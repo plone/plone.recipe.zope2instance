@@ -13,10 +13,11 @@ setup(
     """,
     license = "ZPL 2.1",
     keywords = "zope2 buildout",
-    url='https://svn.plone.org/svn/plone/ploneout/trunk/src/'+name,
+    url='http://svn.plone.org/svn/collective/buildout/'+name,
     classifiers=[
       "License :: OSI Approved :: Zope Public License",
       "Framework :: Buildout",
+      "Framework :: Plone",
       "Framework :: Zope2",
       "Programming Language :: Python",
       ],
