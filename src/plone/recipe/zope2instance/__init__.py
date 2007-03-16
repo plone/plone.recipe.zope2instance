@@ -247,7 +247,22 @@ class Recipe:
         zcml = self.options.get('zcml')
         
         if zcml:
+            sitezcml_path = os.path.join(location, 'etc', 'site.zcml')
+            if not os.path.exists(sitezcml_path):
+                # Zope 2.9 does not have a site.zcml so we copy the
+                # one out from Five.
+                zope2_location = self.options['zope2-location']
+                skel_path = os.path.join(zope2_location, 'lib', 'python',
+                                         'Products', 'Five', 'skel',
+                                         'site.zcml')
+                shutil.copyfile(skel_path, sitezcml_path)
+
             includes_path = os.path.join(location, 'etc', 'package-includes')
+            if not os.path.exists(includes_path):
+                # Zope 2.9 does not have a package-includes so we
+                # create one.
+                os.mkdir(includes_path)
+
             zcml = zcml.split()
             if '*' in zcml:
                 zcml.remove('*')
