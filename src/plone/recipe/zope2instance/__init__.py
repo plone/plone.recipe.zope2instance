@@ -145,17 +145,26 @@ class Recipe:
         file_storage_dir = os.path.dirname(file_storage)
         if not os.path.exists(file_storage_dir):
             os.makedirs(file_storage_dir)
+
+        zeo_client = options.get('zeo-client', '')
+        zeo_address = options.get('zeo-address', '8100')
         
-        zope_conf = zope_conf_template % dict(instance_home = instance_home,
-                                              products_lines = products_lines,
-                                              debug_mode = debug_mode,
-                                              security_implementation = security_implementation,
-                                              verbose_security = verbose_security,
-                                              event_log = event_log,
-                                              z_log = z_log,
-                                              file_storage = file_storage,
-                                              http_address = http_address,
-                                              zope_conf_additional = zope_conf_additional,)
+        if zeo_client.lower() in ('yes', 'true', 'on', '1'):
+            template = zeo_conf_template
+        else:
+            template = zope_conf_template
+            
+        zope_conf = template % dict(instance_home = instance_home,
+                                    products_lines = products_lines,
+                                    debug_mode = debug_mode,
+                                    security_implementation = security_implementation,
+                                    verbose_security = verbose_security,
+                                    event_log = event_log,
+                                    z_log = z_log,
+                                    file_storage = file_storage,
+                                    http_address = http_address,
+                                    zeo_address=zeo_address,
+                                    zope_conf_additional = zope_conf_additional,)
         
         zope_conf_path = os.path.join(location, 'etc', 'zope.conf')
         open(zope_conf_path, 'w').write(zope_conf)
@@ -316,6 +325,59 @@ verbose-security %(verbose_security)s
       path %(file_storage)s
     </filestorage>
     mount-point /
+</zodb_db>
+
+<zodb_db temporary>
+    # Temporary storage database (for sessions)
+    <temporarystorage>
+      name temporary storage for sessioning
+    </temporarystorage>
+    mount-point /temp_folder
+    container-class Products.TemporaryFolder.TemporaryContainer
+</zodb_db>
+
+%(zope_conf_additional)s
+"""
+
+zeo_conf_template="""\
+instancehome %(instance_home)s
+%(products_lines)s
+debug-mode %(debug_mode)s
+security-policy-implementation %(security_implementation)s
+verbose-security %(verbose_security)s
+
+<eventlog>
+  level info
+  <logfile>
+    path %(event_log)s
+    level info
+  </logfile>
+</eventlog>
+
+<logger access>
+  level WARN
+  <logfile>
+    path %(z_log)s
+    format %%(message)s
+  </logfile>
+</logger>
+
+<http-server>
+  # valid keys are "address" and "force-connection-close"
+  address %(http_address)s
+  # force-connection-close on
+  # You can also use the WSGI interface between ZServer and ZPublisher:
+  # use-wsgi on
+</http-server>
+
+<zodb_db main>
+  mount-point /
+  <zeoclient>
+    server %(zeo_address)s
+    storage 1
+    name zeostorage
+    var %(instance_home)s/var
+  </zeoclient>
 </zodb_db>
 
 <zodb_db temporary>
