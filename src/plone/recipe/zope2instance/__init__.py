@@ -229,7 +229,8 @@ class Recipe:
         requirements, ws = self.egg.working_set(['plone.recipe.zope2instance'])
 
         zc.buildout.easy_install.scripts(
-            [(self.name, 'plone.recipe.zope2instance.ctl', 'main')],
+            [(self.options.get('control-script', self.name),
+                'plone.recipe.zope2instance.ctl', 'main')],
             ws, options['executable'], options['bin-directory'],
             extra_paths = extra_paths,
             arguments = ('\n        ["-C", %r]'
