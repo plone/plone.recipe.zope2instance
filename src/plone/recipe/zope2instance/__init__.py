@@ -200,6 +200,32 @@ class Recipe:
             f = open(script_path, 'w')
             f.write(script)
             f.close()
+        # Patch Windows service scripts
+        path =";".join(ws_locations)
+        script_name = 'zopeservice.py'
+        script_path = os.path.join(location, 'bin', script_name)
+        script = open(script_path).read()
+        script = script.replace(
+                "ZOPE_RUN = r'%s\\Zope2\\Startup\\run.py' % SOFTWARE_HOME",
+                "ZOPE_RUN = r'%s\\bin\\servicewrapper.py' % INSTANCE_HOME"
+                )
+        f = open(script_path, 'w')
+        f.write(script)
+        f.close()
+        script_name = 'servicewrapper.py'
+        script_path = os.path.join(location, 'bin', script_name)
+        script = """import sys
+
+sys.path[0:0] = [
+%s]
+
+if __name__ == '__main__':
+    from Zope2.Startup import run
+    run.run()
+""" % ''.join(['  \'%s\',\n' % l.replace('\\', '\\\\') for l in ws_locations])
+        f = open(script_path, 'w')
+        f.write(script)
+        f.close()
         # Add a test.bat that works on Windows
         new_script_path = os.path.join(location, 'bin', 'test.bat')
         script_path = os.path.join(location, 'bin', 'runzope.bat')
