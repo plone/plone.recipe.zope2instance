@@ -110,7 +110,7 @@ class Recipe:
         
         # Don't do this if we have a manual zope.conf
         zope_conf = options.get('zope-conf', None)
-        if zope_conf is None:
+        if zope_conf is not None:
             return
         
         products = options.get('products', '')
