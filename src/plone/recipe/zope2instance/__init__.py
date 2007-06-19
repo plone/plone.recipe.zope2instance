@@ -108,6 +108,11 @@ class Recipe:
         options = self.options
         location = options['location']
         
+        # Don't do this if we have a manual zope.conf
+        zope_conf = options.get('zope-conf', None)
+        if zope_conf is None:
+            return
+        
         products = options.get('products', '')
         if products:
             products = products.split('\n')
@@ -128,13 +133,13 @@ class Recipe:
         
         base_dir = self.buildout['buildout']['directory']
         
-        event_log_name = options.get('event-log', os.path.sep.join(('var', 'log', 'event.log',)))
+        event_log_name = options.get('event-log', os.path.sep.join(('var', 'log', self.name + '.log',)))
         event_log = os.path.join(base_dir, event_log_name)
         event_log_dir = os.path.dirname(event_log)
         if not os.path.exists(event_log_dir):
             os.makedirs(event_log_dir)
             
-        z_log_name = options.get('z-log', os.path.sep.join(('var', 'log', 'Z2.log',)))
+        z_log_name = options.get('z-log', os.path.sep.join(('var', 'log', self.name + '-Z2.log',)))
         z_log = os.path.join(base_dir, z_log_name)
         z_log_dir = os.path.dirname(z_log)
         if not os.path.exists(z_log_dir):
@@ -148,6 +153,9 @@ class Recipe:
 
         zeo_client = options.get('zeo-client', '')
         zeo_address = options.get('zeo-address', '8100')
+        
+        zodb_cache_size = options.get('zodb-cache-size', '2000')
+        zeo_client_cache_size = options.get('zeo-client-cache-size', '30MB')
         
         if zeo_client.lower() in ('yes', 'true', 'on', '1'):
             template = zeo_conf_template
@@ -163,7 +171,9 @@ class Recipe:
                                     z_log = z_log,
                                     file_storage = file_storage,
                                     http_address = http_address,
-                                    zeo_address=zeo_address,
+                                    zeo_address = zeo_address,
+                                    zodb_cache_size = zodb_cache_size,
+                                    zeo_client_cache_size = zeo_client_cache_size,
                                     zope_conf_additional = zope_conf_additional,)
         
         zope_conf_path = os.path.join(location, 'etc', 'zope.conf')
@@ -246,7 +256,12 @@ if __name__ == '__main__':
         options = self.options
         location = options['location']
         
-        zope_conf_path = os.path.join(location, 'etc', 'zope.conf')
+        zope_conf = options.get('zope-conf', None)
+        
+        if zope_conf is not None:
+            zope_conf = os.path.abspath(zope_conf)
+        else:
+            zope_conf = os.path.join(location, 'etc', 'zope.conf')
         extra_paths = [os.path.join(location),
                        os.path.join(options['zope2-location'], 'lib', 'python')
                       ]
@@ -261,7 +276,7 @@ if __name__ == '__main__':
             extra_paths = extra_paths,
             arguments = ('\n        ["-C", %r]'
                          '\n        + sys.argv[1:]'
-                         % zope_conf_path
+                         % zope_conf
                          ),
             )
         
@@ -414,11 +429,13 @@ verbose-security %(verbose_security)s
 
 <zodb_db main>
   mount-point /
+  cache-size %(zodb_cache_size)s
   <zeoclient>
     server %(zeo_address)s
     storage 1
     name zeostorage
     var %(instance_home)s/var
+    cache-size %(zeo_client_cache_size)s
   </zeoclient>
 </zodb_db>
 
