@@ -109,72 +109,73 @@ class Recipe:
         location = options['location']
         
         # Don't do this if we have a manual zope.conf
-        zope_conf = options.get('zope-conf', None)
-        if zope_conf is not None:
-            return
-        
-        products = options.get('products', '')
-        if products:
-            products = products.split('\n')
-            # Filter out empty directories
-            products = [p for p in products if p]
-            # Make sure we have consistent path seperators
-            products = [os.path.abspath(p) for p in products]
-        
-        instance_home = location
-        products_lines = '\n'.join(['products %s' % p for p in products])
-        debug_mode = options.get('debug-mode', 'off')
-        security_implementation = 'C'
-        verbose_security = options.get('verbose-security', 'off')
-        if verbose_security == 'on':
-            security_implementation = 'python'
-        http_address = options.get('http-address', '8080')
-        zope_conf_additional = options.get('zope-conf-additional', '')
-        
-        base_dir = self.buildout['buildout']['directory']
-        
-        event_log_name = options.get('event-log', os.path.sep.join(('var', 'log', self.name + '.log',)))
-        event_log = os.path.join(base_dir, event_log_name)
-        event_log_dir = os.path.dirname(event_log)
-        if not os.path.exists(event_log_dir):
-            os.makedirs(event_log_dir)
-            
-        z_log_name = options.get('z-log', os.path.sep.join(('var', 'log', self.name + '-Z2.log',)))
-        z_log = os.path.join(base_dir, z_log_name)
-        z_log_dir = os.path.dirname(z_log)
-        if not os.path.exists(z_log_dir):
-            os.makedirs(z_log_dir)
-            
-        file_storage = options.get('file-storage', os.path.sep.join(('var', 'filestorage', 'Data.fs',)))
-        file_storage = os.path.join(base_dir, file_storage)
-        file_storage_dir = os.path.dirname(file_storage)
-        if not os.path.exists(file_storage_dir):
-            os.makedirs(file_storage_dir)
-
-        zeo_client = options.get('zeo-client', '')
-        zeo_address = options.get('zeo-address', '8100')
-        
-        zodb_cache_size = options.get('zodb-cache-size', '2000')
-        zeo_client_cache_size = options.get('zeo-client-cache-size', '30MB')
-        
-        if zeo_client.lower() in ('yes', 'true', 'on', '1'):
-            template = zeo_conf_template
+        zope_conf_path = options.get('zope-conf', None)
+        if zope_conf_path is not None:
+            zope_conf = "%%include %s" % os.path.abspath(zope_conf_path)
         else:
-            template = zope_conf_template
+        
+            products = options.get('products', '')
+            if products:
+                products = products.split('\n')
+                # Filter out empty directories
+                products = [p for p in products if p]
+                # Make sure we have consistent path seperators
+                products = [os.path.abspath(p) for p in products]
+        
+            instance_home = location
+            products_lines = '\n'.join(['products %s' % p for p in products])
+            debug_mode = options.get('debug-mode', 'off')
+            security_implementation = 'C'
+            verbose_security = options.get('verbose-security', 'off')
+            if verbose_security == 'on':
+                security_implementation = 'python'
+            http_address = options.get('http-address', '8080')
+            zope_conf_additional = options.get('zope-conf-additional', '')
+        
+            base_dir = self.buildout['buildout']['directory']
+        
+            event_log_name = options.get('event-log', os.path.sep.join(('var', 'log', self.name + '.log',)))
+            event_log = os.path.join(base_dir, event_log_name)
+            event_log_dir = os.path.dirname(event_log)
+            if not os.path.exists(event_log_dir):
+                os.makedirs(event_log_dir)
             
-        zope_conf = template % dict(instance_home = instance_home,
-                                    products_lines = products_lines,
-                                    debug_mode = debug_mode,
-                                    security_implementation = security_implementation,
-                                    verbose_security = verbose_security,
-                                    event_log = event_log,
-                                    z_log = z_log,
-                                    file_storage = file_storage,
-                                    http_address = http_address,
-                                    zeo_address = zeo_address,
-                                    zodb_cache_size = zodb_cache_size,
-                                    zeo_client_cache_size = zeo_client_cache_size,
-                                    zope_conf_additional = zope_conf_additional,)
+            z_log_name = options.get('z-log', os.path.sep.join(('var', 'log', self.name + '-Z2.log',)))
+            z_log = os.path.join(base_dir, z_log_name)
+            z_log_dir = os.path.dirname(z_log)
+            if not os.path.exists(z_log_dir):
+                os.makedirs(z_log_dir)
+            
+            file_storage = options.get('file-storage', os.path.sep.join(('var', 'filestorage', 'Data.fs',)))
+            file_storage = os.path.join(base_dir, file_storage)
+            file_storage_dir = os.path.dirname(file_storage)
+            if not os.path.exists(file_storage_dir):
+                os.makedirs(file_storage_dir)
+
+            zeo_client = options.get('zeo-client', '')
+            zeo_address = options.get('zeo-address', '8100')
+        
+            zodb_cache_size = options.get('zodb-cache-size', '2000')
+            zeo_client_cache_size = options.get('zeo-client-cache-size', '30MB')
+        
+            if zeo_client.lower() in ('yes', 'true', 'on', '1'):
+                template = zeo_conf_template
+            else:
+                template = zope_conf_template
+            
+            zope_conf = template % dict(instance_home = instance_home,
+                                        products_lines = products_lines,
+                                        debug_mode = debug_mode,
+                                        security_implementation = security_implementation,
+                                        verbose_security = verbose_security,
+                                        event_log = event_log,
+                                        z_log = z_log,
+                                        file_storage = file_storage,
+                                        http_address = http_address,
+                                        zeo_address = zeo_address,
+                                        zodb_cache_size = zodb_cache_size,
+                                        zeo_client_cache_size = zeo_client_cache_size,
+                                        zope_conf_additional = zope_conf_additional,)
         
         zope_conf_path = os.path.join(location, 'etc', 'zope.conf')
         open(zope_conf_path, 'w').write(zope_conf)
@@ -256,12 +257,7 @@ if __name__ == '__main__':
         options = self.options
         location = options['location']
         
-        zope_conf = options.get('zope-conf', None)
-        
-        if zope_conf is not None:
-            zope_conf = os.path.abspath(zope_conf)
-        else:
-            zope_conf = os.path.join(location, 'etc', 'zope.conf')
+        zope_conf = os.path.join(location, 'etc', 'zope.conf')
         extra_paths = [os.path.join(location),
                        os.path.join(options['zope2-location'], 'lib', 'python')
                       ]
