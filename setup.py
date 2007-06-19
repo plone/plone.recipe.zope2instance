@@ -35,6 +35,11 @@ The available options are:
  zope-conf -- A relative or absolute path to a zope.conf file. If this is
   not given, a zope.conf will be generated based on the the options below.
   
+ repozo -- The path to the repozo.py backup script. A wrapper for this will be 
+  generated in bin/repozo, which sets up the appropriate environment to
+  be set up. Defaults to "${zope2-location}/utilities/ZODBTools/repozo.py".
+  Set this to an empty value if you do not want this script to be generated.
+  
 The following options all affect the generated zope.conf.
   
  products -- A list of paths where Zope 2 products are installed. The first

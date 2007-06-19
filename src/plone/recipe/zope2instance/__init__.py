@@ -257,6 +257,8 @@ if __name__ == '__main__':
         options = self.options
         location = options['location']
         
+        # The instance control script
+
         zope_conf = os.path.join(location, 'etc', 'zope.conf')
         extra_paths = [os.path.join(location),
                        os.path.join(options['zope2-location'], 'lib', 'python')
@@ -275,6 +277,23 @@ if __name__ == '__main__':
                          % zope_conf
                          ),
             )
+            
+        # The backup script, pointing to repozo.py
+        
+        repozo = options.get('repozo', None)
+        if repozo is None:
+            repozo = os.path.join(options['zope2-location'], 'utilities', 'ZODBTools', 'repozo.py')
+        
+        directory, filename = os.path.split(repozo)
+        
+        if repozo and os.path.exists(repozo):
+            zc.buildout.easy_install.scripts(
+                [('repozo', os.path.splitext(filename)[0], 'main')],
+                {}, options['executable'], options['bin-directory'],
+                extra_paths = [os.path.join(options['zope2-location'], 'lib', 'python'),
+                               directory],
+                )
+            
         
 
     def build_package_includes(self):
