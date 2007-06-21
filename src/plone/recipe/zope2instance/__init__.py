@@ -130,6 +130,10 @@ class Recipe:
             if verbose_security == 'on':
                 security_implementation = 'python'
             http_address = options.get('http-address', '8080')
+            effective_user = options.get('effective-user', '')
+            if effective_user:
+               effective_user = 'effective-user %s' % effective_user 
+            
             zope_conf_additional = options.get('zope-conf-additional', '')
         
             base_dir = self.buildout['buildout']['directory']
@@ -168,6 +172,7 @@ class Recipe:
                                         debug_mode = debug_mode,
                                         security_implementation = security_implementation,
                                         verbose_security = verbose_security,
+                                        effective_user = effective_user,
                                         event_log = event_log,
                                         z_log = z_log,
                                         file_storage = file_storage,
@@ -366,6 +371,7 @@ instancehome %(instance_home)s
 debug-mode %(debug_mode)s
 security-policy-implementation %(security_implementation)s
 verbose-security %(verbose_security)s
+%(effective_user)s
 
 <eventlog>
   level info
@@ -417,6 +423,7 @@ instancehome %(instance_home)s
 debug-mode %(debug_mode)s
 security-policy-implementation %(security_implementation)s
 verbose-security %(verbose_security)s
+%(effective_user)s
 
 <eventlog>
   level info

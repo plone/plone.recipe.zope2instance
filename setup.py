@@ -61,6 +61,10 @@ verbose-security
   the Python security implementation). Defaults to 'off' (and the C security
   implementation).
   
+effective-user
+  The name of the effective user for the Zope process. Defaults to not setting
+  an effective user.
+  
 http-address
   Give a port for the HTTP server. Defaults to 8080.
   
