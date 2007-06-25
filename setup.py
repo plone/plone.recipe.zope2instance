@@ -20,7 +20,7 @@ You can use it with a part like this::
   recipe = plone.recipe.zope2instance
   zope2-location = /path/to/zope2/install
   user = admin:admin
-  http-server = 8080
+  http-address = 8080
   eggs = ${buildout:eggs} my.package
   products = ${buildout:directory}/products
   zcml = my.package
