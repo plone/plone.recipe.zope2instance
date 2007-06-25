@@ -131,8 +131,20 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         progname = self.options.progname
         buildout_root =  os.path.split(os.path.dirname(progname))[0]
         paths = [p for p in paths if p != buildout_root]
+
+        # If we have a package filter, we don't put any packages on the test
+        # path that do not match the package filter
+        package = None
+        if '-s' in args:
+            index = args.index('-s')
+            if len(args) > index:
+                package = args[index + 1]
         for path in paths:
-            defaults += ['--test-path', path]
+            if package is not None:
+                if package in path:
+                    defaults += ['--test-path', path]
+            else:
+                defaults += ['--test-path', path]
 
         # Default to dots, if not explicitly set to quiet. Don't duplicate
         # the -v if it is specified manually.
