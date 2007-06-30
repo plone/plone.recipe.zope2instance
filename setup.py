@@ -91,8 +91,7 @@ zeo-address
  
 zodb-cache-size
   Set the ZODB cache size, i.e. the number of objects which
-  the ZODB cache will try to hold. This is currently only set for ZEO 
-  storages. Defaults to 2000.
+  the ZODB cache will try to hold. Defaults to 2000.
  
 zeo-client-cache-size
   Set the size of the ZEO client cache. Defaults to '30MB'.
