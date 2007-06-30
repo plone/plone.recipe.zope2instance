@@ -399,6 +399,7 @@ verbose-security %(verbose_security)s
 
 <zodb_db main>
     # Main FileStorage database
+    cache-size %(zodb_cache_size)s
     <filestorage>
       path %(file_storage)s
     </filestorage>
