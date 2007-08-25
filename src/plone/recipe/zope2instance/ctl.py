@@ -171,9 +171,9 @@ def main(args=None):
     # into the Products.__path__ so we can put those on the test path
     handlers.root_handler(options.configroot)
 
-    # For some unknown reason the instance home is not set correctly, we do
-    # this manually
-    os.environ['INSTANCE_HOME'] = options.configroot.instancehome
+    # We need to apply the configuration in one more place
+    import App.config
+    App.config.setConfiguration(options.configroot)
 
     # The PYTHONPATH is not set, so all commands starting a new shell fail
     # unless we set it explicitly
