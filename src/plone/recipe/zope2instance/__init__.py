@@ -44,8 +44,11 @@ class Recipe:
         # patch the result. A better approach might be to provide independent
         # instance-creation logic, but this raises lots of issues that
         # need to be stored out first.
-        mkzopeinstance = os.path.join(options['zope2-location'],
-                                      'utilities', 'mkzopeinstance.py')
+        zope2_bin = os.path.join(options['zope2-location'], 'bin')
+        if not os.path.isdir(zope2_bin):
+            zope2_bin = os.path.join(options['zope2-location'],
+                                     'utilities')
+        mkzopeinstance = os.path.join(zope2_bin, 'mkzopeinstance.py')
 
         assert os.spawnl(
             os.P_WAIT, options['executable'], options['executable'],
