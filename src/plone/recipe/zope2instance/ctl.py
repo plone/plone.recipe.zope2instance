@@ -154,6 +154,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         # Run the testrunner. Calling it directly ensures that it is executed
         # in the same environment that we just carefully configured.
         import zope.testing.testrunner
+        args.insert(0, zope.testing.testrunner.__file__)
         zope.testing.testrunner.run(defaults, args)
 
 
