@@ -158,6 +158,15 @@ class Recipe:
             file_storage_dir = os.path.dirname(file_storage)
             if not os.path.exists(file_storage_dir):
                 os.makedirs(file_storage_dir)
+            storage_snippet = file_storage_template % file_storage
+
+            blob_storage = options.get('blob-storage', None)
+            if blob_storage:
+                blob_storage = os.path.join(base_dir, blob_storage)
+                blob_storage_dir = os.path.dirname(blob_storage)
+                if not os.path.exists(blob_storage_dir):
+                    os.makedirs(blob_storage_dir)
+                storage_snippet = blob_storage_template % (blob_storage, file_storage)
 
             zeo_client = options.get('zeo-client', '')
             zeo_address = options.get('zeo-address', '8100')
@@ -178,7 +187,7 @@ class Recipe:
                                         effective_user = effective_user,
                                         event_log = event_log,
                                         z_log = z_log,
-                                        file_storage = file_storage,
+                                        storage_snippet = storage_snippet,
                                         http_address = http_address,
                                         zeo_address = zeo_address,
                                         zodb_cache_size = zodb_cache_size,
@@ -367,6 +376,21 @@ if __name__ == '__main__':
                     % (package, filename)
                     )
 
+# Storage snippets for zope.conf template
+file_storage_template="""\
+<filestorage>
+      path %s
+    </filestorage>\
+"""
+blob_storage_template="""\
+<blobstorage>
+      blob-dir %s
+      <filestorage>
+        path %s
+      </filestorage>
+    </blobstorage>\
+"""
+
 # The template used to build zope.conf
 zope_conf_template="""\
 instancehome %(instance_home)s
@@ -403,9 +427,7 @@ verbose-security %(verbose_security)s
 <zodb_db main>
     # Main FileStorage database
     cache-size %(zodb_cache_size)s
-    <filestorage>
-      path %(file_storage)s
-    </filestorage>
+    %(storage_snippet)s
     mount-point /
 </zodb_db>
 

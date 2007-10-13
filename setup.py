@@ -80,6 +80,9 @@ file-storage
   The filename where the ZODB data file will be stored. 
   Defaults to var/filestorage/Data.fs.
   
+blob-storage
+  The name of the directory where the ZODB blob data will be stored. 
+
 zeo-client
   Set to 'on' to make this instance a ZEO client. In this case,
   setting the zeo-address option is required, and the file-storage option has
