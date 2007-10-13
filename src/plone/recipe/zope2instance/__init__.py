@@ -187,7 +187,7 @@ class Recipe:
                                         effective_user = effective_user,
                                         event_log = event_log,
                                         z_log = z_log,
-                                        storage_snippet = storage_snippet,
+                                        storage_snippet = storage_snippet.strip(),
                                         http_address = http_address,
                                         zeo_address = zeo_address,
                                         zodb_cache_size = zodb_cache_size,
@@ -377,18 +377,18 @@ if __name__ == '__main__':
                     )
 
 # Storage snippets for zope.conf template
-file_storage_template="""\
-<filestorage>
+file_storage_template="""
+    <filestorage>
       path %s
-    </filestorage>\
+    </filestorage>
 """
-blob_storage_template="""\
-<blobstorage>
+blob_storage_template="""
+    <blobstorage>
       blob-dir %s
       <filestorage>
         path %s
       </filestorage>
-    </blobstorage>\
+    </blobstorage>
 """
 
 # The template used to build zope.conf
