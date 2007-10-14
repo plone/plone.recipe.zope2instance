@@ -163,9 +163,8 @@ class Recipe:
             blob_storage = options.get('blob-storage', None)
             if blob_storage:
                 blob_storage = os.path.join(base_dir, blob_storage)
-                blob_storage_dir = os.path.dirname(blob_storage)
-                if not os.path.exists(blob_storage_dir):
-                    os.makedirs(blob_storage_dir)
+                if not os.path.exists(blob_storage):
+                    os.makedirs(blob_storage)
                 storage_snippet = blob_storage_template % (blob_storage, file_storage)
 
             zeo_client = options.get('zeo-client', '')
