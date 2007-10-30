@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 name = "plone.recipe.zope2instance"
-version = '1.0'
+version = '1.0-zopeconfoptions'
 
 setup(
     name = name,
@@ -9,7 +9,7 @@ setup(
     author = "Hanno Schlichting",
     author_email = "plone@hannosch.info",
     description = "ZC Buildout recipe for installing a Zope 2 instance",
-          long_description="""\
+    long_description="""\
 This recipe creates and configures a Zope 2 instance in parts. It also
 installs a control script, which is like zopectl, in the bin/ directory.
 The name of the control script is the the name of the part in buildout.
@@ -53,6 +53,10 @@ products
 zcml
   Install ZCML slugs for the packages listed, separated by whitespace.
 
+default-zpublisher-encoding
+  This controls what character set is used to encode unicode data that reaches
+  ZPublisher without any other specified encoding. Zope defaults to iso-8859-15
+
 debug-mode
   Set to 'on' to turn on debug mode in Zope. Defaults to 'off'.
 
@@ -65,16 +69,37 @@ effective-user
   The name of the effective user for the Zope process. Defaults to not setting
   an effective user.
 
+ip-address
+  The default IP address on which Zope's various server protocol
+  implementations will listen for requests. If this is unset, Zope will listen
+  on all IP addresses supported by the machine. This directive can be
+  overridden on a per-server basis in the servers section. Defaults to not
+  setting an ip-address.
+
+port-base
+  Offset applied to the port numbers used for ZServer configurations. For
+  example, if the http-server port is 8080 and the port-base is 1000, the HTTP
+  server will listen on port 9080. This makes it easy to change the complete
+  set of ports used by a Zope server process. Zope defaults to 0.
+
 http-address
   Give a port for the HTTP server. Defaults to 8080.
 
 event-log
   The filename of the event log. Defaults to
   var/log/${partname}.log
+  
+event-log-level
+  Set the level of the console output for the event log. Level may be any of
+  CRITICAL, ERROR, WARN, INFO, DEBUG, or ALL. Defaults to INFO
 
 z2-log
   The filename for the Z2 access log. Defaults to
   var/log/${partname}-Z2.log.
+
+z2-log-level
+  Set the log level for the access log. Level may be any of CRITICAL, ERROR,
+  WARN, INFO, DEBUG, or ALL. Defaults to WARN
 
 file-storage
   The filename where the ZODB data file will be stored.
@@ -98,6 +123,11 @@ zodb-cache-size
 
 zeo-client-cache-size
   Set the size of the ZEO client cache. Defaults to '30MB'.
+
+zserver-threads
+  Specify the number of threads that Zope's ZServer web server will use to
+  service requests. You shouldn't change this unless you know what you are
+  doing. Zope's default is 4.
 
 zope-conf-additional
   Give additional lines to zope.conf. Make sure you

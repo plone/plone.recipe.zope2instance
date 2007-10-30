@@ -132,10 +132,16 @@ class Recipe:
             verbose_security = options.get('verbose-security', 'off')
             if verbose_security == 'on':
                 security_implementation = 'python'
+            port_base = options.get('port-base', '')
+            if port_base:
+                port_base = 'port-base %s' % port_base
             http_address = options.get('http-address', '8080')
             effective_user = options.get('effective-user', '')
             if effective_user:
                effective_user = 'effective-user %s' % effective_user 
+            ip_address = options.get('ip-address', '')
+            if ip_address:
+                ip_address = 'ip-address %s' % ip_address
             
             zope_conf_additional = options.get('zope-conf-additional', '')
         
@@ -147,11 +153,19 @@ class Recipe:
             if not os.path.exists(event_log_dir):
                 os.makedirs(event_log_dir)
             
+            event_log_level = options.get('event-log-level', 'INFO')
+            
             z_log_name = options.get('z-log', os.path.sep.join(('var', 'log', self.name + '-Z2.log',)))
             z_log = os.path.join(base_dir, z_log_name)
             z_log_dir = os.path.dirname(z_log)
             if not os.path.exists(z_log_dir):
                 os.makedirs(z_log_dir)
+            
+            z_log_level = options.get('z2-log-level', 'WARN')
+            
+            default_zpublisher_encoding = options.get('default-zpublisher-encoding', '')
+            if default_zpublisher_encoding:
+                default_zpublisher_encoding = 'default-zpublisher-encoding %s' % default_zpublisher_encoding
             
             file_storage = options.get('file-storage', os.path.sep.join(('var', 'filestorage', 'Data.fs',)))
             file_storage = os.path.join(base_dir, file_storage)
@@ -166,6 +180,10 @@ class Recipe:
                 if not os.path.exists(blob_storage):
                     os.makedirs(blob_storage)
                 storage_snippet = blob_storage_template % (blob_storage, file_storage)
+                
+            zserver_threads = options.get('zserver-threads', '')
+            if zserver_threads:
+                zserver_threads = 'zserver-threads %s' % zserver_threads
 
             zeo_client = options.get('zeo-client', '')
             zeo_address = options.get('zeo-address', '8100')
@@ -184,11 +202,17 @@ class Recipe:
                                         security_implementation = security_implementation,
                                         verbose_security = verbose_security,
                                         effective_user = effective_user,
+                                        ip_address = ip_address,
                                         event_log = event_log,
+                                        event_log_level = event_log_level,
                                         z_log = z_log,
+                                        z_log_level = z_log_level,
+                                        default_zpublisher_encoding = default_zpublisher_encoding,
                                         storage_snippet = storage_snippet.strip(),
+                                        port_base = port_base,
                                         http_address = http_address,
                                         zeo_address = zeo_address,
+                                        zserver_threads = zserver_threads,
                                         zodb_cache_size = zodb_cache_size,
                                         zeo_client_cache_size = zeo_client_cache_size,
                                         zope_conf_additional = zope_conf_additional,)
@@ -403,10 +427,14 @@ instancehome %(instance_home)s
 debug-mode %(debug_mode)s
 security-policy-implementation %(security_implementation)s
 verbose-security %(verbose_security)s
+%(default_zpublisher_encoding)s
+%(port_base)s
 %(effective_user)s
+%(ip_address)s
+%(zserver_threads)s
 
 <eventlog>
-  level info
+  level %(event_log_level)s
   <logfile>
     path %(event_log)s
     level info
@@ -414,7 +442,7 @@ verbose-security %(verbose_security)s
 </eventlog>
 
 <logger access>
-  level WARN
+  level %(z_log_level)s
   <logfile>
     path %(z_log)s
     format %%(message)s
@@ -454,10 +482,14 @@ instancehome %(instance_home)s
 debug-mode %(debug_mode)s
 security-policy-implementation %(security_implementation)s
 verbose-security %(verbose_security)s
+%(default_zpublisher_encoding)s
+%(port_base)s
 %(effective_user)s
+%(ip_address)s
+%(zserver_threads)s
 
 <eventlog>
-  level info
+  level %(event_log_level)s
   <logfile>
     path %(event_log)s
     level info
@@ -465,7 +497,7 @@ verbose-security %(verbose_security)s
 </eventlog>
 
 <logger access>
-  level WARN
+  level %(z_log_level)s
   <logfile>
     path %(z_log)s
     format %%(message)s
