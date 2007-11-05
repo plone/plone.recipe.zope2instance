@@ -97,6 +97,12 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         # automatically with all configured products and eggs.
         args = filter(None, arg.split(' '))
 
+        # Disable deprecation warnings if desired
+        if '-w' in args:
+            args.remove('-w')
+            from warnings import filterwarnings
+            filterwarnings("ignore", ".*", DeprecationWarning)
+
         defaults = []
         softwarehome = self.options.configroot.softwarehome
 
