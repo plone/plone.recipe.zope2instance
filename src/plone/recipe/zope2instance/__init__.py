@@ -67,7 +67,7 @@ class Recipe:
             self.patch_binaries(ws_locations)
 
             # Install extra scripts
-            self.install_scripts(ws_locations)
+            self.install_scripts()
 
             # Add zcml files to package-includes
             self.build_package_includes()
@@ -293,7 +293,7 @@ if __name__ == '__main__':
         f.write(script)
         f.close()
 
-    def install_scripts(self, ws_locations):
+    def install_scripts(self):
         options = self.options
         location = options['location']
         
@@ -303,14 +303,14 @@ if __name__ == '__main__':
         extra_paths = [os.path.join(location),
                        os.path.join(options['zope2-location'], 'lib', 'python')
                       ]
-        extra_paths.extend(ws_locations)
         
         requirements, ws = self.egg.working_set(['plone.recipe.zope2instance'])
+        extra_paths.extend([d.location for d in ws])
 
         zc.buildout.easy_install.scripts(
             [(self.options.get('control-script', self.name),
                 'plone.recipe.zope2instance.ctl', 'main')],
-            ws, options['executable'], options['bin-directory'],
+            {}, options['executable'], options['bin-directory'],
             extra_paths = extra_paths,
             arguments = ('\n        ["-C", %r]'
                          '\n        + sys.argv[1:]'
