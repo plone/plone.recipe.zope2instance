@@ -341,14 +341,8 @@ if __name__ == '__main__':
         """
         
         location = self.options['location']
-        zcml = self.options.get('zcml', '')
+        zcml = self.options.get('zcml')
         
-        requirements, ws = self.egg.working_set()
-        for ep in ws.iter_entry_points("zope.zcml"):
-            name = ep.name
-            module = ep.module_name
-            zcml+=" %s-%s" % (module, name)
-
         if zcml:
             sitezcml_path = os.path.join(location, 'etc', 'site.zcml')
             if not os.path.exists(sitezcml_path):
