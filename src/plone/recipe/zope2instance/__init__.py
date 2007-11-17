@@ -230,7 +230,7 @@ class Recipe:
             script = open(script_path).read()
             script = script.replace(
                 '$SOFTWARE_HOME:$PYTHONPATH',
-                '$SOFTWARE_HOME:'+path+':$PYTHONPATH'
+                path+':$SOFTWARE_HOME:$PYTHONPATH'
                 )
             f = open(script_path, 'w')
             f.write(script)
@@ -246,7 +246,7 @@ class Recipe:
             script = '\n'.join(lines)
             script = script.replace(
                 'PYTHONPATH=%SOFTWARE_HOME%',
-                'PYTHONPATH=%SOFTWARE_HOME%;'+path+';%PYTHONPATH%'
+                'PYTHONPATH='+path+';%SOFTWARE_HOME%;%PYTHONPATH%'
                 )
             f = open(script_path, 'w')
             f.write(script)
