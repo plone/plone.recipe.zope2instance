@@ -305,12 +305,11 @@ if __name__ == '__main__':
                       ]
         
         requirements, ws = self.egg.working_set(['plone.recipe.zope2instance'])
-        extra_paths.extend([d.location for d in ws])
 
         zc.buildout.easy_install.scripts(
             [(self.options.get('control-script', self.name),
                 'plone.recipe.zope2instance.ctl', 'main')],
-            {}, options['executable'], options['bin-directory'],
+            ws, options['executable'], options['bin-directory'],
             extra_paths = extra_paths,
             arguments = ('\n        ["-C", %r]'
                          '\n        + sys.argv[1:]'
