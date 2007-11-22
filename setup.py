@@ -124,6 +124,9 @@ zodb-cache-size
 zeo-client-cache-size
   Set the size of the ZEO client cache. Defaults to '30MB'.
 
+zeo-storage
+  Set the name of the ZEO storage. Defaults to '1'.
+
 zserver-threads
   Specify the number of threads that Zope's ZServer web server will use to
   service requests. You shouldn't change this unless you know what you are

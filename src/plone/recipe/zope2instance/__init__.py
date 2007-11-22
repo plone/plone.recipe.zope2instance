@@ -190,7 +190,8 @@ class Recipe:
         
             zodb_cache_size = options.get('zodb-cache-size', '2000')
             zeo_client_cache_size = options.get('zeo-client-cache-size', '30MB')
-        
+            zeo_storage = options.get('zeo-storage', '1')
+
             if zeo_client.lower() in ('yes', 'true', 'on', '1'):
                 template = zeo_conf_template
             else:
@@ -215,6 +216,7 @@ class Recipe:
                                         zserver_threads = zserver_threads,
                                         zodb_cache_size = zodb_cache_size,
                                         zeo_client_cache_size = zeo_client_cache_size,
+                                        zeo_storage = zeo_storage,
                                         zope_conf_additional = zope_conf_additional,)
         
         zope_conf_path = os.path.join(location, 'etc', 'zope.conf')
@@ -510,7 +512,7 @@ verbose-security %(verbose_security)s
   cache-size %(zodb_cache_size)s
   <zeoclient>
     server %(zeo_address)s
-    storage 1
+    storage %(zeo_storage)s
     name zeostorage
     var %(instance_home)s/var
     cache-size %(zeo_client_cache_size)s
