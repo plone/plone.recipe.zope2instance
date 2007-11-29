@@ -305,6 +305,7 @@ if __name__ == '__main__':
         extra_paths = [os.path.join(location),
                        os.path.join(options['zope2-location'], 'lib', 'python')
                       ]
+        extra_paths.extend(options.get('extra-paths', '').split())
         
         requirements, ws = self.egg.working_set(['plone.recipe.zope2instance'])
 

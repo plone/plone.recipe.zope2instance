@@ -53,6 +53,10 @@ products
 zcml
   Install ZCML slugs for the packages listed, separated by whitespace.
 
+extra-paths
+  A list of paths where additional python packages are installed.  The paths
+  are searched in the given order after all egg and products paths.
+
 default-zpublisher-encoding
   This controls what character set is used to encode unicode data that reaches
   ZPublisher without any other specified encoding. Zope defaults to iso-8859-15
