@@ -157,7 +157,6 @@ zope-conf-additional
     package_dir = {'':'src'},
     namespace_packages = ['plone', 'plone.recipe'],
     install_requires = ['zc.buildout', 'setuptools', 'zc.recipe.egg'],
-    dependency_links = ['http://download.zope.org/distribution/'],
     zip_safe=False,
     entry_points = {'zc.buildout': ['default = %s:Recipe' % name]},
     )
