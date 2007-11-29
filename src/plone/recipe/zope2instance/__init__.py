@@ -188,7 +188,7 @@ class Recipe:
             zeo_client = options.get('zeo-client', '')
             zeo_address = options.get('zeo-address', '8100')
         
-            zodb_cache_size = options.get('zodb-cache-size', '2000')
+            zodb_cache_size = options.get('zodb-cache-size', '5000')
             zeo_client_cache_size = options.get('zeo-client-cache-size', '30MB')
             zeo_storage = options.get('zeo-storage', '1')
 
