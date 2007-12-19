@@ -197,6 +197,13 @@ class Recipe:
             else:
                 template = zope_conf_template
             
+            pid_file = options.get(
+                'pid-file',
+                os.path.join(base_dir, 'var', self.name + '.pid'))
+            lock_file = options.get(
+                'lock-file',
+                os.path.join(base_dir, 'var', self.name + '.lock'))
+
             zope_conf = template % dict(instance_home = instance_home,
                                         products_lines = products_lines,
                                         debug_mode = debug_mode,
@@ -217,6 +224,8 @@ class Recipe:
                                         zodb_cache_size = zodb_cache_size,
                                         zeo_client_cache_size = zeo_client_cache_size,
                                         zeo_storage = zeo_storage,
+                                        pid_file = pid_file,
+                                        lock_file = lock_file,
                                         zope_conf_additional = zope_conf_additional,)
         
         zope_conf_path = os.path.join(location, 'etc', 'zope.conf')
@@ -469,6 +478,9 @@ verbose-security %(verbose_security)s
     container-class Products.TemporaryFolder.TemporaryContainer
 </zodb_db>
 
+pid-filename %(pid_file)s
+lock-filename %(lock_file)s
+
 %(zope_conf_additional)s
 """
 
@@ -528,6 +540,9 @@ verbose-security %(verbose_security)s
     mount-point /temp_folder
     container-class Products.TemporaryFolder.TemporaryContainer
 </zodb_db>
+
+pid-filename %(pid_file)s
+lock-filename %(lock_file)s
 
 %(zope_conf_additional)s
 """
