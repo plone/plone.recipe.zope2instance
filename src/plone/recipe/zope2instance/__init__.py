@@ -188,6 +188,12 @@ class Recipe:
             zeo_client = options.get('zeo-client', '')
             zeo_address = options.get('zeo-address', '8100')
 
+            zeo_client_name = options.get('zeo-client-name', self.name)
+            if zeo_client_name:
+                zeo_client_name = 'zeo-client-name %s' % zeo_client_name
+            else:
+                zeo_client_name = ''
+
             zodb_cache_size = options.get('zodb-cache-size', '5000')
             zeo_client_cache_size = options.get('zeo-client-cache-size', '30MB')
             zeo_storage = options.get('zeo-storage', '1')
@@ -222,6 +228,7 @@ class Recipe:
                                         zeo_address = zeo_address,
                                         zserver_threads = zserver_threads,
                                         zodb_cache_size = zodb_cache_size,
+                                        zeo_client_name = zeo_client_name,
                                         zeo_client_cache_size = zeo_client_cache_size,
                                         zeo_storage = zeo_storage,
                                         pid_file = pid_file,
@@ -488,6 +495,7 @@ verbose-security %(verbose_security)s
 %(effective_user)s
 %(ip_address)s
 %(zserver_threads)s
+%(zeo_client_name)s
 
 <eventlog>
   level %(event_log_level)s

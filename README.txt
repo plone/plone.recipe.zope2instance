@@ -109,6 +109,10 @@ zeo-client
 zeo-address
   Set the address of the ZEO server. Defaults to 8100.
 
+zeo-client-name
+  Set the name of the ZEO client. Defaults to the name of the part. If a false
+  value is provided no zeo-client-name will be set.
+
 zeo-client-cache-size
   Set the size of the ZEO client cache. Defaults to '30MB'.
 
