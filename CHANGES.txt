@@ -1,0 +1,142 @@
+Change History
+==============
+
+1.1
+---
+
+- Small documentation update. Added link to the bugtracker.
+  [hannosch]
+
+- Changed default of zope.conf option 'default-zpublisher-encoding' to 'utf-8'
+  instead of Zope's default value of 'iso-8859-15'.
+
+- Have PID file's location default to '${buildout:directory}/var/${name}.pid'.
+  Keeping the PID file in $INSTANCE_HOME gives trouble when buildout rebuilds
+  the part.
+  [nouri, mustapha]
+
+1.0
+---
+
+- Increased 'zodb_cache_size' default value to 5000, which is more likely a
+  better default these days.
+  [hannosch]
+
+- Added support for 'extra-paths' as in 'zc.recipe.egg'; this is useful when
+  using regular python packages for which no eggs are available (yet), i.e.
+  with 'plone.recipe.distros'.
+  [witsch]
+
+- Added zeo-storage option (merge branch ree-add-zeo-storage-option).
+  [ree]
+
+- Avoid doubled entries to eggs specified in the buildout in 'sys.path':
+  the working set ('ws') gets passed again when installing the script
+  ('bin/instance'), but it is not also added to 'extra_paths'.
+  [witsch]
+
+- Patching 'PYTHONPATH' in the Zope startup skripts should insert all
+  additional paths (to eggs) __before__ 'SOFTWARE_HOME', because otherwise
+  (newer) egg versions of components from the standard Zope distribution
+  (i.e. stuff that lives in 'lib/python') cannot be used.
+  [witsch]
+
+- Changed the option to suppress deprecation warnings to "--nowarn" or
+  '--nowarning" to be consistent with "zopectl test".
+  [witsch]
+
+- Added option "-w" to allow the test runner to suppress deprecation warnings,
+  so it's easier to spot failing tests...
+  [witsch]
+
+- Updated import for Zope 2.7 (and below) compatibility.
+  [duffyd]
+
+- Merging -r51966:52659 claytron-zopeconfoptions branch to trunk.
+  [claytron]
+
+- Made the config snippet prettier while still getting the resulting
+  indentation right.
+  [witsch]
+
+0.9
+---
+
+- Added support for zodb 3.8's "<blobstorage>" directive.
+  [witsch]
+
+- Added a script name arg before callint zope.testing.testrunner.run.
+  zope.testing.testrunner:1772, get_options removes the first arg from
+  the list of arguments expecting a script name there. Was causing
+  "bin/instance test" to behave improperly.
+  [rossp]
+
+0.8
+---
+
+- Use bin if present falling back to utilities. This makes it possible to use
+  a Zope version installed from a tarball and not compiled inplace.
+  [rossp]
+
+0.7
+---
+
+- Found the problem with strange environment variables.
+  [hannosch]
+
+- Fixed documentation bug, the cache size is respected by non-zeo instance as
+  well.
+  [hannosch]
+
+0.6
+---
+
+- J1m actually read the docs ;)
+  [hannosch]
+
+- Attempt to fix the sometimes insane number of tests which are found by the
+  test runner.
+  [hannosch]
+
+0.5
+---
+
+- Added an option to set the effective-user.
+  [optilude]
+
+0.4
+---
+
+- Generate a bin/repozo script to perform backups using repozo.py (and
+  set up the appropriate pythonpath for this to work).
+  [optilude]
+
+- Document options properly, and add the ability to specify a zope.conf
+  file explicitly rather than having one generated from a template.
+  [optilude]
+
+0.3
+---
+
+- Finally found a way to provide the Zope Windows service with the right
+  environment. We need a new wrapper script, which sets up the PYTHONPATH.
+  [hannosch]
+
+- Make it possible to configure the name of the zopectl script using the
+  control-script option in the [instance] section.
+  [wichert]
+
+0.2
+---
+
+- Extend support for zcml slugs to include Zope 2.9.
+  [dunny]
+
+- Added support for making a ZEO-client.
+  [regebro]
+
+0.1
+---
+
+- Initial implementation.
+  [hannosch]

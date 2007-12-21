@@ -163,7 +163,7 @@ class Recipe:
             
             z_log_level = options.get('z2-log-level', 'WARN')
             
-            default_zpublisher_encoding = options.get('default-zpublisher-encoding', '')
+            default_zpublisher_encoding = options.get('default-zpublisher-encoding', 'utf-8')
             if default_zpublisher_encoding:
                 default_zpublisher_encoding = 'default-zpublisher-encoding %s' % default_zpublisher_encoding
             
@@ -187,7 +187,7 @@ class Recipe:
 
             zeo_client = options.get('zeo-client', '')
             zeo_address = options.get('zeo-address', '8100')
-        
+
             zodb_cache_size = options.get('zodb-cache-size', '5000')
             zeo_client_cache_size = options.get('zeo-client-cache-size', '30MB')
             zeo_storage = options.get('zeo-storage', '1')
@@ -196,7 +196,7 @@ class Recipe:
                 template = zeo_conf_template
             else:
                 template = zope_conf_template
-            
+
             pid_file = options.get(
                 'pid-file',
                 os.path.join(base_dir, 'var', self.name + '.pid'))
@@ -227,10 +227,10 @@ class Recipe:
                                         pid_file = pid_file,
                                         lock_file = lock_file,
                                         zope_conf_additional = zope_conf_additional,)
-        
+
         zope_conf_path = os.path.join(location, 'etc', 'zope.conf')
         open(zope_conf_path, 'w').write(zope_conf)
-        
+
     def patch_binaries(self, ws_locations):
         location = self.options['location']
         # XXX We need to patch the windows specific batch scripts
@@ -307,15 +307,14 @@ if __name__ == '__main__':
     def install_scripts(self):
         options = self.options
         location = options['location']
-        
-        # The instance control script
 
+        # The instance control script
         zope_conf = os.path.join(location, 'etc', 'zope.conf')
         extra_paths = [os.path.join(location),
                        os.path.join(options['zope2-location'], 'lib', 'python')
                       ]
         extra_paths.extend(options.get('extra-paths', '').split())
-        
+
         requirements, ws = self.egg.working_set(['plone.recipe.zope2instance'])
 
         zc.buildout.easy_install.scripts(
@@ -328,15 +327,12 @@ if __name__ == '__main__':
                          % zope_conf
                          ),
             )
-            
         # The backup script, pointing to repozo.py
-        
         repozo = options.get('repozo', None)
         if repozo is None:
             repozo = os.path.join(options['zope2-location'], 'utilities', 'ZODBTools', 'repozo.py')
-        
+
         directory, filename = os.path.split(repozo)
-        
         if repozo and os.path.exists(repozo):
             zc.buildout.easy_install.scripts(
                 [('repozo', os.path.splitext(filename)[0], 'main')],
@@ -344,16 +340,13 @@ if __name__ == '__main__':
                 extra_paths = [os.path.join(options['zope2-location'], 'lib', 'python'),
                                directory],
                 )
-            
-        
 
     def build_package_includes(self):
         """Create ZCML slugs in etc/package-includes
         """
-        
         location = self.options['location']
         zcml = self.options.get('zcml')
-        
+
         if zcml:
             sitezcml_path = os.path.join(location, 'etc', 'site.zcml')
             if not os.path.exists(sitezcml_path):

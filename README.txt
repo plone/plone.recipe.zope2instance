@@ -1,0 +1,135 @@
+plone.recipe.zope2instance
+==========================
+
+This recipe creates and configures a Zope 2 instance in parts. It also
+installs a control script, which is like zopectl, in the bin/ directory.
+The name of the control script is the the name of the part in buildout.
+
+You can use it with a part like this::
+
+  [instance]
+  recipe = plone.recipe.zope2instance
+  zope2-location = /path/to/zope2/install
+  user = admin:admin
+  http-address = 8080
+  eggs = ${buildout:eggs} my.package
+  products = ${buildout:directory}/products
+  zcml = my.package
+
+Options
+-------
+
+zope2-location
+  The path where Zope 2 is installed. If you are also using the
+  plone.recipe.zope2install recipe, and you have that configured as a part
+  called 'zope2' prior to the zope2instance part, you can use ${zope2:location}
+  for this parameter.
+
+zope-conf
+  A relative or absolute path to a zope.conf file. If this is not given, a
+  zope.conf will be generated based on the the options below.
+
+repozo
+  The path to the repozo.py backup script. A wrapper for this will be
+  generated in bin/repozo, which sets up the appropriate environment for
+  running this. Defaults to "${zope2-location}/utilities/ZODBTools/repozo.py".
+  Set this to an empty value if you do not want this script to be generated.
+
+The following options all affect the generated zope.conf:
+
+products
+  A list of paths where Zope 2 products are installed. The first path takes
+  precedence in case the same product is found in more than one directory.
+
+zcml
+  Install ZCML slugs for the packages listed, separated by whitespace.
+
+extra-paths
+  A list of paths where additional python packages are installed. The paths
+  are searched in the given order after all egg and products paths.
+
+default-zpublisher-encoding
+  This controls what character set is used to encode unicode data that reaches
+  ZPublisher without any other specified encoding. This defaults to 'utf-8'.
+
+debug-mode
+  Set to 'on' to turn on debug mode in Zope. Defaults to 'off'.
+
+verbose-security
+  Set to 'on' to turn on verbose security (and switch to the Python security
+  implementation). Defaults to 'off' (and the C security implementation).
+
+effective-user
+  The name of the effective user for the Zope process. Defaults to not setting
+  an effective user.
+
+ip-address
+  The default IP address on which Zope's various server protocol
+  implementations will listen for requests. If this is unset, Zope will listen
+  on all IP addresses supported by the machine. This directive can be
+  overridden on a per-server basis in the servers section. Defaults to not
+  setting an ip-address.
+
+port-base
+  Offset applied to the port numbers used for ZServer configurations. For
+  example, if the http-server port is 8080 and the port-base is 1000, the HTTP
+  server will listen on port 9080. This makes it easy to change the complete
+  set of ports used by a Zope server process. Zope defaults to 0.
+
+http-address
+  Give a port for the HTTP server. Defaults to 8080.
+
+event-log
+  The filename of the event log. Defaults to var/log/${partname}.log
+
+event-log-level
+  Set the level of the console output for the event log. Level may be any of
+  CRITICAL, ERROR, WARN, INFO, DEBUG, or ALL. Defaults to INFO.
+
+z2-log
+  The filename for the Z2 access log. Defaults to var/log/${partname}-Z2.log.
+
+z2-log-level
+  Set the log level for the access log. Level may be any of CRITICAL, ERROR,
+  WARN, INFO, DEBUG, or ALL. Defaults to WARN.
+
+file-storage
+  The filename where the ZODB data file will be stored.
+  Defaults to var/filestorage/Data.fs.
+
+blob-storage
+  The name of the directory where the ZODB blob data will be stored.
+
+zeo-client
+  Set to 'on' to make this instance a ZEO client. In this case, setting the
+  zeo-address option is required, and the file-storage option has no effect.
+  To set up a ZEO server, you can use the plone.recipe.zope2zeoserver recipe.
+  Defaults to 'off'.
+
+zeo-address
+  Set the address of the ZEO server. Defaults to 8100.
+
+zeo-client-cache-size
+  Set the size of the ZEO client cache. Defaults to '30MB'.
+
+zeo-storage
+  Set the name of the ZEO storage. Defaults to '1'.
+
+zodb-cache-size
+  Set the ZODB cache size, i.e. the number of objects which the ZODB cache
+  will try to hold. Defaults to 5000.
+
+zserver-threads
+  Specify the number of threads that Zope's ZServer web server will use to
+  service requests. You shouldn't change this unless you know what you are
+  doing. Zope's default is 4.
+
+zope-conf-additional
+  Give additional lines to zope.conf. Make sure you indent any lines after
+  the one with the parameter.
+
+Reporting bugs or asking questions
+----------------------------------
+
+We have a shared bugtracker and help desk on Launchpad:
+https://bugs.launchpad.net/collective.buildout/
