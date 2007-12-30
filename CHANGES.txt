@@ -4,6 +4,11 @@ Change History
 1.2 (unreleased)
 ----------------
 
+- Merged rochael-blobsupport branch. Added support for ZODB 3.8 blob storage
+  configuration for ZEO clients. This references
+  https://bugs.launchpad.net/collective.buildout/+bug/179113.
+  [rochael, hannosch]
+
 - Added `zeo-client-name` option. Defaults to the name of the ZEO client.
   [hannosch]
 
