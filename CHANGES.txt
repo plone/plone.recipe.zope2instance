@@ -1,8 +1,8 @@
 Change History
 ==============
 
-1.2
----
+1.2 (unreleased)
+----------------
 
 - Added `zeo-client-name` option. Defaults to the name of the ZEO client.
   [hannosch]
