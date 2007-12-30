@@ -144,19 +144,20 @@ class Recipe:
                 ip_address = 'ip-address %s' % ip_address
             
             zope_conf_additional = options.get('zope-conf-additional', '')
-        
+            
             base_dir = self.buildout['buildout']['directory']
-        
-            event_log_name = options.get('event-log', os.path.sep.join(('var', 'log', self.name + '.log',)))
-            event_log = os.path.join(base_dir, event_log_name)
+            var_dir = options.get('var', os.path.join(base_dir, 'var'))
+            
+            event_log_name = options.get('event-log', os.path.sep.join(('log', self.name + '.log',)))
+            event_log = os.path.join(var_dir, event_log_name)
             event_log_dir = os.path.dirname(event_log)
             if not os.path.exists(event_log_dir):
                 os.makedirs(event_log_dir)
             
             event_log_level = options.get('event-log-level', 'INFO')
             
-            z_log_name = options.get('z-log', os.path.sep.join(('var', 'log', self.name + '-Z2.log',)))
-            z_log = os.path.join(base_dir, z_log_name)
+            z_log_name = options.get('z-log', os.path.sep.join(('log', self.name + '-Z2.log',)))
+            z_log = os.path.join(var_dir, z_log_name)
             z_log_dir = os.path.dirname(z_log)
             if not os.path.exists(z_log_dir):
                 os.makedirs(z_log_dir)
@@ -167,8 +168,8 @@ class Recipe:
             if default_zpublisher_encoding:
                 default_zpublisher_encoding = 'default-zpublisher-encoding %s' % default_zpublisher_encoding
             
-            file_storage = options.get('file-storage', os.path.sep.join(('var', 'filestorage', 'Data.fs',)))
-            file_storage = os.path.join(base_dir, file_storage)
+            file_storage = options.get('file-storage', os.path.sep.join(('filestorage', 'Data.fs',)))
+            file_storage = os.path.join(var_dir, file_storage)
             file_storage_dir = os.path.dirname(file_storage)
             if not os.path.exists(file_storage_dir):
                 os.makedirs(file_storage_dir)
@@ -194,6 +195,7 @@ class Recipe:
 
             if zeo_client.lower() in ('yes', 'true', 'on', '1'):
                 zeo_client_name = options.get('zeo-client-name', self.name)
+                zeo_var_dir = options.get('zeo-var', os.path.join(instance_home, 'var'))
                 if zeo_client_name:
                     zeo_client_name = 'zeo-client-name %s' % zeo_client_name
                 if blob_storage:
@@ -202,10 +204,10 @@ class Recipe:
                     storage_snippet_template = zeo_storage_template
                 storage_snippet = storage_snippet_template % dict(
                     blob_storage = blob_storage,
-                    instance_home = instance_home,
                     zeo_address = zeo_address,
                     zeo_client_cache_size = zeo_client_cache_size,
                     zeo_storage = zeo_storage,
+                    zeo_var_dir=zeo_var_dir,
                     )
             else:
                 # no zeo-client, so no zeo_client_name
@@ -215,10 +217,10 @@ class Recipe:
 
             pid_file = options.get(
                 'pid-file',
-                os.path.join(base_dir, 'var', self.name + '.pid'))
+                os.path.join(var_dir, self.name + '.pid'))
             lock_file = options.get(
                 'lock-file',
-                os.path.join(base_dir, 'var', self.name + '.lock'))
+                os.path.join(var_dir, self.name + '.lock'))
 
             zope_conf = template % dict(instance_home = instance_home,
                                         products_lines = products_lines,
@@ -440,7 +442,7 @@ zeo_storage_template="""
       server %(zeo_address)s
       storage %(zeo_storage)s
       name zeostorage
-      var %(instance_home)s/var
+      var %(zeo_var_dir)s
       cache-size %(zeo_client_cache_size)s
     </zeoclient>
 """.strip()
@@ -452,7 +454,7 @@ zeo_blob_storage_template="""
       server %(zeo_address)s
       storage %(zeo_storage)s
       name zeostorage
-      var %(instance_home)s/var
+      var %(zeo_var_dir)s
       cache-size %(zeo_client_cache_size)s
     </zeoclient>
 """.strip()

@@ -79,6 +79,10 @@ port-base
 http-address
   Give a port for the HTTP server. Defaults to 8080.
 
+var
+  Used to configure the base directory for all things going into var.
+  Defaults to ${buildout:directory}/var.
+
 event-log
   The filename of the event log. Defaults to var/log/${partname}.log
 
@@ -118,6 +122,10 @@ zeo-client-cache-size
 
 zeo-storage
   Set the storage number of the ZEO storage. Defaults to '1'.
+
+zeo-var
+    Used in the zeo storage snippets to configure the zeo var folder.
+    Defaults to $INSTANCE_HOME/var.
 
 zodb-cache-size
   Set the ZODB cache size, i.e. the number of objects which the ZODB cache

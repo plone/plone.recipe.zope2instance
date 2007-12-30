@@ -4,6 +4,14 @@ Change History
 1.2 (unreleased)
 ----------------
 
+- Added `var` option, which is used to configure the base directory for all
+  the things going into var.
+  [hannosch]
+
+- Added `zeo-var' option, which is used in the zeo storage snippets to
+  configure the zeo var folder.
+  [hannosch]
+
 - Merged rochael-blobsupport branch. Added support for ZODB 3.8 blob storage
   configuration for ZEO clients. This references
   https://bugs.launchpad.net/collective.buildout/+bug/179113.
