@@ -117,7 +117,7 @@ zeo-client-cache-size
   Set the size of the ZEO client cache. Defaults to '30MB'.
 
 zeo-storage
-  Set the name of the ZEO storage. Defaults to '1'.
+  Set the storage number of the ZEO storage. Defaults to '1'.
 
 zodb-cache-size
   Set the ZODB cache size, i.e. the number of objects which the ZODB cache
