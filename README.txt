@@ -42,7 +42,10 @@ products
   precedence in case the same product is found in more than one directory.
 
 zcml
-  Install ZCML slugs for the packages listed, separated by whitespace.
+  Install ZCML slugs for the packages listed, separated by whitespace. You
+  can specify the type of slug by appending '-' and the type of slug you want
+  to create.  The valid types are configure, overrides and meta. Some
+  examples: my.package-overrides my.package-meta
 
 extra-paths
   A list of paths where additional python packages are installed. The paths
@@ -124,8 +127,8 @@ zeo-storage
   Set the storage number of the ZEO storage. Defaults to '1'.
 
 zeo-var
-    Used in the zeo storage snippets to configure the zeo var folder.
-    Defaults to $INSTANCE_HOME/var.
+  Used in the zeo storage snippets to configure the zeo var folder.
+  Defaults to $INSTANCE_HOME/var.
 
 zodb-cache-size
   Set the ZODB cache size, i.e. the number of objects which the ZODB cache
