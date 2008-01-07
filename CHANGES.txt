@@ -4,6 +4,12 @@ Change History
 1.2 (unreleased)
 ----------------
 
+- Changed the ctl.do_foreground() (which is invoked by the "fg" command
+  line argument) start Zope in debug mode to emulate the behavior of
+  "zopectl fg". This required a little special WIN32 code to make
+  sure it would work in both *nix and Windows.
+  [smcmahon]
+
 - Added `var` option, which is used to configure the base directory for all
   the things going into var.
   [hannosch]

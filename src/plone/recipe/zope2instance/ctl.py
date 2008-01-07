@@ -85,7 +85,13 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         # Quote the program name, so it works even if it contains spaces
         program = self.options.program
         program[0] = '"%s"' % program[0]
+        program[1:1] = ["-X", '"debug-mode=on"']
         program = " ".join(program)
+        if WIN32:
+            # odd, but true: the windows cmd processor can't handle more than
+            # one quoted item per string unless you add quotes around the
+            # whole line.
+            program = '"%s"' % program
         print program
         try:
             os.system(program)
