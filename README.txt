@@ -113,6 +113,13 @@ zeo-client
   To set up a ZEO server, you can use the plone.recipe.zope2zeoserver recipe.
   Defaults to 'off'.
 
+shared-blob
+  If 'zeo-client' is set to 'on' and 'blob-storage' is set to a directory that
+  is shared between this instance and the ZEO server (as configured by the
+  'blob-dir' setting on zeo.conf, then setting 'shared-blob' to 'on' causes
+  this instance not to stream the blob file through the ZEO connection, but
+  just to send the information of the file location to the ZEO server.
+
 zeo-address
   Set the address of the ZEO server. Defaults to 8100.
 

@@ -195,7 +195,9 @@ class Recipe:
 
             if zeo_client.lower() in ('yes', 'true', 'on', '1'):
                 zeo_client_name = options.get('zeo-client-name', self.name)
-                zeo_var_dir = options.get('zeo-var', os.path.join(instance_home, 'var'))
+                zeo_var_dir = options.get('zeo-var',
+                                          os.path.join(instance_home, 'var'))
+                shared_blob_dir = options.get('shared-blob', 'no')
                 if zeo_client_name:
                     zeo_client_name = 'zeo-client-name %s' % zeo_client_name
                 if blob_storage:
@@ -204,6 +206,7 @@ class Recipe:
                     storage_snippet_template = zeo_storage_template
                 storage_snippet = storage_snippet_template % dict(
                     blob_storage = blob_storage,
+                    shared_blob_dir = shared_blob_dir,
                     zeo_address = zeo_address,
                     zeo_client_cache_size = zeo_client_cache_size,
                     zeo_storage = zeo_storage,
@@ -451,6 +454,7 @@ zeo_blob_storage_template="""
     # Blob-enabled ZEOStorage database
     <zeoclient>
       blob-dir %(blob_storage)s
+      shared-blob-dir %(shared_blob_dir)s
       server %(zeo_address)s
       storage %(zeo_storage)s
       name zeostorage

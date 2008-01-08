@@ -4,6 +4,11 @@ Change History
 1.2 (unreleased)
 ----------------
 
+- Added the boolean `shared-blob` option, defaulting to `no`. If all of
+  `zeo-client`, `blob-storage` and `shared-blob` options are set,
+  the instance will assume the blob directory set by `blob-storage` is shared
+  with the server instead of streaming 'blob' files through the ZEO connection.
+
 - Changed ctl.do_foreground() (which is invoked by the "fg" command
   line argument) start Zope in debug mode to emulate the behavior of
   "zopectl fg". This required a little special WIN32 code to make
