@@ -5,9 +5,8 @@ Change History
 ----------------
 
 - For each entry in recipe-specified 'extra-paths' line, add a 'path' line
-  to the instance and zope client zope.conf files.
+  to the instance and Zope client zope.conf files.
   [klm]
-
 
 1.2
 ---
