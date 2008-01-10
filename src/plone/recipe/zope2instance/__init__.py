@@ -127,6 +127,14 @@ class Recipe:
         
             instance_home = location
             products_lines = '\n'.join(['products %s' % p for p in products])
+            module_paths = options.get('extra-paths', '')
+            if module_paths:
+                module_paths = module_paths.split('\n')
+                # Filter out empty directories
+                module_paths = [p for p in module_paths if p]
+                # Make sure we have consistent path seperators
+                module_paths = [os.path.abspath(p) for p in module_paths]
+            paths_lines = '\n'.join(['path %s' % p for p in module_paths])
             debug_mode = options.get('debug-mode', 'off')
             security_implementation = 'C'
             verbose_security = options.get('verbose-security', 'off')
@@ -226,6 +234,7 @@ class Recipe:
                 os.path.join(var_dir, self.name + '.lock'))
 
             zope_conf = template % dict(instance_home = instance_home,
+                                        paths_lines = paths_lines,
                                         products_lines = products_lines,
                                         debug_mode = debug_mode,
                                         security_implementation = security_implementation,
@@ -466,6 +475,7 @@ zeo_blob_storage_template="""
 # The template used to build zope.conf
 zope_conf_template="""\
 instancehome %(instance_home)s
+%(paths_lines)s
 %(products_lines)s
 debug-mode %(debug_mode)s
 security-policy-implementation %(security_implementation)s
