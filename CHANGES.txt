@@ -3,7 +3,9 @@ Change History
 
 1.4 (unreleased)
 ----------------
-
+- Include an <environment></environment> clause if a set of settings is
+  specified.  Fixes #185539.
+  [klm]
 
 1.3
 ---
