@@ -183,19 +183,49 @@ class Recipe:
             if default_zpublisher_encoding:
                 default_zpublisher_encoding = 'default-zpublisher-encoding %s' % default_zpublisher_encoding
             
-            file_storage = options.get('file-storage', os.path.sep.join(('filestorage', 'Data.fs',)))
-            file_storage = os.path.join(var_dir, file_storage)
-            file_storage_dir = os.path.dirname(file_storage)
-            if not os.path.exists(file_storage_dir):
-                os.makedirs(file_storage_dir)
-            storage_snippet = file_storage_template % file_storage
+            relstorage = options.get('rel-storage', None)
+            if relstorage is not None:
+                rel_storage = {'dbname': 'test', 'host': 'localhost',
+                               'user': 'test', 'password': 'test'}
+                def _extract(el):
+                    if el.strip('') == '':
+                        return None
+                    el = el.split(' ')
+                    if len(el) != 2:
+                        return None
+                    return el[0].strip(), el[1].strip()
 
-            blob_storage = options.get('blob-storage', None)
-            if blob_storage:
-                blob_storage = os.path.join(base_dir, blob_storage)
-                if not os.path.exists(blob_storage):
-                    os.makedirs(blob_storage)
-                storage_snippet = blob_storage_template % (blob_storage, file_storage)
+                elements = [_extract(el) for el in relstorage.split('\n') 
+                            if _extract(el) is not None]
+                
+                type_ = 'postgresql' 
+                for key, value in elements:
+                    if key == 'type':
+                        type_ = value
+                    elif key in rel_storage:
+                        rel_storage[key] = value
+
+                if type_ == 'postgresql': 
+                    storage_snippet = rel_storage_postgres_template % rel_storage
+                else:
+                    storage_snippet = rel_storage_oracle_template % rel_storage
+
+            else:
+                file_storage = options.get('file-storage', 
+                                           os.path.sep.join(('filestorage', 
+                                                             'Data.fs',)))
+                file_storage = os.path.join(var_dir, file_storage)
+                file_storage_dir = os.path.dirname(file_storage)
+                if not os.path.exists(file_storage_dir):
+                    os.makedirs(file_storage_dir)
+                storage_snippet = file_storage_template % file_storage
+
+                blob_storage = options.get('blob-storage', None)
+                if blob_storage:
+                    blob_storage = os.path.join(base_dir, blob_storage)
+                    if not os.path.exists(blob_storage):
+                        os.makedirs(blob_storage)
+                    storage_snippet = blob_storage_template % (blob_storage, file_storage)
                 
             zserver_threads = options.get('zserver-threads', '')
             if zserver_threads:
@@ -450,6 +480,26 @@ file_storage_template="""
     <filestorage>
       path %s
     </filestorage>
+"""
+rel_storage_postgres_template="""
+    %%import relstorage
+    <relstorage>
+        <postgresql>
+            # The dsn is optional, as are each of the parameters in the dsn.
+            dsn dbname='%(dbname)s' user='%(user)s' host='%(host)s' password='%(password)s'
+        </postgresql>
+    </relstorage>
+"""
+
+rel_storage_oracle_template="""
+    %%import relstorage
+    <relstorage>
+        <oracle>
+            user %(user)s
+            password %(pass)s
+            dsn %(dns)s
+        </oracle>
+    </relstorage>
 """
 blob_storage_template="""
     # Blob-enabled FileStorage database
