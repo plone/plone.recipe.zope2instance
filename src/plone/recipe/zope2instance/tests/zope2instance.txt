@@ -35,4 +35,114 @@ Let's run it::
     Getting distribution for 'zc.recipe.egg'.
     Got zc.recipe.egg ....
     Generated script '...instance'.
- 
+
+We should have a zope instance, with a basic zope.conf::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    instancehome ...instance
+    debug-mode off
+    security-policy-implementation C
+    verbose-security off
+    default-zpublisher-encoding utf-8
+    <BLANKLINE>
+    <eventlog>
+      level INFO
+      <logfile>
+        path ...instance.log
+        level info
+      </logfile>
+    </eventlog>
+    <BLANKLINE>
+    <logger access>
+      level WARN
+      <logfile>
+        path ...instance-Z2.log
+        format %(message)s
+      </logfile>
+    </logger>
+    <BLANKLINE>
+    <http-server>
+      # valid keys are "address" and "force-connection-close"
+      address 8080
+      ...
+    </http-server>
+    <BLANKLINE>
+    <zodb_db main>
+        # Main database
+        cache-size 5000
+    # FileStorage database
+        <filestorage>
+          path ...Data.fs
+        </filestorage>
+        mount-point /
+    </zodb_db>
+    <BLANKLINE>
+    <zodb_db temporary>
+        # Temporary storage database (for sessions)
+        <temporarystorage>
+          name temporary storage for sessioning
+        </temporarystorage>
+        mount-point /temp_folder
+        container-class Products.TemporaryFolder.TemporaryContainer
+    </zodb_db>
+    <BLANKLINE>
+    pid-filename ...instance.pid
+    lock-filename ...instance.lock
+    <BLANKLINE>
+
+RelStorage
+==========
+
+To have a RelStorage configuration, you can use rel-storage::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... develop = 
+    ...     %(recipe_location)s 
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... 
+    ... zope2-location = %(zope2_location)s
+    ... user = me
+    ...
+    ... rel-storage = 
+    ...   type postgresql
+    ...   dbname zodb
+    ...   user tarek
+    ...   host example.com
+    ...   password secret
+    ...
+    ... ''' % globals())
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Develop: '...'
+    Uninstalling instance.
+    Installing instance.
+
+We should have a zope instance, with a basic zope.conf::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    instancehome ...instance
+    ...    
+    <zodb_db main>
+        # Main database
+        cache-size 5000
+    %import relstorage
+        <relstorage>
+            <postgresql>
+                # The dsn is optional, as are each of the parameters in the dsn.
+                dsn dbname='zodb' user='tarek' host='example.com' password='secret'
+            </postgresql>
+        </relstorage>
+        mount-point /
+    </zodb_db>
+    ...
+    <BLANKLINE>
+
