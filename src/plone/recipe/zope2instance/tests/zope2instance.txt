@@ -4,7 +4,35 @@ plone.recipe.zope2instance
 
 
 This is the doctest for plone.recipe.zope2instance. It ensures the template
-works fine.
+works fine. It is based on zc.buildout testing module::
 
-XXX add some tests 
+    >>> from zc.buildout.testing import * 
+    >>> from os.path import join
+    >>> import sys, os
 
+Let's create a minimum buildout that uses the current 
+plone.recipe.zope2instance::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... develop = 
+    ...     %(recipe_location)s 
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... 
+    ... zope2-location = %(zope2_location)s
+    ... user = me
+    ... ''' % globals())
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Develop: '...'
+    Installing instance.
+    Getting distribution for 'zc.recipe.egg'.
+    Got zc.recipe.egg ....
+    Generated script '...instance'.
+ 

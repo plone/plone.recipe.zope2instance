@@ -1,81 +1,29 @@
 # -*- coding: utf-8 -*-
 """
-Grabs the tests in /docs
+Grabs the doctests in /tests
 """
 __docformat__ = 'restructuredtext'
 
 import unittest
 import doctest
 import sys
+import re
 import os
 import shutil
 import popen2
 import StringIO
 
-from zope.testing import doctest
+from zope.testing import doctest, renormalizing
+import zc.buildout.testing, zc.buildout.easy_install
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
+recipe_location = current_dir
+zope2_location = os.path.join(current_dir, 'zope2')
 
-def rmdir(*args):
-    dirname = os.path.join(*args)
-    if os.path.isdir(dirname):
-        shutil.rmtree(dirname)
+for i in range(5):
+    recipe_location = os.path.split(recipe_location)[0]
 
-def read_sh(cmd):
-    _cmd = cmd
-    if _cmd.startswith('python') or \
-       _cmd.startswith('paster'):
-        _cmd = execdir + os.path.sep + cmd
-    old = sys.stdout 
-    child_stdout_and_stderr, child_stdin = popen2.popen4(_cmd)
-    child_stdin.close()
-    return child_stdout_and_stderr.read()
-
-def sh(cmd):
-    _cmd = cmd
-    print cmd
-    if _cmd.startswith('python') or \
-       _cmd.startswith('paster'):
-        _cmd = execdir + os.path.sep + cmd
-    # launch command 2 times to see what append and be able 
-    # to test in doc tests
-    os.system(_cmd)
-    child_stdout_and_stderr, child_stdin = popen2.popen4(_cmd)
-    child_stdin.close()
-    print child_stdout_and_stderr.read()
-
-def ls(*args):
-    dirname = os.path.join(*args)
-    if os.path.isdir(dirname):
-        filenames = os.listdir(dirname)
-        for filename in sorted(filenames):
-            print filename
-    else:
-        print 'No directory named %s' % dirname
-
-def cd(*args):
-    dirname = os.path.join(*args)
-    os.chdir(dirname)
-
-
-def config(filename):
-    return os.path.join(current_dir, filename)
-
-def cat(*args):
-    filename = os.path.join(*args)
-    if os.path.isfile(filename):
-        print open(filename).read()
-    else:
-        print 'No file named %s' % filename
-
-def touch(*args, **kwargs):
-    filename = os.path.join(*args)
-    open(filename, 'w').write(kwargs.get('data',''))
-
-execdir = os.path.abspath(os.path.dirname(sys.executable))
-tempdir = os.getenv('TEMP', '/tmp')
-
-def doc_suite(test_dir, setUp=None, tearDown=None, globs=None):
+def doc_suite(test_dir, globs=None):
     """Returns a test suite, based on doctests found in /doctest."""
     suite = []
     if globs is None:
@@ -92,9 +40,17 @@ def doc_suite(test_dir, setUp=None, tearDown=None, globs=None):
 
     for test in docs:
         suite.append(doctest.DocFileSuite(test, optionflags=flags, 
-                                          globs=globs, setUp=setUp, 
-                                          tearDown=tearDown,
-                                          module_relative=False))
+                                          globs=globs, 
+                    setUp=zc.buildout.testing.buildoutSetUp,
+                    tearDown=zc.buildout.testing.buildoutTearDown,
+                    checker=renormalizing.RENormalizing([
+                        zc.buildout.testing.normalize_path,
+                        (re.compile(r'\S+buildout.py'), 'buildout.py'),
+                        (re.compile(r'line \d+'), 'line NNN'),
+                        (re.compile(r'py\(\d+\)'), 'py(NNN)'),
+                        ])
+                        ,
+                      module_relative=False))
 
     return unittest.TestSuite(suite)
 
