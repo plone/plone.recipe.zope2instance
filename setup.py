@@ -30,6 +30,7 @@ setup(
       "Framework :: Zope2",
       "Programming Language :: Python",
       ],
+    tests_require=['zope.testing'],
     packages = find_packages('src'),
     include_package_data = True,
     package_dir = {'':'src'},
