@@ -1,0 +1,10 @@
+==========================
+plone.recipe.zope2instance
+==========================
+
+
+This is the doctest for plone.recipe.zope2instance. It ensures the template
+works fine.
+
+XXX add some tests 
+
