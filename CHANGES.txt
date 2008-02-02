@@ -7,6 +7,12 @@ Change History
   specified.  Fixes #185539.
   [klm]
 
+- added a test environment, using zc.buildout.testing, and a doctest
+  that tries the recipe. [tarek]
+
+- added `rel-storage` option to be able to wire Zope to RelStorage
+  (postgresql/oracle) instead of a FileStorage database. [tarek]
+
 1.3
 ---
 
