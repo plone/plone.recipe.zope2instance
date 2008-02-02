@@ -107,6 +107,27 @@ file-storage
 blob-storage
   The name of the directory where the ZODB blob data will be stored.
 
+rel-storage
+  Allows to set a RelStorage instead of a FileStorage. 
+  
+  Contains these values:
+  
+  - type: postgresql or oracle
+  - username: database user
+  - password: database password
+  - dbname: name of the database (postgresql only)
+  - host: name of the server (postgresql only)
+  - dns: dns (oracle only)
+
+  Example::
+    
+    rel-storage = 
+      type postgresql
+      dbname zodb
+      user tarek
+      host localhost
+      password secret
+
 zeo-client
   Set to 'on' to make this instance a ZEO client. In this case, setting the
   zeo-address option is required, and the file-storage option has no effect.
