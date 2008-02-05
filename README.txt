@@ -170,6 +170,13 @@ zserver-threads
 zope-conf-additional
   Give additional lines to zope.conf. Make sure you indent any lines after
   the one with the parameter.
+  
+  Example::
+  
+    zope-conf-additional =
+      <environment>
+        DISABLE_PTS true
+      </environment>
 
 Reporting bugs or asking questions
 ----------------------------------

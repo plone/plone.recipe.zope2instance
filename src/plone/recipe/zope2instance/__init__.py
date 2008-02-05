@@ -134,13 +134,6 @@ class Recipe:
                 module_paths = [p for p in module_paths if p]
                 # Make sure we have consistent path seperators
                 module_paths = [os.path.abspath(p) for p in module_paths]
-
-            envvar_settings = options.get('environment', '')
-            if envvar_settings:
-                envvar_clause = envvar_template % envvar_settings
-            else:
-                envvar_clause = ""
-
             paths_lines = '\n'.join(['path %s' % p for p in module_paths])
             debug_mode = options.get('debug-mode', 'off')
             security_implementation = 'C'
@@ -277,7 +270,6 @@ class Recipe:
                                         security_implementation = security_implementation,
                                         verbose_security = verbose_security,
                                         effective_user = effective_user,
-                                        envvar_clause = envvar_clause,
                                         ip_address = ip_address,
                                         event_log = event_log,
                                         event_log_level = event_log_level,
@@ -469,11 +461,6 @@ if __name__ == '__main__':
                     % (package, filename)
                     )
 
-# Env var snippet for template
-envvar_template = """
-<environment> %s
-</environment>
-"""
 # Storage snippets for zope.conf template
 file_storage_template="""
     # FileStorage database
@@ -545,7 +532,7 @@ security-policy-implementation %(security_implementation)s
 verbose-security %(verbose_security)s
 %(default_zpublisher_encoding)s
 %(port_base)s
-%(effective_user)s%(envvar_clause)s
+%(effective_user)s
 %(ip_address)s
 %(zserver_threads)s
 %(zeo_client_name)s

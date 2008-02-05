@@ -3,15 +3,17 @@ Change History
 
 1.4 (unreleased)
 ----------------
-- Include an <environment></environment> clause if a set of settings is
-  specified.  Fixes #185539.
-  [klm]
 
-- added a test environment, using zc.buildout.testing, and a doctest
-  that tries the recipe. [tarek]
+- Added example for the zope-conf-additional option. This closes #185539.
+  [klm, hannosch]
 
-- added `rel-storage` option to be able to wire Zope to RelStorage
-  (postgresql/oracle) instead of a FileStorage database. [tarek]
+- Added a test environment, using zc.buildout.testing, and a doctest
+  that tries the recipe.
+  [tarek]
+
+- Added `rel-storage` option to be able to wire Zope to RelStorage
+  (postgresql/oracle) instead of a FileStorage database.
+  [tarek]
 
 1.3
 ---
