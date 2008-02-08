@@ -110,7 +110,6 @@ class Recipe:
         
         options = self.options
         location = options['location']
-        
         # Don't do this if we have a manual zope.conf
         zope_conf_path = options.get('zope-conf', None)
         if zope_conf_path is not None:
@@ -156,12 +155,20 @@ class Recipe:
             base_dir = self.buildout['buildout']['directory']
             var_dir = options.get('var', os.path.join(base_dir, 'var'))
             
-            event_log_name = options.get('event-log', os.path.sep.join(('log', self.name + '.log',)))
-            event_log = os.path.join(var_dir, event_log_name)
-            event_log_dir = os.path.dirname(event_log)
-            if not os.path.exists(event_log_dir):
-                os.makedirs(event_log_dir)
-            
+            custom_event_log = options.get('event-log-custom', None)
+            default_log = os.path.sep.join(('log', self.name + '.log',))
+            # log file
+            if custom_event_log is None: 
+                event_log_name = options.get('event-log', default_log)
+                event_file = os.path.join(var_dir, event_log_name)
+                event_log_dir = os.path.dirname(event_file)
+                if not os.path.exists(event_log_dir):
+                    os.makedirs(event_log_dir)
+                event_log = event_logfile % {'event_logfile': event_file}
+            # custom log 
+            else:
+                event_log = custom_event_log
+           
             event_log_level = options.get('event-log-level', 'INFO')
             
             z_log_name = options.get('z-log', os.path.sep.join(('log', self.name + '-Z2.log',)))
@@ -522,6 +529,13 @@ zeo_blob_storage_template="""
     </zeoclient>
 """.strip()
 
+event_logfile = """
+  <logfile>
+    path %(event_logfile)s
+    level info
+  </logfile>
+""".strip()
+
 # The template used to build zope.conf
 zope_conf_template="""\
 instancehome %(instance_home)s
@@ -539,10 +553,7 @@ verbose-security %(verbose_security)s
 
 <eventlog>
   level %(event_log_level)s
-  <logfile>
-    path %(event_log)s
-    level info
-  </logfile>
+  %(event_log)s
 </eventlog>
 
 <logger access>

@@ -89,6 +89,10 @@ var
 event-log
   The filename of the event log. Defaults to var/log/${partname}.log
 
+event-log-custom
+  A custom section for the eventlog, to be able to use another
+  avent logger than `logfile`
+
 event-log-level
   Set the level of the console output for the event log. Level may be any of
   CRITICAL, ERROR, WARN, INFO, DEBUG, or ALL. Defaults to INFO.

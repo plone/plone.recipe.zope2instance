@@ -4,6 +4,8 @@ Change History
 1.4 (unreleased)
 ----------------
 
+- Added a `event-log-custom` option [tarek]
+
 - Added example for the zope-conf-additional option. This closes #185539.
   [klm, hannosch]
 
