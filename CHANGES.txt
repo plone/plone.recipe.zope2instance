@@ -33,17 +33,17 @@ Change History
   with the server instead of streaming 'blob' files through the ZEO connection.
   [rochael]
 
-- Changed ctl.do_foreground() (which is invoked by the "fg" command
+- Changed `ctl.do_foreground()` (which is invoked by the `fg` command
   line argument) start Zope in debug mode to emulate the behavior of
-  "zopectl fg". This required a little special WIN32 code to make
-  sure it would work in both *nix and Windows.
+  `zopectl fg`. This required a little special WIN32 code to make
+  sure it would work in both `*nix` and Windows.
   [smcmahon]
 
 - Added `var` option, which is used to configure the base directory for all
   the things going into var.
   [hannosch]
 
-- Added `zeo-var' option, which is used in the zeo storage snippets to
+- Added `zeo-var` option, which is used in the zeo storage snippets to
   configure the zeo var folder.
   [hannosch]
 
