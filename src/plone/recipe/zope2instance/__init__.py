@@ -171,7 +171,7 @@ class Recipe:
            
             event_log_level = options.get('event-log-level', 'INFO')
             
-            z_log_name = options.get('z-log', os.path.sep.join(('log', self.name + '-Z2.log',)))
+            z_log_name = options.get('z2-log', os.path.sep.join(('log', self.name + '-Z2.log',)))
             z_log = os.path.join(var_dir, z_log_name)
             z_log_dir = os.path.dirname(z_log)
             if not os.path.exists(z_log_dir):

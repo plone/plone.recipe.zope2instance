@@ -17,6 +17,10 @@ Change History
   (postgresql/oracle) instead of a FileStorage database.
   [tarek]
 
+- Fix typo in event log parameter name (from "z-log" to "z2-log"), to comply
+  with the documentation.
+  [kdeldycke]
+
 1.3
 ---
 
