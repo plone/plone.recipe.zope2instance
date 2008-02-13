@@ -21,6 +21,9 @@ Change History
   with the documentation.
   [kdeldycke]
 
+- Create pid and lock file folders if doesn't exist.
+  [kdeldycke]
+
 1.3
 ---
 

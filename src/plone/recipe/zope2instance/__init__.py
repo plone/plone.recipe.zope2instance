@@ -266,9 +266,16 @@ class Recipe:
             pid_file = options.get(
                 'pid-file',
                 os.path.join(var_dir, self.name + '.pid'))
+            pid_file_dir = os.path.dirname(pid_file)
+            if not os.path.exists(pid_file_dir):
+                os.makedirs(pid_file_dir)
+
             lock_file = options.get(
                 'lock-file',
                 os.path.join(var_dir, self.name + '.lock'))
+            lock_file_dir = os.path.dirname(lock_file)
+            if not os.path.exists(lock_file_dir):
+                os.makedirs(lock_file_dir)
 
             zope_conf = template % dict(instance_home = instance_home,
                                         paths_lines = paths_lines,
