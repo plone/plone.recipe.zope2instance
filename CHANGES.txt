@@ -24,6 +24,10 @@ Change History
 - Create pid and lock file folders if doesn't exist.
   [kdeldycke]
 
+- Remove hard-coded log level and use the event_log_level parameter to set it
+  dynamically.
+  [kdeldycke]
+
 1.3
 ---
 
