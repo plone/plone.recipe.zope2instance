@@ -154,6 +154,8 @@ class Recipe:
             
             base_dir = self.buildout['buildout']['directory']
             var_dir = options.get('var', os.path.join(base_dir, 'var'))
+
+            event_log_level = options.get('event-log-level', 'INFO')
             
             custom_event_log = options.get('event-log-custom', None)
             default_log = os.path.sep.join(('log', self.name + '.log',))
@@ -164,12 +166,10 @@ class Recipe:
                 event_log_dir = os.path.dirname(event_file)
                 if not os.path.exists(event_log_dir):
                     os.makedirs(event_log_dir)
-                event_log = event_logfile % {'event_logfile': event_file}
+                event_log = event_logfile % {'event_logfile': event_file, 'event_log_level': event_log_level}
             # custom log 
             else:
                 event_log = custom_event_log
-           
-            event_log_level = options.get('event-log-level', 'INFO')
             
             z_log_name = options.get('z2-log', os.path.sep.join(('log', self.name + '-Z2.log',)))
             z_log = os.path.join(var_dir, z_log_name)
@@ -539,7 +539,7 @@ zeo_blob_storage_template="""
 event_logfile = """
   <logfile>
     path %(event_logfile)s
-    level info
+    level %(event_log_level)s
   </logfile>
 """.strip()
 
