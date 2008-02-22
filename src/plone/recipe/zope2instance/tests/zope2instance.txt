@@ -17,6 +17,7 @@ plone.recipe.zope2instance::
     ... '''
     ... [buildout]
     ... parts = instance
+    ... index = http://download.zope.org/ppix
     ... develop = 
     ...     %(recipe_location)s 
     ...
@@ -31,9 +32,7 @@ Let's run it::
 
     >>> print system(join('bin', 'buildout')),
     Develop: '...'
-    Installing instance.
-    Getting distribution for 'zc.recipe.egg'.
-    Got zc.recipe.egg ....
+    ...
     Generated script '...instance'.
 
 We should have a zope instance, with a basic zope.conf::
@@ -100,6 +99,7 @@ To have a RelStorage configuration, you can use rel-storage::
     ... '''
     ... [buildout]
     ... parts = instance
+    ... index = http://download.zope.org/ppix
     ... develop = 
     ...     %(recipe_location)s 
     ...
@@ -157,6 +157,7 @@ to use `rotatezlogs`::
     ... '''
     ... [buildout]
     ... parts = instance
+    ... index = http://download.zope.org/ppix
     ... develop = 
     ...     %(recipe_location)s 
     ...
