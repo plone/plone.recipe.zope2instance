@@ -50,7 +50,7 @@ We should have a zope instance, with a basic zope.conf::
       level INFO
       <logfile>
         path ...instance.log
-        level info
+        level INFO
       </logfile>
     </eventlog>
     <BLANKLINE>
