@@ -1,7 +1,7 @@
 Change History
 ==============
 
-1.4 (unreleased)
+1.4 (2008-02-23)
 ----------------
 
 - Fix typo in event log parameter name (from "z-log" to "z2-log"), to comply
