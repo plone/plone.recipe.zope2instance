@@ -12,7 +12,7 @@
 #
 ##############################################################################
 
-import os, re, shutil
+import os, re, shutil, sys
 import zc.buildout
 import zc.recipe.egg
 
@@ -49,6 +49,8 @@ class Recipe:
             zope2_bin = os.path.join(options['zope2-location'],
                                      'utilities')
         mkzopeinstance = os.path.join(zope2_bin, 'mkzopeinstance.py')
+        if sys.platform[:3].lower() == "win":
+            mkzopeinstance = '"%s"' % mkzopeinstance
 
         assert os.spawnl(
             os.P_WAIT, options['executable'], options['executable'],

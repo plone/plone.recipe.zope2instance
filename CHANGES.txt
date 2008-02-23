@@ -4,7 +4,9 @@ Change History
 1.5
 ---
 
-
+- Fix instance generation to work on Windows with blanks in the path name.
+  This closes #188023.
+  [hannosch, gotti]
 
 1.4 (2008-02-23)
 ----------------
