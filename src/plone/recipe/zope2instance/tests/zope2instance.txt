@@ -17,7 +17,7 @@ plone.recipe.zope2instance::
     ... '''
     ... [buildout]
     ... parts = instance
-    ... index = http://download.zope.org/ppix
+    ... index = http://pypi.python.org/simple
     ... develop = 
     ...     %(recipe_location)s 
     ...
@@ -99,7 +99,7 @@ To have a RelStorage configuration, you can use rel-storage::
     ... '''
     ... [buildout]
     ... parts = instance
-    ... index = http://download.zope.org/ppix
+    ... index = http://pypi.python.org/simple
     ... develop = 
     ...     %(recipe_location)s 
     ...
@@ -157,7 +157,7 @@ to use `rotatezlogs`::
     ... '''
     ... [buildout]
     ... parts = instance
-    ... index = http://download.zope.org/ppix
+    ... index = http://pypi.python.org/simple
     ... develop = 
     ...     %(recipe_location)s 
     ...

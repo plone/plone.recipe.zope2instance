@@ -4,29 +4,30 @@ Change History
 1.4 (unreleased)
 ----------------
 
-- Added a `event-log-custom` option [tarek]
+- Fix typo in event log parameter name (from "z-log" to "z2-log"), to comply
+  with the documentation. This closes #190943.
+  [kdeldycke]
+
+- Create pid and lock file folders if they don't exist.
+  [kdeldycke]
+
+- Remove hard-coded log level and use the event_log_level parameter to set it
+  dynamically. This closes #190994.
+  [kdeldycke]
+
+- Added a test environment, using zc.buildout.testing, and a doctest that
+  tries the recipe.
+  [tarek]
+
+- Added an `event-log-custom` option
+  [tarek]
 
 - Added example for the zope-conf-additional option. This closes #185539.
   [klm, hannosch]
 
-- Added a test environment, using zc.buildout.testing, and a doctest
-  that tries the recipe.
-  [tarek]
-
 - Added `rel-storage` option to be able to wire Zope to RelStorage
   (postgresql/oracle) instead of a FileStorage database.
   [tarek]
-
-- Fix typo in event log parameter name (from "z-log" to "z2-log"), to comply
-  with the documentation.
-  [kdeldycke]
-
-- Create pid and lock file folders if doesn't exist.
-  [kdeldycke]
-
-- Remove hard-coded log level and use the event_log_level parameter to set it
-  dynamically.
-  [kdeldycke]
 
 1.3
 ---
