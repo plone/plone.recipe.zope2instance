@@ -319,7 +319,7 @@ class Recipe:
         snippet = snippet.strip()
         lines = snippet.split('\n')
         for key, value in properties:
-            lines[-1:-1] = [key + ' ' + value]
+            lines[-1:-1] = [' '*6 + key + ' ' + value]
         return '\n'.join(lines)
 
     def patch_binaries(self, ws_locations):
