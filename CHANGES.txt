@@ -8,6 +8,10 @@ Change History
   This closes #188023.
   [hannosch, gotti]
 
+- Added 'zeo-client-client' option which results in 'client <value>' inside
+  <zeoclient>.
+  [timte]
+
 1.4 (2008-02-23)
 ----------------
 

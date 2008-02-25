@@ -244,6 +244,7 @@ class Recipe:
                 zeo_client_name = options.get('zeo-client-name', self.name)
                 zeo_var_dir = options.get('zeo-var',
                                           os.path.join(instance_home, 'var'))
+                zeo_client_client = options.get('zeo-client-client', None)
                 shared_blob_dir = options.get('shared-blob', 'no')
                 if zeo_client_name:
                     zeo_client_name = 'zeo-client-name %s' % zeo_client_name
@@ -259,6 +260,11 @@ class Recipe:
                     zeo_storage = zeo_storage,
                     zeo_var_dir=zeo_var_dir,
                     )
+                additional_props = []
+                if zeo_client_client is not None:
+                    additional_props += [('client', zeo_client_client)]
+                if additional_props:
+                    storage_snippet = self.add_properties(storage_snippet, additional_props)
             else:
                 # no zeo-client, so no zeo_client_name
                 zeo_client_name = ''
@@ -304,6 +310,17 @@ class Recipe:
 
         zope_conf_path = os.path.join(location, 'etc', 'zope.conf')
         open(zope_conf_path, 'w').write(zope_conf)
+
+    def add_properties(self, snippet, properties):
+        """ Add properties to a directive. This is used when a property can't
+            be added to the template because it shouldn't be added if it's not
+            specified in the buildout configuration.
+        """
+        snippet = snippet.strip()
+        lines = snippet.split('\n')
+        for key, value in properties:
+            lines[-1:-1] = [key + ' ' + value]
+        return '\n'.join(lines)
 
     def patch_binaries(self, ws_locations):
         location = self.options['location']

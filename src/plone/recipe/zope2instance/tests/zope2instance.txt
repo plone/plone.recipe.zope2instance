@@ -146,6 +146,99 @@ We should have a zope instance, with a basic zope.conf::
     ...
     <BLANKLINE>
 
+ZEO storage
+===========
+If you want to connect to a zeo server you specify some additional properties
+for the plone.recipe.zope2instance recipe.
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... index = http://pypi.python.org/simple
+    ... develop = 
+    ...     %(recipe_location)s 
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... 
+    ... zope2-location = %(zope2_location)s
+    ... user = me
+    ... zeo-client = yes
+    ... ''' % globals())
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Develop: '...'
+    ...
+
+We should have a zope instance, with a basic zope.conf::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    instancehome ...instance
+    ...
+    <zodb_db main>
+        ...
+        <zeoclient>
+            server 8100
+            storage 1
+            name zeostorage
+            var /sample-buildout/parts/instance/var
+            cache-size 30MB
+        </zeoclient>
+        ...
+    </zodb_db>
+    ...
+    <BLANKLINE>
+ 
+If zope-client-client is specified it should get into that section as well.
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... index = http://pypi.python.org/simple
+    ... develop = 
+    ...     %(recipe_location)s 
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... 
+    ... zope2-location = %(zope2_location)s
+    ... user = me
+    ... zeo-client = yes
+    ... zeo-client-client = persistentcache88
+    ... ''' % globals())
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Develop: '...'
+    ...
+
+We should have a zope instance, with a basic zope.conf::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    instancehome ...instance
+    ...
+    <zodb_db main>
+        ...
+        <zeoclient>
+            server 8100
+            storage 1
+            name zeostorage
+            var /sample-buildout/parts/instance/var
+            cache-size 30MB
+            client persistentcache88
+        </zeoclient>
+        ...
+    </zodb_db>
+    ...
+    <BLANKLINE>
+ 
 Custom Event log
 ================
 

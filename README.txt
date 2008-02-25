@@ -155,6 +155,10 @@ zeo-client-name
 zeo-client-cache-size
   Set the size of the ZEO client cache. Defaults to '30MB'.
 
+zeo-client-client
+  Set the persistent cache name that is used to construct the cache
+  filenames. Persistent cache files are disabled by default.
+
 zeo-storage
   Set the storage number of the ZEO storage. Defaults to '1'.
 
