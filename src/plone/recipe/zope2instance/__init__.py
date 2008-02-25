@@ -185,32 +185,29 @@ class Recipe:
             if default_zpublisher_encoding:
                 default_zpublisher_encoding = 'default-zpublisher-encoding %s' % default_zpublisher_encoding
             
-            relstorage = options.get('rel-storage', None)
+            relstorage = options.get('rel-storage')
             if relstorage is not None:
-                rel_storage = {'dbname': 'test', 'host': 'localhost',
-                               'user': 'test', 'password': 'test'}
-                def _extract(el):
-                    if el.strip('') == '':
-                        return None
-                    el = el.split(' ')
-                    if len(el) != 2:
-                        return None
-                    return el[0].strip(), el[1].strip()
+                def _split(el):
+                    el = el.strip().split()
+                    return len(el) == 2 and el or None
 
-                elements = [_extract(el) for el in relstorage.split('\n') 
-                            if _extract(el) is not None]
+                rel_storage = dict(
+                    _split(el) for el in relstorage.splitlines() 
+                    if _split(el) is not None)
+                type_ = rel_storage.pop('type', 'postgresql')
                 
-                type_ = 'postgresql' 
-                for key, value in elements:
-                    if key == 'type':
-                        type_ = value
-                    elif key in rel_storage:
-                        rel_storage[key] = value
+                if type_ == 'postgresql' and not 'dsn' in rel_storage:
+                    # Support zope2instance 1.4 style interpolation for
+                    # postgresql
+                    template = ("dbname='%(dbname)s' user='%(user)s' "
+                                "host='%(host)s' password='%(password)s'")
+                    rel_storage = dict(dsn=template % rel_storage)                    
 
-                if type_ == 'postgresql': 
-                    storage_snippet = rel_storage_postgres_template % rel_storage
-                else:
-                    storage_snippet = rel_storage_oracle_template % rel_storage
+                opts = dict(
+                    type=type_,
+                    opts='\n'.join(' ' * 12 + ' '.join(item)
+                                   for item in rel_storage.iteritems()))
+                storage_snippet = rel_storage_template % opts
 
             else:
                 file_storage = options.get('file-storage', 
@@ -501,24 +498,13 @@ file_storage_template="""
       path %s
     </filestorage>
 """
-rel_storage_postgres_template="""
-    %%import relstorage
-    <relstorage>
-        <postgresql>
-            # The dsn is optional, as are each of the parameters in the dsn.
-            dsn dbname='%(dbname)s' user='%(user)s' host='%(host)s' password='%(password)s'
-        </postgresql>
-    </relstorage>
-"""
 
-rel_storage_oracle_template="""
+rel_storage_template="""
     %%import relstorage
     <relstorage>
-        <oracle>
-            user %(user)s
-            password %(pass)s
-            dsn %(dns)s
-        </oracle>
+        <%(type)s>
+%(opts)s
+        </%(type)s>
     </relstorage>
 """
 blob_storage_template="""

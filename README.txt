@@ -114,22 +114,18 @@ blob-storage
 rel-storage
   Allows to set a RelStorage instead of a FileStorage. 
   
-  Contains these values:
+  Contains settings separated by newlines, with these values:
   
-  - type: postgresql or oracle
-  - username: database user
-  - password: database password
-  - dbname: name of the database (postgresql only)
-  - host: name of the server (postgresql only)
-  - dns: dns (oracle only)
+  - type: any database type supported (postgresql, oracle, mysql)
+  - all other keys are passed on to the database-specific RelStorage
+    adapter.
 
   Example::
     
     rel-storage = 
-      type postgresql
-      dbname zodb
+      type oracle
+      dsn (DESCRIPTION=(ADDRESS=(HOST=s01))(CONNECT_DATA=(SERVICE_NAME=d01)))
       user tarek
-      host localhost
       password secret
 
 zeo-client

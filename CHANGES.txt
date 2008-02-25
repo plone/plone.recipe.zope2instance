@@ -11,6 +11,10 @@ Change History
 - Added 'zeo-client-client' option which results in 'client <value>' inside
   <zeoclient>.
   [timte]
+  
+- Made relstorage handling more generic, so it now supports any RelStorage 
+  adapter, including Oracle (which was broken).
+  [mj]
 
 1.4 (2008-02-23)
 ----------------
