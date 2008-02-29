@@ -1,10 +1,10 @@
 Change History
 ==============
 
-1.5
----
+1.5 (2008-02-29)
+----------------
 
-- added `access-log-custom` option to be able to use another event logger
+- Added `access-log-custom` option to be able to use another event logger
   than the file one for the access logger.
   [tarek]
 
