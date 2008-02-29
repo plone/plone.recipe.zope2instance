@@ -172,7 +172,7 @@ class Recipe:
             # custom log 
             else:
                 event_log = custom_event_log
-            
+ 
             z_log_name = options.get('z2-log', os.path.sep.join(('log', self.name + '-Z2.log',)))
             z_log = os.path.join(var_dir, z_log_name)
             z_log_dir = os.path.dirname(z_log)
@@ -181,6 +181,15 @@ class Recipe:
             
             z_log_level = options.get('z2-log-level', 'WARN')
             
+            # access event log
+            custom_access_event_log = options.get('access-log-custom', None)
+            # filelog directive
+            if custom_access_event_log is None: 
+                access_event_log = access_event_logfile % {'z_log': z_log}
+            # custom directive
+            else:
+                access_event_log = custom_access_event_log
+
             default_zpublisher_encoding = options.get('default-zpublisher-encoding', 'utf-8')
             if default_zpublisher_encoding:
                 default_zpublisher_encoding = 'default-zpublisher-encoding %s' % default_zpublisher_encoding
@@ -292,7 +301,7 @@ class Recipe:
                                         ip_address = ip_address,
                                         event_log = event_log,
                                         event_log_level = event_log_level,
-                                        z_log = z_log,
+                                        access_event_log = access_event_log,
                                         z_log_level = z_log_level,
                                         default_zpublisher_encoding = default_zpublisher_encoding,
                                         storage_snippet = storage_snippet.strip(),
@@ -548,6 +557,13 @@ event_logfile = """
   </logfile>
 """.strip()
 
+access_event_logfile = """
+  <logfile>
+    path %(z_log)s
+    format %%(message)s
+  </logfile>
+""".strip()
+
 # The template used to build zope.conf
 zope_conf_template="""\
 instancehome %(instance_home)s
@@ -570,10 +586,7 @@ verbose-security %(verbose_security)s
 
 <logger access>
   level %(z_log_level)s
-  <logfile>
-    path %(z_log)s
-    format %%(message)s
-  </logfile>
+  %(access_event_log)s
 </logger>
 
 <http-server>

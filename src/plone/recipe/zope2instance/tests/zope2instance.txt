@@ -295,4 +295,60 @@ We should have a zope instance, with the custom event log::
     ...
     <BLANKLINE>
 
+Custom access log
+=================
+
+`access-log-custom` is a new option that allows you to create
+a custom event log section. For example, let's say you want
+to use `rotatezlogs`::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... index = http://pypi.python.org/simple
+    ... develop = 
+    ...     %(recipe_location)s 
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... 
+    ... zope2-location = %(zope2_location)s
+    ... user = me
+    ...
+    ... access-log-custom =
+    ...     %%import iw.rotatezlogs
+    ...     <rotatelogfile>
+    ...         path %(sample_buildout)s/var/log/event.log
+    ...         max-bytes 1MB
+    ...         backup-count 5
+    ...     </rotatelogfile>
+    ... 
+    ... ''' % globals())
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Develop: '...'
+    Uninstalling instance.
+    Installing instance.
+
+We should have a zope instance, with the custom event log::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    instancehome ...instance
+    ...   
+    <logger access>
+      level WARN
+      %import iw.rotatezlogs
+      <rotatelogfile>
+        path /sample-buildout/var/log/event.log
+        max-bytes 1MB
+        backup-count 5
+      </rotatelogfile>
+    </logger>
+    ...
+    <BLANKLINE>
+
 

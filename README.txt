@@ -91,7 +91,7 @@ event-log
 
 event-log-custom
   A custom section for the eventlog, to be able to use another
-  avent logger than `logfile`
+  event logger than `logfile`
 
 event-log-level
   Set the level of the console output for the event log. Level may be any of
@@ -103,6 +103,10 @@ z2-log
 z2-log-level
   Set the log level for the access log. Level may be any of CRITICAL, ERROR,
   WARN, INFO, DEBUG, or ALL. Defaults to WARN.
+
+access-log-custom
+  Like `event-log-custom`, a custom section for the access logger, to be able
+  to use another event logger than `logfile`.
 
 file-storage
   The filename where the ZODB data file will be stored.
