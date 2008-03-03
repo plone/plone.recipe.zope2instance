@@ -4,6 +4,8 @@ Change History
 1.6
 ---
 
+- Cleaned up "./bin/instance test" option handling.
+  [stefan]
 
 1.5 (2008-02-29)
 ----------------
