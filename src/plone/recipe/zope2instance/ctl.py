@@ -102,14 +102,6 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         # We overwrite the test command to populate the search path
         # automatically with all configured products and eggs.
         args = filter(None, arg.split(' '))
-
-        # Disable deprecation warnings if desired
-        for nowarn in '--nowarn', '--nowarning':
-            if nowarn in args:
-                args.remove(nowarn)
-                from warnings import filterwarnings
-                filterwarnings("ignore", ".*", DeprecationWarning)
-
         defaults = []
         softwarehome = self.options.configroot.softwarehome
 
@@ -159,9 +151,19 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         if '-v' not in args and '-q' not in args:
             defaults.append('-v')
 
+        # Add the --nowarnings option.
+        import zope.testing.testrunner
+
+        def filter_warnings(option, opt, *ignored):
+            import warnings
+            warnings.simplefilter('ignore', Warning, append=True)
+
+        zope.testing.testrunner.other.add_option(
+            '--nowarnings', action='callback', callback=filter_warnings,
+            help="Install a filter to suppress warnings emitted by code.\n")
+
         # Run the testrunner. Calling it directly ensures that it is executed
         # in the same environment that we just carefully configured.
-        import zope.testing.testrunner
         args.insert(0, zope.testing.testrunner.__file__)
         zope.testing.testrunner.run(defaults, args)
 
