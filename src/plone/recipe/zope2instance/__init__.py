@@ -200,9 +200,9 @@ class Recipe:
                     el = el.strip().split()
                     return len(el) == 2 and el or None
 
-                rel_storage = dict(
+                rel_storage = dict([
                     _split(el) for el in relstorage.splitlines() 
-                    if _split(el) is not None)
+                    if _split(el) is not None])
                 type_ = rel_storage.pop('type', 'postgresql')
                 
                 if type_ == 'postgresql' and not 'dsn' in rel_storage:
@@ -214,8 +214,8 @@ class Recipe:
 
                 opts = dict(
                     type=type_,
-                    opts='\n'.join(' ' * 12 + ' '.join(item)
-                                   for item in rel_storage.iteritems()))
+                    opts='\n'.join([' ' * 12 + ' '.join(item)
+                                   for item in rel_storage.iteritems()]))
                 storage_snippet = rel_storage_template % opts
 
             else:
