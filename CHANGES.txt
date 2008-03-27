@@ -4,6 +4,9 @@ Change History
 1.6
 ---
 
+- Fixed runzope script generation for Zope 2.8.
+  [hannosch]
+
 - Cleaned up "./bin/instance test" option handling.
   [stefan]
 

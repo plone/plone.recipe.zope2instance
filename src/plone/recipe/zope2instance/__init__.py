@@ -324,10 +324,17 @@ class Recipe:
         for script_name in ('runzope', 'zopectl'):
             script_path = os.path.join(location, 'bin', script_name)
             script = open(script_path).read()
-            script = script.replace(
-                '$SOFTWARE_HOME:$PYTHONPATH',
-                path+':$SOFTWARE_HOME:$PYTHONPATH'
-                )
+            if '$SOFTWARE_HOME:$PYTHONPATH' in script:
+                script = script.replace(
+                    '$SOFTWARE_HOME:$PYTHONPATH',
+                    path+':$SOFTWARE_HOME:$PYTHONPATH'
+                    )
+            elif "$SOFTWARE_HOME" in script:
+                # Zope 2.8
+                script = script.replace(
+                    '"$SOFTWARE_HOME"',
+                    '"'+path+':$SOFTWARE_HOME:$PYTHONPATH"'
+                    )
             f = open(script_path, 'w')
             f.write(script)
             f.close()
