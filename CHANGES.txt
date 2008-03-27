@@ -4,6 +4,8 @@ Change History
 1.7
 ---
 
+- Added limited support for running tests under Zope <= 2.8.
+  [hannosch]
 
 1.6 (2008-03-27)
 ----------------

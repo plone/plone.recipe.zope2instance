@@ -37,6 +37,12 @@ except ImportError:
     from Zope.Startup import zopectl
     from Zope.Startup import handlers    
 
+TESTRUNNER = True
+try:
+    import zope.testing.testrunner
+except ImportError:
+    TESTRUNNER = False
+
 WIN32 = False
 if sys.platform[:3].lower() == "win":
     WIN32 = True
@@ -99,6 +105,11 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             print
 
     def do_test(self, arg):
+        if not TESTRUNNER:
+            # This is probably Zope <= 2.8
+            zopectl.ZopeCmd.do_test(self, arg)
+            return
+
         # We overwrite the test command to populate the search path
         # automatically with all configured products and eggs.
         args = filter(None, arg.split(' '))
