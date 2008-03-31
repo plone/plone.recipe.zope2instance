@@ -82,6 +82,10 @@ port-base
 http-address
   Give a port for the HTTP server. Defaults to 8080.
 
+client-home
+  Sets the clienthome for the generated instance.
+  Defaults to ${buildout:directory}/var/<name of the section>.
+
 var
   Used to configure the base directory for all things going into var.
   Defaults to ${buildout:directory}/var.

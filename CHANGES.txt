@@ -4,6 +4,10 @@ Change History
 1.7
 ---
 
+- Added new client-home option and let it default to a subfolder of the
+  buildout-wide var folder with a subfolder of the name of the section.
+  [hannosch]
+
 - Added limited support for running tests under Zope <= 2.8.
   [hannosch]
 
@@ -16,7 +20,8 @@ Change History
 - Cleaned up "./bin/instance test" option handling.
   [stefan]
 
-- Removed generator expressions as these aren't supported in < py2.4, which is used by zope 2.7/8.
+- Removed generator expressions as these aren't supported in < py2.4, which is
+  used by zope 2.7/8.
   [duffyd]
 
 1.5 (2008-02-29)

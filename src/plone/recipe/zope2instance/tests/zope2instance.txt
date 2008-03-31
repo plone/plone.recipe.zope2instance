@@ -40,6 +40,7 @@ We should have a zope instance, with a basic zope.conf::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
     instancehome ...instance
+    clienthome ...instance
     debug-mode off
     security-policy-implementation C
     verbose-security off

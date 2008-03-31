@@ -125,8 +125,17 @@ class Recipe:
                 products = [p for p in products if p]
                 # Make sure we have consistent path seperators
                 products = [os.path.abspath(p) for p in products]
-        
+
+            base_dir = self.buildout['buildout']['directory']
+            var_dir = options.get('var', os.path.join(base_dir, 'var'))
+            if not os.path.exists(var_dir):
+                os.makedirs(var_dir)
+
             instance_home = location
+            client_home = options.get('client-home', os.path.join(var_dir, self.name))
+            if not os.path.exists(client_home):
+                os.makedirs(client_home)
+
             products_lines = '\n'.join(['products %s' % p for p in products])
             module_paths = options.get('extra-paths', '')
             if module_paths:
@@ -151,14 +160,10 @@ class Recipe:
             ip_address = options.get('ip-address', '')
             if ip_address:
                 ip_address = 'ip-address %s' % ip_address
-            
+
             zope_conf_additional = options.get('zope-conf-additional', '')
-            
-            base_dir = self.buildout['buildout']['directory']
-            var_dir = options.get('var', os.path.join(base_dir, 'var'))
 
             event_log_level = options.get('event-log-level', 'INFO')
-            
             custom_event_log = options.get('event-log-custom', None)
             default_log = os.path.sep.join(('log', self.name + '.log',))
             # log file
@@ -193,7 +198,7 @@ class Recipe:
             default_zpublisher_encoding = options.get('default-zpublisher-encoding', 'utf-8')
             if default_zpublisher_encoding:
                 default_zpublisher_encoding = 'default-zpublisher-encoding %s' % default_zpublisher_encoding
-            
+
             relstorage = options.get('rel-storage')
             if relstorage is not None:
                 def _split(el):
@@ -291,6 +296,7 @@ class Recipe:
                 os.makedirs(lock_file_dir)
 
             zope_conf = template % dict(instance_home = instance_home,
+                                        client_home = client_home,
                                         paths_lines = paths_lines,
                                         products_lines = products_lines,
                                         debug_mode = debug_mode,
@@ -564,6 +570,7 @@ access_event_logfile = """
 # The template used to build zope.conf
 zope_conf_template="""\
 instancehome %(instance_home)s
+clienthome %(client_home)s
 %(paths_lines)s
 %(products_lines)s
 debug-mode %(debug_mode)s
