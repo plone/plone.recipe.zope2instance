@@ -4,6 +4,9 @@ Change History
 1.8
 ---
 
+- Added `console` command to the instance script, which is equivalent to
+  foreground but does not turn on debug mode but respects the zope.conf setting.
+  [hannosch]
 
 1.7 (2008-03-31)
 ----------------

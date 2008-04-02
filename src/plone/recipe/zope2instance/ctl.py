@@ -81,7 +81,14 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             print program
             os.system(program)
 
-    def do_foreground(self, arg):
+    def do_console(self, arg):
+        self.do_foreground(arg, debug=False)
+
+    def help_console(self):
+        print "console -- Run the program in the console."
+        print "    In contrast to foreground this does not turn on debug mode."
+
+    def do_foreground(self, arg, debug=True):
         if not WIN32:
             self.get_status()
             pid = self.zd_pid
@@ -91,7 +98,8 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         # Quote the program name, so it works even if it contains spaces
         program = self.options.program
         program[0] = '"%s"' % program[0]
-        program[1:1] = ["-X", '"debug-mode=on"']
+        if debug:
+            program[1:1] = ["-X", '"debug-mode=on"']
         program = " ".join(program)
         if WIN32:
             # odd, but true: the windows cmd processor can't handle more than
