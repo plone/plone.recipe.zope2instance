@@ -81,6 +81,16 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             print program
             os.system(program)
 
+        def get_startup_cmd(self, python, more):
+            # if we pass a win32 backslashed path as a ''-style
+            # string, the backslashes will act as escapes.
+            # Use r'' instead.
+            cmdline = ( '%s -c "from Zope2 import configure;'
+                        'configure(r\'%s\');' %
+                        (python, self.options.configfile)
+                        )
+            return cmdline + more + '\"'
+
     def do_console(self, arg):
         self.do_foreground(arg, debug=False)
 

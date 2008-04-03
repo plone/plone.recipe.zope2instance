@@ -4,6 +4,12 @@ Change History
 1.8
 ---
 
+- Fixed a Win32 problem in which the presence of Python string
+  escapes in the path to zope.conf (e.g., d:\botest\parts\instance\etc\zope.conf
+  would escape the \b). This showed up when using the 'run', 'debug' or
+  'adduser' commands. Fixes #211416.
+  [smcmahon]
+
 - Added `console` command to the instance script, which is equivalent to
   foreground but does not turn on debug mode but respects the zope.conf setting.
   [hannosch]
