@@ -15,6 +15,7 @@
 import os, re, shutil, sys
 import zc.buildout
 import zc.recipe.egg
+from ctl import ZOPE27
 
 class Recipe:
 
@@ -150,6 +151,10 @@ class Recipe:
             verbose_security = options.get('verbose-security', 'off')
             if verbose_security == 'on':
                 security_implementation = 'python'
+            if ZOPE27:
+                verbose_security = ''
+            else:
+                verbose_security = 'verbose-security %s' % verbose_security
             port_base = options.get('port-base', '')
             if port_base:
                 port_base = 'port-base %s' % port_base
@@ -575,7 +580,7 @@ clienthome %(client_home)s
 %(products_lines)s
 debug-mode %(debug_mode)s
 security-policy-implementation %(security_implementation)s
-verbose-security %(verbose_security)s
+%(verbose_security)s
 %(default_zpublisher_encoding)s
 %(port_base)s
 %(effective_user)s

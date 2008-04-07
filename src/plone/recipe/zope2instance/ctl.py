@@ -28,12 +28,14 @@ action "help" to find out about available actions.
 """
 
 import os, sys
+ZOPE27 = False
 try:
     # Zope 2.8+
     from Zope2.Startup import zopectl
     from Zope2.Startup import handlers
 except ImportError:
     # Zope 2.7 (and below)
+    ZOPE27 = True
     from Zope.Startup import zopectl
     from Zope.Startup import handlers    
 
