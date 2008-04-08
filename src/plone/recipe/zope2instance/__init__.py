@@ -15,7 +15,6 @@
 import os, re, shutil, sys
 import zc.buildout
 import zc.recipe.egg
-from plone.recipe.zope2instance.ctl import ZOPE27
 
 class Recipe:
 
@@ -64,6 +63,7 @@ class Recipe:
                 '\n'.join(ws_locations))
 
             # Make a new zope.conf based on options in buildout.cfg
+            from plone.recipe.zope2instance.ctl import ZOPE27
             self.build_zope_conf()
             
             # Patch extra paths into binaries
