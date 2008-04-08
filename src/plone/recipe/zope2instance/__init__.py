@@ -15,7 +15,7 @@
 import os, re, shutil, sys
 import zc.buildout
 import zc.recipe.egg
-from ctl import ZOPE27
+from plone.recipe.zope2instance.ctl import ZOPE27
 
 class Recipe:
 
