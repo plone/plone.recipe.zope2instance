@@ -15,6 +15,7 @@
 import os, re, shutil, sys
 import zc.buildout
 import zc.recipe.egg
+ZOPE27 = False
 
 class Recipe:
 
