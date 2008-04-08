@@ -34,8 +34,8 @@ class Recipe:
         options = self.options
         location = options['location']
         # Check if we're running Zope 2.7
-        if self.buildout['buildout'].get('zope2-version') is not None:
-            if self.buildout['buildout'].get('zope2-version').find('2.7') > -1:
+        if options['zope2-version'] is not None:
+            if options['zope2-version'].find('2.7') > -1:
                 ZOPE27 = True
             
         requirements, ws = self.egg.working_set()
