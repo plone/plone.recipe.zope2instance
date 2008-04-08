@@ -32,13 +32,17 @@ class Recipe:
     def install(self):
         options = self.options
         location = options['location']
-
+        # Check if we're running Zope 2.7
+        if buildout['buildout'].get('zope2-version') is not None:
+            if buildout['buildout'].get('zope2-version').find('2.7') > -1:
+                ZOPE27 = True
+            
         requirements, ws = self.egg.working_set()
         ws_locations = [d.location for d in ws]
 
         if os.path.exists(location):
             shutil.rmtree(location)
-
+            
         # What follows is a bit of a hack because the instance-setup mechanism
         # is a bit monolithic. We'll run mkzopeinstance and then we'll
         # patch the result. A better approach might be to provide independent
@@ -63,7 +67,6 @@ class Recipe:
                 '\n'.join(ws_locations))
 
             # Make a new zope.conf based on options in buildout.cfg
-            from plone.recipe.zope2instance.ctl import ZOPE27
             self.build_zope_conf()
             
             # Patch extra paths into binaries
