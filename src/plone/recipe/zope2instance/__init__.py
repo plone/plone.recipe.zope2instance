@@ -28,14 +28,14 @@ class Recipe:
             )
         options['bin-directory'] = buildout['buildout']['bin-directory']
         options['scripts'] = '' # suppress script generation.
-
-    def install(self):
-        options = self.options
-        location = options['location']
         # Check if we're running Zope 2.7
         if buildout['buildout'].get('zope2-version') is not None:
             if buildout['buildout'].get('zope2-version').find('2.7') > -1:
                 ZOPE27 = True
+
+    def install(self):
+        options = self.options
+        location = options['location']
             
         requirements, ws = self.egg.working_set()
         ws_locations = [d.location for d in ws]
