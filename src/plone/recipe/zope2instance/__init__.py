@@ -30,6 +30,10 @@ class Recipe:
         options['bin-directory'] = buildout['buildout']['bin-directory']
         options['scripts'] = '' # suppress script generation.
         
+    def install(self):
+        options = self.options
+        location = options['location']
+        
         # Retrieve Zope version
         # Zope 2.7/2.8
         if os.path.isfile(os.path.join(options['zope2-location'], 'lib/python') + '/version.txt'):
@@ -41,10 +45,7 @@ class Recipe:
             options['zope2-version'] = version_file.read()
         else:
             options['zope2-version'] = "(UNKNOWN)"
-
-    def install(self):
-        options = self.options
-        location = options['location']
+        
         # Check if we're running Zope 2.7
         if options['zope2-version'] is not None:
             if options['zope2-version'].find('2.7') > -1:
