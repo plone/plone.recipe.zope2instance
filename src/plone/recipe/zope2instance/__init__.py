@@ -15,7 +15,6 @@
 import os, re, shutil, sys
 import zc.buildout
 import zc.recipe.egg
-ZOPE27 = False
 
 class Recipe:
 
@@ -29,34 +28,17 @@ class Recipe:
             )
         options['bin-directory'] = buildout['buildout']['bin-directory']
         options['scripts'] = '' # suppress script generation.
-        
+
     def install(self):
         options = self.options
         location = options['location']
-        
-        # Retrieve Zope version
-        # Zope 2.7/2.8
-        if os.path.isfile(os.path.join(options['zope2-location'], 'lib/python') + '/version.txt'):
-            version_file = open(os.path.join(options['zope2-location'], 'lib/python') + '/version.txt')
-            options['zope2-version'] = version_file.read()
-        # Zope 2.9+
-        elif os.path.isfile(os.path.join(options['zope2-location'], 'lib/python/Zope2') + '/version.txt'):
-            version_file = os.path.join(options['zope2-location'], 'lib/python/Zope2') + '/version.txt'
-            options['zope2-version'] = version_file.read()
-        else:
-            options['zope2-version'] = "(UNKNOWN)"
-        
-        # Check if we're running Zope 2.7
-        if options['zope2-version'] is not None:
-            if options['zope2-version'].find('2.7') > -1:
-                ZOPE27 = True
-            
+
         requirements, ws = self.egg.working_set()
         ws_locations = [d.location for d in ws]
 
         if os.path.exists(location):
             shutil.rmtree(location)
-            
+
         # What follows is a bit of a hack because the instance-setup mechanism
         # is a bit monolithic. We'll run mkzopeinstance and then we'll
         # patch the result. A better approach might be to provide independent
@@ -168,10 +150,6 @@ class Recipe:
             verbose_security = options.get('verbose-security', 'off')
             if verbose_security == 'on':
                 security_implementation = 'python'
-            if ZOPE27:
-                verbose_security = ''
-            else:
-                verbose_security = 'verbose-security %s' % verbose_security
             port_base = options.get('port-base', '')
             if port_base:
                 port_base = 'port-base %s' % port_base
@@ -597,7 +575,7 @@ clienthome %(client_home)s
 %(products_lines)s
 debug-mode %(debug_mode)s
 security-policy-implementation %(security_implementation)s
-%(verbose_security)s
+verbose-security %(verbose_security)s
 %(default_zpublisher_encoding)s
 %(port_base)s
 %(effective_user)s
