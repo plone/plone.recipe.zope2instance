@@ -1,9 +1,12 @@
 Change History
 ==============
 
-1.9
----
+1.9 (2008-04-15)
+----------------
 
+- Fix rel-storage parsing for options with spaces. Note that split() or
+  split(None) already strips the string.
+  [mj]
 
 1.8 (2008-04-05)
 ----------------
