@@ -115,7 +115,7 @@ To have a RelStorage configuration, you can use rel-storage::
     ...   dbname zodb
     ...   user tarek
     ...   host example.com
-    ...   password secret
+    ...   password secret space
     ...
     ... ''' % globals())
 
@@ -138,7 +138,7 @@ We should have a zope instance, with a basic zope.conf::
     %import relstorage
         <relstorage>
             <postgresql>
-                dsn dbname='zodb' user='tarek' host='example.com' password='secret'
+                dsn dbname='zodb' user='tarek' host='example.com' password='secret space'
             </postgresql>
         </relstorage>
         mount-point /

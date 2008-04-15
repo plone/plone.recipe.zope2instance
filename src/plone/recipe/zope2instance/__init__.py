@@ -202,7 +202,7 @@ class Recipe:
             relstorage = options.get('rel-storage')
             if relstorage is not None:
                 def _split(el):
-                    el = el.strip().split()
+                    el = el.split(None, 1)
                     return len(el) == 2 and el or None
 
                 rel_storage = dict([
