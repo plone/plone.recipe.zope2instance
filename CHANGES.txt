@@ -4,6 +4,9 @@ Change History
 2.0
 ---
 
+- Added FTP and WebDAV options
+  [claytron]
+
 
 1.9 (2008-04-15)
 ----------------

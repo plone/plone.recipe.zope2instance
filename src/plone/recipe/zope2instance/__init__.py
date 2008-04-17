@@ -154,6 +154,16 @@ class Recipe:
             if port_base:
                 port_base = 'port-base %s' % port_base
             http_address = options.get('http-address', '8080')
+            ftp_address = options.get('ftp-address', '')
+            if ftp_address:
+                ftp_address = ftp_server_template % ftp_address
+            webdav_address = options.get('webdav-address', '')
+            if webdav_address:
+                webdav_conn_close = options.get(
+                                        'webdav-force-connection-close',
+                                        'off')
+                webdav_address = webdav_server_template % (webdav_address, 
+                                                           webdav_conn_close)
             effective_user = options.get('effective-user', '')
             if effective_user:
                effective_user = 'effective-user %s' % effective_user 
@@ -312,6 +322,8 @@ class Recipe:
                                         storage_snippet = storage_snippet.strip(),
                                         port_base = port_base,
                                         http_address = http_address,
+                                        ftp_address = ftp_address,
+                                        webdav_address = webdav_address,
                                         zserver_threads = zserver_threads,
                                         zodb_cache_size = zodb_cache_size,
                                         zeo_client_name = zeo_client_name,
@@ -567,6 +579,21 @@ access_event_logfile = """
   </logfile>
 """.strip()
 
+ftp_server_template = """
+<ftp-server>
+  # valid key is "address"
+  address %s
+</ftp-server>
+"""
+
+webdav_server_template = """
+<webdav-source-server>
+  # valid keys are "address" and "force-connection-close"
+  address %s
+  force-connection-close %s
+</webdav-source-server>
+"""
+
 # The template used to build zope.conf
 zope_conf_template="""\
 instancehome %(instance_home)s
@@ -600,6 +627,9 @@ verbose-security %(verbose_security)s
   # You can also use the WSGI interface between ZServer and ZPublisher:
   # use-wsgi on
 </http-server>
+
+%(ftp_address)s
+%(webdav_address)s
 
 <zodb_db main>
     # Main database

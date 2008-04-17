@@ -82,6 +82,15 @@ port-base
 http-address
   Give a port for the HTTP server. Defaults to 8080.
 
+ftp-address
+  Give a port for the FTP server. This enables the FTP server.
+
+webdav-address
+  Give a port for the WebDAV server.  This enables the WebDAV server
+
+webdav-force-connection-close
+  Valid options are off and on. Defaults to off
+
 client-home
   Sets the clienthome for the generated instance.
   Defaults to ${buildout:directory}/var/<name of the section>.
