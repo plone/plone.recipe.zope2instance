@@ -4,6 +4,11 @@ Change History
 2.0
 ---
 
+- Added `environment-vars` option to set environment variables. Changed 
+  the zope-conf-additional example code to something that isn't covered by
+  the recipe.
+  [claytron]
+
 - Added FTP and WebDAV options
   [claytron]
 

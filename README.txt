@@ -188,6 +188,10 @@ zserver-threads
   service requests. You shouldn't change this unless you know what you are
   doing. Zope's default is 4.
 
+environment-vars
+  Define arbitrary key-value pairs for use as environment variables during
+  Zope's run cycle.
+
 zope-conf-additional
   Give additional lines to zope.conf. Make sure you indent any lines after
   the one with the parameter.
@@ -195,9 +199,8 @@ zope-conf-additional
   Example::
   
     zope-conf-additional =
-      <environment>
-        DISABLE_PTS true
-      </environment>
+      locale fr_FR
+      http-realm Slipknot
 
 Reporting bugs or asking questions
 ----------------------------------

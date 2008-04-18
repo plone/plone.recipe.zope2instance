@@ -470,4 +470,84 @@ We should have a zope instance, with the custom event log::
     ...
     <BLANKLINE>
 
+Environment Variables
+=====================
 
+We can specify environment variables for Zope.  Sometimes it is
+useful to set the TZ variable if our instance will be moving
+between several servers::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... index = http://pypi.python.org/simple
+    ... develop = 
+    ...     %(recipe_location)s 
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... user = me
+    ... zope2-location = %(zope2_location)s
+    ... 
+    ... environment-vars = TZ US/Eastern
+    ... ''' % globals())
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Develop: '...'
+    Uninstalling instance.
+    Installing instance.
+
+Our environment variables should be set now::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    instancehome ...instance
+    ...
+    <environment>
+      TZ US/Eastern
+    </environment>
+    ...
+
+Now let's add several environment variables::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... index = http://pypi.python.org/simple
+    ... develop = 
+    ...     %(recipe_location)s 
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... user = me
+    ... zope2-location = %(zope2_location)s
+    ... 
+    ... environment-vars = 
+    ...     TZ US/Eastern
+    ...     TMP /var/tmp
+    ...     DISABLE_PTS True
+    ... ''' % globals())
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Develop: '...'
+    Uninstalling instance.
+    Installing instance.
+
+Our environment variables should be set now::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    instancehome ...instance
+    ...
+    <environment>
+      TZ US/Eastern
+      TMP /var/tmp
+      DISABLE_PTS True
+    </environment>
+    ...

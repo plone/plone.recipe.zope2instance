@@ -170,7 +170,10 @@ class Recipe:
             ip_address = options.get('ip-address', '')
             if ip_address:
                 ip_address = 'ip-address %s' % ip_address
-
+            environment_vars = options.get('environment-vars', '')
+            if environment_vars:
+                environment_vars = environment_template % environment_vars
+            
             zope_conf_additional = options.get('zope-conf-additional', '')
 
             event_log_level = options.get('event-log-level', 'INFO')
@@ -329,6 +332,7 @@ class Recipe:
                                         zeo_client_name = zeo_client_name,
                                         pid_file = pid_file,
                                         lock_file = lock_file,
+                                        environment_vars = environment_vars,
                                         zope_conf_additional = zope_conf_additional,)
 
         zope_conf_path = os.path.join(location, 'etc', 'zope.conf')
@@ -594,6 +598,12 @@ webdav_server_template = """
 </webdav-source-server>
 """
 
+environment_template = """
+<environment>
+    %s
+</environment>
+"""
+
 # The template used to build zope.conf
 zope_conf_template="""\
 instancehome %(instance_home)s
@@ -609,6 +619,7 @@ verbose-security %(verbose_security)s
 %(ip_address)s
 %(zserver_threads)s
 %(zeo_client_name)s
+%(environment_vars)s
 
 <eventlog>
   level %(event_log_level)s
