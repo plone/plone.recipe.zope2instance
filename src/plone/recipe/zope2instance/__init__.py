@@ -271,15 +271,28 @@ class Recipe:
                     zeo_client_name = 'zeo-client-name %s' % zeo_client_name
                 if zeo_client_client:
                     zeo_client_client = 'client %s' % zeo_client_client
+                if options.get('zeo-username', ''):
+                    if not options.get('zeo-password', ''):
+                        raise zc.buildout.UserError('No ZEO password specified')
+
+                    zeo_authentication = zeo_authentication_template % dict(
+                            realm = options.get('zeo-realm', 'ZEO'),
+                            username = options.get('zeo-username'),
+                            password = options.get('zeo-password'))
+                else:
+                    zeo_authentication = ''
+
                 if blob_storage:
                     storage_snippet_template = zeo_blob_storage_template
                 else:
                     storage_snippet_template = zeo_storage_template
+
                 storage_snippet = storage_snippet_template % dict(
                     blob_storage = blob_storage,
                     shared_blob_dir = shared_blob_dir,
                     zeo_address = zeo_address,
                     zeo_client_cache_size = zeo_client_cache_size,
+                    zeo_authentication = zeo_authentication,
                     zeo_client_client = zeo_client_client,
                     zeo_storage = zeo_storage,
                     zeo_var_dir=zeo_var_dir,
@@ -539,6 +552,12 @@ blob_storage_template="""
     </blobstorage>
 """
 
+zeo_authentication_template="""
+    realm %(realm)s
+      username %(username)s
+      password %(password)s
+""".strip()
+
 zeo_storage_template="""
     # ZEOStorage database
     <zeoclient>
@@ -547,6 +566,7 @@ zeo_storage_template="""
       name zeostorage
       var %(zeo_var_dir)s
       cache-size %(zeo_client_cache_size)s
+      %(zeo_authentication)s
       %(zeo_client_client)s
     </zeoclient>
 """.strip()
@@ -561,6 +581,7 @@ zeo_blob_storage_template="""
       name zeostorage
       var %(zeo_var_dir)s
       cache-size %(zeo_client_cache_size)s
+      %(zeo_authentication)s
       %(zeo_client_client)s
     </zeoclient>
 """.strip()

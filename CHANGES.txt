@@ -4,6 +4,12 @@ Change History
 2.0
 ---
 
+- Add support for ZEO authentication. Note that this does not work with any
+  released Zope or ZODB version at this moment. See
+  http://mail.zope.org/pipermail/zope/2005-October/161951.html for required
+  patches.
+  [wichert]
+
 - Added FTP and WebDAV options
   [claytron]
 

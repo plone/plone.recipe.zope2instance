@@ -179,6 +179,18 @@ zeo-var
   Used in the zeo storage snippets to configure the zeo var folder.
   Defaults to $INSTANCE_HOME/var.
 
+zeo-username
+  Enable ZEO authentication and use the given username when accessing the
+  ZEO server. It is obligatory to also specify a zeo-password.
+
+zeo-password
+  Password to use when connecting to a ZEO server with authentication
+  enabled.
+
+zeo-realm
+  Authentication realm to use when authentication with a ZEO server. Defaults
+  to 'ZEO'.
+
 zodb-cache-size
   Set the ZODB cache size, i.e. the number of objects which the ZODB cache
   will try to hold. Defaults to 5000.
