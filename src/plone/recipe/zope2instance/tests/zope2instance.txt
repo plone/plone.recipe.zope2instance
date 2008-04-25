@@ -470,4 +470,55 @@ We should have a zope instance, with the custom event log::
     ...
     <BLANKLINE>
 
+Custom site.zcml file
+=====================
+
+`site-zcml` is a new option that allows you to create a custom site.zcml file.
+When this option is used the `zcml` option is ignored. Let's try it::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... index = http://pypi.python.org/simple
+    ... develop = 
+    ...     %(recipe_location)s 
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... 
+    ... zope2-location = %(zope2_location)s
+    ... user = me
+    ... # the zcml option will be ignored when a site-zcml option is given
+    ... zcml = 
+    ...       test.example
+    ...
+    ... site-zcml =
+    ...       <configure xmlns="http://namespaces.zope.org/zope"
+    ...                  xmlns:five="http://namespaces.zope.org/five">
+    ...           <include package="Products.Five" />
+    ...           <meta:redefinePermission from="zope2.Public" to="zope.Public" />
+    ...           <include package="test.example" />
+    ...       </configure>
+    ...
+    ... ''' % globals())
+
+Let's run the buildout::
+
+    >>> print system(join('bin', 'buildout')),
+    Develop: '...'
+    Uninstalling instance.
+    Installing instance.
+
+Now let's check that we have a zope instance, with the custom site.zcml::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> print open(os.path.join(instance, 'etc', 'site.zcml')).read()
+    <configure xmlns="http://namespaces.zope.org/zope"
+               xmlns:five="http://namespaces.zope.org/five">
+        <include package="Products.Five" />
+        <meta:redefinePermission from="zope2.Public" to="zope.Public" />
+        <include package="test.example" />
+    </configure>
+    <BLANKLINE>
 

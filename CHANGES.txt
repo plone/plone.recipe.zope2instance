@@ -3,6 +3,9 @@ Change History
 
 2.0
 ---
+- Added `site-zcml` option
+  Added tests
+  [mustapha]
 
 - Add support for ZEO authentication. Note that this does not work with any
   released Zope or ZODB version at this moment. See
@@ -12,7 +15,6 @@ Change History
 
 - Added FTP and WebDAV options
   [claytron]
-
 
 1.9 (2008-04-15)
 ----------------

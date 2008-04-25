@@ -41,6 +41,10 @@ products
   A list of paths where Zope 2 products are installed. The first path takes
   precedence in case the same product is found in more than one directory.
 
+site-zcml
+  If you want a custom site.zcml file, put its content here. If this option is 
+  used the zcml option is ignored
+
 zcml
   Install ZCML slugs for the packages listed, separated by whitespace. You
   can specify the type of slug by appending '-' and the type of slug you want

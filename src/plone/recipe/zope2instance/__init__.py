@@ -97,6 +97,8 @@ class Recipe:
                     ):
                     # Something has changed. Blow away the instance.
                     self.install()
+                elif options.get('site-zcml'):
+                    self.build_package_includes()
 
             # Nothing has changed.
             return location
@@ -468,10 +470,15 @@ if __name__ == '__main__':
         """Create ZCML slugs in etc/package-includes
         """
         location = self.options['location']
+        sitezcml_path = os.path.join(location, 'etc', 'site.zcml')
         zcml = self.options.get('zcml')
+        site_zcml = self.options.get('site-zcml')
+
+        if site_zcml:
+            open(sitezcml_path, 'w').write(site_zcml)
+            return
 
         if zcml:
-            sitezcml_path = os.path.join(location, 'etc', 'site.zcml')
             if not os.path.exists(sitezcml_path):
                 # Zope 2.9 does not have a site.zcml so we copy the
                 # one out from Five.
