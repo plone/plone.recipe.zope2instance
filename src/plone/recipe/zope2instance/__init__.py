@@ -212,7 +212,7 @@ class Recipe:
                 default_zpublisher_encoding = 'default-zpublisher-encoding %s' % default_zpublisher_encoding
 
             relstorage = options.get('rel-storage')
-            if relstorage is not None:
+            if relstorage:
                 def _split(el):
                     el = el.split(None, 1)
                     return len(el) == 2 and el or None
