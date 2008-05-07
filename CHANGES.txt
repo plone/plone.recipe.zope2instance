@@ -18,6 +18,7 @@ Change History
 
 - Allow rel-storage to be an empty string, meaning 'do not use relstorage'.
   This allows an extending buildout configuration to disable relstorage again.
+  [mj]
 
 1.9 (2008-04-15)
 ----------------
