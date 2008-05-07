@@ -16,6 +16,9 @@ Change History
 - Added FTP and WebDAV options
   [claytron]
 
+- Allow rel-storage to be an empty string, meaning 'do not use relstorage'.
+  This allows an extending buildout configuration to disable relstorage again.
+
 1.9 (2008-04-15)
 ----------------
 
