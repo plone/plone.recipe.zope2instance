@@ -118,7 +118,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                 # whole line. 
                 command = '"%s"' % command 
 
-            os.system(command)
+            return os.system(command)
         else:
             os.execv(program[0], program)
 
