@@ -3,6 +3,10 @@ Change History
 
 2.0
 ---
+- Do not use system but exec when starting Zope. This makes it possible for
+  process management tools to properly manage Zope processes.
+  [wichert]
+
 - Added `site-zcml` option
   Added tests
   [mustapha]
