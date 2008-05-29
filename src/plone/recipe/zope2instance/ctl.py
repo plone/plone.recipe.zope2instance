@@ -105,12 +105,22 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             if pid:
                 print "To run the program in the foreground, please stop it first."
                 return
-        # Quote the program name, so it works even if it contains spaces
         program = self.options.program
         if debug:
-            program[1:1] = ["-X", '"debug-mode=on"']
-        print " ".join(program)
-        os.execv(program[0], program)
+            program[1:1] = ["-X", 'debug-mode=on']
+            print " ".join(program)
+            # Quote the program name, so it works even if it contains spaces
+            program=['"%s"' % x for x in program]
+            command=" ".join(program)
+            if WIN32: 
+                # odd, but true: the windows cmd processor can't handle more than 
+                # one quoted item per string unless you add quotes around the 
+                # whole line. 
+                command = '"%s"' % command 
+
+            return os.system(command)
+        else:
+            os.execv(program[0], program)
 
     def do_test(self, arg):
         if not TESTRUNNER:

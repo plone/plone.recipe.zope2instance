@@ -1,10 +1,10 @@
 Change History
 ==============
 
-2.0
----
-- Do not use system but exec when starting Zope. This makes it possible for
-  process management tools to properly manage Zope processes.
+2.0 (2008-05-29)
+----------------
+- Do not use system but exec when starting Zope using `console`. This makes it
+  possible for process management tools to properly manage Zope processes.
   [wichert]
 
 - Added `site-zcml` option
