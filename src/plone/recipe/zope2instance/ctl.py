@@ -105,11 +105,11 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             if pid:
                 print "To run the program in the foreground, please stop it first."
                 return
-        # Quote the program name, so it works even if it contains spaces
         program = self.options.program
         if debug:
             program[1:1] = ["-X", 'debug-mode=on']
             print " ".join(program)
+            # Quote the program name, so it works even if it contains spaces
             program=['"%s"' % x for x in program]
             command=" ".join(program)
             if WIN32: 
