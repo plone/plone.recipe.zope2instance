@@ -203,6 +203,10 @@ zserver-threads
   Specify the number of threads that Zope's ZServer web server will use to
   service requests. You shouldn't change this unless you know what you are
   doing. Zope's default is 4.
+  
+zodb-temporary-storage
+  If given zopes default temporary storage definition will be replaced by 
+  the lines of this parameter.
 
 zope-conf-additional
   Give additional lines to zope.conf. Make sure you indent any lines after

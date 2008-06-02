@@ -134,7 +134,8 @@ class Recipe:
                 os.makedirs(var_dir)
 
             instance_home = location
-            client_home = options.get('client-home', os.path.join(var_dir, self.name))
+            client_home = options.get('client-home', os.path.join(var_dir, 
+                                                                  self.name))
             if not os.path.exists(client_home):
                 os.makedirs(client_home)
 
@@ -185,12 +186,14 @@ class Recipe:
                 event_log_dir = os.path.dirname(event_file)
                 if not os.path.exists(event_log_dir):
                     os.makedirs(event_log_dir)
-                event_log = event_logfile % {'event_logfile': event_file, 'event_log_level': event_log_level}
+                event_log = event_logfile % {'event_logfile': event_file, 
+                                             'event_log_level': event_log_level}
             # custom log 
             else:
                 event_log = custom_event_log
- 
-            z_log_name = options.get('z2-log', os.path.sep.join(('log', self.name + '-Z2.log',)))
+            
+            z_log_name = os.path.sep.join(('log', self.name + '-Z2.log'))
+            z_log_name = options.get('z2-log', z_log_name)
             z_log = os.path.join(var_dir, z_log_name)
             z_log_dir = os.path.dirname(z_log)
             if not os.path.exists(z_log_dir):
@@ -207,9 +210,11 @@ class Recipe:
             else:
                 access_event_log = custom_access_event_log
 
-            default_zpublisher_encoding = options.get('default-zpublisher-encoding', 'utf-8')
+            default_zpublisher_encoding = options.get('default-zpublisher-encoding', 
+                                                      'utf-8')
             if default_zpublisher_encoding:
-                default_zpublisher_encoding = 'default-zpublisher-encoding %s' % default_zpublisher_encoding
+                default_zpublisher_encoding = 'default-zpublisher-encoding %s' %\
+                                              default_zpublisher_encoding
 
             relstorage = options.get('rel-storage')
             if relstorage:
@@ -250,7 +255,8 @@ class Recipe:
                     blob_storage = os.path.join(base_dir, blob_storage)
                     if not os.path.exists(blob_storage):
                         os.makedirs(blob_storage)
-                    storage_snippet = blob_storage_template % (blob_storage, file_storage)
+                    storage_snippet = blob_storage_template % (blob_storage, 
+                                                               file_storage)
                 
             zserver_threads = options.get('zserver-threads', '')
             if zserver_threads:
@@ -303,6 +309,9 @@ class Recipe:
                 # no zeo-client
                 zeo_client_client = ''
                 zeo_client_name = ''
+            
+            zodb_tmp_storage = options.get('zodb-temporary-storage', 
+                                           zodb_temporary_storage_template)
 
             template = zope_conf_template
 
@@ -318,7 +327,7 @@ class Recipe:
                 os.path.join(var_dir, self.name + '.lock'))
             lock_file_dir = os.path.dirname(lock_file)
             if not os.path.exists(lock_file_dir):
-                os.makedirs(lock_file_dir)
+                os.makedirs(lock_file_dir)                
 
             zope_conf = template % dict(instance_home = instance_home,
                                         client_home = client_home,
@@ -342,6 +351,7 @@ class Recipe:
                                         zserver_threads = zserver_threads,
                                         zodb_cache_size = zodb_cache_size,
                                         zeo_client_name = zeo_client_name,
+                                        zodb_tmp_storage = zodb_tmp_storage,
                                         pid_file = pid_file,
                                         lock_file = lock_file,
                                         zope_conf_additional = zope_conf_additional,)
@@ -593,6 +603,17 @@ zeo_blob_storage_template="""
     </zeoclient>
 """.strip()
 
+zodb_temporary_storage_template="""
+<zodb_db temporary>
+    # Temporary storage database (for sessions)
+    <temporarystorage>
+      name temporary storage for sessioning
+    </temporarystorage>
+    mount-point /temp_folder
+    container-class Products.TemporaryFolder.TemporaryContainer
+</zodb_db>
+""".strip()
+
 event_logfile = """
   <logfile>
     path %(event_logfile)s
@@ -666,14 +687,7 @@ verbose-security %(verbose_security)s
     mount-point /
 </zodb_db>
 
-<zodb_db temporary>
-    # Temporary storage database (for sessions)
-    <temporarystorage>
-      name temporary storage for sessioning
-    </temporarystorage>
-    mount-point /temp_folder
-    container-class Products.TemporaryFolder.TemporaryContainer
-</zodb_db>
+%(zodb_tmp_storage)s
 
 pid-filename %(pid_file)s
 lock-filename %(lock_file)s

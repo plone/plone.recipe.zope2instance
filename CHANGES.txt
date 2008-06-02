@@ -4,6 +4,8 @@ Change History
 2.1
 --
 
+- allow to use an alternative temporary storage.
+  [jensens]
 
 2.0 (2008-05-29)
 ----------------
