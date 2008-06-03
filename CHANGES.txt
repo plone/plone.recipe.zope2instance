@@ -7,6 +7,11 @@ Change History
 - allow to use an alternative temporary storage.
   [jensens]
 
+- Added `environment-vars` option to set environment variables. Changed 
+  the zope-conf-additional example code to something that isn't covered by
+  the recipe.
+  [claytron]
+
 2.0 (2008-05-29)
 ----------------
 - Do not use system but exec when starting Zope. This makes it possible for

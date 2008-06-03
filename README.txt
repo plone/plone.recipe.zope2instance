@@ -208,6 +208,17 @@ zodb-temporary-storage
   If given zopes default temporary storage definition will be replaced by 
   the lines of this parameter.
 
+environment-vars
+  Define arbitrary key-value pairs for use as environment variables during
+  Zope's run cycle.
+  
+  Example::
+  
+    environment-vars = 
+      TZ US/Eastern
+      TMP /var/tmp
+      DISABLE_PTS True
+
 zope-conf-additional
   Give additional lines to zope.conf. Make sure you indent any lines after
   the one with the parameter.
@@ -215,9 +226,8 @@ zope-conf-additional
   Example::
   
     zope-conf-additional =
-      <environment>
-        DISABLE_PTS true
-      </environment>
+      locale fr_FR
+      http-realm Slipknot
 
 Reporting bugs or asking questions
 ----------------------------------

@@ -173,7 +173,24 @@ class Recipe:
             ip_address = options.get('ip-address', '')
             if ip_address:
                 ip_address = 'ip-address %s' % ip_address
-
+            environment_vars = options.get('environment-vars', '')
+            if environment_vars:
+                # if the vars are all given on one line we need to do some work
+                if not '\n' in environment_vars:
+                    keys = []
+                    values = []
+                    env_vars = environment_vars.split()
+                    # split out the odd and even items into keys, values
+                    for var in env_vars:
+                        if divmod(env_vars.index(var) + 1, 2)[1]:
+                            keys.append(var)
+                        else:
+                            values.append(var)
+                    env_vars = zip(keys, values)
+                    environment_vars = '\n'.join(["%s %s" % (env_var[0], env_var[1])
+                                                 for env_var in env_vars])
+                environment_vars = environment_template % environment_vars
+            
             zope_conf_additional = options.get('zope-conf-additional', '')
 
             event_log_level = options.get('event-log-level', 'INFO')
@@ -354,6 +371,7 @@ class Recipe:
                                         zodb_tmp_storage = zodb_tmp_storage,
                                         pid_file = pid_file,
                                         lock_file = lock_file,
+                                        environment_vars = environment_vars,
                                         zope_conf_additional = zope_conf_additional,)
 
         zope_conf_path = os.path.join(location, 'etc', 'zope.conf')
@@ -643,6 +661,12 @@ webdav_server_template = """
 </webdav-source-server>
 """
 
+environment_template = """
+<environment>
+    %s
+</environment>
+"""
+
 # The template used to build zope.conf
 zope_conf_template="""\
 instancehome %(instance_home)s
@@ -658,6 +682,7 @@ verbose-security %(verbose_security)s
 %(ip_address)s
 %(zserver_threads)s
 %(zeo_client_name)s
+%(environment_vars)s
 
 <eventlog>
   level %(event_log_level)s
