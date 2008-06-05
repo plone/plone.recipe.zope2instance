@@ -1,8 +1,8 @@
 Change History
 ==============
 
-2.1
----
+2.1 (2008-06-05)
+----------------
 
 - Fixed a test problem on Windows, where explicit closing of files is required.
   [hannosch]
