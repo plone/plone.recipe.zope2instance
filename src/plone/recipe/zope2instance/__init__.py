@@ -379,8 +379,6 @@ class Recipe:
 
     def patch_binaries(self, ws_locations):
         location = self.options['location']
-        # XXX We need to patch the windows specific batch scripts
-        # and they need a different path seperator
         path =":".join(ws_locations)
         for script_name in ('runzope', 'zopectl'):
             script_path = os.path.join(location, 'bin', script_name)
@@ -400,17 +398,23 @@ class Recipe:
             f.write(script)
             f.close()
         # Patch Windows scripts
-        path =";".join(ws_locations)
         for script_name in ('runzope.bat', ):
             script_path = os.path.join(location, 'bin', script_name)
             script = open(script_path).read()
             # This could need some regex-fu
-            lines = [l for l in script.splitlines() if not l.startswith('@set PYTHON=')]
+            lines = [l for l in script.splitlines() 
+                     if not l.startswith('@set PYTHON=')]
             lines.insert(2, '@set PYTHON=%s' % self.options['executable'])
             script = '\n'.join(lines)
+
+            # Use servicewrapper.py instead of calling run.py directly
+            # so that sys.path gets properly set. We used to append
+            # all the eggs to PYTHONPATH in runzope.bat, but after
+            # everything was turned into eggs we exceeded the
+            # environment maximum size for cmd.exe.
             script = script.replace(
-                'PYTHONPATH=%SOFTWARE_HOME%',
-                'PYTHONPATH='+path+';%SOFTWARE_HOME%;%PYTHONPATH%'
+                "ZOPE_RUN = r'%s\\Zope2\\Startup\\run.py' % SOFTWARE_HOME",
+                "ZOPE_RUN = r'%s\\bin\\servicewrapper.py' % INSTANCE_HOME"
                 )
             f = open(script_path, 'w')
             f.write(script)
