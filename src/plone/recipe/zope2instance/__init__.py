@@ -375,7 +375,11 @@ class Recipe:
                                         zope_conf_additional = zope_conf_additional,)
 
         zope_conf_path = os.path.join(location, 'etc', 'zope.conf')
-        open(zope_conf_path, 'w').write(zope_conf)
+        try:
+            fd = open(zope_conf_path, 'w')
+            fd.write(zope_conf)
+        finally:
+            fd.close()
 
     def patch_binaries(self, ws_locations):
         location = self.options['location']

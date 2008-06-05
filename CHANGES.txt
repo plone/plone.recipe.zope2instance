@@ -4,6 +4,9 @@ Change History
 2.1
 ---
 
+- Fixed a test problem on Windows, where explicit closing of files is required.
+  [hannosch]
+
 - Call `servicewrapper.py` from `runzope.bat` instead of setting
   `PYTHONPATH` and calling `Zope2/Startup/run.py`. That way we set
   sys.path from inside Python code and avoid exceeding the maximum
