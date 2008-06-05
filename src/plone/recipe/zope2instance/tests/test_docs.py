@@ -30,7 +30,7 @@ def doc_suite(test_dir, globs=None):
         globs = globals()
 
     flags = (doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE |
-             doctest.REPORT_ONLY_FIRST_FAILURE)
+             doctest.REPORT_ONLY_FIRST_FAILURE | doctest.REPORT_UDIFF)
 
     doctest_dir = test_dir
 
