@@ -2,7 +2,7 @@ Change History
 ==============
 
 2.1
---
+---
 
 - Call `servicewrapper.py` from `runzope.bat` instead of setting
   `PYTHONPATH` and calling `Zope2/Startup/run.py`. That way we set
@@ -10,7 +10,8 @@ Change History
   environment variable limit.
   [sidnei]
 
-- allow to use an alternative temporary storage.
+- Allow to use an alternative temporary storage, by specifying the new
+  `zodb-temporary-storage` option.
   [jensens]
 
 - Added `environment-vars` option to set environment variables. Changed 
@@ -20,6 +21,7 @@ Change History
 
 2.0 (2008-05-29)
 ----------------
+
 - Do not use system but exec when starting Zope. This makes it possible for
   process management tools to properly manage Zope processes.
   [wichert]

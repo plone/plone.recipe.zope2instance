@@ -344,7 +344,7 @@ class Recipe:
                 os.path.join(var_dir, self.name + '.lock'))
             lock_file_dir = os.path.dirname(lock_file)
             if not os.path.exists(lock_file_dir):
-                os.makedirs(lock_file_dir)                
+                os.makedirs(lock_file_dir)
 
             zope_conf = template % dict(instance_home = instance_home,
                                         client_home = client_home,

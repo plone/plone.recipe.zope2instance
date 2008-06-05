@@ -205,7 +205,7 @@ zserver-threads
   doing. Zope's default is 4.
   
 zodb-temporary-storage
-  If given zopes default temporary storage definition will be replaced by 
+  If given Zope's default temporary storage definition will be replaced by
   the lines of this parameter.
 
 environment-vars
