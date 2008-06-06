@@ -14,6 +14,7 @@
 
 import os, re, shutil, sys
 import zc.buildout
+import zc.buildout.easy_install
 import zc.recipe.egg
 
 class Recipe:
@@ -53,7 +54,8 @@ class Recipe:
             mkzopeinstance = '"%s"' % mkzopeinstance
 
         assert os.spawnl(
-            os.P_WAIT, options['executable'], options['executable'],
+            os.P_WAIT, options['executable'], 
+            zc.buildout.easy_install._safe_arg(options['executable']),
             mkzopeinstance, '-d', location, '-u', options['user'],
             ) == 0
 

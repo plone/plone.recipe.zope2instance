@@ -4,6 +4,11 @@ Change History
 2.2
 ---
 
+- Escape 'executable' argument before passing it to os.spawnl, in
+  order to make it work on Windows when the executable name has spaces
+  on it.  
+  [sidnei]
+
 - Added `http-fast-listen` option. Use of this option requires Zope >= 2.11.
   [stefan]
 
