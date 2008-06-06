@@ -86,6 +86,10 @@ port-base
 http-address
   Give a port for the HTTP server. Defaults to 8080.
 
+http-fast-listen
+  Set to off to defer opening of the HTTP socket until the end of the Zope
+  startup phase. Defaults to on. Note: This option requires Zope >= 2.11.
+
 ftp-address
   Give a port for the FTP server. This enables the FTP server.
 

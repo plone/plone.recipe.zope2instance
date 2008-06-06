@@ -4,6 +4,8 @@ Change History
 2.2
 ---
 
+- Added `http-fast-listen` option. Use of this option requires Zope >= 2.11.
+  [stefan]
 
 2.1 (2008-06-05)
 ----------------

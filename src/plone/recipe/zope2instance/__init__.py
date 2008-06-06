@@ -157,6 +157,11 @@ class Recipe:
             if port_base:
                 port_base = 'port-base %s' % port_base
             http_address = options.get('http-address', '8080')
+            http_fast_listen = options.get('http-fast-listen', None)
+            if http_fast_listen is None:
+                http_fast_listen = ''
+            else:
+                http_fast_listen = http_fast_listen_template % http_fast_listen
             ftp_address = options.get('ftp-address', '')
             if ftp_address:
                 ftp_address = ftp_server_template % ftp_address
@@ -363,6 +368,7 @@ class Recipe:
                                         storage_snippet = storage_snippet.strip(),
                                         port_base = port_base,
                                         http_address = http_address,
+                                        http_fast_listen = http_fast_listen,
                                         ftp_address = ftp_address,
                                         webdav_address = webdav_address,
                                         zserver_threads = zserver_threads,
@@ -585,6 +591,7 @@ rel_storage_template="""
         </%(type)s>
     </relstorage>
 """
+
 blob_storage_template="""
     # Blob-enabled FileStorage database
     <blobstorage>
@@ -639,6 +646,12 @@ zodb_temporary_storage_template="""
     container-class Products.TemporaryFolder.TemporaryContainer
 </zodb_db>
 """.strip()
+
+http_fast_listen_template="""\
+  # Set to off to defer opening of the HTTP socket until the end of the
+  # startup phase:
+  fast-listen %s
+""".rstrip()
 
 event_logfile = """
   <logfile>
@@ -708,6 +721,7 @@ verbose-security %(verbose_security)s
   # force-connection-close on
   # You can also use the WSGI interface between ZServer and ZPublisher:
   # use-wsgi on
+%(http_fast_listen)s
 </http-server>
 
 %(ftp_address)s
