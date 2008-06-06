@@ -1,8 +1,12 @@
 Change History
 ==============
 
-2.2
+2.3
 ---
+
+
+2.2 (2008-06-06)
+----------------
 
 - Added `deprecation-warnings` option that allows turning the option
   to disable deprecation warnings on or off. You can provide the value
