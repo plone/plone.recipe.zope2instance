@@ -198,6 +198,18 @@ class Recipe:
                                                  for env_var in env_vars])
                 environment_vars = environment_template % environment_vars
             
+            deprecation_warnings = options.get('deprecation-warnings', '')
+            if deprecation_warnings:
+                if deprecation_warnings.lower() in ('off', 'disable', 'false'):
+                    deprecation_warnings = 'ignore'
+                elif deprecation_warnings.lower() in ('enable', 'on', 'true'):
+                    deprecation_warnings = 'default'
+                deprecation_warnings = '\n'.join((
+                    "<warnfilter>",
+                    "  action %s" % deprecation_warnings,
+                    "  category exceptions.DeprecationWarning",
+                    "</warnfilter>"))
+
             zope_conf_additional = options.get('zope-conf-additional', '')
 
             event_log_level = options.get('event-log-level', 'INFO')
@@ -706,6 +718,7 @@ verbose-security %(verbose_security)s
 %(zserver_threads)s
 %(zeo_client_name)s
 %(environment_vars)s
+%(deprecation_warnings)s
 
 <eventlog>
   level %(event_log_level)s

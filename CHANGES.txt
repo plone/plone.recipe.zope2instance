@@ -4,6 +4,12 @@ Change History
 2.2
 ---
 
+- Added `deprecation-warnings` option that allows turning the option
+  to disable deprecation warnings on or off. You can provide the value
+  `error` to it, and every deprecation warning will be turned into an
+  exception.
+  [sidnei]
+
 - Fix copy and paste error that caused a failure on changing
   runzope.bat to call servicewrapper.py.
   [sidnei]
