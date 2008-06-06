@@ -425,8 +425,8 @@ class Recipe:
             # everything was turned into eggs we exceeded the
             # environment maximum size for cmd.exe.
             script = script.replace(
-                "ZOPE_RUN = r'%s\\Zope2\\Startup\\run.py' % SOFTWARE_HOME",
-                "ZOPE_RUN = r'%s\\bin\\servicewrapper.py' % INSTANCE_HOME"
+                "ZOPE_RUN=%SOFTWARE_HOME%\\Zope2\\Startup\\run.py",
+                "ZOPE_RUN=%INSTANCE_HOME%\\bin\\servicewrapper.py"
                 )
             f = open(script_path, 'w')
             f.write(script)

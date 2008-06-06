@@ -4,6 +4,10 @@ Change History
 2.2
 ---
 
+- Fix copy and paste error that caused a failure on changing
+  runzope.bat to call servicewrapper.py.
+  [sidnei]
+
 - Escape 'executable' argument before passing it to os.spawnl, in
   order to make it work on Windows when the executable name has spaces
   on it.  
