@@ -1,8 +1,16 @@
 Change History
 ==============
 
-2.3
----
+2.3 (2008-06-06)
+----------------
+
+- Need to actually pass in deprecation-warnings, otherwise we get a
+  KeyError.
+  [sidnei]
+
+- Fix another place where the directory name needed to be escaped to
+  avoid problems with spaces.
+  [sidnei]
 
 - Don't try to delete location if it does not exist.
   [sidnei]

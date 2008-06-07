@@ -56,7 +56,9 @@ class Recipe:
         assert os.spawnl(
             os.P_WAIT, options['executable'], 
             zc.buildout.easy_install._safe_arg(options['executable']),
-            mkzopeinstance, '-d', location, '-u', options['user'],
+            mkzopeinstance, '-d', 
+            zc.buildout.easy_install._safe_arg(location), 
+            '-u', options['user'],
             ) == 0
 
         try:
@@ -393,6 +395,7 @@ class Recipe:
                                         pid_file = pid_file,
                                         lock_file = lock_file,
                                         environment_vars = environment_vars,
+                                        deprecation_warnings = deprecation_warnings,
                                         zope_conf_additional = zope_conf_additional,)
 
         zope_conf_path = os.path.join(location, 'etc', 'zope.conf')
