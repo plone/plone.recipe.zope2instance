@@ -4,6 +4,8 @@ Change History
 2.3
 ---
 
+- Don't try to delete location if it does not exist.
+  [sidnei]
 
 2.2 (2008-06-06)
 ----------------

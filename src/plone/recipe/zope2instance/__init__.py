@@ -12,7 +12,7 @@
 #
 ##############################################################################
 
-import os, re, shutil, sys
+import os, os.path, re, shutil, sys
 import zc.buildout
 import zc.buildout.easy_install
 import zc.recipe.egg
@@ -77,7 +77,8 @@ class Recipe:
             self.build_package_includes()
         except:
             # clean up
-            shutil.rmtree(location)
+            if os.path.exists(location):
+                shutil.rmtree(location)
             raise
 
         return location
