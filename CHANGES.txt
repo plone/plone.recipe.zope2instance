@@ -1,9 +1,12 @@
 Change History
 ==============
 
-2.4
----
+2.3.1 (2008-06-10)
+------------------
 
+- No code changes. Released to fix the 2.3 release which put .egg files in
+  the wild.
+  [hannosch]
 
 2.3 (2008-06-06)
 ----------------
