@@ -187,7 +187,12 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             import warnings
             warnings.simplefilter('ignore', Warning, append=True)
 
-        zope.testing.testrunner.other.add_option(
+        other = getattr(zope.testing.testrunner, 'other', None)
+        if other is None:
+            from zope.testing.testrunner import options
+            other = options.other
+
+        other.add_option(
             '--nowarnings', action='callback', callback=filter_warnings,
             help="Install a filter to suppress warnings emitted by code.\n")
 

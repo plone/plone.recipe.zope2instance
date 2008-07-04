@@ -4,6 +4,8 @@ Change History
 2.4
 ---
 
+- Made test command compatible with zope.testing 3.6.
+  [hannosch]
 
 2.3.1 (2008-06-10)
 ------------------
