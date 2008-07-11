@@ -708,8 +708,10 @@ environment_template = """
 
 # The template used to build zope.conf
 zope_conf_template="""\
-instancehome %(instance_home)s
-clienthome %(client_home)s
+%%define INSTANCEHOME %(instance_home)s
+instancehome $INSTANCEHOME
+%%define CLIENTHOME %(client_home)s
+clienthome $CLIENTHOME
 %(paths_lines)s
 %(products_lines)s
 debug-mode %(debug_mode)s

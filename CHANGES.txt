@@ -4,6 +4,11 @@ Change History
 2.4
 ---
 
+- Introduced zope.conf variables "INSTANCEHOME" and "CLIENTHOME".
+  Its very very helpful in cluster setups with zope-conf-additional
+  sections (buildout lacks to reference the current section).
+  [jensens]
+
 - Made test command compatible with zope.testing 3.6.
   [hannosch]
 
