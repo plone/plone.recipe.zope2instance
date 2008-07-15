@@ -23,6 +23,12 @@ zope2_location = os.path.join(current_dir, 'zope2')
 for i in range(5):
     recipe_location = os.path.split(recipe_location)[0]
 
+
+def tearDown(test):
+    zc.buildout.testing.buildoutTearDown(test)
+    sample_buildout = test.globs['sample_buildout']
+    shutil.rmtree(sample_buildout, ignore_errors=True)
+
 def doc_suite(test_dir, globs=None):
     """Returns a test suite, based on doctests found in /doctest."""
     suite = []
@@ -42,7 +48,7 @@ def doc_suite(test_dir, globs=None):
         suite.append(doctest.DocFileSuite(test, optionflags=flags, 
                                           globs=globs, 
                     setUp=zc.buildout.testing.buildoutSetUp,
-                    tearDown=zc.buildout.testing.buildoutTearDown,
+                    tearDown=tearDown,
                     checker=renormalizing.RENormalizing([
                         zc.buildout.testing.normalize_path,
                         (re.compile(r'\S+buildout.py'), 'buildout.py'),

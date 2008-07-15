@@ -39,17 +39,28 @@ We should have a zope instance, with a basic zope.conf::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
-    instancehome ...instance
-    clienthome ...instance
+    %define INSTANCEHOME /sample-buildout/parts/instance
+    instancehome $INSTANCEHOME
+    %define CLIENTHOME /sample-buildout/var/instance
+    clienthome $CLIENTHOME
+    <BLANKLINE>
+    <BLANKLINE>
     debug-mode off
     security-policy-implementation C
     verbose-security off
     default-zpublisher-encoding utf-8
     <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
     <eventlog>
       level INFO
       <logfile>
-        path ...instance.log
+        path /sample-buildout/var/log/instance.log
         level INFO
       </logfile>
     </eventlog>
@@ -57,7 +68,7 @@ We should have a zope instance, with a basic zope.conf::
     <logger access>
       level WARN
       <logfile>
-        path ...instance-Z2.log
+        path /sample-buildout/var/log/instance-Z2.log
         format %(message)s
       </logfile>
     </logger>
@@ -65,15 +76,21 @@ We should have a zope instance, with a basic zope.conf::
     <http-server>
       # valid keys are "address" and "force-connection-close"
       address 8080
-      ...
+      # force-connection-close on
+      # You can also use the WSGI interface between ZServer and ZPublisher:
+      # use-wsgi on
+    <BLANKLINE>
     </http-server>
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
     <BLANKLINE>
     <zodb_db main>
         # Main database
         cache-size 5000
     # FileStorage database
         <filestorage>
-          path ...Data.fs
+          path /sample-buildout/var/filestorage/Data.fs
         </filestorage>
         mount-point /
     </zodb_db>
@@ -87,8 +104,10 @@ We should have a zope instance, with a basic zope.conf::
         container-class Products.TemporaryFolder.TemporaryContainer
     </zodb_db>
     <BLANKLINE>
-    pid-filename ...instance.pid
-    lock-filename ...instance.lock
+    pid-filename /sample-buildout/var/instance.pid
+    lock-filename /sample-buildout/var/instance.lock
+    <BLANKLINE>
+    <BLANKLINE>
     <BLANKLINE>
 
 FTP and WebDAV
@@ -123,7 +142,7 @@ Our FTP server should be set up now::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
-    instancehome ...instance
+    %define INSTANCEHOME /sample-buildout/parts/instance
     ...
     <ftp-server>
       # valid key is "address"
@@ -160,7 +179,7 @@ Our WebDAV server should be set up now::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
-    instancehome ...instance
+    %define INSTANCEHOME /sample-buildout/parts/instance
     ...
     <webdav-source-server>
       # valid keys are "address" and "force-connection-close"
@@ -199,7 +218,7 @@ Our WebDAV server should be set up now::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
-    instancehome ...instance
+    %define INSTANCEHOME /sample-buildout/parts/instance
     ...
     <webdav-source-server>
       # valid keys are "address" and "force-connection-close"
@@ -248,7 +267,7 @@ We should have a zope instance, with a basic zope.conf::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
-    instancehome ...instance
+    %define INSTANCEHOME /sample-buildout/parts/instance
     ...    
     <zodb_db main>
         # Main database
@@ -295,7 +314,7 @@ We should have a zope instance, with a basic zope.conf::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
-    instancehome ...instance
+    %define INSTANCEHOME /sample-buildout/parts/instance
     ...
     <zodb_db main>
         ...
@@ -340,7 +359,7 @@ We should have a zope instance, with a basic zope.conf::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
-    instancehome ...instance
+    %define INSTANCEHOME /sample-buildout/parts/instance
     ...
     <zodb_db main>
         ...
@@ -400,7 +419,7 @@ We should have a zope instance, with the custom event log::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
-    instancehome ...instance
+    %define INSTANCEHOME /sample-buildout/parts/instance
     ...   
     <eventlog>
       level info
@@ -456,7 +475,7 @@ We should have a zope instance, with the custom event log::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
-    instancehome ...instance
+    %define INSTANCEHOME /sample-buildout/parts/instance
     ...   
     <logger access>
       level WARN
@@ -557,7 +576,7 @@ Our environment variables should be set now::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
-    instancehome ...instance
+    %define INSTANCEHOME /sample-buildout/parts/instance
     ...
     <environment>
       TZ US/Eastern
