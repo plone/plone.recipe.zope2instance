@@ -246,6 +246,7 @@ To have a RelStorage configuration, you can use rel-storage::
     ... 
     ... zope2-location = %(zope2_location)s
     ... user = me
+    ... zodb-cache-size-bytes = 1000000
     ...
     ... rel-storage = 
     ...   type postgresql
@@ -272,6 +273,7 @@ We should have a zope instance, with a basic zope.conf::
     <zodb_db main>
         # Main database
         cache-size 5000
+        cache-size-bytes 1000000
     %import relstorage
         <relstorage>
             <postgresql>
