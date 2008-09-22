@@ -4,6 +4,8 @@ Change History
 2.5
 ---
 
+- Add support for zodb-cache-size-bytes from ZODB 3.9 and later.
+  [wichert]
 
 2.4 (2008-07-15)
 ----------------

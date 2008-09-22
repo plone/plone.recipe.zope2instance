@@ -203,6 +203,9 @@ zodb-cache-size
   Set the ZODB cache size, i.e. the number of objects which the ZODB cache
   will try to hold. Defaults to 5000.
 
+zodb-cache-size-bytes
+  Set the ZODB cache sizes in bytes. Requires ZODB 3.9 or later.
+
 zserver-threads
   Specify the number of threads that Zope's ZServer web server will use to
   service requests. You shouldn't change this unless you know what you are

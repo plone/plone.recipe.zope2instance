@@ -305,6 +305,11 @@ class Recipe:
             zeo_address = options.get('zeo-address', '8100')
 
             zodb_cache_size = options.get('zodb-cache-size', '5000')
+            zodb_cache_size_bytes = options.get('zodb-cache-size-bytes', None)
+            if zodb_cache_size_bytes:
+                zodb_cache_size_bytes = "cache-size-bytes %s" % zodb_cache_size_bytes
+            else:
+                zodb_cache_size_bytes = ""
             zeo_client_cache_size = options.get('zeo-client-cache-size', '30MB')
             zeo_storage = options.get('zeo-storage', '1')
 
@@ -390,6 +395,7 @@ class Recipe:
                                         webdav_address = webdav_address,
                                         zserver_threads = zserver_threads,
                                         zodb_cache_size = zodb_cache_size,
+                                        zodb_cache_size_bytes = zodb_cache_size_bytes,
                                         zeo_client_name = zeo_client_name,
                                         zodb_tmp_storage = zodb_tmp_storage,
                                         pid_file = pid_file,
@@ -751,6 +757,7 @@ verbose-security %(verbose_security)s
 <zodb_db main>
     # Main database
     cache-size %(zodb_cache_size)s
+    %(zodb_cache_size_bytes)s
 %(storage_snippet)s
     mount-point /
 </zodb_db>
