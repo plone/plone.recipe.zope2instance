@@ -318,11 +318,17 @@ class Recipe:
                 zeo_var_dir = options.get('zeo-var',
                                           os.path.join(instance_home, 'var'))
                 zeo_client_client = options.get('zeo-client-client', '')
+                zeo_client_min_disconnect_poll = options.get('min-disconnect-poll', "")
+                zeo_client_max_disconnect_poll = options.get('max-disconnect-poll', "")
                 shared_blob_dir = options.get('shared-blob', 'no')
                 if zeo_client_name:
                     zeo_client_name = 'zeo-client-name %s' % zeo_client_name
                 if zeo_client_client:
                     zeo_client_client = 'client %s' % zeo_client_client
+                if zeo_client_min_disconnect_poll:
+                    zeo_client_min_disconnect_poll = "min-disconnect-poll %s" % zeo_client_min_disconnect_poll
+                if zeo_client_max_disconnect_poll:
+                    zeo_client_max_disconnect_poll = "max-disconnect-poll %s" % zeo_client_max_disconnect_poll
                 if options.get('zeo-username', ''):
                     if not options.get('zeo-password', ''):
                         raise zc.buildout.UserError('No ZEO password specified')
@@ -348,6 +354,8 @@ class Recipe:
                     zeo_client_client = zeo_client_client,
                     zeo_storage = zeo_storage,
                     zeo_var_dir=zeo_var_dir,
+                    zeo_client_min_disconnect_poll=zeo_client_min_disconnect_poll,
+                    zeo_client_max_disconnect_poll=zeo_client_max_disconnect_poll,
                     )
             else:
                 # no zeo-client
@@ -642,6 +650,8 @@ zeo_storage_template="""
       cache-size %(zeo_client_cache_size)s
       %(zeo_authentication)s
       %(zeo_client_client)s
+      %(zeo_client_min_disconnect_poll)s
+      %(zeo_client_max_disconnect_poll)s
     </zeoclient>
 """.strip()
 
@@ -657,6 +667,8 @@ zeo_blob_storage_template="""
       cache-size %(zeo_client_cache_size)s
       %(zeo_authentication)s
       %(zeo_client_client)s
+      %(zeo_client_min_disconnect_poll)s
+      %(zeo_client_max_disconnect_poll)s
     </zeoclient>
 """.strip()
 

@@ -326,6 +326,10 @@ We should have a zope instance, with a basic zope.conf::
             name zeostorage
             var /sample-buildout/parts/instance/var
             cache-size 30MB
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
         </zeoclient>
         ...
     </zodb_db>
@@ -349,6 +353,8 @@ If zope-client-client is specified it should get into that section as well.
     ... user = me
     ... zeo-client = yes
     ... zeo-client-client = persistentcache88
+    ... min-disconnect-poll = 10
+    ... max-disconnect-poll = 20
     ... ''' % globals())
 
 Let's run it::
@@ -371,7 +377,10 @@ We should have a zope instance, with a basic zope.conf::
             name zeostorage
             var /sample-buildout/parts/instance/var
             cache-size 30MB
+    <BLANKLINE>
             client persistentcache88
+            min-disconnect-poll 10
+            max-disconnect-poll 20
         </zeoclient>
         ...
     </zodb_db>
