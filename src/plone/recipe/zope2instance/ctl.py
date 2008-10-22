@@ -47,6 +47,9 @@ WIN32 = False
 if sys.platform[:3].lower() == "win":
     WIN32 = True
 
+def _n(path):
+    return os.path.abspath(os.path.normpath(path)).lower()
+
 class AdjustedZopeCmd(zopectl.ZopeCmd):
 
     if WIN32:
@@ -139,7 +142,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         products = []
         for path in Products.__path__:
             # ignore software home, as it already works
-            if not path.startswith(softwarehome):
+            if not _n(path).startswith(_n(softwarehome)):
                 # get all folders in the current products folder and filter
                 # out everything that is not a directory or a VCS internal one.
                 folders = [f for f in os.listdir(path) if
@@ -170,9 +173,9 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         paths = sys.path
         progname = self.options.progname
         buildout_root = os.path.dirname(os.path.dirname(progname))
-
+        
         for path in paths:
-            if path != buildout_root:
+            if _n(path) != _n(buildout_root):
                 defaults += ['--test-path', path]
 
         # Default to dots, if not explicitly set to quiet. Don't duplicate
