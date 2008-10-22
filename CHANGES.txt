@@ -1,8 +1,12 @@
 Change History
 ==============
 
+2.7 (Unreleased)
+----------------
+
+
 2.6 (2008-10-22)
----
+----------------
 
 - Normalize, absolutize and lowercase-ize (is that a word?) paths
   before comparing, to avoid problems with relative filenames and
