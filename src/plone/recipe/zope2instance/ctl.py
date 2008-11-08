@@ -50,6 +50,17 @@ if sys.platform[:3].lower() == "win":
 def _n(path):
     return os.path.abspath(os.path.normpath(path)).lower()
 
+def quote_command(command):
+    print " ".join(command)
+    # Quote the program name, so it works even if it contains spaces
+    command = " ".join(['"%s"' % x for x in command])
+    if WIN32: 
+        # odd, but true: the windows cmd processor can't handle more than 
+        # one quoted item per string unless you add quotes around the 
+        # whole line. 
+        command = '"%s"' % command 
+    return command
+
 class AdjustedZopeCmd(zopectl.ZopeCmd):
 
     if WIN32:
@@ -60,28 +71,23 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             return
 
         def do_install(self, arg):
-            program = "%s install" % self.options.servicescript
-            print program
+            program = quote_command(self.options.servicescript + ['install'])
             os.system(program)
 
         def do_remove(self, arg):
-            program = "%s remove" % self.options.servicescript
-            print program
+            program = quote_command(self.options.servicescript + ['remove'])
             os.system(program)
 
         def do_start(self, arg):
-            program = "%s start" % self.options.servicescript
-            print program
+            program = quote_command(self.options.servicescript + ['start'])
             os.system(program)
 
         def do_stop(self, arg):
-            program = "%s stop" % self.options.servicescript
-            print program
+            program = quote_command(self.options.servicescript + ['stop'])
             os.system(program)
 
         def do_restart(self, arg):
-            program = "%s restart" % self.options.servicescript
-            print program
+            program = quote_command(self.options.servicescript + ['restart'])
             os.system(program)
 
         def get_startup_cmd(self, python, more):
@@ -111,16 +117,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         program = self.options.program
         if debug:
             program[1:1] = ["-X", 'debug-mode=on']
-            print " ".join(program)
-            # Quote the program name, so it works even if it contains spaces
-            program=['"%s"' % x for x in program]
-            command=" ".join(program)
-            if WIN32: 
-                # odd, but true: the windows cmd processor can't handle more than 
-                # one quoted item per string unless you add quotes around the 
-                # whole line. 
-                command = '"%s"' % command 
-
+            command = quote_command(program)
             return os.system(command)
         else:
             os.execv(program[0], program)
@@ -229,9 +226,9 @@ def main(args=None):
 
     # Add the path to the zopeservice.py script, which is needed for some of the
     # Windows specific commands    
-    servicescript = os.path.join(options.configroot.instancehome, 'bin', 'zopeservice.py')
-    options.servicescript = '"%s" %s' % (options.python, servicescript)
-
+    servicescript = os.path.join(options.configroot.instancehome, 
+                                 'bin', 'zopeservice.py')
+    options.servicescript = [options.python, servicescript]
 
     # If no command was specified we go into interactive mode.
     if options.args:

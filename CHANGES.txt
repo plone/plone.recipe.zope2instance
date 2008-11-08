@@ -4,6 +4,10 @@ Change History
 2.7 (Unreleased)
 ----------------
 
+- Use same quoting as on 'do_foreground' for servicescript
+  usage. Fixes problems with installing the buildout-based Plone
+  installer for Windows on a path with spaces.
+  [sidnei]
 
 2.6 (2008-10-22)
 ----------------
