@@ -54,7 +54,7 @@ class Recipe:
             mkzopeinstance = '"%s"' % mkzopeinstance
 
         assert os.spawnl(
-            os.P_WAIT, options['executable'], 
+            os.P_WAIT, os.path.normpath(options['executable']), 
             zc.buildout.easy_install._safe_arg(options['executable']),
             mkzopeinstance, '-d', 
             zc.buildout.easy_install._safe_arg(location), 

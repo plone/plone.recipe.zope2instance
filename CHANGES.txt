@@ -4,6 +4,10 @@ Change History
 2.7 (Unreleased)
 ----------------
 
+- Normalize first argument to os.spawnl. It can get really upset
+  otherwise (dll import failure on a relocatable python install).  
+  [sidnei]
+
 - Use same quoting as on 'do_foreground' for servicescript
   usage. Fixes problems with installing the buildout-based Plone
   installer for Windows on a path with spaces.
