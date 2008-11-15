@@ -116,9 +116,17 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                 return
         program = self.options.program
         if debug:
-            program[1:1] = ["-X", 'debug-mode=on']
+            local_additions = []
+            if not program.count('-X'):
+                local_additions += ['-X']
+            if not program.count('debug-mode=on'):
+                local_additions += ['debug-mode=on']
+            program[1:1] = local_additions
             command = quote_command(program)
-            return os.system(command)
+            try:
+                return os.system(command)
+            finally:
+                for addition in local_additions: program.remove(addition)
         else:
             os.execv(program[0], program)
 
