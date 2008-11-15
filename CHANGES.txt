@@ -13,6 +13,11 @@ Change History
   installer for Windows on a path with spaces.
   [sidnei]
 
+- Ensure that do_foreground leaves self.options.program arguments as it
+  found them.  This makes it possible to use 'fg' and 'debug' more than
+  once within the same control session.
+  [klm]
+
 2.6 (2008-10-22)
 ----------------
 
