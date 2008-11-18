@@ -45,11 +45,11 @@ class Recipe:
         # patch the result. A better approach might be to provide independent
         # instance-creation logic, but this raises lots of issues that
         # need to be stored out first.
-        zope2_bin = os.path.join(options['zope2-location'], 'bin')
-        if not os.path.isdir(zope2_bin):
-            zope2_bin = os.path.join(options['zope2-location'],
-                                     'utilities')
-        mkzopeinstance = os.path.join(zope2_bin, 'mkzopeinstance.py')
+        mkzopeinstance = os.path.join(
+            options['zope2-location'], 'bin', 'mkzopeinstance.py')
+        if not os.path.exists(mkzopeinstance):
+            mkzopeinstance = os.path.join(
+                options['zope2-location'], 'utilities', 'mkzopeinstance.py')
         if sys.platform[:3].lower() == "win":
             mkzopeinstance = '"%s"' % mkzopeinstance
 
@@ -509,9 +509,15 @@ if __name__ == '__main__':
 
         # The instance control script
         zope_conf = os.path.join(location, 'etc', 'zope.conf')
-        extra_paths = [os.path.join(location),
-                       os.path.join(options['zope2-location'], 'lib', 'python')
-                      ]
+        extra_paths = []
+
+        # Only append the instance home and Zope lib/python in a non-egg
+        # environment
+        lib_python = os.path.join(options['zope2-location'], 'lib', 'python')
+        if os.path.exists(lib_python):
+            extra_paths.append(os.path.join(location))
+            extra_paths.append(lib_python)
+
         extra_paths.extend(options.get('extra-paths', '').split())
 
         requirements, ws = self.egg.working_set(['plone.recipe.zope2instance'])
