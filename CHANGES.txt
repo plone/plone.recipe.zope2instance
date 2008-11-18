@@ -4,6 +4,10 @@ Change History
 2.7 (Unreleased)
 ----------------
 
+- Added a `zope2-egg` option and an accompanying simple startup script for
+  use with an eggified Zope2.
+  [hannosch]
+
 - Do not fail with a Zope2 egg checkout.
   [hannosch]
 

@@ -22,6 +22,7 @@ class Recipe:
     def __init__(self, buildout, name, options):
         self.egg = zc.recipe.egg.Egg(buildout, options['recipe'], options)
         self.buildout, self.options, self.name = buildout, options, name
+        self.zope2_egg = options.get('zope2-egg', False)
 
         options['location'] = os.path.join(
             buildout['buildout']['parts-directory'],
@@ -420,6 +421,9 @@ class Recipe:
             fd.close()
 
     def patch_binaries(self, ws_locations):
+        if self.zope2_egg:
+            return
+
         location = self.options['location']
         path =":".join(ws_locations)
         for script_name in ('runzope', 'zopectl'):
@@ -522,29 +526,40 @@ if __name__ == '__main__':
 
         requirements, ws = self.egg.working_set(['plone.recipe.zope2instance'])
 
-        zc.buildout.easy_install.scripts(
-            [(self.options.get('control-script', self.name),
-                'plone.recipe.zope2instance.ctl', 'main')],
-            ws, options['executable'], options['bin-directory'],
-            extra_paths = extra_paths,
-            arguments = ('\n        ["-C", %r]'
-                         '\n        + sys.argv[1:]'
-                         % zope_conf
-                         ),
-            )
-        # The backup script, pointing to repozo.py
-        repozo = options.get('repozo', None)
-        if repozo is None:
-            repozo = os.path.join(options['zope2-location'], 'utilities', 'ZODBTools', 'repozo.py')
-
-        directory, filename = os.path.split(repozo)
-        if repozo and os.path.exists(repozo):
+        if self.zope2_egg:
             zc.buildout.easy_install.scripts(
-                [('repozo', os.path.splitext(filename)[0], 'main')],
-                {}, options['executable'], options['bin-directory'],
-                extra_paths = [os.path.join(options['zope2-location'], 'lib', 'python'),
-                               directory],
+                [(self.options.get('control-script', self.name),
+                    'plone.recipe.zope2instance.simple', 'main')],
+                ws, options['executable'], options['bin-directory'],
+                extra_paths = extra_paths,
+                arguments = ('\n        [%r]'
+                             % zope_conf
+                             ),
                 )
+        else:
+            zc.buildout.easy_install.scripts(
+                [(self.options.get('control-script', self.name),
+                    'plone.recipe.zope2instance.ctl', 'main')],
+                ws, options['executable'], options['bin-directory'],
+                extra_paths = extra_paths,
+                arguments = ('\n        ["-C", %r]'
+                             '\n        + sys.argv[1:]'
+                             % zope_conf
+                             ),
+                )
+            # The backup script, pointing to repozo.py
+            repozo = options.get('repozo', None)
+            if repozo is None:
+                repozo = os.path.join(options['zope2-location'], 'utilities', 'ZODBTools', 'repozo.py')
+
+            directory, filename = os.path.split(repozo)
+            if repozo and os.path.exists(repozo):
+                zc.buildout.easy_install.scripts(
+                    [('repozo', os.path.splitext(filename)[0], 'main')],
+                    {}, options['executable'], options['bin-directory'],
+                    extra_paths = [os.path.join(options['zope2-location'], 'lib', 'python'),
+                                   directory],
+                    )
 
     def build_package_includes(self):
         """Create ZCML slugs in etc/package-includes
