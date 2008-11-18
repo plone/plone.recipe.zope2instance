@@ -1,7 +1,7 @@
 Change History
 ==============
 
-2.7 (Unreleased)
+2.7 (2008-11-18)
 ----------------
 
 - Added a `zope2-egg` option and an accompanying simple startup script for
