@@ -228,6 +228,59 @@ Our WebDAV server should be set up now::
     ...
 
 
+BlobStorage
+===========
+
+To have a BlobStorage configuration, you can use blob-storage::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... index = http://pypi.python.org/simple
+    ... develop = 
+    ...     %(recipe_location)s 
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... 
+    ... zope2-location = %(zope2_location)s
+    ... user = me
+    ... zodb-cache-size-bytes = 1000000
+    ...
+    ... blob-storage = ${buildout:directory}/var/blob
+    ...
+    ... ''' % globals())
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Develop: '...'
+    Uninstalling instance.
+    Installing instance.
+
+We should have a zope instance, with a basic zope.conf::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    %define INSTANCEHOME /sample-buildout/parts/instance
+    ...
+    <zodb_db main>
+        # Main database
+        cache-size 5000
+        cache-size-bytes 1000000
+        # Blob-enabled FileStorage database
+        <blobstorage>
+          blob-dir /sample-buildout/var/blob
+          <filestorage>
+            path /sample-buildout/var/filestorage/Data.fs
+          </filestorage>
+        </blobstorage>
+        mount-point /
+    </zodb_db>
+    ...
+    <BLANKLINE>
+
 RelStorage
 ==========
 
