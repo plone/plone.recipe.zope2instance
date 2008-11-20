@@ -227,6 +227,59 @@ Our WebDAV server should be set up now::
     </webdav-source-server>
     ...
 
+DemoStorage
+===========
+
+To have a DemoStorage configuration, you can use demo-storage::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... index = http://pypi.python.org/simple
+    ... develop = 
+    ...     %(recipe_location)s 
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... 
+    ... zope2-location = %(zope2_location)s
+    ... user = me
+    ... zodb-cache-size-bytes = 1000000
+    ...
+    ... file-storage = newfs/Data.fs
+    ... demo-storage = on
+    ...
+    ... ''' % globals())
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Develop: '...'
+    Uninstalling instance.
+    Installing instance.
+
+We should have a zope instance, with a basic zope.conf::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    %define INSTANCEHOME /sample-buildout/parts/instance
+    ...
+    <zodb_db main>
+        # Main database
+        cache-size 5000
+        cache-size-bytes 1000000
+        # Demostorage
+        <demostorage>
+          # FileStorage database
+          <filestorage>
+            path /sample-buildout/var/newfs/Data.fs
+          </filestorage>
+        </demostorage>
+        mount-point /
+    </zodb_db>
+    ...
+    <BLANKLINE>
 
 BlobStorage
 ===========
@@ -281,6 +334,40 @@ We should have a zope instance, with a basic zope.conf::
     ...
     <BLANKLINE>
 
+BlobStorage doesn't support demostorage, let test this::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... index = http://pypi.python.org/simple
+    ... develop = 
+    ...     %(recipe_location)s 
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... 
+    ... zope2-location = %(zope2_location)s
+    ... user = me
+    ... zodb-cache-size-bytes = 1000000
+    ...
+    ... blob-storage = ${buildout:directory}/var/blob
+    ... demo-storage = on
+    ...
+    ... ''' % globals())
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Develop: '...'
+    Uninstalling instance.
+    Installing instance.
+    While:
+      Installing instance.
+    <BLANKLINE>
+    ...
+    ValueError: Both blob and demo storage cannot be used at the same time.
+
 RelStorage
 ==========
 
@@ -314,7 +401,6 @@ Let's run it::
 
     >>> print system(join('bin', 'buildout')),
     Develop: '...'
-    Uninstalling instance.
     Installing instance.
 
 We should have a zope instance, with a basic zope.conf::

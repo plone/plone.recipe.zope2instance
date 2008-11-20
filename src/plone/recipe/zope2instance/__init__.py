@@ -180,7 +180,7 @@ class Recipe:
                                                            webdav_conn_close)
             effective_user = options.get('effective-user', '')
             if effective_user:
-               effective_user = 'effective-user %s' % effective_user 
+                effective_user = 'effective-user %s' % effective_user 
             ip_address = options.get('ip-address', '')
             if ip_address:
                 ip_address = 'ip-address %s' % ip_address
@@ -291,13 +291,21 @@ class Recipe:
                 storage_snippet = file_storage_template % file_storage
 
                 blob_storage = options.get('blob-storage', None)
+                demo_storage = options.get('demo-storage', None)
+                if blob_storage and demo_storage:
+                    raise ValueError("Both blob and demo storage cannot be used"
+                                     " at the same time.")
+
                 if blob_storage:
                     blob_storage = os.path.join(base_dir, blob_storage)
                     if not os.path.exists(blob_storage):
                         os.makedirs(blob_storage)
                     storage_snippet = blob_storage_template % (blob_storage, 
                                                                file_storage)
-                
+
+                elif demo_storage:
+                    storage_snippet = demo_storage_template % file_storage
+
             zserver_threads = options.get('zserver-threads', '')
             if zserver_threads:
                 zserver_threads = 'zserver-threads %s' % zserver_threads
@@ -634,6 +642,16 @@ file_storage_template="""
     <filestorage>
       path %s
     </filestorage>
+"""
+
+demo_storage_template="""
+    # Demostorage
+    <demostorage>
+      # FileStorage database
+      <filestorage>
+        path %s
+      </filestorage>
+    </demostorage>
 """
 
 rel_storage_template="""

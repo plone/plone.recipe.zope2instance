@@ -4,6 +4,11 @@ Change History
 2.8 (unreleased)
 ----------------
 
+- Add a demo-storage option and tests.
+  [encolpe]
+
+- Add a first test for blob-storage.
+  [encolpe]
 
 2.7 (2008-11-18)
 ----------------
