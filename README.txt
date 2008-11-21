@@ -133,6 +133,10 @@ file-storage
   The filename where the ZODB data file will be stored.
   Defaults to var/filestorage/Data.fs.
 
+demo-storage
+  If 'on' it enables the demostorage. It is not compatible with blob-storage
+  and rel-storage.
+
 blob-storage
   The name of the directory where the ZODB blob data will be stored.
 
