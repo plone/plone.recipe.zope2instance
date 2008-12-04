@@ -90,15 +90,35 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             program = quote_command(self.options.servicescript + ['restart'])
             os.system(program)
 
-        def get_startup_cmd(self, python, more):
-            # if we pass a win32 backslashed path as a ''-style
-            # string, the backslashes will act as escapes.
-            # Use r'' instead.
-            cmdline = ( '%s -c "from Zope2 import configure;'
-                        'configure(r\'%s\');' %
-                        (python, self.options.configfile)
-                        )
-            return cmdline + more + '\"'
+    def get_startup_cmd(self, python, more):
+        # If we pass the configuration filename as a win32
+        # backslashed path using a ''-style string, the backslashes
+        # will act as escapes.  Use r'' instead.
+        cmdline = ( '%s -c "from Zope2 import configure; '
+                    'configure(r\'%s\'); ' %
+                    (python, self.options.configfile)
+                    )
+        return cmdline + more + '\"'
+
+    def do_run(self, arg):
+        tup = arg.split(' ')
+        if not arg:
+            print "usage: run <script> [args]"
+            return
+
+        # If we pass the script filename as a win32 backslashed path
+        # using a ''-style string, the backslashes will act as
+        # escapes.  Use r'' instead.
+        #
+        # Remove -c and add script as sys.argv[0]
+        script = tup[0]
+        cmd = 'import sys; sys.argv.pop(); sys.argv.append(r\'%s\'); '  % script
+        if len(tup) > 1:
+            argv = tup[1:]
+            cmd += '[sys.argv.append(x) for x in %s]; ' % argv
+        cmd += 'import Zope2; app=Zope2.app(); execfile(r\'%s\')' % script
+        cmdline = self.get_startup_cmd(self.options.python, cmd)
+        self._exitstatus = os.system(cmdline)
 
     def do_console(self, arg):
         self.do_foreground(arg, debug=False)
