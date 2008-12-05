@@ -1,15 +1,15 @@
 Change History
 ==============
 
-2.8 (unreleased)
-----------------
+2.8 (20080-12-05)
+-----------------
 
 - Add more tests for ZEO client with blob and demo storages.
   Still no test on 'shared-blob-dir' option.
   [encolpe]
 
 - Always use 'r'-style strings for passing script and configuration
-  filenames (eg: on 'instance run <script>'.
+  filenames (eg: on 'instance run <script>').
   [sidnei]
 
 - Add a demo-storage option and tests.
