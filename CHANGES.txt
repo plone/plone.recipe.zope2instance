@@ -4,6 +4,10 @@ Change History
 2.8 (unreleased)
 ----------------
 
+- Add more tests for ZEO client with blob and demo storages.
+  Still no test on 'shared-blob-dir' option.
+  [encolpe]
+
 - Always use 'r'-style strings for passing script and configuration
   filenames (eg: on 'instance run <script>'.
   [sidnei]

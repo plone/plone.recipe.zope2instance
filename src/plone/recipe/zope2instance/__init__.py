@@ -304,7 +304,7 @@ class Recipe:
                                                                file_storage)
 
                 elif demo_storage:
-                    storage_snippet = demo_storage_template % file_storage
+                    storage_snippet = demo_storage_template % storage_snippet
 
             zserver_threads = options.get('zserver-threads', '')
             if zserver_threads:
@@ -351,11 +351,10 @@ class Recipe:
 
                 if blob_storage:
                     storage_snippet_template = zeo_blob_storage_template
+                elif demo_storage:
+                    storage_snippet_template = demo_storage_template % zeo_storage_template
                 else:
-                    if demo_storage:
-                        storage_snippet_template = demo_storage_template % zeo_storage_template
-                    else:
-                        storage_snippet_template = zeo_storage_template
+                    storage_snippet_template = zeo_storage_template
 
                 storage_snippet = storage_snippet_template % dict(
                     blob_storage = blob_storage,
@@ -650,10 +649,7 @@ file_storage_template="""
 demo_storage_template="""
     # Demostorage
     <demostorage>
-      # FileStorage database
-      <filestorage>
-        path %s
-      </filestorage>
+%s
     </demostorage>
 """
 

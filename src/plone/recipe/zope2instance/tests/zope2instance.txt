@@ -272,9 +272,9 @@ We should have a zope instance, with a basic zope.conf::
         # Demostorage
         <demostorage>
           # FileStorage database
-          <filestorage>
-            path /sample-buildout/var/newfs/Data.fs
-          </filestorage>
+        <filestorage>
+          path /sample-buildout/var/newfs/Data.fs
+        </filestorage>
         </demostorage>
         mount-point /
     </zodb_db>
@@ -520,6 +520,111 @@ We should have a zope instance, with a basic zope.conf::
             client persistentcache88
             min-disconnect-poll 10
             max-disconnect-poll 20
+        </zeoclient>
+        ...
+    </zodb_db>
+    ...
+    <BLANKLINE>
+
+Verify that demo-storage is correctly applied
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... index = http://pypi.python.org/simple
+    ... develop = 
+    ...     %(recipe_location)s 
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... 
+    ... zope2-location = %(zope2_location)s
+    ... user = me
+    ... zeo-client = yes
+    ... demo-storage = yes
+    ... ''' % globals())
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Develop: '...'
+    ...
+
+We should have a zope instance, with a basic zope.conf::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    %define INSTANCEHOME /sample-buildout/parts/instance
+    ...
+    <zodb_db main>
+        ...
+        # Demostorage
+        <demostorage>
+        # ZEOStorage database
+        <zeoclient>
+            server 8100
+            storage 1
+            name zeostorage
+            var /sample-buildout/parts/instance/var
+            cache-size 30MB
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+        </zeoclient>
+        </demostorage>
+        ...
+    </zodb_db>
+    ...
+    <BLANKLINE>
+
+Verify that demo-storage is correctly applied
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... index = http://pypi.python.org/simple
+    ... develop = 
+    ...     %(recipe_location)s 
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... 
+    ... zope2-location = %(zope2_location)s
+    ... user = me
+    ... zeo-client = yes
+    ... blob-storage = ${buildout:directory}/var/blob
+    ... ''' % globals())
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Develop: '...'
+    ...
+
+We should have a zope instance, with a basic zope.conf::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    %define INSTANCEHOME /sample-buildout/parts/instance
+    ...
+    <zodb_db main>
+        ...
+    # Blob-enabled ZEOStorage database
+        <zeoclient>
+          blob-dir /sample-buildout/var/blob
+          shared-blob-dir no
+          server 8100
+          storage 1
+          name zeostorage
+          var /sample-buildout/parts/instance/var
+          cache-size 30MB
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
         </zeoclient>
         ...
     </zodb_db>
