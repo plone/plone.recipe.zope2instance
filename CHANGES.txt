@@ -1,8 +1,8 @@
 Change History
 ==============
 
-2.8 (20080-12-05)
------------------
+2.8 (2008-12-05)
+----------------
 
 - Add more tests for ZEO client with blob and demo storages.
   Still no test on 'shared-blob-dir' option.
