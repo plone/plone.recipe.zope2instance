@@ -55,10 +55,10 @@ class Recipe:
             mkzopeinstance = '"%s"' % mkzopeinstance
 
         assert os.spawnl(
-            os.P_WAIT, os.path.normpath(options['executable']), 
+            os.P_WAIT, os.path.normpath(options['executable']),
             zc.buildout.easy_install._safe_arg(options['executable']),
-            mkzopeinstance, '-d', 
-            zc.buildout.easy_install._safe_arg(location), 
+            mkzopeinstance, '-d',
+            zc.buildout.easy_install._safe_arg(location),
             '-u', options['user'],
             ) == 0
 
@@ -69,7 +69,7 @@ class Recipe:
 
             # Make a new zope.conf based on options in buildout.cfg
             self.build_zope_conf()
-            
+
             # Patch extra paths into binaries
             self.patch_binaries(ws_locations)
 
@@ -117,7 +117,7 @@ class Recipe:
     def build_zope_conf(self):
         """Create a zope.conf file
         """
-        
+
         options = self.options
         location = options['location']
         # Don't do this if we have a manual zope.conf
@@ -125,7 +125,7 @@ class Recipe:
         if zope_conf_path is not None:
             zope_conf = "%%include %s" % os.path.abspath(zope_conf_path)
         else:
-        
+
             products = options.get('products', '')
             if products:
                 products = products.split('\n')
@@ -140,7 +140,7 @@ class Recipe:
                 os.makedirs(var_dir)
 
             instance_home = location
-            client_home = options.get('client-home', os.path.join(var_dir, 
+            client_home = options.get('client-home', os.path.join(var_dir,
                                                                   self.name))
             if not os.path.exists(client_home):
                 os.makedirs(client_home)
@@ -176,11 +176,11 @@ class Recipe:
                 webdav_conn_close = options.get(
                                         'webdav-force-connection-close',
                                         'off')
-                webdav_address = webdav_server_template % (webdav_address, 
+                webdav_address = webdav_server_template % (webdav_address,
                                                            webdav_conn_close)
             effective_user = options.get('effective-user', '')
             if effective_user:
-                effective_user = 'effective-user %s' % effective_user 
+                effective_user = 'effective-user %s' % effective_user
             ip_address = options.get('ip-address', '')
             if ip_address:
                 ip_address = 'ip-address %s' % ip_address
@@ -201,7 +201,7 @@ class Recipe:
                     environment_vars = '\n'.join(["%s %s" % (env_var[0], env_var[1])
                                                  for env_var in env_vars])
                 environment_vars = environment_template % environment_vars
-            
+
             deprecation_warnings = options.get('deprecation-warnings', '')
             if deprecation_warnings:
                 if deprecation_warnings.lower() in ('off', 'disable', 'false'):
@@ -220,37 +220,37 @@ class Recipe:
             custom_event_log = options.get('event-log-custom', None)
             default_log = os.path.sep.join(('log', self.name + '.log',))
             # log file
-            if custom_event_log is None: 
+            if custom_event_log is None:
                 event_log_name = options.get('event-log', default_log)
                 event_file = os.path.join(var_dir, event_log_name)
                 event_log_dir = os.path.dirname(event_file)
                 if not os.path.exists(event_log_dir):
                     os.makedirs(event_log_dir)
-                event_log = event_logfile % {'event_logfile': event_file, 
+                event_log = event_logfile % {'event_logfile': event_file,
                                              'event_log_level': event_log_level}
-            # custom log 
+            # custom log
             else:
                 event_log = custom_event_log
-            
+
             z_log_name = os.path.sep.join(('log', self.name + '-Z2.log'))
             z_log_name = options.get('z2-log', z_log_name)
             z_log = os.path.join(var_dir, z_log_name)
             z_log_dir = os.path.dirname(z_log)
             if not os.path.exists(z_log_dir):
                 os.makedirs(z_log_dir)
-            
+
             z_log_level = options.get('z2-log-level', 'WARN')
-            
+
             # access event log
             custom_access_event_log = options.get('access-log-custom', None)
             # filelog directive
-            if custom_access_event_log is None: 
+            if custom_access_event_log is None:
                 access_event_log = access_event_logfile % {'z_log': z_log}
             # custom directive
             else:
                 access_event_log = custom_access_event_log
 
-            default_zpublisher_encoding = options.get('default-zpublisher-encoding', 
+            default_zpublisher_encoding = options.get('default-zpublisher-encoding',
                                                       'utf-8')
             if default_zpublisher_encoding:
                 default_zpublisher_encoding = 'default-zpublisher-encoding %s' %\
@@ -263,16 +263,16 @@ class Recipe:
                     return len(el) == 2 and el or None
 
                 rel_storage = dict([
-                    _split(el) for el in relstorage.splitlines() 
+                    _split(el) for el in relstorage.splitlines()
                     if _split(el) is not None])
                 type_ = rel_storage.pop('type', 'postgresql')
-                
+
                 if type_ == 'postgresql' and not 'dsn' in rel_storage:
                     # Support zope2instance 1.4 style interpolation for
                     # postgresql
                     template = ("dbname='%(dbname)s' user='%(user)s' "
                                 "host='%(host)s' password='%(password)s'")
-                    rel_storage = dict(dsn=template % rel_storage)                    
+                    rel_storage = dict(dsn=template % rel_storage)
 
                 opts = dict(
                     type=type_,
@@ -281,8 +281,8 @@ class Recipe:
                 storage_snippet = rel_storage_template % opts
 
             else:
-                file_storage = options.get('file-storage', 
-                                           os.path.sep.join(('filestorage', 
+                file_storage = options.get('file-storage',
+                                           os.path.sep.join(('filestorage',
                                                              'Data.fs',)))
                 file_storage = os.path.join(var_dir, file_storage)
                 file_storage_dir = os.path.dirname(file_storage)
@@ -300,7 +300,7 @@ class Recipe:
                     blob_storage = os.path.join(base_dir, blob_storage)
                     if not os.path.exists(blob_storage):
                         os.makedirs(blob_storage)
-                    storage_snippet = blob_storage_template % (blob_storage, 
+                    storage_snippet = blob_storage_template % (blob_storage,
                                                                file_storage)
 
                 elif demo_storage:
@@ -352,7 +352,10 @@ class Recipe:
                 if blob_storage:
                     storage_snippet_template = zeo_blob_storage_template
                 else:
-                    storage_snippet_template = zeo_storage_template
+                    if demo_storage:
+                        storage_snippet_template = demo_storage_template % zeo_storage_template
+                    else:
+                        storage_snippet_template = zeo_storage_template
 
                 storage_snippet = storage_snippet_template % dict(
                     blob_storage = blob_storage,
@@ -370,8 +373,8 @@ class Recipe:
                 # no zeo-client
                 zeo_client_client = ''
                 zeo_client_name = ''
-            
-            zodb_tmp_storage = options.get('zodb-temporary-storage', 
+
+            zodb_tmp_storage = options.get('zodb-temporary-storage',
                                            zodb_temporary_storage_template)
 
             template = zope_conf_template
@@ -456,7 +459,7 @@ class Recipe:
             script_path = os.path.join(location, 'bin', script_name)
             script = open(script_path).read()
             # This could need some regex-fu
-            lines = [l for l in script.splitlines() 
+            lines = [l for l in script.splitlines()
                      if not l.startswith('@set PYTHON=')]
             lines.insert(2, '@set PYTHON=%s' % self.options['executable'])
             script = '\n'.join(lines)
@@ -504,7 +507,7 @@ if __name__ == '__main__':
         script_path = os.path.join(location, 'bin', 'runzope.bat')
         script = open(script_path).read()
         # Adjust script to use the right command
-        script = script.replace("@set ZOPE_RUN=%SOFTWARE_HOME%\\Zope2\\Startup\\run.py", 
+        script = script.replace("@set ZOPE_RUN=%SOFTWARE_HOME%\\Zope2\\Startup\\run.py",
                                 """@set ZOPE_RUN=%ZOPE_HOME%\\test.py
 @set ERRLEV=0""")
         script = script.replace("\"%ZOPE_RUN%\" -C \"%CONFIG_FILE%\" %1 %2 %3 %4 %5 %6 %7",
