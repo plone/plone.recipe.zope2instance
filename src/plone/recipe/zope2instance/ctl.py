@@ -45,6 +45,11 @@ except ImportError:
 
 WIN32 = False
 if sys.platform[:3].lower() == "win":
+    import pywintypes
+    import win32con
+    import win32service
+    import win32serviceutil
+
     WIN32 = True
 
 def _n(path):
@@ -65,30 +70,61 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
 
     if WIN32:
         def get_status(self):
-            self.zd_up = 0
-            self.zd_pid = 0
-            self.zd_status = None
-            return
+            sn = self.get_service_name()
+            try:
+                stat = win32serviceutil.QueryServiceStatus(sn)[1]
+                self.zd_up = 1
+            except pywintypes.error, err:
+                if err[0] == 1060:
+                    # Service not installed
+                    stat = win32service.SERVICE_STOPPED
+                    self.zd_up = 0
+                else:
+                    raise
+
+            self.zd_pid = (stat == win32service.SERVICE_RUNNING) and -1 or 0
+            self.zd_status = "args=%s" % self.options.program
+
+        def get_service_name(self):
+            ih = self.options.configroot.instancehome.lower()
+            return "Zope_%s" % hash(ih)
+
+        def handle_command(self, cmd):
+            # Make a copy of the environment and the sys path so we
+            # can restore them afterwards.
+            old_env = os.environ.data.copy()
+            old_path = sys.path[:]
+
+            try:
+                # Make the zopeservice module importable
+                sys.path.insert(0, os.path.dirname(self.options.servicescript[-1]))
+
+                # Import the InstanceService class, and then delegate the
+                # commands to HandleCommandLine
+                from zopeservice import InstanceService
+                win32serviceutil.HandleCommandLine(InstanceService, argv=['', cmd])
+            finally:
+                os.environ.data = old_env
+                sys.path = old_path
 
         def do_install(self, arg):
-            program = quote_command(self.options.servicescript + ['install'])
-            os.system(program)
+            self.handle_command('install')
 
         def do_remove(self, arg):
-            program = quote_command(self.options.servicescript + ['remove'])
-            os.system(program)
+            self.handle_command('remove')
 
         def do_start(self, arg):
-            program = quote_command(self.options.servicescript + ['start'])
-            os.system(program)
+            self.get_status()
+            if not self.zd_up:
+                self.handle_command('start')
 
         def do_stop(self, arg):
-            program = quote_command(self.options.servicescript + ['stop'])
-            os.system(program)
+            self.get_status()
+            if self.zd_up:
+                self.handle_command('stop')
 
         def do_restart(self, arg):
-            program = quote_command(self.options.servicescript + ['restart'])
-            os.system(program)
+            self.handle_command('restart')
 
     def get_startup_cmd(self, python, more):
         # If we pass the configuration filename as a win32

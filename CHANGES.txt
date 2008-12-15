@@ -1,6 +1,15 @@
 Change History
 ==============
 
+2.9 (Unreleased)
+----------------
+
+- Delegate commands to ``win32serviceutil.HandleCommand()`` on win32,
+  instead of starting the interpreter through ``os.system()``. Should
+  shave off a couple seconds from overall time taken to process those
+  commands.
+  [sidnei]
+
 2.8 (2008-12-05)
 ----------------
 
