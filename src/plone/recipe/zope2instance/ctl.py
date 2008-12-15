@@ -115,12 +115,12 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
 
         def do_start(self, arg):
             self.get_status()
-            if not self.zd_up:
+            if not self.zd_pid:
                 self.handle_command('start')
 
         def do_stop(self, arg):
             self.get_status()
-            if self.zd_up:
+            if self.zd_pid:
                 self.handle_command('stop')
 
         def do_restart(self, arg):
