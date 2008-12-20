@@ -456,37 +456,39 @@ class Recipe:
         # Patch Windows scripts
         for script_name in ('runzope.bat', ):
             script_path = os.path.join(location, 'bin', script_name)
-            script = open(script_path).read()
-            # This could need some regex-fu
-            lines = [l for l in script.splitlines()
-                     if not l.startswith('@set PYTHON=')]
-            lines.insert(2, '@set PYTHON=%s' % self.options['executable'])
-            script = '\n'.join(lines)
+            if os.path.exists(script_path):
+                script = open(script_path).read()
+                # This could need some regex-fu
+                lines = [l for l in script.splitlines()
+                         if not l.startswith('@set PYTHON=')]
+                lines.insert(2, '@set PYTHON=%s' % self.options['executable'])
+                script = '\n'.join(lines)
 
-            # Use servicewrapper.py instead of calling run.py directly
-            # so that sys.path gets properly set. We used to append
-            # all the eggs to PYTHONPATH in runzope.bat, but after
-            # everything was turned into eggs we exceeded the
-            # environment maximum size for cmd.exe.
-            script = script.replace(
-                "ZOPE_RUN=%SOFTWARE_HOME%\\Zope2\\Startup\\run.py",
-                "ZOPE_RUN=%INSTANCE_HOME%\\bin\\servicewrapper.py"
-                )
-            f = open(script_path, 'w')
-            f.write(script)
-            f.close()
+                # Use servicewrapper.py instead of calling run.py directly
+                # so that sys.path gets properly set. We used to append
+                # all the eggs to PYTHONPATH in runzope.bat, but after
+                # everything was turned into eggs we exceeded the
+                # environment maximum size for cmd.exe.
+                script = script.replace(
+                    "ZOPE_RUN=%SOFTWARE_HOME%\\Zope2\\Startup\\run.py",
+                    "ZOPE_RUN=%INSTANCE_HOME%\\bin\\servicewrapper.py"
+                    )
+                f = open(script_path, 'w')
+                f.write(script)
+                f.close()
         # Patch Windows service scripts
         path =";".join(ws_locations)
         script_name = 'zopeservice.py'
         script_path = os.path.join(location, 'bin', script_name)
-        script = open(script_path).read()
-        script = script.replace(
-                "ZOPE_RUN = r'%s\\Zope2\\Startup\\run.py' % SOFTWARE_HOME",
-                "ZOPE_RUN = r'%s\\bin\\servicewrapper.py' % INSTANCE_HOME"
-                )
-        f = open(script_path, 'w')
-        f.write(script)
-        f.close()
+        if os.path.exists(script_path):
+            script = open(script_path).read()
+            script = script.replace(
+                    "ZOPE_RUN = r'%s\\Zope2\\Startup\\run.py' % SOFTWARE_HOME",
+                    "ZOPE_RUN = r'%s\\bin\\servicewrapper.py' % INSTANCE_HOME"
+                    )
+            f = open(script_path, 'w')
+            f.write(script)
+            f.close()
         script_name = 'servicewrapper.py'
         script_path = os.path.join(location, 'bin', script_name)
         script = """import sys
@@ -504,18 +506,19 @@ if __name__ == '__main__':
         # Add a test.bat that works on Windows
         new_script_path = os.path.join(location, 'bin', 'test.bat')
         script_path = os.path.join(location, 'bin', 'runzope.bat')
-        script = open(script_path).read()
-        # Adjust script to use the right command
-        script = script.replace("@set ZOPE_RUN=%SOFTWARE_HOME%\\Zope2\\Startup\\run.py",
-                                """@set ZOPE_RUN=%ZOPE_HOME%\\test.py
+        if os.path.exists(script_path):
+            script = open(script_path).read()
+            # Adjust script to use the right command
+            script = script.replace("@set ZOPE_RUN=%SOFTWARE_HOME%\\Zope2\\Startup\\run.py",
+                                    """@set ZOPE_RUN=%ZOPE_HOME%\\test.py
 @set ERRLEV=0""")
-        script = script.replace("\"%ZOPE_RUN%\" -C \"%CONFIG_FILE%\" %1 %2 %3 %4 %5 %6 %7",
-                                """\"%ZOPE_RUN%\" --config-file \"%CONFIG_FILE%\" %1 %2 %3 %4 %5 %6 %7 %8 %9
+            script = script.replace("\"%ZOPE_RUN%\" -C \"%CONFIG_FILE%\" %1 %2 %3 %4 %5 %6 %7",
+                                    """\"%ZOPE_RUN%\" --config-file \"%CONFIG_FILE%\" %1 %2 %3 %4 %5 %6 %7 %8 %9
 @IF %ERRORLEVEL% NEQ 0 SET ERRLEV=1
 @ECHO \"%ERRLEV%\">%INSTANCE_HOME%\\testsexitcode.err""")
-        f = open(new_script_path, 'w')
-        f.write(script)
-        f.close()
+            f = open(new_script_path, 'w')
+            f.write(script)
+            f.close()
 
     def install_scripts(self):
         options = self.options

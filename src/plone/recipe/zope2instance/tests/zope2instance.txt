@@ -906,3 +906,35 @@ Our environment variables should be set now::
     >>> zc = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> re.search(env_vars, zc).group('vars')
     'TZ US/Eastern\nTMP /var/tmp\nDISABLE_PTS True'
+
+
+Edge Cases
+==========
+
+Some Linux distributions of Zope2 don't have the windows scripts.
+Let's run a minimal buildout without them to make sure
+we don't error::
+
+    >>> zope2_location = "%s-nowin" % zope2_location
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... index = http://pypi.python.org/simple
+    ... develop = 
+    ...     %(recipe_location)s 
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... 
+    ... zope2-location = %(zope2_location)s
+    ... user = me
+    ... ''' % globals())
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Develop: '...'
+    Uninstalling instance.
+    Installing instance.
+

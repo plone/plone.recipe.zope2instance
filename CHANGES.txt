@@ -4,6 +4,9 @@ Change History
 2.9 (Unreleased)
 ----------------
 
+- Check for existence of windows scripts before patching them. Some
+  Linux distributions of Zope2 don't have these files. [smcmahon]
+
 - Delegate commands to ``win32serviceutil.HandleCommand()`` on win32,
   instead of starting the interpreter through ``os.system()``. Should
   shave off a couple seconds from overall time taken to process those
