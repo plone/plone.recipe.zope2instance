@@ -97,12 +97,19 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
 
             try:
                 # Make the zopeservice module importable
-                sys.path.insert(0, os.path.dirname(self.options.servicescript[-1]))
+                parent = os.path.dirname(self.options.servicescript[-1])
+                sys.path.insert(0, parent)
 
                 # Import the InstanceService class, and then delegate the
                 # commands to HandleCommandLine
                 from zopeservice import InstanceService
-                win32serviceutil.HandleCommandLine(InstanceService, argv=['', cmd])
+
+                serviceClassString = ('%s.%s' % (
+                        os.path.join(parent, 'zopeservice'),
+                        InstanceService.__name__))
+                win32serviceutil.HandleCommandLine(InstanceService, 
+                                                   serviceClassString,
+                                                   argv=['', cmd])
             finally:
                 os.environ.data = old_env
                 sys.path = old_path

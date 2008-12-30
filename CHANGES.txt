@@ -5,12 +5,18 @@ Change History
 ----------------
 
 - Check for existence of windows scripts before patching them. Some
-  Linux distributions of Zope2 don't have these files. [smcmahon]
+  Linux distributions of Zope2 don't have these files. 
+  [smcmahon]
 
 - Delegate commands to ``win32serviceutil.HandleCommand()`` on win32,
   instead of starting the interpreter through ``os.system()``. Should
   shave off a couple seconds from overall time taken to process those
   commands.
+  [sidnei]
+
+- Compute ``serviceClassString`` ourselves, since we are calling this
+  as a module and not directly as ``__main__``, otherwise the service
+  won't be installed correctly.
   [sidnei]
 
 2.8 (2008-12-05)
