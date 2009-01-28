@@ -291,7 +291,9 @@ class Recipe:
                 storage_snippet = file_storage_template % file_storage
 
                 blob_storage = options.get('blob-storage', None)
-                demo_storage = options.get('demo-storage', None)
+                demo_storage = options.get('demo-storage', 'off') \
+                             not in ('off', 'disable', 'false')
+
                 if blob_storage and demo_storage:
                     raise ValueError("Both blob and demo storage cannot be used"
                                      " at the same time.")

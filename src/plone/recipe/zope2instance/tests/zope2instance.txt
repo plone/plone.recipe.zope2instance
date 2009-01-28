@@ -281,6 +281,54 @@ We should have a zope instance, with a basic zope.conf::
     ...
     <BLANKLINE>
 
+Verify that demostorage can be disable::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... index = http://pypi.python.org/simple
+    ... develop = 
+    ...     %(recipe_location)s 
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... 
+    ... zope2-location = %(zope2_location)s
+    ... user = me
+    ... zodb-cache-size-bytes = 1000000
+    ...
+    ... file-storage = newfs/Data.fs
+    ... demo-storage = off
+    ...
+    ... ''' % globals())
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Develop: '...'
+    Uninstalling instance.
+    Installing instance.
+
+We should have a zope instance, with a basic zope.conf without demostorage::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    %define INSTANCEHOME /sample-buildout/parts/instance
+    ...
+    <zodb_db main>
+        # Main database
+        cache-size 5000
+        cache-size-bytes 1000000
+        # FileStorage database
+        <filestorage>
+          path /sample-buildout/var/newfs/Data.fs
+        </filestorage>
+        mount-point /
+    </zodb_db>
+    ...
+    <BLANKLINE>
+
 BlobStorage
 ===========
 
