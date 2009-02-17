@@ -27,7 +27,7 @@ configuration option default_to_interactive is set to false). Use the
 action "help" to find out about available actions.
 """
 
-import os, sys
+import os, sys, csv
 try:
     # Zope 2.8+
     from Zope2.Startup import zopectl
@@ -113,7 +113,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             finally:
                 os.environ.data = old_env
                 sys.path = old_path
-
+    
         def do_install(self, arg):
             self.handle_command('install')
 
@@ -137,14 +137,28 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         # If we pass the configuration filename as a win32
         # backslashed path using a ''-style string, the backslashes
         # will act as escapes.  Use r'' instead.
-        cmdline = ( '%s -c "from Zope2 import configure; '
+        # Also, don't forget that 'python' may have spaces
+        # and needs to be quoted.
+        cmdline = ( '"%s" -c "from Zope2 import configure; '
                     'configure(r\'%s\'); ' %
                     (python, self.options.configfile)
                     )
-        return cmdline + more + '\"'
+        cmdline = cmdline + more + '\"'
+        if WIN32:
+            # entire command line must be quoted
+            # as well as the components
+            return '"%s"' % cmdline
+        else:
+            return cmdline
 
     def do_run(self, arg):
-        tup = arg.split(' ')
+        # We need to pay attention to quotes or this isn't going to work if
+        # there are any spaces in the arguments.
+        # cmd.parseline will have already stripped them from arg, so we have
+        # to return to the original arguments, throwing away the "run"
+        # command at the beginning.
+        tup = csv.reader(self.options.args, delimiter=' ').next()[1:]
+        
         if not arg:
             print "usage: run <script> [args]"
             return

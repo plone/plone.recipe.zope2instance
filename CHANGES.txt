@@ -4,6 +4,10 @@ Change History
 2.9 (Unreleased)
 ----------------
 
+- The instance run command was vulnerable to spaces in pathnames, and
+  needed some extra quoting for win32.
+  [smcmahon]
+
 - Check for existence of windows scripts before patching them. Some
   Linux distributions of Zope2 don't have these files. 
   [smcmahon]
