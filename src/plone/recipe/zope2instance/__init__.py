@@ -23,6 +23,7 @@ class Recipe:
         self.egg = zc.recipe.egg.Egg(buildout, options['recipe'], options)
         self.buildout, self.options, self.name = buildout, options, name
         self.zope2_egg = options.get('zope2-egg', False)
+        self.zope2_location = options.get('zope2-location', None)
 
         options['location'] = os.path.join(
             buildout['buildout']['parts-directory'],
@@ -41,16 +42,20 @@ class Recipe:
         if os.path.exists(location):
             shutil.rmtree(location)
 
+        # If we have an egg-layout, we cannot build the instance
+        if self.zope2_egg:
+            return location
+
         # What follows is a bit of a hack because the instance-setup mechanism
         # is a bit monolithic. We'll run mkzopeinstance and then we'll
         # patch the result. A better approach might be to provide independent
         # instance-creation logic, but this raises lots of issues that
         # need to be stored out first.
         mkzopeinstance = os.path.join(
-            options['zope2-location'], 'bin', 'mkzopeinstance.py')
+            self.zope2_location, 'bin', 'mkzopeinstance.py')
         if not os.path.exists(mkzopeinstance):
             mkzopeinstance = os.path.join(
-                options['zope2-location'], 'utilities', 'mkzopeinstance.py')
+                self.zope2_location, 'utilities', 'mkzopeinstance.py')
         if sys.platform[:3].lower() == "win":
             mkzopeinstance = '"%s"' % mkzopeinstance
 
@@ -532,7 +537,7 @@ if __name__ == '__main__':
 
         # Only append the instance home and Zope lib/python in a non-egg
         # environment
-        lib_python = os.path.join(options['zope2-location'], 'lib', 'python')
+        lib_python = os.path.join(self.zope2_location, 'lib', 'python')
         if os.path.exists(lib_python):
             extra_paths.append(os.path.join(location))
             extra_paths.append(lib_python)
@@ -565,14 +570,14 @@ if __name__ == '__main__':
             # The backup script, pointing to repozo.py
             repozo = options.get('repozo', None)
             if repozo is None:
-                repozo = os.path.join(options['zope2-location'], 'utilities', 'ZODBTools', 'repozo.py')
+                repozo = os.path.join(self.zope2_location, 'utilities', 'ZODBTools', 'repozo.py')
 
             directory, filename = os.path.split(repozo)
             if repozo and os.path.exists(repozo):
                 zc.buildout.easy_install.scripts(
                     [('repozo', os.path.splitext(filename)[0], 'main')],
                     {}, options['executable'], options['bin-directory'],
-                    extra_paths = [os.path.join(options['zope2-location'], 'lib', 'python'),
+                    extra_paths = [os.path.join(self.zope2_location, 'lib', 'python'),
                                    directory],
                     )
 
@@ -592,8 +597,7 @@ if __name__ == '__main__':
             if not os.path.exists(sitezcml_path):
                 # Zope 2.9 does not have a site.zcml so we copy the
                 # one out from Five.
-                zope2_location = self.options['zope2-location']
-                skel_path = os.path.join(zope2_location, 'lib', 'python',
+                skel_path = os.path.join(self.zope2_location, 'lib', 'python',
                                          'Products', 'Five', 'skel',
                                          'site.zcml')
                 shutil.copyfile(skel_path, sitezcml_path)

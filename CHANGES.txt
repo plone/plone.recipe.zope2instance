@@ -4,6 +4,10 @@ Change History
 3.0 (unreleased)
 ----------------
 
+- Changed the `zope2-egg` option to omit any kind of instance creation for
+  now. The mkzopeinstance script relies on being able to import Zope2, which
+  is not available when buildout runs.
+  [hannosch]
 
 2.9 (2009-02-26)
 ----------------
