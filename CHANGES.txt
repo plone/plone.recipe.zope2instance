@@ -1,7 +1,7 @@
 Change History
 ==============
 
-2.9 (Unreleased)
+2.9 (2009-02-26)
 ----------------
 
 - The instance run command was vulnerable to spaces in pathnames, and
