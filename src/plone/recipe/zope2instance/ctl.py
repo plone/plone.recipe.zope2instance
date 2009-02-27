@@ -27,7 +27,7 @@ configuration option default_to_interactive is set to false). Use the
 action "help" to find out about available actions.
 """
 
-import os, sys, csv
+import os, sys
 try:
     # Zope 2.8+
     from Zope2.Startup import zopectl
