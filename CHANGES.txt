@@ -1,14 +1,12 @@
 Change History
 ==============
 
-3.0 (unreleased)
+3.0 (2009-02-27)
 ----------------
 
 - The 2.9 fix for the instance run command was itself broken and
   would fail on anything except Windows.
   [smcmahon]
-
-
 
 - Changed the `zope2-egg` option to omit any kind of instance creation for
   now. The mkzopeinstance script relies on being able to import Zope2, which
