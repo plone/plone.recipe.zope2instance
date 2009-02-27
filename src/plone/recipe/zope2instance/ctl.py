@@ -152,13 +152,16 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             return cmdline
 
     def do_run(self, arg):
-        # We need to pay attention to quotes or this isn't going to work if
-        # there are any spaces in the arguments.
-        # cmd.parseline will have already stripped them from arg, so we have
-        # to return to the original arguments, throwing away the "run"
-        # command at the beginning.
-        tup = csv.reader(self.options.args, delimiter=' ').next()[1:]
-        
+        # If the command line was something like
+        # """bin/instance run "one two" three"""
+        # cmd.parseline will have converted it so
+        # that arg == 'one two three'. This is going to
+        # foul up any quoted command with embedded spaces.
+        # So we have to return to self.options.args,
+        # which is a correctly split tuple of command line args,
+        # throwing away the "run" command at the beginning.
+        tup = self.options.args[1:]
+    
         if not arg:
             print "usage: run <script> [args]"
             return
