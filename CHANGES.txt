@@ -4,6 +4,10 @@ Change History
 3.1 (unreleased)
 ----------------
 
+- The 2.9 fix for spaces caused a problem using debug (bug 337740)
+  due to the way do_debug passed the "-i" command line argument
+  to get_startup_cmd.
+  [smcmahon]  
 
 3.0 (2009-02-27)
 ----------------

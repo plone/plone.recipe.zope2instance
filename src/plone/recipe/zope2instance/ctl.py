@@ -133,15 +133,15 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         def do_restart(self, arg):
             self.handle_command('restart')
 
-    def get_startup_cmd(self, python, more):
+    def get_startup_cmd(self, python, more, pyflags=""):
         # If we pass the configuration filename as a win32
         # backslashed path using a ''-style string, the backslashes
         # will act as escapes.  Use r'' instead.
-        # Also, don't forget that 'python' may have spaces
-        # and needs to be quoted.
-        cmdline = ( '"%s" -c "from Zope2 import configure; '
+        # Also, don't forget that 'python'
+        # may have spaces and needs to be quoted.
+        cmdline = ( '"%s" %s -c "from Zope2 import configure; '
                     'configure(r\'%s\'); ' %
-                    (python, self.options.configfile)
+                    (python, pyflags, self.options.configfile)
                     )
         cmdline = cmdline + more + '\"'
         if WIN32:
@@ -186,6 +186,14 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
     def help_console(self):
         print "console -- Run the program in the console."
         print "    In contrast to foreground this does not turn on debug mode."
+
+    def do_debug(self, arg):
+        cmdline = self.get_startup_cmd(self.options.python, 
+                                       'import Zope2; app=Zope2.app()',
+                                       pyflags = '-i',)
+        print ('Starting debugger (the name "app" is bound to the top-level '
+               'Zope object)')
+        os.system(cmdline)
 
     def do_foreground(self, arg, debug=True):
         if not WIN32:
