@@ -27,7 +27,8 @@ configuration option default_to_interactive is set to false). Use the
 action "help" to find out about available actions.
 """
 
-import os, sys
+import os, sys, csv
+
 try:
     # Zope 2.8+
     from Zope2.Startup import zopectl
@@ -158,11 +159,21 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         # that arg == 'one two three'. This is going to
         # foul up any quoted command with embedded spaces.
         # So we have to return to self.options.args,
-        # which is a correctly split tuple of command line args,
+        # which is a tuple of command line args,
         # throwing away the "run" command at the beginning.
-        tup = self.options.args[1:]
+        # 
+        # Further complications: if self.options.args has come
+        # via subprocess, it may look like
+        # ['run "arg 1" "arg2"'] rather than ['run','arg 1','arg2'].
+        # If that's the case, we'll use csv to do the parsing
+        # so that we can split on spaces while respecting quotes.        
+        if len(self.options.args) == 1:
+            tup = csv.reader(self.options.args, delimiter=' ').next()[1:]
+        else:
+            tup = self.options.args[1:]
     
-        if not arg:
+    
+        if not tup:
             print "usage: run <script> [args]"
             return
 
