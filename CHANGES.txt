@@ -1,7 +1,7 @@
 Change History
 ==============
 
-3.1 (unreleased)
+3.1 (2009-03-15)
 ----------------
 
 - The 2.9 fix for spaces caused a problem using debug (bug 337740)
