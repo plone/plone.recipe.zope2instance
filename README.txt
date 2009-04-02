@@ -43,13 +43,17 @@ products
 
 site-zcml
   If you want a custom site.zcml file, put its content here. If this option is 
-  used the zcml option is ignored
+  used the zcml and zcml-additional options are ignored.
 
 zcml
   Install ZCML slugs for the packages listed, separated by whitespace. You
   can specify the type of slug by appending '-' and the type of slug you want
   to create.  The valid types are configure, overrides and meta. Some
   examples: my.package-overrides my.package-meta
+
+zcml-additional
+  Extra ZCML statements that should be included in the generated site.zcml
+  file.
 
 extra-paths
   A list of paths where additional python packages are installed. The paths

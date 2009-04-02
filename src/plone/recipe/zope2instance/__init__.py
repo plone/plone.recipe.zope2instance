@@ -99,7 +99,7 @@ class Recipe:
         ws_locations = [d.location for d in ws]
 
         if os.path.exists(location):
-            # See is we can stop. We need to see if the working set path
+            # See if we can stop. We need to see if the working set path
             # has changed.
             saved_path = os.path.join(location, 'etc', '.eggs')
             if os.path.isfile(saved_path):
@@ -588,10 +588,32 @@ if __name__ == '__main__':
         sitezcml_path = os.path.join(location, 'etc', 'site.zcml')
         zcml = self.options.get('zcml')
         site_zcml = self.options.get('site-zcml')
+        additional_zcml = self.options.get("zcml-additional")
 
         if site_zcml:
             open(sitezcml_path, 'w').write(site_zcml)
             return
+
+        if zcml:
+            zcml=zcml.split()
+
+        if additional_zcml or zcml:
+            includes_path = os.path.join(location, 'etc', 'package-includes')
+
+            if not os.path.exists(includes_path):
+                # Zope 2.9 does not have a package-includes so we
+                # create one.
+                os.mkdir(includes_path)
+            else:
+                if '*' in zcml:
+                    zcml.remove('*')
+                else:
+                    shutil.rmtree(includes_path)
+                    os.mkdir(includes_path)
+
+        if additional_zcml:
+            path=os.path.join(includes_path, "999-additional-overrides.zcml")
+            open(path, "w").write(additional_zcml.strip())
 
         if zcml:
             if not os.path.exists(sitezcml_path):
@@ -601,19 +623,6 @@ if __name__ == '__main__':
                                          'Products', 'Five', 'skel',
                                          'site.zcml')
                 shutil.copyfile(skel_path, sitezcml_path)
-
-            includes_path = os.path.join(location, 'etc', 'package-includes')
-            if not os.path.exists(includes_path):
-                # Zope 2.9 does not have a package-includes so we
-                # create one.
-                os.mkdir(includes_path)
-
-            zcml = zcml.split()
-            if '*' in zcml:
-                zcml.remove('*')
-            else:
-                shutil.rmtree(includes_path)
-                os.mkdir(includes_path)
 
             n = 0
             package_match = re.compile('\w+([.]\w+)*$').match
@@ -646,6 +655,7 @@ if __name__ == '__main__':
                     '<include package="%s" file="%s" />\n'
                     % (package, filename)
                     )
+
 
 # Storage snippets for zope.conf template
 file_storage_template="""
