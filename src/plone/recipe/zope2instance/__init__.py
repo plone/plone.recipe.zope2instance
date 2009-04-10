@@ -107,17 +107,16 @@ class Recipe:
                     '\n'.join(ws_locations)
                     ):
                     # Something has changed. Blow away the instance.
-                    self.install()
+                    return self.install()
                 elif options.get('site-zcml'):
                     self.build_package_includes()
 
             # Nothing has changed.
+            self.install_scripts()
             return location
 
         else:
-            self.install()
-
-        return location
+            return self.install()
 
     def build_zope_conf(self):
         """Create a zope.conf file

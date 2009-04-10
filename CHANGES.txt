@@ -1,10 +1,11 @@
 Change History
 ==============
 
-3.2 - UNRELEASED
+3.3 - UNRELEASED
 ----------------
 
-
+- Reinstall scripts on update which appears to be good recipe practice.
+  [stefan]
 
 3.2 (2009-04-02)
 ----------------
@@ -13,7 +14,6 @@ Change History
   non-code configuration (such as database connection details for
   ore.contentmirror) are managed through zcml.
   [wichert]
-
 
 3.1 (2009-03-15)
 ----------------
