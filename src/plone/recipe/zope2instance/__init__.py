@@ -278,10 +278,26 @@ class Recipe:
                                 "host='%(host)s' password='%(password)s'")
                     rel_storage = dict(dsn=template % rel_storage)
 
+                rel_storage_outer_opts = (
+                    'poll-interval',
+                    'pack-gc',
+                    'pack-dry-run',
+                    'pack-batch-timeout',
+                    'pack-duty-cycle',
+                    'pack-max-delay',
+                    'cache-servers',
+                    'cache-module-name',
+                    )
+
                 opts = dict(
                     type=type_,
-                    opts='\n'.join([' ' * 12 + ' '.join(item)
-                                   for item in rel_storage.iteritems()]))
+                    db_opts='\n'.join(' ' * 12 + ' '.join((k, v))
+                                      for k, v in rel_storage.iteritems()
+                                      if k not in rel_storage_outer_opts),
+                    rs_opts='\n'.join(' ' * 8 + ' '.join((k, v))
+                                      for k, v in rel_storage.iteritems()
+                                      if k in rel_storage_outer_opts),
+                    )
                 storage_snippet = rel_storage_template % opts
 
             else:
@@ -674,8 +690,9 @@ demo_storage_template="""
 rel_storage_template="""
     %%import relstorage
     <relstorage>
+%(rs_opts)s
         <%(type)s>
-%(opts)s
+%(db_opts)s
         </%(type)s>
     </relstorage>
 """
