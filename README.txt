@@ -1,5 +1,5 @@
-plone.recipe.zope2instance
-==========================
+Introduction
+============
 
 This recipe creates and configures a Zope 2 instance in parts. It also
 installs a control script, which is like zopectl, in the bin/ directory.
@@ -150,8 +150,8 @@ rel-storage
   Contains settings separated by newlines, with these values:
   
   - type: any database type supported (postgresql, oracle, mysql)
-  - all other keys are passed on to the database-specific RelStorage
-    adapter.
+  - RelStorage specific keys, like `cache-servers` and `poll-interval`
+  - all other keys are passed on to the database-specific RelStorage adapter.
 
   Example::
     

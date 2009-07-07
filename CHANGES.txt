@@ -1,16 +1,16 @@
-Change History
-==============
+Changelog
+=========
 
-3.3 - UNRELEASED
+3.3 - 2009-07-07
 ----------------
-
-- Reinstall scripts on update which appears to be good recipe practice.
-  [stefan]
 
 - Add handling for RelStorage options.
   [elro]
 
-3.2 (2009-04-02)
+- Reinstall scripts on update which appears to be good recipe practice.
+  [stefan]
+
+3.2 - 2009-04-02
 ----------------
 
 - Add a new zcml-additional option. This is useful for environments where
