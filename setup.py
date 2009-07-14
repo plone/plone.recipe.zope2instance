@@ -28,7 +28,6 @@ setup(
       "Framework :: Buildout",
       "Framework :: Plone",
       "Framework :: Zope2",
-      "Programming Language :: Python",
       ],
     tests_require=['zope.testing'],
     packages = find_packages('src'),

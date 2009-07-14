@@ -22,8 +22,7 @@ class Recipe:
     def __init__(self, buildout, name, options):
         self.egg = zc.recipe.egg.Egg(buildout, options['recipe'], options)
         self.buildout, self.options, self.name = buildout, options, name
-        self.zope2_egg = options.get('zope2-egg', False)
-        self.zope2_location = options.get('zope2-location', None)
+        self.zope2_location = options.get('zope2-location', '')
 
         options['location'] = os.path.join(
             buildout['buildout']['parts-directory'],
@@ -42,22 +41,30 @@ class Recipe:
         if os.path.exists(location):
             shutil.rmtree(location)
 
-        # If we have an egg-layout, we cannot build the instance
-        if self.zope2_egg:
-            return location
-
         # What follows is a bit of a hack because the instance-setup mechanism
         # is a bit monolithic. We'll run mkzopeinstance and then we'll
         # patch the result. A better approach might be to provide independent
         # instance-creation logic, but this raises lots of issues that
         # need to be stored out first.
-        mkzopeinstance = os.path.join(
-            self.zope2_location, 'bin', 'mkzopeinstance.py')
-        if not os.path.exists(mkzopeinstance):
+        if not self.zope2_location:
             mkzopeinstance = os.path.join(
-                self.zope2_location, 'utilities', 'mkzopeinstance.py')
-        if sys.platform[:3].lower() == "win":
-            mkzopeinstance = '"%s"' % mkzopeinstance
+                self.buildout['buildout']['directory'], 'bin', 'mkzopeinstance')
+            if not mkzopeinstance:
+                # EEE
+                return
+
+        else:
+            mkzopeinstance = os.path.join(
+                self.zope2_location, 'bin', 'mkzopeinstance.py')
+            if not os.path.exists(mkzopeinstance):
+                mkzopeinstance = os.path.join(
+                    self.zope2_location, 'utilities', 'mkzopeinstance.py')
+            if sys.platform[:3].lower() == "win":
+                mkzopeinstance = '"%s"' % mkzopeinstance
+        
+        if not mkzopeinstance:
+            # EEE
+            return
 
         assert os.spawnl(
             os.P_WAIT, os.path.normpath(options['executable']),
@@ -457,7 +464,7 @@ class Recipe:
             fd.close()
 
     def patch_binaries(self, ws_locations):
-        if self.zope2_egg:
+        if not self.zope2_location:
             return
 
         location = self.options['location']
@@ -565,40 +572,30 @@ if __name__ == '__main__':
 
         requirements, ws = self.egg.working_set(['plone.recipe.zope2instance'])
 
-        if self.zope2_egg:
-            zc.buildout.easy_install.scripts(
-                [(self.options.get('control-script', self.name),
-                    'plone.recipe.zope2instance.simple', 'main')],
-                ws, options['executable'], options['bin-directory'],
-                extra_paths = extra_paths,
-                arguments = ('\n        [%r]'
-                             % zope_conf
-                             ),
-                )
-        else:
-            zc.buildout.easy_install.scripts(
-                [(self.options.get('control-script', self.name),
-                    'plone.recipe.zope2instance.ctl', 'main')],
-                ws, options['executable'], options['bin-directory'],
-                extra_paths = extra_paths,
-                arguments = ('\n        ["-C", %r]'
-                             '\n        + sys.argv[1:]'
-                             % zope_conf
-                             ),
-                )
-            # The backup script, pointing to repozo.py
-            repozo = options.get('repozo', None)
-            if repozo is None:
-                repozo = os.path.join(self.zope2_location, 'utilities', 'ZODBTools', 'repozo.py')
+        zc.buildout.easy_install.scripts(
+            [(self.options.get('control-script', self.name),
+                'plone.recipe.zope2instance.ctl', 'main')],
+            ws, options['executable'], options['bin-directory'],
+            extra_paths = extra_paths,
+            arguments = ('\n        ["-C", %r]'
+                         '\n        + sys.argv[1:]'
+                         % zope_conf
+                         ),
+            )
 
-            directory, filename = os.path.split(repozo)
-            if repozo and os.path.exists(repozo):
-                zc.buildout.easy_install.scripts(
-                    [('repozo', os.path.splitext(filename)[0], 'main')],
-                    {}, options['executable'], options['bin-directory'],
-                    extra_paths = [os.path.join(self.zope2_location, 'lib', 'python'),
-                                   directory],
-                    )
+        # The backup script, pointing to repozo.py
+        repozo = options.get('repozo', None)
+        if repozo is None:
+            repozo = os.path.join(self.zope2_location, 'utilities', 'ZODBTools', 'repozo.py')
+
+        directory, filename = os.path.split(repozo)
+        if repozo and os.path.exists(repozo):
+            zc.buildout.easy_install.scripts(
+                [('repozo', os.path.splitext(filename)[0], 'main')],
+                {}, options['executable'], options['bin-directory'],
+                extra_paths = [os.path.join(self.zope2_location, 'lib', 'python'),
+                               directory],
+                )
 
     def build_package_includes(self):
         """Create ZCML slugs in etc/package-includes
