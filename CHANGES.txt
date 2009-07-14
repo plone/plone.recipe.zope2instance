@@ -4,6 +4,10 @@ Changelog
 3.4 - unreleased
 ----------------
 
+- Add a new icp-address option. This is useful for environments where
+  e.g. squid is used to front a Zope/ZEO cluster. See 
+  http://www.zope.org/Members/htrd/icp/intro
+  [neaj]
 
 3.3 - 2009-07-07
 ----------------

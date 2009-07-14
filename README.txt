@@ -103,6 +103,9 @@ webdav-address
 webdav-force-connection-close
   Valid options are off and on. Defaults to off
 
+icp-address
+  Give a port for the ICP server. This enables the ICP server.
+
 client-home
   Sets the clienthome for the generated instance.
   Defaults to ${buildout:directory}/var/<name of the section>.

@@ -182,6 +182,9 @@ class Recipe:
                                         'off')
                 webdav_address = webdav_server_template % (webdav_address,
                                                            webdav_conn_close)
+            icp_address = options.get('icp-address', '')
+            if icp_address:
+                icp_address = icp_server_template % icp_address
             effective_user = options.get('effective-user', '')
             if effective_user:
                 effective_user = 'effective-user %s' % effective_user
@@ -434,6 +437,7 @@ class Recipe:
                                         http_fast_listen = http_fast_listen,
                                         ftp_address = ftp_address,
                                         webdav_address = webdav_address,
+                                        icp_address = icp_address,
                                         zserver_threads = zserver_threads,
                                         zodb_cache_size = zodb_cache_size,
                                         zodb_cache_size_bytes = zodb_cache_size_bytes,
@@ -783,6 +787,13 @@ ftp_server_template = """
 </ftp-server>
 """
 
+icp_server_template = """
+<icp-server>
+  # valid key is "address"
+  address %s
+</icp-server>
+"""
+
 webdav_server_template = """
 <webdav-source-server>
   # valid keys are "address" and "force-connection-close"
@@ -838,6 +849,7 @@ verbose-security %(verbose_security)s
 
 %(ftp_address)s
 %(webdav_address)s
+%(icp_address)s
 
 <zodb_db main>
     # Main database
