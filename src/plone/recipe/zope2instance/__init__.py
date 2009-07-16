@@ -1,4 +1,5 @@
-##############################################################################
+
+# ##############################################################################
 #
 # Copyright (c) 2006-2008 Zope Corporation and Contributors.
 # All Rights Reserved.
@@ -48,7 +49,7 @@ class Recipe:
         # need to be stored out first.
         if not self.zope2_location:
             mkzopeinstance = os.path.join(
-                self.buildout['buildout']['directory'], 'bin', 'mkzopeinstance')
+                options['bin-directory'], 'mkzopeinstance')
             if not mkzopeinstance:
                 # EEE
                 return
