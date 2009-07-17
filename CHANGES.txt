@@ -4,6 +4,9 @@ Changelog
 3.4 - unreleased
 ----------------
 
+- Changed the 'mkzopeinstance' call respect the 'bin-directory' option.
+  [esteele]
+
 - Removed the `zope2-egg` option and the simple startup script from the recipe.
   We assume that we have an egg distribution if `zope2-location` is not set.
   [hannosch]
