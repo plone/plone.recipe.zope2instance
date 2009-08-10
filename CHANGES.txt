@@ -4,6 +4,9 @@ Changelog
 3.4 - unreleased
 ----------------
 
+- Support in line with fix for LP#407916.
+  [gotcha]
+
 - Changed the 'mkzopeinstance' call respect the 'bin-directory' option.
   [esteele]
 
