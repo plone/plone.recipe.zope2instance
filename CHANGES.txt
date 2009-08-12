@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.4 - unreleased
+3.4 (2009-08-12)
 ----------------
 
 - Support in line with fix for LP#407916.
