@@ -4,7 +4,8 @@ Changelog
 3.5 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Added support for relative-paths in the script generation.
+  [jvloothuis]
 
 
 3.4 (2009-08-12)
@@ -24,7 +25,7 @@ Changelog
   [hannosch]
 
 - Add a new icp-address option. This is useful for environments where
-  e.g. squid is used to front a Zope/ZEO cluster. See 
+  e.g. squid is used to front a Zope/ZEO cluster. See
   http://www.zope.org/Members/htrd/icp/intro
   [neaj]
 
@@ -51,7 +52,7 @@ Changelog
 - The 2.9 fix for spaces caused a problem using debug (bug 337740)
   due to the way do_debug passed the "-i" command line argument
   to get_startup_cmd.
-  [smcmahon]  
+  [smcmahon]
 
 3.0 (2009-02-27)
 ----------------
@@ -73,7 +74,7 @@ Changelog
   [smcmahon]
 
 - Check for existence of windows scripts before patching them. Some
-  Linux distributions of Zope2 don't have these files. 
+  Linux distributions of Zope2 don't have these files.
   [smcmahon]
 
 - Delegate commands to ``win32serviceutil.HandleCommand()`` on win32,
@@ -190,7 +191,7 @@ Changelog
 
 - Escape 'executable' argument before passing it to os.spawnl, in
   order to make it work on Windows when the executable name has spaces
-  on it.  
+  on it.
   [sidnei]
 
 - Added `http-fast-listen` option. Use of this option requires Zope >= 2.11.
@@ -212,7 +213,7 @@ Changelog
   `zodb-temporary-storage` option.
   [jensens]
 
-- Added `environment-vars` option to set environment variables. Changed 
+- Added `environment-vars` option to set environment variables. Changed
   the zope-conf-additional example code to something that isn't covered by
   the recipe.
   [claytron]
@@ -298,8 +299,8 @@ Changelog
 - Added 'zeo-client-client' option which results in 'client <value>' inside
   <zeoclient>.
   [timte, hannosch]
-  
-- Made relstorage handling more generic, so it now supports any RelStorage 
+
+- Made relstorage handling more generic, so it now supports any RelStorage
   adapter, including Oracle (which was broken).
   [mj]
 

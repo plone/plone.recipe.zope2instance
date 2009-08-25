@@ -32,6 +32,18 @@ class Recipe:
         options['bin-directory'] = buildout['buildout']['bin-directory']
         options['scripts'] = '' # suppress script generation.
 
+        # Relative path support for the generated scripts
+        relative_paths = options.get(
+            'relative-paths',
+            buildout['buildout'].get('relative-paths', 'false')
+            )
+        if relative_paths == 'true':
+            options['buildout-directory'] = buildout['buildout']['directory']
+            self._relative_paths = options['buildout-directory']
+        else:
+            self._relative_paths = ''
+            assert relative_paths == 'false'
+
     def install(self):
         options = self.options
         location = options['location']
@@ -62,7 +74,7 @@ class Recipe:
                     self.zope2_location, 'utilities', 'mkzopeinstance.py')
             if sys.platform[:3].lower() == "win":
                 mkzopeinstance = '"%s"' % mkzopeinstance
-        
+
         if not mkzopeinstance:
             # EEE
             return
@@ -582,6 +594,7 @@ if __name__ == '__main__':
                          '\n        + sys.argv[1:]'
                          % zope_conf
                          ),
+            relative_paths=self._relative_paths,
             )
 
         # The backup script, pointing to repozo.py
@@ -596,6 +609,7 @@ if __name__ == '__main__':
                 {}, options['executable'], options['bin-directory'],
                 extra_paths = [os.path.join(self.zope2_location, 'lib', 'python'),
                                directory],
+                relative_paths=self._relative_paths,
                 )
 
     def build_package_includes(self):

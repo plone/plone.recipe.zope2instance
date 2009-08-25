@@ -6,11 +6,11 @@ plone.recipe.zope2instance
 This is the doctest for plone.recipe.zope2instance. It ensures the template
 works fine. It is based on zc.buildout testing module::
 
-    >>> from zc.buildout.testing import * 
+    >>> from zc.buildout.testing import *
     >>> from os.path import join
     >>> import sys, os
 
-Let's create a minimum buildout that uses the current 
+Let's create a minimum buildout that uses the current
 plone.recipe.zope2instance::
 
     >>> write('buildout.cfg',
@@ -18,12 +18,12 @@ plone.recipe.zope2instance::
     ... [buildout]
     ... parts = instance
     ... index = http://pypi.python.org/simple
-    ... develop = 
-    ...     %(recipe_location)s 
+    ... develop =
+    ...     %(recipe_location)s
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... 
+    ...
     ... zope2-location = %(zope2_location)s
     ... user = me
     ... ''' % globals())
@@ -120,13 +120,13 @@ Let's start off by adding an FTP address::
     ... [buildout]
     ... parts = instance
     ... index = http://pypi.python.org/simple
-    ... develop = 
-    ...     %(recipe_location)s 
+    ... develop =
+    ...     %(recipe_location)s
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
     ... user = me
-    ... 
+    ...
     ... zope2-location = %(zope2_location)s
     ... ftp-address = 8021
     ... ''' % globals())
@@ -157,13 +157,13 @@ Next we will add a WebDAV server::
     ... [buildout]
     ... parts = instance
     ... index = http://pypi.python.org/simple
-    ... develop = 
-    ...     %(recipe_location)s 
+    ... develop =
+    ...     %(recipe_location)s
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
     ... user = me
-    ... 
+    ...
     ... zope2-location = %(zope2_location)s
     ... webdav-address = 1980
     ... ''' % globals())
@@ -195,13 +195,13 @@ Next we will add a WebDAV server with force-connection-close on::
     ... [buildout]
     ... parts = instance
     ... index = http://pypi.python.org/simple
-    ... develop = 
-    ...     %(recipe_location)s 
+    ... develop =
+    ...     %(recipe_location)s
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
     ... user = me
-    ... 
+    ...
     ... zope2-location = %(zope2_location)s
     ... webdav-address = 1980
     ... webdav-force-connection-close = on
@@ -237,12 +237,12 @@ To have a DemoStorage configuration, you can use demo-storage::
     ... [buildout]
     ... parts = instance
     ... index = http://pypi.python.org/simple
-    ... develop = 
-    ...     %(recipe_location)s 
+    ... develop =
+    ...     %(recipe_location)s
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... 
+    ...
     ... zope2-location = %(zope2_location)s
     ... user = me
     ... zodb-cache-size-bytes = 1000000
@@ -288,12 +288,12 @@ Verify that demostorage can be disable::
     ... [buildout]
     ... parts = instance
     ... index = http://pypi.python.org/simple
-    ... develop = 
-    ...     %(recipe_location)s 
+    ... develop =
+    ...     %(recipe_location)s
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... 
+    ...
     ... zope2-location = %(zope2_location)s
     ... user = me
     ... zodb-cache-size-bytes = 1000000
@@ -339,12 +339,12 @@ To have a BlobStorage configuration, you can use blob-storage::
     ... [buildout]
     ... parts = instance
     ... index = http://pypi.python.org/simple
-    ... develop = 
-    ...     %(recipe_location)s 
+    ... develop =
+    ...     %(recipe_location)s
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... 
+    ...
     ... zope2-location = %(zope2_location)s
     ... user = me
     ... zodb-cache-size-bytes = 1000000
@@ -389,12 +389,12 @@ BlobStorage doesn't support demostorage, let test this::
     ... [buildout]
     ... parts = instance
     ... index = http://pypi.python.org/simple
-    ... develop = 
-    ...     %(recipe_location)s 
+    ... develop =
+    ...     %(recipe_location)s
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... 
+    ...
     ... zope2-location = %(zope2_location)s
     ... user = me
     ... zodb-cache-size-bytes = 1000000
@@ -426,17 +426,17 @@ To have a RelStorage configuration, you can use rel-storage::
     ... [buildout]
     ... parts = instance
     ... index = http://pypi.python.org/simple
-    ... develop = 
-    ...     %(recipe_location)s 
+    ... develop =
+    ...     %(recipe_location)s
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... 
+    ...
     ... zope2-location = %(zope2_location)s
     ... user = me
     ... zodb-cache-size-bytes = 1000000
     ...
-    ... rel-storage = 
+    ... rel-storage =
     ...   type postgresql
     ...   dbname zodb
     ...   user tarek
@@ -456,7 +456,7 @@ We should have a zope instance, with a basic zope.conf::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
     %define INSTANCEHOME /sample-buildout/parts/instance
-    ...    
+    ...
     <zodb_db main>
         # Main database
         cache-size 5000
@@ -482,12 +482,12 @@ for the plone.recipe.zope2instance recipe.
     ... [buildout]
     ... parts = instance
     ... index = http://pypi.python.org/simple
-    ... develop = 
-    ...     %(recipe_location)s 
+    ... develop =
+    ...     %(recipe_location)s
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... 
+    ...
     ... zope2-location = %(zope2_location)s
     ... user = me
     ... zeo-client = yes
@@ -522,7 +522,7 @@ We should have a zope instance, with a basic zope.conf::
     </zodb_db>
     ...
     <BLANKLINE>
- 
+
 If zope-client-client is specified it should get into that section as well.
 
     >>> write('buildout.cfg',
@@ -530,12 +530,12 @@ If zope-client-client is specified it should get into that section as well.
     ... [buildout]
     ... parts = instance
     ... index = http://pypi.python.org/simple
-    ... develop = 
-    ...     %(recipe_location)s 
+    ... develop =
+    ...     %(recipe_location)s
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... 
+    ...
     ... zope2-location = %(zope2_location)s
     ... user = me
     ... zeo-client = yes
@@ -581,12 +581,12 @@ Verify that demo-storage is correctly applied
     ... [buildout]
     ... parts = instance
     ... index = http://pypi.python.org/simple
-    ... develop = 
-    ...     %(recipe_location)s 
+    ... develop =
+    ...     %(recipe_location)s
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... 
+    ...
     ... zope2-location = %(zope2_location)s
     ... user = me
     ... zeo-client = yes
@@ -634,12 +634,12 @@ Verify that demo-storage is correctly applied
     ... [buildout]
     ... parts = instance
     ... index = http://pypi.python.org/simple
-    ... develop = 
-    ...     %(recipe_location)s 
+    ... develop =
+    ...     %(recipe_location)s
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... 
+    ...
     ... zope2-location = %(zope2_location)s
     ... user = me
     ... zeo-client = yes
@@ -678,7 +678,7 @@ We should have a zope instance, with a basic zope.conf::
     </zodb_db>
     ...
     <BLANKLINE>
- 
+
 Custom Event log
 ================
 
@@ -691,12 +691,12 @@ to use `rotatezlogs`::
     ... [buildout]
     ... parts = instance
     ... index = http://pypi.python.org/simple
-    ... develop = 
-    ...     %(recipe_location)s 
+    ... develop =
+    ...     %(recipe_location)s
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... 
+    ...
     ... zope2-location = %(zope2_location)s
     ... user = me
     ...
@@ -707,8 +707,8 @@ to use `rotatezlogs`::
     ...         max-bytes 1MB
     ...         backup-count 5
     ...     </rotatelogfile>
-    ... 
-    ... event-log-level = info 
+    ...
+    ... event-log-level = info
     ... ''' % globals())
 
 Let's run it::
@@ -723,7 +723,7 @@ We should have a zope instance, with the custom event log::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
     %define INSTANCEHOME /sample-buildout/parts/instance
-    ...   
+    ...
     <eventlog>
       level info
       %import iw.rotatezlogs
@@ -748,12 +748,12 @@ to use `rotatezlogs`::
     ... [buildout]
     ... parts = instance
     ... index = http://pypi.python.org/simple
-    ... develop = 
-    ...     %(recipe_location)s 
+    ... develop =
+    ...     %(recipe_location)s
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... 
+    ...
     ... zope2-location = %(zope2_location)s
     ... user = me
     ...
@@ -764,7 +764,7 @@ to use `rotatezlogs`::
     ...         max-bytes 1MB
     ...         backup-count 5
     ...     </rotatelogfile>
-    ... 
+    ...
     ... ''' % globals())
 
 Let's run it::
@@ -779,7 +779,7 @@ We should have a zope instance, with the custom event log::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
     %define INSTANCEHOME /sample-buildout/parts/instance
-    ...   
+    ...
     <logger access>
       level WARN
       %import iw.rotatezlogs
@@ -803,16 +803,16 @@ When this option is used the `zcml` option is ignored. Let's try it::
     ... [buildout]
     ... parts = instance
     ... index = http://pypi.python.org/simple
-    ... develop = 
-    ...     %(recipe_location)s 
+    ... develop =
+    ...     %(recipe_location)s
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... 
+    ...
     ... zope2-location = %(zope2_location)s
     ... user = me
     ... # the zcml option will be ignored when a site-zcml option is given
-    ... zcml = 
+    ... zcml =
     ...       test.example
     ...
     ... site-zcml =
@@ -857,14 +857,14 @@ between several servers::
     ... [buildout]
     ... parts = instance
     ... index = http://pypi.python.org/simple
-    ... develop = 
-    ...     %(recipe_location)s 
+    ... develop =
+    ...     %(recipe_location)s
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
     ... user = me
     ... zope2-location = %(zope2_location)s
-    ... 
+    ...
     ... environment-vars = TZ US/Eastern
     ... ''' % globals())
 
@@ -893,15 +893,15 @@ Now let's add several environment variables::
     ... [buildout]
     ... parts = instance
     ... index = http://pypi.python.org/simple
-    ... develop = 
-    ...     %(recipe_location)s 
+    ... develop =
+    ...     %(recipe_location)s
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
     ... user = me
     ... zope2-location = %(zope2_location)s
-    ... 
-    ... environment-vars = 
+    ...
+    ... environment-vars =
     ...     TZ US/Eastern
     ...     TMP /var/tmp
     ...     DISABLE_PTS True
@@ -930,14 +930,14 @@ Several all on one line::
     ... [buildout]
     ... parts = instance
     ... index = http://pypi.python.org/simple
-    ... develop = 
-    ...     %(recipe_location)s 
+    ... develop =
+    ...     %(recipe_location)s
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
     ... user = me
     ... zope2-location = %(zope2_location)s
-    ... 
+    ...
     ... environment-vars = TZ US/Eastern TMP /var/tmp DISABLE_PTS True
     ... ''' % globals())
 
@@ -969,12 +969,12 @@ we don't error::
     ... [buildout]
     ... parts = instance
     ... index = http://pypi.python.org/simple
-    ... develop = 
-    ...     %(recipe_location)s 
+    ... develop =
+    ...     %(recipe_location)s
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... 
+    ...
     ... zope2-location = %(zope2_location)s
     ... user = me
     ... ''' % globals())
@@ -985,4 +985,33 @@ Let's run it::
     Develop: '...'
     Uninstalling instance.
     Installing instance.
+
+Relative paths in scripts
+=========================
+
+The recipe supports the generation of scripts with relative paths.
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... relative-paths = true
+    ... parts = instance
+    ... index = http://pypi.python.org/simple
+    ... develop =
+    ...     %(recipe_location)s
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ...
+    ... zope2-location = %(zope2_location)s
+    ... user = me
+    ... ''' % globals())
+    >>> print system(join('bin', 'buildout')),
+    Develop: '...'
+    ...
+
+Our generated script now has a reference to the relative path.
+
+    >>> open(join('bin', 'instance')).read()
+    '...base = os.path.dirname(os.path.abspath(__file__))...'
 

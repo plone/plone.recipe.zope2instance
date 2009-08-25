@@ -42,7 +42,7 @@ products
   precedence in case the same product is found in more than one directory.
 
 site-zcml
-  If you want a custom site.zcml file, put its content here. If this option is 
+  If you want a custom site.zcml file, put its content here. If this option is
   used the zcml and zcml-additional options are ignored.
 
 zcml
@@ -148,17 +148,17 @@ blob-storage
   The name of the directory where the ZODB blob data will be stored.
 
 rel-storage
-  Allows to set a RelStorage instead of a FileStorage. 
-  
+  Allows to set a RelStorage instead of a FileStorage.
+
   Contains settings separated by newlines, with these values:
-  
+
   - type: any database type supported (postgresql, oracle, mysql)
   - RelStorage specific keys, like `cache-servers` and `poll-interval`
   - all other keys are passed on to the database-specific RelStorage adapter.
 
   Example::
-    
-    rel-storage = 
+
+    rel-storage =
       type oracle
       dsn (DESCRIPTION=(ADDRESS=(HOST=s01))(CONNECT_DATA=(SERVICE_NAME=d01)))
       user tarek
@@ -221,7 +221,7 @@ zserver-threads
   Specify the number of threads that Zope's ZServer web server will use to
   service requests. You shouldn't change this unless you know what you are
   doing. Zope's default is 4.
-  
+
 zodb-temporary-storage
   If given Zope's default temporary storage definition will be replaced by
   the lines of this parameter.
@@ -229,10 +229,10 @@ zodb-temporary-storage
 environment-vars
   Define arbitrary key-value pairs for use as environment variables during
   Zope's run cycle.
-  
+
   Example::
-  
-    environment-vars = 
+
+    environment-vars =
       TZ US/Eastern
       TMP /var/tmp
       DISABLE_PTS True
@@ -240,12 +240,16 @@ environment-vars
 zope-conf-additional
   Give additional lines to zope.conf. Make sure you indent any lines after
   the one with the parameter.
-  
+
   Example::
-  
+
     zope-conf-additional =
       locale fr_FR
       http-realm Slipknot
+
+relative-paths
+  Set this to `true` to make the generated scripts use relative
+  paths. You can also enable this in the `[buildout]` section.
 
 Reporting bugs or asking questions
 ----------------------------------
