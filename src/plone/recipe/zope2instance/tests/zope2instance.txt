@@ -1015,3 +1015,33 @@ Our generated script now has a reference to the relative path.
     >>> open(join('bin', 'instance')).read()
     '...base = os.path.dirname(os.path.abspath(__file__))...'
 
+Custom Zope Conf
+=================
+
+`zope-conf` is an option that allows you to use a specific Zope config file.
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... index = http://pypi.python.org/simple
+    ... develop =
+    ...     %(recipe_location)s
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... zope2-location = %(zope2_location)s
+    ... user = me
+    ... zope-conf = /some/path/my.conf
+    ... ''' % globals())
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Develop: '...'
+    ...
+
+We should have a zope instance script with the custom config file::
+
+    >>> open(join('bin', 'instance')).read()
+    '...plone.recipe.zope2instance.ctl.main(...["-C", \'/some/path/my.conf\']...'
