@@ -12,6 +12,11 @@ Changelog
   it).
   [jvloothuis]
 
+- Added an option to avoid using the normal shell scripts for starting
+  Zope. This makes it possible to avoid the hard-coded paths in these
+  scripts.
+  [jvloothuis]
+
 3.4 (2009-08-12)
 ----------------
 

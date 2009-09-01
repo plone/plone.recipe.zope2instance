@@ -586,17 +586,30 @@ if __name__ == '__main__':
 
         requirements, ws = self.egg.working_set(['plone.recipe.zope2instance'])
 
-        zc.buildout.easy_install.scripts(
-            [(self.options.get('control-script', self.name),
-                'plone.recipe.zope2instance.ctl', 'main')],
-            ws, options['executable'], options['bin-directory'],
-            extra_paths = extra_paths,
-            arguments = ('\n        ["-C", %r]'
-                         '\n        + sys.argv[1:]'
-                         % zope_conf_path
-                         ),
-            relative_paths=self._relative_paths,
-            )
+        if options.get('no-shell') == 'true':
+            zc.buildout.easy_install.scripts(
+                [(self.options.get('control-script', self.name),
+                  'plone.recipe.zope2instance.ctl', 'noshell')],
+                ws, options['executable'], options['bin-directory'],
+                extra_paths = extra_paths,
+                arguments = ('\n        ["-C", %r]'
+                             '\n        + sys.argv[1:]'
+                             % zope_conf_path
+                             ),
+                relative_paths=self._relative_paths,
+                )
+        else:
+            zc.buildout.easy_install.scripts(
+                [(self.options.get('control-script', self.name),
+                  'plone.recipe.zope2instance.ctl', 'main')],
+                ws, options['executable'], options['bin-directory'],
+                extra_paths = extra_paths,
+                arguments = ('\n        ["-C", %r]'
+                             '\n        + sys.argv[1:]'
+                             % zope_conf_path
+                             ),
+                relative_paths=self._relative_paths,
+                )
 
         # The backup script, pointing to repozo.py
         repozo = options.get('repozo', None)

@@ -355,3 +355,118 @@ def main(args=None):
         print "program:", " ".join(options.program)
         c.do_status()
         c.cmdloop()
+
+
+class NoShellZopeCmd(AdjustedZopeCmd):
+
+    def environment(self):
+        configroot = self.options.configroot
+        env = dict(os.environ)
+        env.update({'SOFTWARE_HOME': configroot.softwarehome,
+                    'INSTANCE_HOME': configroot.instancehome,
+                    'PYTHONPATH': ':'.join(sys.path + [
+                        configroot.softwarehome])})
+        return env
+
+    def do_foreground(self, arg, debug=True):
+        if not WIN32:
+            self.get_status()
+            pid = self.zd_pid
+            if pid:
+                print "To run the program in the foreground, please stop it first."
+                return
+
+        import subprocess
+        options = self.options
+        env = self.environment()
+        cmd = self.options.program
+        if debug:
+            cmd.extend(['-X', 'debug-mode=on'])
+            return subprocess.call(cmd, env=env)
+        os.execve(cmd[0], cmd, env)
+
+    def do_start(self, arg):
+        self.get_status()
+        if not self.zd_up:
+            args = [
+                self.options.python,
+                self.options.zdrun,
+                ]
+            args += self._get_override("-S", "schemafile")
+            args += self._get_override("-C", "configfile")
+            args += self._get_override("-b", "backofflimit")
+            args += self._get_override("-d", "daemon", flag=1)
+            args += self._get_override("-f", "forever", flag=1)
+            args += self._get_override("-s", "sockname")
+            args += self._get_override("-u", "user")
+            if self.options.umask:
+                args += self._get_override("-m", "umask",
+                                           oct(self.options.umask))
+            args += self._get_override(
+                "-x", "exitcodes", ",".join(map(str, self.options.exitcodes)))
+            args += self._get_override("-z", "directory")
+
+            args.extend(self.options.program)
+
+            if self.options.daemon:
+                flag = os.P_NOWAIT
+            else:
+                flag = os.P_WAIT
+            os.spawnvpe(flag, args[0], args, self.environment())
+        elif not self.zd_pid:
+            self.send_action("start")
+        else:
+            print "daemon process already running; pid=%d" % self.zd_pid
+            return
+        self.awhile(lambda: self.zd_pid,
+                    "daemon process started, pid=%(zd_pid)d")
+
+def noshell(args=None):
+    # This is a customized entry point for launching Zope without forking shell
+    # scripts or other processes.
+    options = zopectl.ZopeCtlOptions()
+    # Realize arguments and set documentation which is used in the -h option
+    options.realize(args, doc=__doc__)
+
+    # Change the program to avoid warning messages
+    script = os.path.join(
+        options.configroot.softwarehome, 'Zope2', 'Startup', 'run.py')
+    options.program =  [options.python, script, '-C', options.configfile]
+
+    # We use our own ZopeCmd set, that is derived from the original one.
+    c = NoShellZopeCmd(options)
+    # We need to apply a number of hacks to make things work:
+
+    # We need to apply a number of hacks to make things work:
+
+    # This puts amongst other things all the configured products directories
+    # into the Products.__path__ so we can put those on the test path
+    handlers.root_handler(options.configroot)
+
+    # We need to apply the configuration in one more place
+    import App.config
+    App.config.setConfiguration(options.configroot)
+
+    # The PYTHONPATH is not set, so all commands starting a new shell fail
+    # unless we set it explicitly
+    os.environ['PYTHONPATH'] = os.path.pathsep.join(sys.path)
+
+    # Add the path to the zopeservice.py script, which is needed for some of the
+    # Windows specific commands
+    servicescript = os.path.join(options.configroot.instancehome,
+                                 'bin', 'zopeservice.py')
+    options.servicescript = [options.python, servicescript]
+
+    # If no command was specified we go into interactive mode.
+    if options.args:
+        c.onecmd(" ".join(options.args))
+    else:
+        options.interactive = 1
+    if options.interactive:
+        try:
+            import readline
+        except ImportError:
+            pass
+        print "program:", " ".join(options.program)
+        c.do_status()
+        c.cmdloop()
