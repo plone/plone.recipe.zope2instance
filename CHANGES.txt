@@ -1,23 +1,22 @@
 Changelog
 =========
 
-3.5 (unreleased)
+3.5 (2009-09-05)
 ----------------
 
 - Added support for relative-paths in the script generation.
   [jvloothuis]
 
-- When `zope-conf` is set the config file will be directly loaded from
-  that location (it previously created a stub zope.conf which included
-  it).
+- When `zope-conf` is set the config file will be directly loaded from that
+  location (it previously created a stub zope.conf which included it).
   [jvloothuis]
 
-- Added an option to avoid using the normal shell scripts for starting
-  Zope. This makes it possible to avoid the hard-coded paths in these
-  scripts.
+- Added an option to avoid using the normal shell scripts for starting Zope.
+  This makes it possible to avoid the hard-coded paths in these scripts.
   [jvloothuis]
 
-- Allow the blob-dir parameter in RelStorage configurations. [hathawsh]
+- Allow the blob-dir parameter in RelStorage configurations.
+  [hathawsh]
 
 3.4 (2009-08-12)
 ----------------
