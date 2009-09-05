@@ -301,6 +301,7 @@ class Recipe:
                 rel_storage = dict(dsn=template % rel_storage)
 
             rel_storage_outer_opts = (
+                'blob-dir',
                 'poll-interval',
                 'pack-gc',
                 'pack-dry-run',

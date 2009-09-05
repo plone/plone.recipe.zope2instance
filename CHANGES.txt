@@ -17,6 +17,8 @@ Changelog
   scripts.
   [jvloothuis]
 
+- Allow the blob-dir parameter in RelStorage configurations. [hathawsh]
+
 3.4 (2009-08-12)
 ----------------
 
