@@ -298,10 +298,20 @@ class Recipe:
                 # postgresql
                 template = ("dbname='%(dbname)s' user='%(user)s' "
                             "host='%(host)s' password='%(password)s'")
-                rel_storage = dict(dsn=template % rel_storage)
+                dsn = template % rel_storage
+                del rel_storage['dbname']
+                del rel_storage['user']
+                del rel_storage['host']
+                del rel_storage['password']
+                rel_storage['dsn'] = dsn
 
             rel_storage_outer_opts = (
+                'name',
+                'read-only',
                 'blob-dir',
+                'keep-history',
+                'replica-conf',
+                'replica-timeout',
                 'poll-interval',
                 'pack-gc',
                 'pack-dry-run',

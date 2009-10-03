@@ -442,6 +442,7 @@ To have a RelStorage configuration, you can use rel-storage::
     ...   user tarek
     ...   host example.com
     ...   password secret space
+    ...   keep-history false
     ...
     ... ''' % globals())
 
@@ -463,6 +464,7 @@ We should have a zope instance, with a basic zope.conf::
         cache-size-bytes 1000000
     %import relstorage
         <relstorage>
+            keep-history false
             <postgresql>
                 dsn dbname='zodb' user='tarek' host='example.com' password='secret space'
             </postgresql>
