@@ -1,8 +1,9 @@
 Changelog
 =========
 
-3.6 (unreleased)
+3.6 (2009-10-11)
 ----------------
+
 - Expanded the RelStorage options, including keep-history and replica-conf.
   [hathawsh]
 

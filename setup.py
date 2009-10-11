@@ -1,8 +1,7 @@
-import os
 from setuptools import setup, find_packages
 
 name = "plone.recipe.zope2instance"
-version = '3.6dev'
+version = '3.6'
 
 def read(name):
     return open(name).read()
@@ -34,7 +33,11 @@ setup(
     include_package_data = True,
     package_dir = {'':'src'},
     namespace_packages = ['plone', 'plone.recipe'],
-    install_requires = ['zc.buildout', 'setuptools', 'zc.recipe.egg'],
+    install_requires = [
+        'zc.buildout',
+        'setuptools',
+        'zc.recipe.egg',
+    ],
     zip_safe=False,
     entry_points = {'zc.buildout': ['default = %s:Recipe' % name]},
     )
