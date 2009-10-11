@@ -4,6 +4,10 @@ Changelog
 4.0 (unreleased)
 ----------------
 
+- If we are used in an environment with Zope2 as an egg, we make sure to
+  install the mkzopeinstance and runzope scripts we depend on ourselves.
+  [hannosch]
+
 - Added Zope2 egg to the list of dependencies of this recipe. This can cause
   trouble for Zope versions before Zope 2.12 or Plone before 4.0.
   [hannosch]
