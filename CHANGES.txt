@@ -1,9 +1,12 @@
 Changelog
 =========
 
-3.7 (unreleased)
+4.0 (unreleased)
 ----------------
 
+- Added Zope2 egg to the list of dependencies of this recipe. This can cause
+  trouble for Zope versions before Zope 2.12 or Plone before 4.0.
+  [hannosch]
 
 3.6 (2009-10-11)
 ----------------
