@@ -12,6 +12,8 @@ Changelog
   trouble for Zope versions before Zope 2.12 or Plone before 4.0.
   [hannosch]
 
+- Added the cache-prefix option for RelStorage.
+
 3.6 (2009-10-11)
 ----------------
 

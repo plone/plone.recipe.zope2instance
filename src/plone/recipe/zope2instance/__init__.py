@@ -326,6 +326,7 @@ class Recipe:
                 'pack-max-delay',
                 'cache-servers',
                 'cache-module-name',
+                'cache-prefix',
                 )
 
             opts = dict(
