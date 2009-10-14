@@ -62,10 +62,10 @@ class Recipe:
         if not self.zope2_location:
             # If we have an egg install, make sure the Zope2 scripts we need
             # are actually installed.
-            zc.buildout.easy_install.scripts(
+            mkzopeinstance = zc.buildout.easy_install.scripts(
                 [('mkzopeinstance', 'Zope2.utilities.mkzopeinstance', 'main')],
                 ws, options['executable'], options['bin-directory'],
-                )
+                )[0]
             zc.buildout.easy_install.scripts(
                 [('runzope', 'Zope2.Startup.run', 'run')],
                 ws, options['executable'], options['bin-directory'],
