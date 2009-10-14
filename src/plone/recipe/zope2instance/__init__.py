@@ -362,9 +362,13 @@ class Recipe:
             elif demo_storage:
                 storage_snippet = demo_storage_template % storage_snippet
 
-        zserver_threads = options.get('zserver-threads', '')
+        zserver_threads = options.get('zserver-threads', '2')
         if zserver_threads:
             zserver_threads = 'zserver-threads %s' % zserver_threads
+
+        python_check_interval = options.get('python-check-interval', '1000')
+        if python_check_interval:
+            python_check_interval = "python-check-interval %s" % python_check_interval
 
         zeo_client = options.get('zeo-client', '')
         zeo_address = options.get('zeo-address', '8100')
@@ -482,6 +486,7 @@ class Recipe:
                                     lock_file = lock_file,
                                     environment_vars = environment_vars,
                                     deprecation_warnings = deprecation_warnings,
+                                    python_check_interval = python_check_interval,
                                     zope_conf_additional = zope_conf_additional,)
 
         zope_conf_path = os.path.join(location, 'etc', 'zope.conf')
@@ -905,6 +910,7 @@ verbose-security %(verbose_security)s
 
 pid-filename %(pid_file)s
 lock-filename %(lock_file)s
+%(python_check_interval)s
 
 %(zope_conf_additional)s
 """

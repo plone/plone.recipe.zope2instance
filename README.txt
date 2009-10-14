@@ -220,7 +220,11 @@ zodb-cache-size-bytes
 zserver-threads
   Specify the number of threads that Zope's ZServer web server will use to
   service requests. You shouldn't change this unless you know what you are
-  doing. Zope's default is 4.
+  doing. The recipes default is 2.
+
+python-check-interval
+  An integer telling the Python interpreter to check for asynchronous events
+  every number of instructions. This affects how often thread switches occur.
 
 zodb-temporary-storage
   If given Zope's default temporary storage definition will be replaced by

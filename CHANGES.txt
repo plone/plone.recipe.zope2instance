@@ -4,6 +4,13 @@ Changelog
 4.0 (unreleased)
 ----------------
 
+- Added an explicit `python-check-interval` option and change its default to
+  `1000` instead of Python's own default of `100`.
+  [hannosch]
+
+- Changed default `zserver-threads` to two instead of four.
+  [hannosch]
+
 - Changed client connection cache defaults. We specify a cache size of one
   million objects now, effectively disabling this metric. Instead we define
   an upper cache limit based on object size which defaults to 128MB. Also
