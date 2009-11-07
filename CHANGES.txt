@@ -11,10 +11,8 @@ Changelog
 - Changed default `zserver-threads` to two instead of four.
   [hannosch]
 
-- Changed client connection cache defaults. We specify a cache size of one
-  million objects now, effectively disabling this metric. Instead we define
-  an upper cache limit based on object size which defaults to 128MB. Also
-  changed ZEO client cache to 128MB instead of 30MB.
+- Changed client connection cache defaults. We specify a cache size of 10000
+  instead of 5000. Also changed ZEO client cache to 128MB instead of 30MB.
   [hannosch]
 
 - If we are used in an environment with Zope2 as an egg, we make sure to

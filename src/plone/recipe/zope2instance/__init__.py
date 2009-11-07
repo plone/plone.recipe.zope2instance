@@ -373,12 +373,12 @@ class Recipe:
         zeo_client = options.get('zeo-client', '')
         zeo_address = options.get('zeo-address', '8100')
 
-        zodb_cache_size = options.get('zodb-cache-size', '1048576')
+        zodb_cache_size = options.get('zodb-cache-size', '10000')
         if zodb_cache_size:
             zodb_cache_size = "cache-size %s" % zodb_cache_size
         else:
             zodb_cache_size = ""
-        zodb_cache_size_bytes = options.get('zodb-cache-size-bytes', '128MB')
+        zodb_cache_size_bytes = options.get('zodb-cache-size-bytes', None)
         if zodb_cache_size_bytes:
             zodb_cache_size_bytes = "cache-size-bytes %s" % zodb_cache_size_bytes
         else:
