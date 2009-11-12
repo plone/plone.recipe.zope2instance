@@ -4,6 +4,10 @@ Changelog
 4.0 (unreleased)
 ----------------
 
+- Removed the test command support from the control script which lets us
+  remove quite a bit of hackery. Added a note about using ``bin/test`` instead.
+  [hannosch]
+
 - Added an explicit `python-check-interval` option and change its default to
   `1000` instead of Python's own default of `100`.
   [hannosch]

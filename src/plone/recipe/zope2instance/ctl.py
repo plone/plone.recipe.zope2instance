@@ -29,25 +29,12 @@ action "help" to find out about available actions.
 
 import os, sys, csv
 
-try:
-    # Zope 2.8+
-    from Zope2.Startup import zopectl
-    from Zope2.Startup import handlers
-except ImportError:
-    # Zope 2.7 (and below)
-    from Zope.Startup import zopectl
-    from Zope.Startup import handlers
-
-TESTRUNNER = True
-try:
-    import zope.testing.testrunner
-except ImportError:
-    TESTRUNNER = False
+from Zope2.Startup import zopectl
+from Zope2.Startup import handlers
 
 WIN32 = False
 if sys.platform[:3].lower() == "win":
     import pywintypes
-    import win32con
     import win32service
     import win32serviceutil
 
@@ -230,88 +217,12 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             os.execv(program[0], program)
 
     def do_test(self, arg):
-        if not TESTRUNNER:
-            # This is probably Zope <= 2.8
-            zopectl.ZopeCmd.do_test(self, arg)
-            return
-
-        # We overwrite the test command to populate the search path
-        # automatically with all configured products and eggs.
-        args = filter(None, arg.split(' '))
-        defaults = []
-        softwarehome = self.options.configroot.softwarehome
-
-        # Put all packages found in products directories on the test-path.
-        import Products
-        products = []
-        for path in Products.__path__:
-            # ignore software home, as it already works
-            if not _n(path).startswith(_n(softwarehome)):
-                # get all folders in the current products folder and filter
-                # out everything that is not a directory or a VCS internal one.
-                folders = [f for f in os.listdir(path) if
-                             os.path.isdir(os.path.join(path, f)) and
-                             not f.startswith('.') and not f == 'CVS']
-                if folders:
-                    for folder in folders:
-                        # look into all folders and see if they have an
-                        # __init__.py in them. This filters out non-packages
-                        # like for example documenation folders
-                        package = os.path.join(path, folder)
-                        if os.path.exists(os.path.join(package, '__init__.py')):
-                            products.append(package)
-
-        # Put all packages onto the search path as a package. As we only deal
-        # with products, the package name is always prepended by 'Products.'
-        for product in products:
-            defaults += ['--package-path', product, 'Products.%s' % os.path.split(product)[-1]]
-
-        # Put everything on sys.path into the test-path.
-        # XXX This might be too much, but ensures all activated eggs are found.
-        # What we really would want here, is to put only the eggs onto the
-        # test-path
-
-        # XXX Somehow the buildout root gets on the sys.path. This causes
-        # weird problems, as packages like src.plone.portlets.plone.portlets
-        # are found by the testrunner
-        paths = sys.path
-        progname = self.options.progname
-        buildout_root = os.path.dirname(os.path.dirname(progname))
-
-        for path in paths:
-            if _n(path) != _n(buildout_root):
-                defaults += ['--test-path', path]
-
-        # Default to dots, if not explicitly set to quiet. Don't duplicate
-        # the -v if it is specified manually.
-        if '-v' not in args and '-q' not in args:
-            defaults.append('-v')
-
-        # Add the --nowarnings option.
-        import zope.testing.testrunner
-
-        def filter_warnings(option, opt, *ignored):
-            import warnings
-            warnings.simplefilter('ignore', Warning, append=True)
-
-        other = getattr(zope.testing.testrunner, 'other', None)
-        if other is None:
-            from zope.testing.testrunner import options
-            other = options.other
-
-        other.add_option(
-            '--nowarnings', action='callback', callback=filter_warnings,
-            help="Install a filter to suppress warnings emitted by code.\n")
-
-        # Run the testrunner. Calling it directly ensures that it is executed
-        # in the same environment that we just carefully configured.
-        args.insert(0, zope.testing.testrunner.__file__)
-        script_parts = [sys.argv[0], 'test']
-        try:
-            zope.testing.testrunner.run(defaults, args, script_parts=script_parts)
-        except TypeError:
-            # BBB to support zope.testing <= 3.8.0
-            zope.testing.testrunner.run(defaults, args)
+        print("The test command is no longer supported. Please use a "
+              "zc.recipe.testrunner section in your buildout config file "
+              "to get a test runner for your environment. Most often you "
+              "will name the section `test` and can run tests via: "
+              "bin/test -s <my.package>")
+        return
 
 
 def main(args=None):
