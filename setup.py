@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 name = "plone.recipe.zope2instance"
-version = '4.0dev'
+version = '4.0a1'
 
 def read(name):
     return open(name).read()
@@ -37,7 +37,7 @@ setup(
         'zc.buildout',
         'setuptools',
         'zc.recipe.egg',
-        'Zope2',
+        'Zope2 >= 2.12.1',
     ],
     zip_safe=False,
     entry_points = {'zc.buildout': ['default = %s:Recipe' % name]},

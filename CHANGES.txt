@@ -1,8 +1,8 @@
 Changelog
 =========
 
-4.0 (unreleased)
-----------------
+4.0a1 - 2009-11-14
+------------------
 
 - Removed the test command support from the control script which lets us
   remove quite a bit of hackery. Added a note about using ``bin/test`` instead.
