@@ -4,6 +4,9 @@ Changelog
 4.0b1 - Unreleased
 ------------------
 
+- Make it possible for third-party packages to add additional commands to the
+  control script by supplying a 'plone.recipe.zope2instance.ctl' entry point.
+  [davisagli]
 
 4.0a1 - 2009-11-14
 ------------------
