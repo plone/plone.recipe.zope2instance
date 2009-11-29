@@ -258,6 +258,36 @@ no-shell
   used. In this case the recipe will directly start the Python
   process.
 
+Additional control script commands
+----------------------------------
+
+Third-party packages may add additional commands to the control script by
+installing a 'plone.recipe.zope2instance.ctl' entry point. For example,
+an egg called mypackage could include a module called mypackage with the
+following custom command::
+
+    def foo(self, *args)
+        """Help message here"""
+        print 'foo'
+
+It would then install the foo method as a command for the control script using
+the following entry point configuration in setup.py::
+
+    entry_points="""
+    [plone.recipe.zope2instance.ctl]
+    foo = mypackage:foo
+    """
+
+This would allow invoking the foo method by running `bin/instance foo`
+(assuming the instance control script was installed by a buildout part
+called `instance`.)  The entry point is invoked with the following
+parameters:
+
+  self
+    An instance of plone.recipe.zope2instance.ctl.AdjustedZopeCmd.
+  args
+    Any additional arguments that were passed on the command line.
+
 Reporting bugs or asking questions
 ----------------------------------
 

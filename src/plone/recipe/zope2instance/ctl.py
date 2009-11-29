@@ -28,6 +28,7 @@ action "help" to find out about available actions.
 """
 
 import os, sys, csv
+from pkg_resources import iter_entry_points
 
 try:
     # Zope 2.8+
@@ -321,6 +322,14 @@ def main(args=None):
     options.realize(args, doc=__doc__)
     # We use our own ZopeCmd set, that is derived from the original one.
     c = AdjustedZopeCmd(options)
+
+    # Mix in any additional commands supplied by other packages:
+    for ep in iter_entry_points('plone.recipe.zope2instance.ctl'):
+        func_name = 'do_' + ep.name
+        func = ep.load()
+        # avoid overwriting the standard commands
+        if func_name not in dir(c):
+            setattr(c.__class__, func_name, func)
 
     # We need to apply a number of hacks to make things work:
 
