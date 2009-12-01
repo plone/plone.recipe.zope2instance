@@ -65,16 +65,14 @@ class Recipe:
             # If we have an egg install, make sure the Zope2 scripts we need
             # are actually installed.
             #
-            # The list returned by scripts() has two items:
-            # - name of non-Windows script
-            # - name of Windows script
-            item_to_use = 0
-            if IS_WIN:
-                item_to_use = 1
+            # zc.buildout.easy_install.scripts() returns a list with two items...
+            # [0] name of non-Windows script
+            # [1] name of Windows script
+            # ... so select the correct one depending on the platform
             mkzopeinstance = zc.buildout.easy_install.scripts(
                 [('mkzopeinstance', 'Zope2.utilities.mkzopeinstance', 'main')],
                 ws, options['executable'], options['bin-directory'],
-                )[item_to_use]
+                )[1 if IS_WIN else 0]
             zc.buildout.easy_install.scripts(
                 [('runzope', 'Zope2.Startup.run', 'run')],
                 ws, options['executable'], options['bin-directory'],
