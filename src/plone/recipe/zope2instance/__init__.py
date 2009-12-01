@@ -18,6 +18,8 @@ import zc.buildout
 import zc.buildout.easy_install
 import zc.recipe.egg
 
+IS_WIN = sys.platform[:3].lower() == 'win'
+
 class Recipe:
 
     def __init__(self, buildout, name, options):
@@ -62,10 +64,14 @@ class Recipe:
         if not self.zope2_location:
             # If we have an egg install, make sure the Zope2 scripts we need
             # are actually installed.
+            #
+            # The list returned by scripts() has two items:
+            # - name of non-Windows script
+            # - name of Windows script
             mkzopeinstance = zc.buildout.easy_install.scripts(
                 [('mkzopeinstance', 'Zope2.utilities.mkzopeinstance', 'main')],
                 ws, options['executable'], options['bin-directory'],
-                )[0]
+                )[1 if IS_WIN else 0]
             zc.buildout.easy_install.scripts(
                 [('runzope', 'Zope2.Startup.run', 'run')],
                 ws, options['executable'], options['bin-directory'],
@@ -76,7 +82,7 @@ class Recipe:
             if not os.path.exists(mkzopeinstance):
                 mkzopeinstance = os.path.join(
                     self.zope2_location, 'utilities', 'mkzopeinstance.py')
-            if sys.platform[:3].lower() == "win":
+            if IS_WIN:
                 mkzopeinstance = '"%s"' % mkzopeinstance
 
         assert os.spawnl(
