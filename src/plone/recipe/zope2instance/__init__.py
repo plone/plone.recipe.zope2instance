@@ -18,9 +18,9 @@ import zc.buildout
 import zc.buildout.easy_install
 import zc.recipe.egg
 
-class Recipe:
+IS_WIN = sys.platform[:3].lower() == 'win'
 
-    IS_WIN = sys.platform[:3].lower() == 'win'
+class Recipe:
 
     def __init__(self, buildout, name, options):
         self.egg = zc.recipe.egg.Egg(buildout, options['recipe'], options)
