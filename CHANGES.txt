@@ -1,7 +1,7 @@
 Changelog
 =========
 
-4.0b1 - Unreleased
+4.0a2 - 2009-12-02
 ------------------
 
 - Make it possible for third-party packages to add additional commands to the
