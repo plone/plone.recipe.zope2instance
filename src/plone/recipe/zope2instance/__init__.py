@@ -18,7 +18,10 @@ import zc.buildout
 import zc.buildout.easy_install
 import zc.recipe.egg
 
+from plone.recipe.zope2instance import make
+
 IS_WIN = sys.platform[:3].lower() == 'win'
+
 
 class Recipe:
 
@@ -45,24 +48,16 @@ class Recipe:
             self._relative_paths = ''
             assert relative_paths == 'false'
 
-    def install(self):
+    def install(self, update=False):
         options = self.options
         location = options['location']
 
-        requirements, ws = self.egg.working_set()
-        ws_locations = [d.location for d in ws]
-
-        if os.path.exists(location):
-            shutil.rmtree(location)
-
-        from plone.recipe.zope2instance import make
-        make.make_instance(options.get('user', None), location)
+        if not update:
+            if os.path.exists(location):
+                shutil.rmtree(location)
+            make.make_instance(options.get('user', None), location)
 
         try:
-            # Save the working set:
-            open(os.path.join(location, 'etc', '.eggs'), 'w').write(
-                '\n'.join(ws_locations))
-
             # Make a new zope.conf based on options in buildout.cfg
             self.build_zope_conf()
 
@@ -80,31 +75,7 @@ class Recipe:
         return location
 
     def update(self):
-        options = self.options
-        location = options['location']
-
-        requirements, ws = self.egg.working_set()
-        ws_locations = [d.location for d in ws]
-
-        if os.path.exists(location):
-            # See if we can stop. We need to see if the working set path
-            # has changed.
-            saved_path = os.path.join(location, 'etc', '.eggs')
-            if os.path.isfile(saved_path):
-                if (open(saved_path).read() !=
-                    '\n'.join(ws_locations)
-                    ):
-                    # Something has changed. Blow away the instance.
-                    return self.install()
-                elif options.get('site-zcml'):
-                    self.build_package_includes()
-
-            # Nothing has changed.
-            self.install_scripts()
-            return location
-
-        else:
-            return self.install()
+        return self.install(update=True)
 
     def build_zope_conf(self):
         """Create a zope.conf file
