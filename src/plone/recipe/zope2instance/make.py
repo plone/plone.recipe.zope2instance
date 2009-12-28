@@ -7,7 +7,9 @@ VCS_DIRS = [os.path.normcase("CVS"), os.path.normcase(".svn")]
 
 def make_instance(user=None, instancehome=None):
     instancehome = os.path.abspath(os.path.expanduser(instancehome))
-    user, password = user.split(":", 1)
+    password = None
+    if user:
+        user, password = user.split(":", 1)
 
     # Use our own skeleton
     skelsrc = os.path.join(os.path.dirname(__file__), "skel")

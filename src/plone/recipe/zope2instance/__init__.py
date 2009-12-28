@@ -55,29 +55,8 @@ class Recipe:
         if os.path.exists(location):
             shutil.rmtree(location)
 
-        # If we have an egg install, make sure the Zope2 scripts we need
-        # are actually installed.
-        #
-        # zc.buildout.easy_install.scripts() returns a list with two items...
-        # [0] name of non-Windows script
-        # [1] name of Windows script
-        # ... so select the correct one depending on the platform
-        mkzopeinstance = zc.buildout.easy_install.scripts(
-            [('mkzopeinstance', 'Zope2.utilities.mkzopeinstance', 'main')],
-            ws, options['executable'], options['bin-directory'],
-            )[1 if IS_WIN else 0]
-
-        arguments = [
-            os.P_WAIT,
-            os.path.normpath(options['executable']),
-            zc.buildout.easy_install._safe_arg(options['executable']),
-            mkzopeinstance,
-            '-d', zc.buildout.easy_install._safe_arg(location),
-        ]
-        if options.get('user'):
-            arguments.extend(['-u', options['user']])
-
-        assert os.spawnl(*arguments) == 0
+        from plone.recipe.zope2instance import make
+        make.make_instance(options.get('user', None), location)
 
         try:
             # Save the working set:
