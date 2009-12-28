@@ -139,8 +139,7 @@ Let's run it::
 
     >>> print system(join('bin', 'buildout')),
     Develop: '...'
-    Uninstalling instance.
-    Installing instance.
+    ...
 
 Our FTP server should be set up now::
 
@@ -174,8 +173,7 @@ Let's run it::
 
     >>> print system(join('bin', 'buildout')),
     Develop: '...'
-    Uninstalling instance.
-    Installing instance.
+    ...
 
 Our WebDAV server should be set up now::
 
@@ -211,8 +209,7 @@ Let's run it::
 
     >>> print system(join('bin', 'buildout')),
     Develop: '...'
-    Uninstalling instance.
-    Installing instance.
+    ...
 
 Our WebDAV server should be set up now::
 
@@ -252,8 +249,7 @@ Let's run it::
 
     >>> print system(join('bin', 'buildout')),
     Develop: '...'
-    Uninstalling instance.
-    Installing instance.
+    ...
 
 We should have a zope instance, with a basic zope.conf::
 
@@ -298,8 +294,7 @@ Let's run it::
 
     >>> print system(join('bin', 'buildout')),
     Develop: '...'
-    Uninstalling instance.
-    Installing instance.
+    ...
 
 We should have a zope instance, with a basic zope.conf without demostorage::
 
@@ -347,8 +342,7 @@ Let's run it::
 
     >>> print system(join('bin', 'buildout')),
     Develop: '...'
-    Uninstalling instance.
-    Installing instance.
+    ...
 
 We should have a zope instance, with a basic zope.conf::
 
@@ -402,7 +396,7 @@ Let's run it::
 
     >>> print system(join('bin', 'buildout')),
     Develop: '...'
-    Installing instance.
+    ...
 
 We should have a zope instance, with a basic zope.conf::
 
@@ -658,8 +652,7 @@ Let's run it::
 
     >>> print system(join('bin', 'buildout')),
     Develop: '...'
-    Uninstalling instance.
-    Installing instance.
+    ...
 
 We should have a zope instance, with the custom event log::
 
@@ -712,8 +705,7 @@ Let's run it::
 
     >>> print system(join('bin', 'buildout')),
     Develop: '...'
-    Uninstalling instance.
-    Installing instance.
+    ...
 
 We should have a zope instance, with the custom event log::
 
@@ -768,8 +760,7 @@ Let's run the buildout::
 
     >>> print system(join('bin', 'buildout')),
     Develop: '...'
-    Uninstalling instance.
-    Installing instance.
+    ...
 
 Now let's check that we have a zope instance, with the custom site.zcml::
 
@@ -809,8 +800,7 @@ Let's run it::
 
     >>> print system(join('bin', 'buildout')),
     Develop: '...'
-    Uninstalling instance.
-    Installing instance.
+    ...
 
 Our environment variables should be set now::
 
@@ -846,8 +836,7 @@ Let's run it::
 
     >>> print system(join('bin', 'buildout')),
     Develop: '...'
-    Uninstalling instance.
-    Installing instance.
+    ...
 
 Our environment variables should be set now::
 
@@ -878,8 +867,7 @@ Let's run it::
 
     >>> print system(join('bin', 'buildout')),
     Develop: '...'
-    Uninstalling instance.
-    Installing instance.
+    ...
 
 Our environment variables should be set now::
 
@@ -913,8 +901,7 @@ Let's run it::
 
     >>> print system(join('bin', 'buildout')),
     Develop: '...'
-    Uninstalling instance.
-    Installing instance.
+    ...
 
 Relative paths in scripts
 =========================
