@@ -303,9 +303,10 @@ class Recipe:
             demo_storage = options.get('demo-storage', 'off') \
                          not in ('off', 'disable', 'false')
 
-            if blob_storage and demo_storage:
-                raise ValueError("Both blob and demo storage cannot be used"
-                                 " at the same time.")
+            if demo_storage:
+                # Disable blob storage when using a demo storage, is that
+                # really not support in Zope 2.12?
+                blob_storage = None
 
             if blob_storage:
                 blob_storage = os.path.join(base_dir, blob_storage)

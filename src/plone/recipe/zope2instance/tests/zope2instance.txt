@@ -371,35 +371,6 @@ We should have a zope instance, with a basic zope.conf::
     ...
     <BLANKLINE>
 
-BlobStorage doesn't support demostorage, let test this::
-
-    >>> write('buildout.cfg',
-    ... '''
-    ... [buildout]
-    ... parts = instance
-    ... index = http://pypi.python.org/simple
-    ... develop =
-    ...     %(recipe_location)s
-    ...
-    ... [instance]
-    ... recipe = plone.recipe.zope2instance
-    ... user = me:me
-    ... blob-storage = ${buildout:directory}/var/blob
-    ... demo-storage = on
-    ...
-    ... ''' % options)
-
-Let's run it::
-
-    >>> print system(join('bin', 'buildout')),
-    Develop: '...'
-    Uninstalling instance.
-    Installing instance.
-    While:
-      Installing instance.
-    <BLANKLINE>
-    ...
-    ValueError: Both blob and demo storage cannot be used at the same time.
 
 RelStorage
 ==========
