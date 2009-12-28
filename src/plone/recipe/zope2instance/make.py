@@ -72,46 +72,23 @@ def copyskel(sourcedir, targetdir):
         print >>sys.stderr, msg
         sys.exit(1)
 
-    # fix file permissions in 'bin' directory
-    bin_dir = os.path.join(targetdir, 'bin')
-    for fname in os.listdir(bin_dir):
-        fullname = os.path.join(bin_dir, fname)
-        os.chmod(fullname, 0700)
-
 
 def copydir(targetdir, sourcedir, names):
     # Don't recurse into VCS directories:
     for name in names[:]:
         if os.path.normcase(name) in VCS_DIRS:
             names.remove(name)
-        elif os.path.isfile(os.path.join(sourcedir, name)):
+        src = os.path.join(sourcedir, name)
+        if os.path.isfile(src):
             # Copy the file:
-            sn, ext = os.path.splitext(name)
-            if os.path.normcase(ext) == ".in":
-                dst = os.path.join(targetdir, sourcedir, sn)
-                if os.path.exists(dst):
-                    continue
-                copyin(os.path.join(sourcedir, name), dst)
-            else:
-                src = os.path.join(sourcedir, name)
-                dst = os.path.join(targetdir, src)
-                if os.path.exists(dst):
-                    continue
-                shutil.copyfile(src, dst)
-                shutil.copymode(src, dst)
+            dst = os.path.join(targetdir, src)
+            if os.path.exists(dst):
+                continue
+            shutil.copyfile(src, dst)
+            shutil.copymode(src, dst)
         else:
             # Directory:
             dn = os.path.join(targetdir, sourcedir, name)
             if not os.path.exists(dn):
                 os.mkdir(dn)
-                shutil.copymode(os.path.join(sourcedir, name), dn)
-
-
-def copyin(src, dst):
-    ifp = open(src)
-    text = ifp.read()
-    ifp.close()
-    ofp = open(dst, "w")
-    ofp.write(text)
-    ofp.close()
-    shutil.copymode(src, dst)
+                shutil.copymode(src, dn)
