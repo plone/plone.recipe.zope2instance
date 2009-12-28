@@ -122,6 +122,44 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         def do_restart(self, arg):
             self.handle_command('restart')
 
+    # not WIN32:
+    else:
+        def do_start(self, arg):
+            self.get_status()
+            if not self.zd_up:
+                args = [
+                    self.options.python,
+                    self.options.zdrun,
+                    ]
+                args += self._get_override("-S", "schemafile")
+                args += self._get_override("-C", "configfile")
+                args += self._get_override("-b", "backofflimit")
+                args += self._get_override("-d", "daemon", flag=1)
+                args += self._get_override("-f", "forever", flag=1)
+                args += self._get_override("-s", "sockname")
+                args += self._get_override("-u", "user")
+                if self.options.umask:
+                    args += self._get_override("-m", "umask",
+                                               oct(self.options.umask))
+                args += self._get_override(
+                    "-x", "exitcodes", ",".join(map(str, self.options.exitcodes)))
+                args += self._get_override("-z", "directory")
+
+                args.extend(self.options.program)
+
+                if self.options.daemon:
+                    flag = os.P_NOWAIT
+                else:
+                    flag = os.P_WAIT
+                os.spawnvpe(flag, args[0], args, self.environment())
+            elif not self.zd_pid:
+                self.send_action("start")
+            else:
+                print "daemon process already running; pid=%d" % self.zd_pid
+                return
+            self.awhile(lambda: self.zd_pid,
+                        "daemon process started, pid=%(zd_pid)d")
+
     def environment(self):
         configroot = self.options.configroot
         env = dict(os.environ)
@@ -234,42 +272,6 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                     program.remove(addition)
         else:
             os.execve(program[0], program, env)
-
-    def do_start(self, arg):
-        self.get_status()
-        if not self.zd_up:
-            args = [
-                self.options.python,
-                self.options.zdrun,
-                ]
-            args += self._get_override("-S", "schemafile")
-            args += self._get_override("-C", "configfile")
-            args += self._get_override("-b", "backofflimit")
-            args += self._get_override("-d", "daemon", flag=1)
-            args += self._get_override("-f", "forever", flag=1)
-            args += self._get_override("-s", "sockname")
-            args += self._get_override("-u", "user")
-            if self.options.umask:
-                args += self._get_override("-m", "umask",
-                                           oct(self.options.umask))
-            args += self._get_override(
-                "-x", "exitcodes", ",".join(map(str, self.options.exitcodes)))
-            args += self._get_override("-z", "directory")
-
-            args.extend(self.options.program)
-
-            if self.options.daemon:
-                flag = os.P_NOWAIT
-            else:
-                flag = os.P_WAIT
-            os.spawnvpe(flag, args[0], args, self.environment())
-        elif not self.zd_pid:
-            self.send_action("start")
-        else:
-            print "daemon process already running; pid=%d" % self.zd_pid
-            return
-        self.awhile(lambda: self.zd_pid,
-                    "daemon process started, pid=%(zd_pid)d")
 
     def do_test(self, arg):
         print("The test command is no longer supported. Please use a "
