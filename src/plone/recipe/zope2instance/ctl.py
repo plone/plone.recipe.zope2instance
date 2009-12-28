@@ -122,6 +122,15 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         def do_restart(self, arg):
             self.handle_command('restart')
 
+    def environment(self):
+        configroot = self.options.configroot
+        env = dict(os.environ)
+        env.update({'SOFTWARE_HOME': configroot.softwarehome,
+                    'INSTANCE_HOME': configroot.instancehome,
+                    'PYTHONPATH': ':'.join(sys.path + [
+                        configroot.softwarehome])})
+        return env
+
     def get_startup_cmd(self, python, more, pyflags=""):
         # If we pass the configuration filename as a win32
         # backslashed path using a ''-style string, the backslashes
@@ -201,6 +210,9 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             if pid:
                 print "To run the program in the foreground, please stop it first."
                 return
+
+        import subprocess
+        env = self.environment()
         program = self.options.program
         if debug:
             local_additions = []
@@ -208,14 +220,20 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                 local_additions += ['-X']
             if not program.count('debug-mode=on'):
                 local_additions += ['debug-mode=on']
-            program[1:1] = local_additions
-            command = quote_command(program)
+            program.extend(local_additions)
+            if WIN32:
+                command = quote_command(program)
+            else:
+                command = program
             try:
-                return os.system(command)
+                return subprocess.call(command, env=env)
+            except KeyboardInterrupt:
+                return
             finally:
-                for addition in local_additions: program.remove(addition)
+                for addition in local_additions:
+                    program.remove(addition)
         else:
-            os.execv(program[0], program)
+            os.execve(program[0], program, env)
 
     def do_test(self, arg):
         print("The test command is no longer supported. Please use a "
@@ -227,35 +245,6 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
 
 
 class NoShellZopeCmd(AdjustedZopeCmd):
-
-    def environment(self):
-        configroot = self.options.configroot
-        env = dict(os.environ)
-        env.update({'SOFTWARE_HOME': configroot.softwarehome,
-                    'INSTANCE_HOME': configroot.instancehome,
-                    'PYTHONPATH': ':'.join(sys.path + [
-                        configroot.softwarehome])})
-        return env
-
-    def do_foreground(self, arg, debug=True):
-        if not WIN32:
-            self.get_status()
-            pid = self.zd_pid
-            if pid:
-                print "To run the program in the foreground, please stop it first."
-                return
-
-        import subprocess
-        env = self.environment()
-        cmd = self.options.program
-        if debug:
-            cmd.extend(['-X', 'debug-mode=on'])
-            try:
-                return subprocess.call(cmd, env=env)
-            except KeyboardInterrupt:
-                return
-        else:
-            os.execve(cmd[0], cmd, env)
 
     def do_start(self, arg):
         self.get_status()
