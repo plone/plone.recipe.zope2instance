@@ -226,57 +226,6 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         return
 
 
-def main(args=None):
-    # This is mainly a copy of zopectl.py's main function from Zope2.Startup
-    options = zopectl.ZopeCtlOptions()
-    # Realize arguments and set documentation which is used in the -h option
-    options.realize(args, doc=__doc__)
-    # We use our own ZopeCmd set, that is derived from the original one.
-    c = AdjustedZopeCmd(options)
-
-    # Mix in any additional commands supplied by other packages:
-    for ep in iter_entry_points('plone.recipe.zope2instance.ctl'):
-        func_name = 'do_' + ep.name
-        func = ep.load()
-        # avoid overwriting the standard commands
-        if func_name not in dir(c):
-            setattr(c.__class__, func_name, func)
-
-    # We need to apply a number of hacks to make things work:
-
-    # This puts amongst other things all the configured products directories
-    # into the Products.__path__ so we can put those on the test path
-    handlers.root_handler(options.configroot)
-
-    # We need to apply the configuration in one more place
-    import App.config
-    App.config.setConfiguration(options.configroot)
-
-    # The PYTHONPATH is not set, so all commands starting a new shell fail
-    # unless we set it explicitly
-    os.environ['PYTHONPATH'] = os.path.pathsep.join(sys.path)
-
-    # Add the path to the zopeservice.py script, which is needed for some of the
-    # Windows specific commands
-    servicescript = os.path.join(options.configroot.instancehome,
-                                 'bin', 'zopeservice.py')
-    options.servicescript = [options.python, servicescript]
-
-    # If no command was specified we go into interactive mode.
-    if options.args:
-        c.onecmd(" ".join(options.args))
-    else:
-        options.interactive = 1
-    if options.interactive:
-        try:
-            import readline
-        except ImportError:
-            pass
-        print "program:", " ".join(options.program)
-        c.do_status()
-        c.cmdloop()
-
-
 class NoShellZopeCmd(AdjustedZopeCmd):
 
     def environment(self):
