@@ -235,17 +235,6 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         else:
             os.execve(program[0], program, env)
 
-    def do_test(self, arg):
-        print("The test command is no longer supported. Please use a "
-              "zc.recipe.testrunner section in your buildout config file "
-              "to get a test runner for your environment. Most often you "
-              "will name the section `test` and can run tests via: "
-              "bin/test -s <my.package>")
-        return
-
-
-class NoShellZopeCmd(AdjustedZopeCmd):
-
     def do_start(self, arg):
         self.get_status()
         if not self.zd_up:
@@ -282,6 +271,14 @@ class NoShellZopeCmd(AdjustedZopeCmd):
         self.awhile(lambda: self.zd_pid,
                     "daemon process started, pid=%(zd_pid)d")
 
+    def do_test(self, arg):
+        print("The test command is no longer supported. Please use a "
+              "zc.recipe.testrunner section in your buildout config file "
+              "to get a test runner for your environment. Most often you "
+              "will name the section `test` and can run tests via: "
+              "bin/test -s <my.package>")
+        return
+
 
 def noshell(args=None):
     # This is a customized entry point for launching Zope without forking shell
@@ -296,7 +293,7 @@ def noshell(args=None):
     options.program =  [options.python, script, '-C', options.configfile]
 
     # We use our own ZopeCmd set, that is derived from the original one.
-    c = NoShellZopeCmd(options)
+    c = AdjustedZopeCmd(options)
 
     # Mix in any additional commands supplied by other packages:
     for ep in iter_entry_points('plone.recipe.zope2instance.ctl'):
