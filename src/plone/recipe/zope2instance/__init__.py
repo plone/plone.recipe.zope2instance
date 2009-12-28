@@ -52,7 +52,6 @@ class Recipe:
             self._relative_paths = options['buildout-directory']
         else:
             self._relative_paths = ''
-            assert relative_paths == 'false'
 
     def install(self, update=False):
         options = self.options
