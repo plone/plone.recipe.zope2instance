@@ -20,11 +20,10 @@ Options:
 -i/--interactive -- start an interactive shell after executing commands
 action [arguments] -- see below
 
-Actions are commands like "start", "stop" and "status". If -i is
-specified or no action is specified on the command line, a "shell"
-interpreting actions typed interactively is started (unless the
-configuration option default_to_interactive is set to false). Use the
-action "help" to find out about available actions.
+Actions are commands like "start", "stop" and "status". If -i is specified or
+no action is specified on the command line, a "shell" interpreting actions
+typed interactively is started. Use the action "help" to find out about
+available actions.
 """
 
 import os, sys, csv
@@ -32,83 +31,31 @@ from pkg_resources import iter_entry_points
 
 from Zope2.Startup import zopectl
 
-WIN32 = False
-if sys.platform[:3].lower() == "win":
-    import pywintypes
-    import win32service
-    import win32serviceutil
-
-    WIN32 = True
-
-def _n(path):
-    return os.path.abspath(os.path.normpath(path)).lower()
 
 class AdjustedZopeCmd(zopectl.ZopeCmd):
 
-    if WIN32:
-        def get_status(self):
-            sn = self.get_service_name()
-            try:
-                stat = win32serviceutil.QueryServiceStatus(sn)[1]
-                self.zd_up = 1
-            except pywintypes.error, err:
-                if err[0] == 1060:
-                    # Service not installed
-                    stat = win32service.SERVICE_STOPPED
-                    self.zd_up = 0
-                else:
-                    raise
-
-            self.zd_pid = (stat == win32service.SERVICE_RUNNING) and -1 or 0
-            self.zd_status = "args=%s" % self.options.program
-
-        def get_service_name(self):
-            ih = self.options.configroot.instancehome.lower()
-            return "Zope_%s" % hash(ih)
-
-        def handle_command(self, cmd):
-            # Make a copy of the environment and the sys path so we
-            # can restore them afterwards.
-            old_env = os.environ.data.copy()
-            old_path = sys.path[:]
-
-            try:
-                # Make the zopeservice module importable
-                parent = os.path.dirname(self.options.servicescript[-1])
-                sys.path.insert(0, parent)
-
-                # Import the InstanceService class, and then delegate the
-                # commands to HandleCommandLine
-                from zopeservice import InstanceService
-
-                serviceClassString = ('%s.%s' % (
-                        os.path.join(parent, 'zopeservice'),
-                        InstanceService.__name__))
-                win32serviceutil.HandleCommandLine(InstanceService,
-                                                   serviceClassString,
-                                                   argv=['', cmd])
-            finally:
-                os.environ.data = old_env
-                sys.path = old_path
-
+    if zopectl.WIN:
         def do_install(self, arg):
-            self.handle_command('install')
+            from Zope2.Startup.zopectl import do_windows
+            err = do_windows('install')(self,arg)
+            # XXX the runzope script here is certainly wrong, we need to
+            # adjust that
+            if False and not err:
+                # If we installed successfully, put info in registry for the
+                # real Service class to use:
+                command = '"%s" -C "%s"' % (
+                    # This gives us the instance script for buildout instances
+                    # and the install script for classic instances.
+                    os.path.join(os.path.split(sys.argv[0])[0],'runzope'),
+                    self.options.configfile
+                    )
+                self.InstanceClass.setReg('command',command)
 
-        def do_remove(self, arg):
-            self.handle_command('remove')
-
-        def do_start(self, arg):
-            self.get_status()
-            if not self.zd_pid:
-                self.handle_command('start')
-
-        def do_stop(self, arg):
-            self.get_status()
-            if self.zd_pid:
-                self.handle_command('stop')
-
-        def do_restart(self, arg):
-            self.handle_command('restart')
+                # This is unfortunately needed because runzope.exe is a setuptools
+                # generated .exe that spawns off a sub process, so pid would give us
+                # the wrong event name.
+                self.InstanceClass.setReg('pid_filename',self.options.configroot.pid_filename)
+            return err
 
     # not WIN32:
     else:
@@ -169,7 +116,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                     (python, pyflags, self.options.configfile)
                     )
         cmdline = cmdline + more + '\"'
-        if WIN32:
+        if zopectl.WIN:
             # entire command line must be quoted
             # as well as the components
             return '"%s"' % cmdline
@@ -230,12 +177,11 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         os.system(cmdline)
 
     def do_foreground(self, arg, debug=True):
-        if not WIN32:
-            self.get_status()
-            pid = self.zd_pid
-            if pid:
-                print "To run the program in the foreground, please stop it first."
-                return
+        self.get_status()
+        pid = self.zd_pid
+        if pid:
+            print "To run the program in the foreground, please stop it first."
+            return
 
         import subprocess
         env = self.environment()
@@ -247,7 +193,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             if not program.count('debug-mode=on'):
                 local_additions += ['debug-mode=on']
             program.extend(local_additions)
-            if WIN32:
+            if zopectl.WIN:
                 command = zopectl.quote_command(program)
             else:
                 command = program
