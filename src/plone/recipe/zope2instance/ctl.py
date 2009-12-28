@@ -297,13 +297,16 @@ class NoShellZopeCmd(AdjustedZopeCmd):
                 return
 
         import subprocess
-        options = self.options
         env = self.environment()
         cmd = self.options.program
         if debug:
             cmd.extend(['-X', 'debug-mode=on'])
-            return subprocess.call(cmd, env=env)
-        os.execve(cmd[0], cmd, env)
+            try:
+                return subprocess.call(cmd, env=env)
+            except KeyboardInterrupt:
+                return
+        else:
+            os.execve(cmd[0], cmd, env)
 
     def do_start(self, arg):
         self.get_status()

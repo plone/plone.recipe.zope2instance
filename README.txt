@@ -9,7 +9,6 @@ You can use it with a part like this::
 
   [instance]
   recipe = plone.recipe.zope2instance
-  zope2-location = /path/to/zope2/install
   user = admin:admin
   http-address = 8080
   eggs = ${buildout:eggs} my.package
@@ -19,21 +18,9 @@ You can use it with a part like this::
 Options
 -------
 
-zope2-location
-  The path where Zope 2 is installed. If you are also using the
-  plone.recipe.zope2install recipe, and you have that configured as a part
-  called 'zope2' prior to the zope2instance part, you can use ${zope2:location}
-  for this parameter.
-
 zope-conf
   A relative or absolute path to a zope.conf file. If this is not given, a
   zope.conf will be generated based on the the options below.
-
-repozo
-  The path to the repozo.py backup script. A wrapper for this will be
-  generated in bin/repozo, which sets up the appropriate environment for
-  running this. Defaults to "${zope2-location}/utilities/ZODBTools/repozo.py".
-  Set this to an empty value if you do not want this script to be generated.
 
 The following options all affect the generated zope.conf:
 

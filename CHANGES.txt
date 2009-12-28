@@ -4,6 +4,9 @@ Changelog
 4.0b1 - Unreleased
 ------------------
 
+- This version can no longer be used to install a non-eggified Zope2. The
+  ``zope2-location`` option was removed.
+  [hannosch]
 
 4.0a2 - 2009-12-02
 ------------------
