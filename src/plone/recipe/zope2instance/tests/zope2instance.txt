@@ -33,6 +33,7 @@ Let's run it::
     Develop: '...'
     ...
     Generated script '...instance'.
+    ...
 
 We should have a zope instance, with a basic zope.conf::
 
@@ -48,14 +49,9 @@ We should have a zope instance, with a basic zope.conf::
     security-policy-implementation C
     verbose-security off
     default-zpublisher-encoding utf-8
-    <BLANKLINE>
-    <BLANKLINE>
-    <BLANKLINE>
-    <BLANKLINE>
-    <BLANKLINE>
-    <BLANKLINE>
-    <BLANKLINE>
-    <BLANKLINE>
+    ...
+    zserver-threads 2
+    ...
     <eventlog>
       level INFO
       <logfile>
@@ -87,10 +83,14 @@ We should have a zope instance, with a basic zope.conf::
     <zodb_db main>
         # Main database
         cache-size 10000
-    # FileStorage database
-        <filestorage>
-          path /sample-buildout/var/filestorage/Data.fs
-        </filestorage>
+    <BLANKLINE>
+    # Blob-enabled FileStorage database
+        <blobstorage>
+          blob-dir /sample-buildout/var/blobstorage
+          <filestorage>
+            path /sample-buildout/var/filestorage/Data.fs
+          </filestorage>
+        </blobstorage>
         mount-point /
     </zodb_db>
     <BLANKLINE>
@@ -105,9 +105,8 @@ We should have a zope instance, with a basic zope.conf::
     <BLANKLINE>
     pid-filename /sample-buildout/var/instance.pid
     lock-filename /sample-buildout/var/instance.lock
-    <BLANKLINE>
-    <BLANKLINE>
-    <BLANKLINE>
+    python-check-interval 1000
+    ...
 
 FTP and WebDAV
 ==============
