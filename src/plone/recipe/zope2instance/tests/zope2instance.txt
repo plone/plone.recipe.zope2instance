@@ -49,9 +49,14 @@ We should have a zope instance, with a basic zope.conf::
     security-policy-implementation C
     verbose-security off
     default-zpublisher-encoding utf-8
-    ...
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
     zserver-threads 2
-    ...
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
     <eventlog>
       level INFO
       <logfile>
@@ -76,6 +81,7 @@ We should have a zope instance, with a basic zope.conf::
       # use-wsgi on
     <BLANKLINE>
     </http-server>
+    <BLANKLINE>
     <BLANKLINE>
     <BLANKLINE>
     <BLANKLINE>
@@ -106,7 +112,9 @@ We should have a zope instance, with a basic zope.conf::
     pid-filename /sample-buildout/var/instance.pid
     lock-filename /sample-buildout/var/instance.lock
     python-check-interval 1000
-    ...
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
 
 FTP and WebDAV
 ==============
@@ -302,10 +310,14 @@ We should have a zope instance, with a basic zope.conf without demostorage::
     <zodb_db main>
         # Main database
         cache-size 10000
-        # FileStorage database
-        <filestorage>
-          path /sample-buildout/var/newfs/Data.fs
-        </filestorage>
+    <BLANKLINE>
+    # Blob-enabled FileStorage database
+        <blobstorage>
+          blob-dir /sample-buildout/var/blobstorage
+          <filestorage>
+            path /sample-buildout/var/newfs/Data.fs
+          </filestorage>
+        </blobstorage>
         mount-point /
     </zodb_db>
     ...
