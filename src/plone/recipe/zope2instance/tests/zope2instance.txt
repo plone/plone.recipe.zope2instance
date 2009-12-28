@@ -9,6 +9,7 @@ works fine. It is based on zc.buildout testing module::
     >>> from zc.buildout.testing import *
     >>> from os.path import join
     >>> import sys, os
+    >>> options = globals()
 
 Let's create a minimum buildout that uses the current
 plone.recipe.zope2instance::
@@ -24,7 +25,7 @@ plone.recipe.zope2instance::
     ... [instance]
     ... recipe = plone.recipe.zope2instance
     ... user = me:me
-    ... ''' % globals())
+    ... ''' % options)
 
 Let's run it::
 
@@ -125,7 +126,7 @@ Let's start off by adding an FTP address::
     ... recipe = plone.recipe.zope2instance
     ... user = me:me
     ... ftp-address = 8021
-    ... ''' % globals())
+    ... ''' % options)
 
 Let's run it::
 
@@ -160,7 +161,7 @@ Next we will add a WebDAV server::
     ... recipe = plone.recipe.zope2instance
     ... user = me:me
     ... webdav-address = 1980
-    ... ''' % globals())
+    ... ''' % options)
 
 Let's run it::
 
@@ -197,7 +198,7 @@ Next we will add a WebDAV server with force-connection-close on::
     ... user = me:me
     ... webdav-address = 1980
     ... webdav-force-connection-close = on
-    ... ''' % globals())
+    ... ''' % options)
 
 Let's run it::
 
@@ -238,7 +239,7 @@ To have a DemoStorage configuration, you can use demo-storage::
     ... file-storage = newfs/Data.fs
     ... demo-storage = on
     ...
-    ... ''' % globals())
+    ... ''' % options)
 
 Let's run it::
 
@@ -284,7 +285,7 @@ Verify that demostorage can be disable::
     ... file-storage = newfs/Data.fs
     ... demo-storage = off
     ...
-    ... ''' % globals())
+    ... ''' % options)
 
 Let's run it::
 
@@ -329,7 +330,7 @@ To have a BlobStorage configuration, you can use blob-storage::
     ... user = me:me
     ... blob-storage = ${buildout:directory}/var/blob
     ...
-    ... ''' % globals())
+    ... ''' % options)
 
 Let's run it::
 
@@ -375,7 +376,7 @@ BlobStorage doesn't support demostorage, let test this::
     ... blob-storage = ${buildout:directory}/var/blob
     ... demo-storage = on
     ...
-    ... ''' % globals())
+    ... ''' % options)
 
 Let's run it::
 
@@ -413,7 +414,7 @@ To have a RelStorage configuration, you can use rel-storage::
     ...   password secret space
     ...   keep-history false
     ...
-    ... ''' % globals())
+    ... ''' % options)
 
 Let's run it::
 
@@ -459,7 +460,7 @@ for the plone.recipe.zope2instance recipe.
     ... recipe = plone.recipe.zope2instance
     ... user = me:me
     ... zeo-client = yes
-    ... ''' % globals())
+    ... ''' % options)
 
 Let's run it::
 
@@ -508,7 +509,7 @@ If zope-client-client is specified it should get into that section as well.
     ... zeo-client-client = persistentcache88
     ... min-disconnect-poll = 10
     ... max-disconnect-poll = 20
-    ... ''' % globals())
+    ... ''' % options)
 
 Let's run it::
 
@@ -555,7 +556,7 @@ Verify that demo-storage is correctly applied
     ... user = me:me
     ... zeo-client = yes
     ... demo-storage = yes
-    ... ''' % globals())
+    ... ''' % options)
 
 Let's run it::
 
@@ -606,7 +607,7 @@ Verify that demo-storage is correctly applied
     ... user = me:me
     ... zeo-client = yes
     ... blob-storage = ${buildout:directory}/var/blob
-    ... ''' % globals())
+    ... ''' % options)
 
 Let's run it::
 
@@ -669,7 +670,7 @@ to use `rotatezlogs`::
     ...     </rotatelogfile>
     ...
     ... event-log-level = info
-    ... ''' % globals())
+    ... ''' % options)
 
 Let's run it::
 
@@ -723,7 +724,7 @@ to use `rotatezlogs`::
     ...         backup-count 5
     ...     </rotatelogfile>
     ...
-    ... ''' % globals())
+    ... ''' % options)
 
 Let's run it::
 
@@ -779,7 +780,7 @@ When this option is used the `zcml` option is ignored. Let's try it::
     ...           <include package="test.example" />
     ...       </configure>
     ...
-    ... ''' % globals())
+    ... ''' % options)
 
 Let's run the buildout::
 
@@ -820,7 +821,7 @@ between several servers::
     ... recipe = plone.recipe.zope2instance
     ... user = me:me
     ... environment-vars = TZ US/Eastern
-    ... ''' % globals())
+    ... ''' % options)
 
 Let's run it::
 
@@ -857,7 +858,7 @@ Now let's add several environment variables::
     ...     TZ US/Eastern
     ...     TMP /var/tmp
     ...     DISABLE_PTS True
-    ... ''' % globals())
+    ... ''' % options)
 
 Let's run it::
 
@@ -889,7 +890,7 @@ Several all on one line::
     ... recipe = plone.recipe.zope2instance
     ... user = me:me
     ... environment-vars = TZ US/Eastern TMP /var/tmp DISABLE_PTS True
-    ... ''' % globals())
+    ... ''' % options)
 
 Let's run it::
 
@@ -913,7 +914,6 @@ Some Linux distributions of Zope2 don't have the windows scripts.
 Let's run a minimal buildout without them to make sure
 we don't error::
 
-    >>> zope2_location = "%s-nowin" % zope2_location
     >>> write('buildout.cfg',
     ... '''
     ... [buildout]
@@ -925,7 +925,7 @@ we don't error::
     ... [instance]
     ... recipe = plone.recipe.zope2instance
     ... user = me:me
-    ... ''' % globals())
+    ... ''' % options)
 
 Let's run it::
 
@@ -951,7 +951,7 @@ The recipe supports the generation of scripts with relative paths.
     ... [instance]
     ... recipe = plone.recipe.zope2instance
     ... user = me:me
-    ... ''' % globals())
+    ... ''' % options)
     >>> print system(join('bin', 'buildout')),
     Develop: '...'
     ...
@@ -978,7 +978,7 @@ Custom Zope Conf
     ... recipe = plone.recipe.zope2instance
     ... user = me:me
     ... zope-conf = /some/path/my.conf
-    ... ''' % globals())
+    ... ''' % options)
 
 Let's run it::
 
