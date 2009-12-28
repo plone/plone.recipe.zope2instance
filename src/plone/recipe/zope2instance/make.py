@@ -7,14 +7,14 @@ from hashlib import sha1
 VCS_DIRS = [os.path.normcase("CVS"), os.path.normcase(".svn")]
 
 
-def make_instance(user=None, instancehome=None):
+def make_instance(user=None, instancehome=None, version="212"):
     instancehome = os.path.abspath(os.path.expanduser(instancehome))
     password = None
     if user:
         user, password = user.split(":", 1)
 
     # Use our own skeleton
-    skelsrc = os.path.join(os.path.dirname(__file__), "skel")
+    skelsrc = os.path.join(os.path.dirname(__file__), "skel" + version)
 
     inituser = os.path.join(instancehome, "inituser")
     if not (user or os.path.exists(inituser)):

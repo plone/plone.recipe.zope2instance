@@ -13,7 +13,13 @@
 #
 ##############################################################################
 
-import os, os.path, re, shutil, sys
+import os
+import os.path
+import re
+import shutil
+import sys
+
+import pkg_resources
 import zc.buildout
 import zc.buildout.easy_install
 import zc.recipe.egg
@@ -55,7 +61,17 @@ class Recipe:
         if not update:
             if os.path.exists(location):
                 shutil.rmtree(location)
-            make.make_instance(options.get('user', None), location)
+
+            # Which Zope2 version do we have?
+            dist = pkg_resources.get_distribution('Zope2')
+            parsed = dist.parsed_version
+            major, minor = parsed[0:2]
+            major, minor = int(major), int(minor)
+            # We only support creating instances for 2.12 and 2.13
+            if minor > 13:
+                minor = 13
+            version = str(major) + str(minor)
+            make.make_instance(options.get('user', None), location, version)
 
         try:
             # Make a new zope.conf based on options in buildout.cfg
