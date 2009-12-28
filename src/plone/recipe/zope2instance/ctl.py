@@ -31,7 +31,6 @@ import os, sys, csv
 from pkg_resources import iter_entry_points
 
 from Zope2.Startup import zopectl
-from Zope2.Startup import handlers
 
 WIN32 = False
 if sys.platform[:3].lower() == "win":
@@ -296,25 +295,9 @@ def main(args=None):
         if func_name not in dir(c):
             setattr(c.__class__, func_name, func)
 
-    # We need to apply a number of hacks to make things work:
-
-    # This puts amongst other things all the configured products directories
-    # into the Products.__path__ so we can put those on the test path
-    handlers.root_handler(options.configroot)
-
-    # We need to apply the configuration in one more place
-    import App.config
-    App.config.setConfiguration(options.configroot)
-
     # The PYTHONPATH is not set, so all commands starting a new shell fail
     # unless we set it explicitly
     os.environ['PYTHONPATH'] = os.path.pathsep.join(sys.path)
-
-    # Add the path to the zopeservice.py script, which is needed for some of the
-    # Windows specific commands
-    servicescript = os.path.join(options.configroot.instancehome,
-                                 'bin', 'zopeservice.py')
-    options.servicescript = [options.python, servicescript]
 
     # If no command was specified we go into interactive mode.
     if options.args:
@@ -329,3 +312,5 @@ def main(args=None):
         print "program:", " ".join(options.program)
         c.do_status()
         c.cmdloop()
+    else:
+        return min(c._exitstatus, 1)
