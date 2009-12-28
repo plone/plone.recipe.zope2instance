@@ -280,7 +280,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         return
 
 
-def noshell(args=None):
+def main(args=None):
     # This is a customized entry point for launching Zope without forking shell
     # scripts or other processes.
     options = zopectl.ZopeCtlOptions()
