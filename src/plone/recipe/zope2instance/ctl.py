@@ -153,8 +153,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
     def environment(self):
         configroot = self.options.configroot
         env = dict(os.environ)
-        env.update({'SOFTWARE_HOME': configroot.softwarehome,
-                    'INSTANCE_HOME': configroot.instancehome,
+        env.update({'INSTANCE_HOME': configroot.instancehome,
                     'PYTHONPATH': ':'.join(sys.path + [
                         configroot.softwarehome])})
         return env
@@ -196,7 +195,6 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             tup = csv.reader(self.options.args, delimiter=' ').next()[1:]
         else:
             tup = self.options.args[1:]
-
 
         if not tup:
             print "usage: run <script> [args]"
