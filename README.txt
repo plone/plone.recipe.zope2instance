@@ -242,13 +242,6 @@ relative-paths
   Set this to `true` to make the generated scripts use relative
   paths. You can also enable this in the `[buildout]` section.
 
-no-shell
-  The traditional way to run Zope is by using shell scripts. These in
-  turn start-up a Python process with the right settings. By setting
-  this option to true (default false) these shell scripts will not be
-  used. In this case the recipe will directly start the Python
-  process.
-
 Additional control script commands
 ----------------------------------
 

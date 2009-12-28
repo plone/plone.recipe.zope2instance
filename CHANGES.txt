@@ -4,6 +4,10 @@ Changelog
 4.0b1 - Unreleased
 ------------------
 
+- Removed the ``no-shell`` option and made it the default for running the
+  process. This also removes the need for the ``runzope`` script.
+  [hannosch]
+
 - This version can no longer be used to install a non-eggified Zope2. The
   ``zope2-location`` option was removed.
   [hannosch]

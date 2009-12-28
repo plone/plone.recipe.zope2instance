@@ -66,10 +66,6 @@ class Recipe:
             [('mkzopeinstance', 'Zope2.utilities.mkzopeinstance', 'main')],
             ws, options['executable'], options['bin-directory'],
             )[1 if IS_WIN else 0]
-        zc.buildout.easy_install.scripts(
-            [('runzope', 'Zope2.Startup.run', 'run')],
-            ws, options['executable'], options['bin-directory'],
-            )
 
         assert os.spawnl(
             os.P_WAIT, os.path.normpath(options['executable']),
@@ -496,30 +492,17 @@ class Recipe:
         extra_paths = options.get('extra-paths', '').split()
         requirements, ws = self.egg.working_set(['plone.recipe.zope2instance'])
 
-        if options.get('no-shell') == 'true':
-            zc.buildout.easy_install.scripts(
-                [(self.options.get('control-script', self.name),
-                  'plone.recipe.zope2instance.ctl', 'noshell')],
-                ws, options['executable'], options['bin-directory'],
-                extra_paths = extra_paths,
-                arguments = ('\n        ["-C", %r]'
-                             '\n        + sys.argv[1:]'
-                             % zope_conf_path
-                             ),
-                relative_paths=self._relative_paths,
-                )
-        else:
-            zc.buildout.easy_install.scripts(
-                [(self.options.get('control-script', self.name),
-                  'plone.recipe.zope2instance.ctl', 'main')],
-                ws, options['executable'], options['bin-directory'],
-                extra_paths = extra_paths,
-                arguments = ('\n        ["-C", %r]'
-                             '\n        + sys.argv[1:]'
-                             % zope_conf_path
-                             ),
-                relative_paths=self._relative_paths,
-                )
+        zc.buildout.easy_install.scripts(
+            [(self.options.get('control-script', self.name),
+              'plone.recipe.zope2instance.ctl', 'noshell')],
+            ws, options['executable'], options['bin-directory'],
+            extra_paths = extra_paths,
+            arguments = ('\n        ["-C", %r]'
+                         '\n        + sys.argv[1:]'
+                         % zope_conf_path
+                         ),
+            relative_paths=self._relative_paths,
+            )
 
     def build_package_includes(self):
         """Create ZCML slugs in etc/package-includes
