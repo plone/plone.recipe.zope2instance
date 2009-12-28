@@ -25,7 +25,7 @@ plone.recipe.zope2instance::
     ... recipe = plone.recipe.zope2instance
     ...
     ... zope2-location = %(zope2_location)s
-    ... user = me
+    ... user = me:me
     ... ''' % globals())
 
 Let's run it::
@@ -125,7 +125,7 @@ Let's start off by adding an FTP address::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... user = me
+    ... user = me:me
     ...
     ... zope2-location = %(zope2_location)s
     ... ftp-address = 8021
@@ -162,7 +162,7 @@ Next we will add a WebDAV server::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... user = me
+    ... user = me:me
     ...
     ... zope2-location = %(zope2_location)s
     ... webdav-address = 1980
@@ -200,7 +200,7 @@ Next we will add a WebDAV server with force-connection-close on::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... user = me
+    ... user = me:me
     ...
     ... zope2-location = %(zope2_location)s
     ... webdav-address = 1980
@@ -244,7 +244,7 @@ To have a DemoStorage configuration, you can use demo-storage::
     ... recipe = plone.recipe.zope2instance
     ...
     ... zope2-location = %(zope2_location)s
-    ... user = me
+    ... user = me:me
     ... zodb-cache-size-bytes = 1000000
     ...
     ... file-storage = newfs/Data.fs
@@ -295,7 +295,7 @@ Verify that demostorage can be disable::
     ... recipe = plone.recipe.zope2instance
     ...
     ... zope2-location = %(zope2_location)s
-    ... user = me
+    ... user = me:me
     ... zodb-cache-size-bytes = 1000000
     ...
     ... file-storage = newfs/Data.fs
@@ -346,7 +346,7 @@ To have a BlobStorage configuration, you can use blob-storage::
     ... recipe = plone.recipe.zope2instance
     ...
     ... zope2-location = %(zope2_location)s
-    ... user = me
+    ... user = me:me
     ... zodb-cache-size-bytes = 1000000
     ...
     ... blob-storage = ${buildout:directory}/var/blob
@@ -396,7 +396,7 @@ BlobStorage doesn't support demostorage, let test this::
     ... recipe = plone.recipe.zope2instance
     ...
     ... zope2-location = %(zope2_location)s
-    ... user = me
+    ... user = me:me
     ... zodb-cache-size-bytes = 1000000
     ...
     ... blob-storage = ${buildout:directory}/var/blob
@@ -433,7 +433,7 @@ To have a RelStorage configuration, you can use rel-storage::
     ... recipe = plone.recipe.zope2instance
     ...
     ... zope2-location = %(zope2_location)s
-    ... user = me
+    ... user = me:me
     ... zodb-cache-size-bytes = 1000000
     ...
     ... rel-storage =
@@ -491,7 +491,7 @@ for the plone.recipe.zope2instance recipe.
     ... recipe = plone.recipe.zope2instance
     ...
     ... zope2-location = %(zope2_location)s
-    ... user = me
+    ... user = me:me
     ... zeo-client = yes
     ... ''' % globals())
 
@@ -539,7 +539,7 @@ If zope-client-client is specified it should get into that section as well.
     ... recipe = plone.recipe.zope2instance
     ...
     ... zope2-location = %(zope2_location)s
-    ... user = me
+    ... user = me:me
     ... zeo-client = yes
     ... zeo-client-client = persistentcache88
     ... min-disconnect-poll = 10
@@ -590,7 +590,7 @@ Verify that demo-storage is correctly applied
     ... recipe = plone.recipe.zope2instance
     ...
     ... zope2-location = %(zope2_location)s
-    ... user = me
+    ... user = me:me
     ... zeo-client = yes
     ... demo-storage = yes
     ... ''' % globals())
@@ -643,7 +643,7 @@ Verify that demo-storage is correctly applied
     ... recipe = plone.recipe.zope2instance
     ...
     ... zope2-location = %(zope2_location)s
-    ... user = me
+    ... user = me:me
     ... zeo-client = yes
     ... blob-storage = ${buildout:directory}/var/blob
     ... ''' % globals())
@@ -700,7 +700,7 @@ to use `rotatezlogs`::
     ... recipe = plone.recipe.zope2instance
     ...
     ... zope2-location = %(zope2_location)s
-    ... user = me
+    ... user = me:me
     ...
     ... event-log-custom =
     ...     %%import iw.rotatezlogs
@@ -757,7 +757,7 @@ to use `rotatezlogs`::
     ... recipe = plone.recipe.zope2instance
     ...
     ... zope2-location = %(zope2_location)s
-    ... user = me
+    ... user = me:me
     ...
     ... access-log-custom =
     ...     %%import iw.rotatezlogs
@@ -812,7 +812,7 @@ When this option is used the `zcml` option is ignored. Let's try it::
     ... recipe = plone.recipe.zope2instance
     ...
     ... zope2-location = %(zope2_location)s
-    ... user = me
+    ... user = me:me
     ... # the zcml option will be ignored when a site-zcml option is given
     ... zcml =
     ...       test.example
@@ -864,7 +864,7 @@ between several servers::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... user = me
+    ... user = me:me
     ... zope2-location = %(zope2_location)s
     ...
     ... environment-vars = TZ US/Eastern
@@ -900,7 +900,7 @@ Now let's add several environment variables::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... user = me
+    ... user = me:me
     ... zope2-location = %(zope2_location)s
     ...
     ... environment-vars =
@@ -937,7 +937,7 @@ Several all on one line::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... user = me
+    ... user = me:me
     ... zope2-location = %(zope2_location)s
     ...
     ... environment-vars = TZ US/Eastern TMP /var/tmp DISABLE_PTS True
@@ -978,7 +978,7 @@ we don't error::
     ... recipe = plone.recipe.zope2instance
     ...
     ... zope2-location = %(zope2_location)s
-    ... user = me
+    ... user = me:me
     ... ''' % globals())
 
 Let's run it::
@@ -1006,7 +1006,7 @@ The recipe supports the generation of scripts with relative paths.
     ... recipe = plone.recipe.zope2instance
     ...
     ... zope2-location = %(zope2_location)s
-    ... user = me
+    ... user = me:me
     ... ''' % globals())
     >>> print system(join('bin', 'buildout')),
     Develop: '...'
@@ -1033,7 +1033,7 @@ Custom Zope Conf
     ... [instance]
     ... recipe = plone.recipe.zope2instance
     ... zope2-location = %(zope2_location)s
-    ... user = me
+    ... user = me:me
     ... zope-conf = /some/path/my.conf
     ... ''' % globals())
 
