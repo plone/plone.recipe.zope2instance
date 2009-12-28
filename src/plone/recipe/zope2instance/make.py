@@ -1,6 +1,8 @@
+from binascii import b2a_base64
 import os
 import shutil
 import sys
+from hashlib import sha1
 
 VCS_DIRS = [os.path.normcase("CVS"), os.path.normcase(".svn")]
 
@@ -44,10 +46,8 @@ def get_inituser():
 
 
 def write_inituser(fn, user, password):
-    import binascii
-    from hashlib import sha1 as sha
     fp = open(fn, "w")
-    pw = binascii.b2a_base64(sha(password).digest())[:-1]
+    pw = b2a_base64(sha1(password).digest())[:-1]
     fp.write('%s:{SHA}%s\n' % (user, pw))
     fp.close()
     os.chmod(fn, 0644)
