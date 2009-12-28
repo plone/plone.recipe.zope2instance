@@ -4,6 +4,9 @@ Changelog
 4.0b1 - Unreleased
 ------------------
 
+- By default create a blob-storage in ``var/blobstorage``.
+  [hannosch]
+
 - Removed the ``no-shell`` option and made it the default for running the
   process. This also removes the need for the ``runzope`` script.
   [hannosch]

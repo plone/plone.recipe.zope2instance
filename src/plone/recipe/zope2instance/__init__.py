@@ -328,8 +328,9 @@ class Recipe:
             if not os.path.exists(file_storage_dir):
                 os.makedirs(file_storage_dir)
             storage_snippet = file_storage_template % file_storage
+            blob_storage = options.get('blob-storage',
+                                       os.path.join(var_dir, 'blobstorage'))
 
-            blob_storage = options.get('blob-storage', None)
             demo_storage = options.get('demo-storage', 'off') \
                          not in ('off', 'disable', 'false')
 
