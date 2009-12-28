@@ -44,17 +44,6 @@ if sys.platform[:3].lower() == "win":
 def _n(path):
     return os.path.abspath(os.path.normpath(path)).lower()
 
-def quote_command(command):
-    print " ".join(command)
-    # Quote the program name, so it works even if it contains spaces
-    command = " ".join(['"%s"' % x for x in command])
-    if WIN32:
-        # odd, but true: the windows cmd processor can't handle more than
-        # one quoted item per string unless you add quotes around the
-        # whole line.
-        command = '"%s"' % command
-    return command
-
 class AdjustedZopeCmd(zopectl.ZopeCmd):
 
     if WIN32:
@@ -260,7 +249,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                 local_additions += ['debug-mode=on']
             program.extend(local_additions)
             if WIN32:
-                command = quote_command(program)
+                command = zopectl.quote_command(program)
             else:
                 command = program
             try:
