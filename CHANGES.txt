@@ -4,6 +4,10 @@ Changelog
 4.0b1 - Unreleased
 ------------------
 
+- Make it possible to omit the user option, in which case buildout will ask
+  for a user and password, when a new instance is created.
+  [hannosch]
+
 - By default create a blob-storage in ``var/blobstorage``.
   [hannosch]
 

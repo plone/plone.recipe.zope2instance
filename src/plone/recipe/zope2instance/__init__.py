@@ -67,13 +67,17 @@ class Recipe:
             ws, options['executable'], options['bin-directory'],
             )[1 if IS_WIN else 0]
 
-        assert os.spawnl(
-            os.P_WAIT, os.path.normpath(options['executable']),
+        arguments = [
+            os.P_WAIT,
+            os.path.normpath(options['executable']),
             zc.buildout.easy_install._safe_arg(options['executable']),
-            mkzopeinstance, '-d',
-            zc.buildout.easy_install._safe_arg(location),
-            '-u', options['user'],
-            ) == 0
+            mkzopeinstance,
+            '-d', zc.buildout.easy_install._safe_arg(location),
+        ]
+        if options.get('user'):
+            arguments.extend(['-u', options['user']])
+
+        assert os.spawnl(*arguments) == 0
 
         try:
             # Save the working set:
