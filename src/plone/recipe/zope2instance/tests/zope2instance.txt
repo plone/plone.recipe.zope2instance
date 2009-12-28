@@ -1047,36 +1047,3 @@ We should have a zope instance script with the custom config file::
 
     >>> open(join('bin', 'instance')).read()
     '...plone.recipe.zope2instance.ctl.main(...["-C", \'/some/path/my.conf\']...'
-
-No shell launcher
-=================
-
-The default setup starts Zope via a Python script which invokes a
-shell script which in turn runs another Python script. If the option
-is given to directly launch the server these steps will be skipped.
-
-    >>> write('buildout.cfg',
-    ... '''
-    ... [buildout]
-    ... parts = instance
-    ... index = http://pypi.python.org/simple
-    ... develop =
-    ...     %(recipe_location)s
-    ...
-    ... [instance]
-    ... recipe = plone.recipe.zope2instance
-    ... zope2-location = %(zope2_location)s
-    ... user = me
-    ... no-shell = true
-    ... ''' % globals())
-
-Let's run it::
-
-    >>> print system(join('bin', 'buildout')),
-    Develop: '...'
-    ...
-
-We should have a zope instance script with the custom config file::
-
-    >>> open(join('bin', 'instance')).read()
-    '...plone.recipe.zope2instance.ctl.noshell...'
