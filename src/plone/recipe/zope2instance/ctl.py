@@ -140,7 +140,9 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                     flag = os.P_NOWAIT
                 else:
                     flag = os.P_WAIT
-                os.spawnvpe(flag, args[0], args, self.environment())
+                env = self.environment().copy()
+                env.update({'ZMANAGED': '1',})
+                os.spawnvpe(flag, args[0], args, env)
             elif not self.zd_pid:
                 self.send_action("start")
             else:
