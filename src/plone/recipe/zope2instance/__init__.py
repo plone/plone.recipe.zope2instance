@@ -122,6 +122,10 @@ class Recipe:
         if not os.path.exists(client_home):
             os.makedirs(client_home)
 
+        client_import = os.path.join(client_home, 'import')
+        if not os.path.exists(client_import):
+            os.makedirs(client_import)
+
         products_lines = '\n'.join(['products %s' % p for p in products])
         module_paths = options.get('extra-paths', '')
         if module_paths:
