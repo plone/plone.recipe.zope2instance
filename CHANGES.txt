@@ -4,6 +4,10 @@ Changelog
 4.0b1 - Unreleased
 ------------------
 
+- Removed the import directory from the skeleton. You can place import files
+  into the client home in new Zope 2 versions.
+  [hannosch]
+
 - Make it possible to omit the user option, in which case buildout will ask
   for a user and password, when a new instance is created.
   [hannosch]
