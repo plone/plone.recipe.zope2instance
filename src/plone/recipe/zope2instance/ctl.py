@@ -101,7 +101,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         configroot = self.options.configroot
         env = dict(os.environ)
         env.update({'INSTANCE_HOME': configroot.instancehome,
-                    'PYTHONPATH': ':'.join(sys.path + [
+                    'PYTHONPATH': os.pathsep.join(sys.path + [
                         configroot.softwarehome])})
         return env
 
