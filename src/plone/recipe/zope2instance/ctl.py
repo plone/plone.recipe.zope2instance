@@ -194,7 +194,9 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                 local_additions += ['debug-mode=on']
             program.extend(local_additions)
             if zopectl.WIN:
-                command = zopectl.quote_command(program)
+                # The outer quotes were causing "WindowsError: [Error 87] The parameter is incorrect"
+                # command = zopectl.quote_command(program)
+                command = ' '.join(['"%s"' % x for x in program])
             else:
                 command = program
             try:
