@@ -207,7 +207,11 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                 for addition in local_additions:
                     program.remove(addition)
         else:
-            os.execve(program[0], program, env)
+            if zopectl.WIN:
+                command = ['"%s"' % x for x in program]
+            else:
+                command = program
+            os.execve(command[0], command, env)
 
     def do_test(self, arg):
         print("The test command is no longer supported. Please use a "
