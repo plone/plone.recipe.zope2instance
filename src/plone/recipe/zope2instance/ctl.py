@@ -38,23 +38,23 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         def do_install(self, arg):
             from Zope2.Startup.zopectl import do_windows
             err = do_windows('install')(self,arg)
-            # XXX the runzope script here is certainly wrong, we need to
-            # adjust that
-            if False and not err:
+            if not err:
                 # If we installed successfully, put info in registry for the
                 # real Service class to use:
-                command = '"%s" -C "%s"' % (
-                    # This gives us the instance script for buildout instances
-                    # and the install script for classic instances.
-                    os.path.join(os.path.split(sys.argv[0])[0],'runzope'),
+                instance_py = sys.argv[0]
+                instance_exe = instance_py.replace('.py', '.exe')
+                command = '"%s" "%s" console -C "%s"' % (
+                    self.options.python,
+                    instance_exe,
                     self.options.configfile
                     )
-                self.InstanceClass.setReg('command',command)
+                self.InstanceClass.setReg('command', command)
 
                 # This is unfortunately needed because runzope.exe is a setuptools
                 # generated .exe that spawns off a sub process, so pid would give us
                 # the wrong event name.
-                self.InstanceClass.setReg('pid_filename',self.options.configroot.pid_filename)
+                self.InstanceClass.setReg('pid_filename',
+                    self.options.configroot.pid_filename)
             return err
 
     # not WIN32:
