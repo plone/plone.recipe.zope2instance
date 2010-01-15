@@ -211,7 +211,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                 command = ['"%s"' % x for x in program]
             else:
                 command = program
-            os.execve(command[0], command, env)
+            os.execve(program[0], command, env)
 
     def do_test(self, arg):
         print("The test command is no longer supported. Please use a "
