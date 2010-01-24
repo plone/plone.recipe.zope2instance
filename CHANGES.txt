@@ -1,8 +1,24 @@
 Changelog
 =========
 
-4.0b1 - Unreleased
+4.0a2 - 2010-01-24
 ------------------
+
+- Tried to restore the Windows service functionality, getting closer but not
+  there yet all the way.
+  [hannosch]
+
+- Use the same quoting approach for the console as for fg command on Windows.
+  [hannosch]
+
+- Don't call zopectl.quote_command(), since the added outer double quotes caused
+  subprocess.call() to fail with "WindowsError: [Error 87] The parameter is
+  incorrect". Instead, hand roll the quoting (save outer quotes).
+  [kleist]
+
+- Un-hardcoded ':' as path separator, caused "ImportError: No module named
+  Zope2.Startup" on Windows. See http://dev.plone.org/plone/ticket/9991.
+  [kleist]
 
 - Removed the import directory from the skeleton. You can place import files
   into the import directory in the client home in new Zope 2 versions.
@@ -10,6 +26,14 @@ Changelog
 
 - Make it possible to omit the user option, in which case buildout will ask
   for a user and password, when a new instance is created.
+  [hannosch]
+
+- Use our own make instance script and skeletons, only providing what we
+  really need anymore.
+  [hannosch]
+
+- Merge the two ZopeCmd classes into one. We don't rely or generate the runzope
+  script or anything inside parts/instance/bin anymore.
   [hannosch]
 
 - By default create a blob-storage in ``var/blobstorage``.
