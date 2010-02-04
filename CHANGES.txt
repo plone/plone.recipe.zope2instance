@@ -4,6 +4,9 @@ Changelog
 4.0b1 - unreleased
 ------------------
 
+- Removed commented out options from the http-server section.
+  [hannosch]
+
 - Added new ``enable-product-installation`` option and let it default to off.
   [hannosch]
 

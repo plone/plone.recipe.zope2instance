@@ -76,9 +76,6 @@ We should have a zope instance, with a basic zope.conf::
     <http-server>
       # valid keys are "address" and "force-connection-close"
       address 8080
-      # force-connection-close on
-      # You can also use the WSGI interface between ZServer and ZPublisher:
-      # use-wsgi on
     <BLANKLINE>
     </http-server>
     <BLANKLINE>
@@ -112,6 +109,7 @@ We should have a zope instance, with a basic zope.conf::
     pid-filename /sample-buildout/var/instance.pid
     lock-filename /sample-buildout/var/instance.lock
     python-check-interval 1000
+    enable-product-installation off
     <BLANKLINE>
     <BLANKLINE>
     <BLANKLINE>

@@ -717,9 +717,6 @@ verbose-security %(verbose_security)s
 <http-server>
   # valid keys are "address" and "force-connection-close"
   address %(http_address)s
-  # force-connection-close on
-  # You can also use the WSGI interface between ZServer and ZPublisher:
-  # use-wsgi on
 %(http_fast_listen)s
 </http-server>
 
