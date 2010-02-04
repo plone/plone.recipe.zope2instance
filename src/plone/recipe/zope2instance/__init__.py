@@ -330,6 +330,10 @@ class Recipe:
         if python_check_interval:
             python_check_interval = "python-check-interval %s" % python_check_interval
 
+        enable_products = options.get('enable-product-installation', 'off')
+        if enable_products:
+            enable_products = "enable-product-installation %s" % enable_products
+
         zeo_client = options.get('zeo-client', '')
         zeo_address = options.get('zeo-address', '8100')
 
@@ -447,6 +451,7 @@ class Recipe:
                                     environment_vars = environment_vars,
                                     deprecation_warnings = deprecation_warnings,
                                     python_check_interval = python_check_interval,
+                                    enable_products = enable_products,
                                     zope_conf_additional = zope_conf_additional,)
 
         zope_conf_path = os.path.join(location, 'etc', 'zope.conf')
@@ -735,6 +740,7 @@ verbose-security %(verbose_security)s
 pid-filename %(pid_file)s
 lock-filename %(lock_file)s
 %(python_check_interval)s
+%(enable_products)s
 
 %(zope_conf_additional)s
 """

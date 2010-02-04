@@ -213,6 +213,10 @@ python-check-interval
   An integer telling the Python interpreter to check for asynchronous events
   every number of instructions. This affects how often thread switches occur.
 
+enable-product-installation
+  Enable the persistent product registry by setting this to ``on``. By default
+  the registry is turned ``off``.
+
 zodb-temporary-storage
   If given Zope's default temporary storage definition will be replaced by
   the lines of this parameter.

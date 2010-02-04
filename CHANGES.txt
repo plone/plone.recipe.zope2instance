@@ -4,6 +4,8 @@ Changelog
 4.0b1 - unreleased
 ------------------
 
+- Added new ``enable-product-installation`` option and let it default to off.
+  [hannosch]
 
 4.0a3 - 2010-01-24
 ------------------
