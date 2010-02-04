@@ -4,6 +4,10 @@ Changelog
 3.12 (unreleased)
 -----------------
 
+- Added new ``enable-product-installation`` option but don't set it by default
+  in 3.x branch.  
+  [anthonygerrard]
+
 3.11 (2011-06-20)
 -----------------
 

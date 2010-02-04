@@ -239,6 +239,9 @@ zserver-threads
   service requests. You shouldn't change this unless you know what you are
   doing. Zope's default is 4.
 
+enable-product-installation
+  Disable the persistent product registry by setting this to ``off``.
+
 zodb-temporary-storage
   If given Zope's default temporary storage definition will be replaced by
   the lines of this parameter.
