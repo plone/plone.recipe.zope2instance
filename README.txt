@@ -15,6 +15,11 @@ You can use it with a part like this::
   products = ${buildout:directory}/products
   zcml = my.package
 
+.. ATTENTION::
+   This release is targeted at Zope 2.12+ and Python 2.6. If you are using
+   this recipe with earlier versions of Zope or Python, you should use one
+   of the releases from the 3.x series.
+
 Options
 -------
 
