@@ -4,6 +4,9 @@ Changelog
 4.0b1 - unreleased
 ------------------
 
+- The recipe could sometimes fail to build twice if no zcml option was given.
+  This closes http://dev.plone.org/plone/ticket/10296.
+  [hannosch]
 
 4.0a4 - 2010-02-04
 ------------------

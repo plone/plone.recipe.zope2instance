@@ -498,7 +498,7 @@ class Recipe:
             return
 
         if zcml:
-            zcml=zcml.split()
+            zcml = zcml.split()
 
         if additional_zcml or zcml:
             includes_path = os.path.join(location, 'etc', 'package-includes')
@@ -508,7 +508,7 @@ class Recipe:
                 # create one.
                 os.mkdir(includes_path)
             else:
-                if '*' in zcml:
+                if zcml and '*' in zcml:
                     zcml.remove('*')
                 else:
                     shutil.rmtree(includes_path)
