@@ -1,7 +1,7 @@
 Changelog
 =========
 
-4.0b1 - unreleased
+4.0b1 - 2010-04-04
 ------------------
 
 - The recipe could sometimes fail to build twice if no zcml option was given.
