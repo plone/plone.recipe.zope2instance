@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import unittest
 import doctest
+import unittest
 import shutil
 
 import pkg_resources
@@ -33,11 +33,9 @@ def tearDown(test):
 
 def test_suite():
     suite = []
-    flags = (doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE |
-             doctest.REPORT_UDIFF)
+    flags = (doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE)
 
-    suite.append(doctest.DocFileSuite('zope2instance.txt',
-                 optionflags=flags,
+    suite.append(doctest.DocFileSuite('zope2instance.txt', optionflags=flags,
                  setUp=setUp, tearDown=tearDown))
 
     return unittest.TestSuite(suite)
