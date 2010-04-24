@@ -28,7 +28,6 @@ setup(
       "Framework :: Plone",
       "Framework :: Zope2",
       ],
-    tests_require=['zope.testing'],
     packages = find_packages('src'),
     include_package_data = True,
     package_dir = {'':'src'},

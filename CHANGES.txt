@@ -4,6 +4,8 @@ Changelog
 4.0b2 - unreleased
 ------------------
 
+- Removed testing dependency on ``zope.testing`` and refactored test setup.
+  [hannosch]
 
 4.0b1 - 2010-04-04
 ------------------
