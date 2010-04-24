@@ -20,7 +20,8 @@ def setUp(test):
         try:
             install(dep.project_name, test)
         except OSError:
-            # Some distribution are installed multiple times
+            # Some distributions are installed multiple times, and the
+            # underlying API doesn't check for it
             pass
 
 
