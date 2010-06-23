@@ -16,6 +16,11 @@ You can use it with a part like this::
   products = ${buildout:directory}/products
   zcml = my.package
 
+.. ATTENTION::
+   This release is targeted at Zope 2.9 to 2.11 and Python 2.4. If you are
+   using this recipe with later versions of Zope, you must use one of the
+   releases from the 4.x series.
+
 Options
 -------
 
@@ -124,6 +129,18 @@ event-log-custom
 event-log-level
   Set the level of the console output for the event log. Level may be any of
   CRITICAL, ERROR, WARN, INFO, DEBUG, or ALL. Defaults to INFO.
+
+mailinglogger
+  A mailinglogger section added into the event log. Example snippet::
+
+    <mailing-logger>
+      level error
+      flood-level 10
+      smtp-server smtp.mydomain.com
+      from logger@mydomain.com
+      to errors@mydomain.com
+      subject [My domain error] [%(hostname)s] %(line)s
+    </mailing-logger>
 
 z2-log
   The filename for the Z2 access log. Defaults to var/log/${partname}-Z2.log.

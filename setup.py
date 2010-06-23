@@ -36,7 +36,9 @@ setup(
     install_requires = [
         'zc.buildout',
         'setuptools',
+        'mailinglogger',
         'zc.recipe.egg',
+        'zope.testing',
     ],
     zip_safe=False,
     entry_points = {'zc.buildout': ['default = %s:Recipe' % name]},
