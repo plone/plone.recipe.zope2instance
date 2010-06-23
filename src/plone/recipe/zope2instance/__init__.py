@@ -200,6 +200,7 @@ class Recipe:
 
         zope_conf_additional = options.get('zope-conf-additional', '')
 
+        # logging
         event_log_level = options.get('event-log-level', 'INFO')
         custom_event_log = options.get('event-log-custom', None)
         default_log = os.path.sep.join(('log', self.name + '.log',))
@@ -215,6 +216,12 @@ class Recipe:
         # custom log
         else:
             event_log = custom_event_log
+
+        mailinglogger_config = options.get('mailinglogger', '')
+        mailinglogger_import = ''
+        if mailinglogger_config:
+            mailinglogger_config = mailinglogger_config.strip()
+            mailinglogger_import = '%import mailinglogger'
 
         z_log_name = os.path.sep.join(('log', self.name + '-Z2.log'))
         z_log_name = options.get('z2-log', z_log_name)
@@ -429,6 +436,8 @@ class Recipe:
                                     verbose_security = verbose_security,
                                     effective_user = effective_user,
                                     ip_address = ip_address,
+                                    mailinglogger_import = mailinglogger_import,
+                                    mailinglogger_config = mailinglogger_config,
                                     event_log = event_log,
                                     event_log_level = event_log_level,
                                     access_event_log = access_event_log,
@@ -704,7 +713,9 @@ verbose-security %(verbose_security)s
 %(environment_vars)s
 %(deprecation_warnings)s
 
+%(mailinglogger_import)s
 <eventlog>
+  %(mailinglogger_config)s
   level %(event_log_level)s
   %(event_log)s
 </eventlog>

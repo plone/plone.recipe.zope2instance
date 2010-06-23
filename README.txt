@@ -117,6 +117,18 @@ event-log-level
   Set the level of the console output for the event log. Level may be any of
   CRITICAL, ERROR, WARN, INFO, DEBUG, or ALL. Defaults to INFO.
 
+mailinglogger
+  A mailinglogger section added into the event log. Example snippet::
+
+    <mailing-logger>
+      level error
+      flood-level 10
+      smtp-server smtp.mydomain.com
+      from logger@mydomain.com
+      to errors@mydomain.com
+      subject [My domain error] [%(hostname)s] %(line)s
+    </mailing-logger>
+
 z2-log
   The filename for the Z2 access log. Defaults to var/log/${partname}-Z2.log.
 

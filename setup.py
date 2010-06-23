@@ -35,6 +35,7 @@ setup(
     install_requires = [
         'zc.buildout',
         'setuptools',
+        'mailinglogger',
         'zc.recipe.egg',
         'Zope2 >= 2.12.1',
     ],

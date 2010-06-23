@@ -15,6 +15,7 @@ def setUp(test):
     buildoutSetUp(test)
     install_develop('plone.recipe.zope2instance', test)
     install('zc.recipe.egg', test)
+    install('mailinglogger', test)
     dependencies = pkg_resources.working_set.require('Zope2')
     for dep in dependencies:
         try:

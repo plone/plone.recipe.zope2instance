@@ -53,7 +53,9 @@ We should have a zope instance, with a basic zope.conf::
     <BLANKLINE>
     <BLANKLINE>
     <BLANKLINE>
+    <BLANKLINE>
     <eventlog>
+    <BLANKLINE>
       level INFO
       <logfile>
         path .../sample-buildout/var/log/instance.log
@@ -645,6 +647,63 @@ We should have a zope instance, with the custom event log::
     </eventlog>
     ...
     <BLANKLINE>
+
+
+Mailing logger
+==============
+
+`mailinglogger` allows you to configure mail actions for the event log::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... user = me:me
+    ...
+    ... mailinglogger =
+    ...     <mailing-logger>
+    ...       level error
+    ...       flood-level 10
+    ...       smtp-server smtp.mydomain.com
+    ...       from logger@mydomain.com
+    ...       to errors@mydomain.com
+    ...       subject [My domain error]
+    ...     </mailing-logger>
+    ...
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Uninstalling instance.
+    Installing instance.
+
+We should have a zope instance, with the mailing logger::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    %import mailinglogger
+    <eventlog>
+      <mailing-logger>
+        level error
+        flood-level 10
+        smtp-server smtp.mydomain.com
+        from logger@mydomain.com
+        to errors@mydomain.com
+        subject [My domain error]
+      </mailing-logger>
+      level INFO
+    ...
+    </eventlog>
+    ...
+    <BLANKLINE>
+
 
 Custom access log
 =================

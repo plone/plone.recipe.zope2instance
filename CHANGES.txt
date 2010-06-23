@@ -4,6 +4,10 @@ Changelog
 4.0b2 - unreleased
 ------------------
 
+- Added a new dependency on ``mailinglogger`` and expose it as a convenient
+  new option.
+  [hannosch]
+
 - Removed testing dependency on ``zope.testing`` and refactored test setup.
   [hannosch]
 
