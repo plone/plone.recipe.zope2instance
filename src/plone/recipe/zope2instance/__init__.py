@@ -327,6 +327,10 @@ class Recipe:
                 'pack-max-delay',
                 'cache-servers',
                 'cache-module-name',
+                'cache-local-mb',
+                'cache-delta-size-limit',
+                'commit-lock-timeout',
+                'commit-lock-id',
                 )
 
             opts = dict(

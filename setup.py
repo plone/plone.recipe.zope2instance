@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 name = "plone.recipe.zope2instance"
-version = '3.7'
+version = '3.8'
 
 def read(name):
     return open(name).read()
