@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.8 (unreleased)
+3.8 (2010-06-28)
 ----------------
 
 - Added support for specifying new RelStorage options cache-local-mb,
