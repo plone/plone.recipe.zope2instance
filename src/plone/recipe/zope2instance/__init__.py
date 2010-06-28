@@ -286,6 +286,10 @@ class Recipe:
                 'cache-servers',
                 'cache-module-name',
                 'cache-prefix',
+                'cache-local-mb',
+                'cache-delta-size-limit',
+                'commit-lock-timeout',
+                'commit-lock-id',
                 )
 
             opts = dict(

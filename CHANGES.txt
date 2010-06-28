@@ -4,6 +4,9 @@ Changelog
 4.0b3 - unreleased
 ------------------
 
+- Added support for specifying new RelStorage options cache-local-mb,
+  cache-delta-size-limit, commit-lock-timeout and commit-lock-id.
+  [hannosch]
 
 4.0b2 - 2010-06-23
 ------------------
