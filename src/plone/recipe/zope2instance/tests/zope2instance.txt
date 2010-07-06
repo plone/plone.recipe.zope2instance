@@ -11,6 +11,8 @@ works fine. It is based on zc.buildout testing module::
     >>> import sys, os
     >>> options = globals()
 
+    >>> WINDOWS = sys.platform == 'win32'
+
 Let's create a minimum buildout that uses the current
 plone.recipe.zope2instance::
 
@@ -981,7 +983,13 @@ The recipe supports the generation of scripts with relative paths.
 
 Our generated script now has a reference to the relative path.
 
-    >>> open(join('bin', 'instance')).read()
+    >>> import sys
+    >>> 
+
+    >>> instance_path = join('bin', 'instance')
+    >>> if WINDOWS:
+    ...     instance_path += '-script.py'
+    >>> open(instance_path).read()
     '...base = ...__file__...'
 
 Custom Zope Conf
@@ -1010,5 +1018,8 @@ Let's run it::
 
 We should have a zope instance script with the custom config file::
 
-    >>> open(join('bin', 'instance')).read()
+    >>> instance_path = join('bin', 'instance')
+    >>> if WINDOWS:
+    ...     instance_path += '-script.py'
+    >>> open(instance_path).read()
     '...plone.recipe.zope2instance.ctl.main(...["-C", \'/some/path/my.conf\']...'
