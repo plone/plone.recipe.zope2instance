@@ -34,7 +34,9 @@ Let's run it::
 We should have a zope instance, with a basic zope.conf::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
     %define INSTANCEHOME .../sample-buildout/parts/instance
     instancehome $INSTANCEHOME
     %define CLIENTHOME .../sample-buildout/var/instance
@@ -138,7 +140,9 @@ Let's run it::
 Our FTP server should be set up now::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <ftp-server>
@@ -170,7 +174,9 @@ Let's run it::
 Our WebDAV server should be set up now::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <webdav-source-server>
@@ -204,7 +210,9 @@ Let's run it::
 Our WebDAV server should be set up now::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <webdav-source-server>
@@ -242,7 +250,9 @@ Let's run it::
 We should have a zope instance, with a basic zope.conf::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <zodb_db main>
@@ -285,7 +295,9 @@ Let's run it::
 We should have a zope instance, with a basic zope.conf without demostorage::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <zodb_db main>
@@ -331,7 +343,9 @@ Let's run it::
 We should have a zope instance, with a basic zope.conf::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <zodb_db main>
@@ -383,7 +397,9 @@ Let's run it::
 We should have a zope instance, with a basic zope.conf::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <zodb_db main>
@@ -427,7 +443,9 @@ Let's run it::
 We should have a zope instance, with a basic zope.conf::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <zodb_db main>
@@ -476,7 +494,9 @@ Let's run it::
 We should have a zope instance, with a basic zope.conf::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <zodb_db main>
@@ -523,7 +543,9 @@ Let's run it::
 We should have a zope instance, with a basic zope.conf::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <zodb_db main>
@@ -572,7 +594,9 @@ Let's run it::
 We should have a zope instance, with a basic zope.conf::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <zodb_db main>
@@ -633,7 +657,9 @@ Let's run it::
 We should have a zope instance, with the custom event log::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <eventlog>
@@ -685,7 +711,9 @@ Let's run it::
 We should have a zope instance, with the mailing logger::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     %import mailinglogger
@@ -741,7 +769,9 @@ Let's run it::
 We should have a zope instance, with the custom event log::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <logger access>
@@ -832,7 +862,9 @@ Let's run it::
 Our environment variables should be set now::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> print open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <environment>
@@ -866,10 +898,11 @@ Let's run it::
 Our environment variables should be set now::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> zc = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
     >>> import re
     >>> env_vars = re.compile(r"<environment>\n\s*(?P<vars>.*)\n</environment>", re.M | re.S)
-    >>> re.search(env_vars, zc).group('vars')
+    >>> re.search(env_vars, zope_conf).group('vars')
     'TZ US/Eastern\nTMP /var/tmp\nDISABLE_PTS True'
 
 Several all on one line::
@@ -895,8 +928,9 @@ Let's run it::
 Our environment variables should be set now::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> zc = open(os.path.join(instance, 'etc', 'zope.conf')).read()
-    >>> re.search(env_vars, zc).group('vars')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> re.search(env_vars, zope_conf).group('vars')
     'TZ US/Eastern\nTMP /var/tmp\nDISABLE_PTS True'
 
 
