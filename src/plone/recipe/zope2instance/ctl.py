@@ -26,7 +26,9 @@ typed interactively is started. Use the action "help" to find out about
 available actions.
 """
 
-import os, sys, csv
+import csv
+import os
+import sys
 from pkg_resources import iter_entry_points
 
 from Zope2.Startup import zopectl
@@ -35,9 +37,10 @@ from Zope2.Startup import zopectl
 class AdjustedZopeCmd(zopectl.ZopeCmd):
 
     if zopectl.WIN:
+
         def do_install(self, arg):
             from Zope2.Startup.zopectl import do_windows
-            err = do_windows('install')(self,arg)
+            err = do_windows('install')(self, arg)
             if not err:
                 # If we installed successfully, put info in registry for the
                 # real Service class to use:
@@ -46,19 +49,19 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                 command = '"%s" "%s" console -C "%s"' % (
                     self.options.python,
                     instance_exe,
-                    self.options.configfile
-                    )
+                    self.options.configfile)
                 self.InstanceClass.setReg('command', command)
 
-                # This is unfortunately needed because runzope.exe is a setuptools
-                # generated .exe that spawns off a sub process, so pid would give us
-                # the wrong event name.
+                # This is unfortunately needed because runzope.exe is a
+                # setuptools generated .exe that spawns off a sub process, so
+                # pid would give us the wrong event name.
                 self.InstanceClass.setReg('pid_filename',
                     self.options.configroot.pid_filename)
             return err
 
     # not WIN32:
     else:
+
         def do_start(self, arg):
             self.get_status()
             if not self.zd_up:
@@ -76,8 +79,8 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                 if self.options.umask:
                     args += self._get_override("-m", "umask",
                                                oct(self.options.umask))
-                args += self._get_override(
-                    "-x", "exitcodes", ",".join(map(str, self.options.exitcodes)))
+                args += self._get_override("-x", "exitcodes",
+                    ",".join(map(str, self.options.exitcodes)))
                 args += self._get_override("-z", "directory")
 
                 args.extend(self.options.program)
@@ -87,7 +90,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                 else:
                     flag = os.P_WAIT
                 env = self.environment().copy()
-                env.update({'ZMANAGED': '1',})
+                env.update({'ZMANAGED': '1', })
                 os.spawnvpe(flag, args[0], args, env)
             elif not self.zd_pid:
                 self.send_action("start")
@@ -111,10 +114,9 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         # will act as escapes.  Use r'' instead.
         # Also, don't forget that 'python'
         # may have spaces and needs to be quoted.
-        cmdline = ( '"%s" %s -c "from Zope2 import configure; '
-                    'configure(r\'%s\'); ' %
-                    (python, pyflags, self.options.configfile)
-                    )
+        cmdline = ('"%s" %s -c "from Zope2 import configure; '
+                   'configure(r\'%s\'); ' %
+                   (python, pyflags, self.options.configfile))
         cmdline = cmdline + more + '\"'
         if zopectl.WIN:
             # entire command line must be quoted
@@ -153,7 +155,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         #
         # Remove -c and add script as sys.argv[0]
         script = tup[0]
-        cmd = 'import sys; sys.argv.pop(); sys.argv.append(r\'%s\'); '  % script
+        cmd = 'import sys; sys.argv.pop(); sys.argv.append(r\'%s\'); ' % script
         if len(tup) > 1:
             argv = tup[1:]
             cmd += '[sys.argv.append(x) for x in %s]; ' % argv
@@ -171,7 +173,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
     def do_debug(self, arg):
         cmdline = self.get_startup_cmd(self.options.python,
                                        'import Zope2; app=Zope2.app()',
-                                       pyflags = '-i',)
+                                       pyflags = '-i', )
         print ('Starting debugger (the name "app" is bound to the top-level '
                'Zope object)')
         os.system(cmdline)
@@ -196,7 +198,8 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             program.extend(local_additions)
 
         if zopectl.WIN:
-            # The outer quotes were causing "WindowsError: [Error 87] The parameter is incorrect"
+            # The outer quotes were causing
+            # "WindowsError: [Error 87] The parameter is incorrect"
             # command = zopectl.quote_command(program)
             command = ' '.join(['"%s"' % x for x in program])
         else:
@@ -211,7 +214,8 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                 for addition in local_additions:
                     program.remove(addition)
         else:
-            # non-debug mode on Unix: replace the current process (required by e.g. supervisord)
+            # non-debug mode on Unix: replace the current process
+            # (required by e.g. supervisord)
             os.execve(program[0], command, env)
 
     def do_test(self, arg):
@@ -233,7 +237,7 @@ def main(args=None):
     # Change the program to avoid warning messages
     script = os.path.join(
         options.configroot.softwarehome, 'Zope2', 'Startup', 'run.py')
-    options.program =  [options.python, script, '-C', options.configfile]
+    options.program = [options.python, script, '-C', options.configfile]
 
     # We use our own ZopeCmd set, that is derived from the original one.
     c = AdjustedZopeCmd(options)
