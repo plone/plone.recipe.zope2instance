@@ -187,25 +187,32 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         env = self.environment()
         program = self.options.program
         local_additions = []
+
         if debug:
             if not program.count('-X'):
                 local_additions += ['-X']
             if not program.count('debug-mode=on'):
                 local_additions += ['debug-mode=on']
             program.extend(local_additions)
+
         if zopectl.WIN:
             # The outer quotes were causing "WindowsError: [Error 87] The parameter is incorrect"
             # command = zopectl.quote_command(program)
             command = ' '.join(['"%s"' % x for x in program])
         else:
             command = program
-        try:
-            return subprocess.call(command, env=env)
-        except KeyboardInterrupt:
-            return
-        finally:
-            for addition in local_additions:
-                program.remove(addition)
+
+        if debug or zopectl.WIN:
+            try:
+                return subprocess.call(command, env=env)
+            except KeyboardInterrupt:
+                return
+            finally:
+                for addition in local_additions:
+                    program.remove(addition)
+        else:
+            # non-debug mode on Unix: replace the current process (required by e.g. supervisord)
+            os.execve(program[0], command, env)
 
     def do_test(self, arg):
         print("The test command is no longer supported. Please use a "
