@@ -1,8 +1,12 @@
 Changelog
 =========
 
-4.0b3 - unreleased
+4.0.0 - 2010-07-21
 ------------------
+
+- "console" mode on Windows no longer returns immediately, thus makes it
+  usable by the Windows Service.
+  [kleist]
 
 - Made tests compatible with Windows.
   [hannosch]
@@ -10,10 +14,6 @@ Changelog
 - Added support for specifying new RelStorage options cache-local-mb,
   cache-delta-size-limit, commit-lock-timeout and commit-lock-id.
   [hannosch]
-  
-- "console" mode on Windows no longer returns immediately, thus makes it
-  usable by the Windows Service.
-  [kleist]
 
 4.0b2 - 2010-06-23
 ------------------
