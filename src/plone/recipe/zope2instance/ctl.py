@@ -59,6 +59,18 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                     self.options.configroot.pid_filename)
             return err
 
+        def get_status(self):
+            zopectl.ZopeCmd.get_status(self)
+
+            fname = self.options.configroot.pid_filename
+            if os.path.exists(fname):
+                # Try reading actual pid from the filename, in the
+                # event that anyone actually cares about it.
+                self.zd_pid = int(open(fname).read().strip())
+            else:
+                # No pid file means that Zope isn't running.
+                self.zd_pid = 0
+
     # not WIN32:
     else:
 
