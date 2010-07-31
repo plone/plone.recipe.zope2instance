@@ -1,9 +1,11 @@
 Changelog
 =========
 
-4.0.1 - unreleased
+4.0.1 - 2010-07-30
 ------------------
 
+- Use pid file to check for running application, instead of service status.
+  [sidnei]
 
 4.0.0 - 2010-07-21
 ------------------
