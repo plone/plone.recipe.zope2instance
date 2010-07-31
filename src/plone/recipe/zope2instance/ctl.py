@@ -38,6 +38,19 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
 
     if zopectl.WIN:
 
+        def _get_pid_from_pidfile(self):
+            fname = self.options.configroot.pid_filename
+            if os.path.exists(fname):
+                with open(fname) as f:
+                    try:
+                        return int(f.read().strip())
+                    except ValueError:
+                        # pid file for any reason empty or corrupt
+                        print 'ERROR: Corrupt pid file: %s' % fname
+                        return 0
+            else:
+                return 0
+
         def do_install(self, arg):
             from Zope2.Startup.zopectl import do_windows
             err = do_windows('install')(self, arg)
@@ -61,15 +74,9 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
 
         def get_status(self):
             zopectl.ZopeCmd.get_status(self)
-
-            fname = self.options.configroot.pid_filename
-            if os.path.exists(fname):
-                # Try reading actual pid from the filename, in the
-                # event that anyone actually cares about it.
-                self.zd_pid = int(open(fname).read().strip())
-            else:
-                # No pid file means that Zope isn't running.
-                self.zd_pid = 0
+            # Try reading actual pid from the filename,
+            # in the event that anyone actually cares about it.
+            self.zd_pid = self._get_pid_from_pidfile()
 
     # not WIN32:
     else:
