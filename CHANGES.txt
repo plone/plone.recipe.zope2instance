@@ -4,6 +4,10 @@ Changelog
 4.0.2 - Unreleased
 ------------------
 
+- Rewritten major parts of commands specific for the Windows Service, inspired
+  by "collective.buildout.cluster.base.ClusterBase" as used by the Windows
+  installer. Closes http://dev.plone.org/plone/ticket/10860.
+  [kleist]
 
 4.0.1 - 2010-07-30
 ------------------
