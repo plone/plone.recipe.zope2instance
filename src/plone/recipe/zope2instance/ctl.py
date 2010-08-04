@@ -33,6 +33,14 @@ from pkg_resources import iter_entry_points
 
 from Zope2.Startup import zopectl
 
+if zopectl.WIN:
+    import pkg_resources
+    import pywintypes
+    import traceback
+    import win32api
+    import win32con
+    import win32service
+    import win32serviceutil
 
 class AdjustedZopeCmd(zopectl.ZopeCmd):
 
@@ -51,26 +59,126 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             else:
                 return 0
 
-        def do_install(self, arg):
-            from Zope2.Startup.zopectl import do_windows
-            err = do_windows('install')(self, arg)
-            if not err:
-                # If we installed successfully, put info in registry for the
-                # real Service class to use:
-                instance_py = sys.argv[0]
-                instance_exe = instance_py.replace('.py', '.exe')
-                command = '"%s" "%s" console -C "%s"' % (
-                    self.options.python,
-                    instance_exe,
-                    self.options.configfile)
-                self.InstanceClass.setReg('command', command)
+        def get_service_name(self):
+            return 'Zope%s' % str(hash(self.options.directory.lower()))
 
-                # This is unfortunately needed because runzope.exe is a
-                # setuptools generated .exe that spawns off a sub process, so
-                # pid would give us the wrong event name.
-                self.InstanceClass.setReg('pid_filename',
-                    self.options.configroot.pid_filename)
-            return err
+        def get_service_class_string(self):
+            return '%s.Service' % pkg_resources.resource_filename(
+                'nt_svcutils', 'service')
+
+        def set_winreg_key(self, name, value, keyname='PythonClass'):
+            # see "collective.buildout.cluster.ClusterBase"
+            # TODO: use Python module "_winreg"
+
+            def open_key(keyname=None):
+                keypath = ('System\\CurrentControlSet\\Services\\' +
+                           self.get_service_name())
+                if keyname:
+                    keypath += ('\\' + keyname)
+                return win32api.RegOpenKey(
+                    win32con.HKEY_LOCAL_MACHINE,
+                    keypath,
+                    0,
+                    win32con.KEY_ALL_ACCESS)
+
+            key = open_key(keyname)
+            try:
+                win32api.RegSetValueEx(key,
+                                       name,
+                                       0,
+                                       win32con.REG_SZ,
+                                       value)
+            finally:
+                win32api.RegCloseKey(key)
+
+        def do_install(self, arg):
+            # see "collective.buildout.cluster.base.ClusterBase.install()"
+
+            ret_code = 0
+
+            class_string = self.get_service_class_string()
+            name = self.get_service_name()
+            display_name = 'Zope instance at '+ self.options.directory
+
+            if arg.lower() == 'auto':
+                start_type = win32service.SERVICE_AUTO_START
+            else:
+                start_type = win32service.SERVICE_DEMAND_START
+
+            try:
+                win32serviceutil.InstallService(class_string,
+                                                name,
+                                                display_name,
+                                                start_type)
+
+                # put info in registry for the Windows Service class to use:
+
+                instance_script = self.options.progname
+                # for example
+                #     'D:\\local\\Plone-4.0b5\\bin\\instance-script.py'
+                # but the Windows Service must launch
+                #     'D:\\local\\Plone-4.0b5\\bin\\instance.exe'
+                script_suffix = '-script.py'
+                pos = instance_script.rfind(script_suffix)
+                instance_exe = instance_script[:pos] + '.exe'
+
+                self.set_winreg_key('command',
+                             '"%s" console' % instance_exe)
+                self.set_winreg_key('pid_filename',
+                             self.options.configroot.pid_filename)
+
+                print 'Installed Zope as Windows Service "%s"' % name
+
+            except pywintypes.error as e:
+                traceback.print_exc()
+                # TODO: pretty print error, which typically is:
+                # (1073, 'CreateService', 'The specified service already exists.')
+                ret_code = 1
+
+            return ret_code
+
+        def help_install(self):
+            print 'install -- Installs Zope as a Windows service that must be manually started.'
+            print 'install auto --- Installs Zope as a Windows service that starts at system logon.'
+
+        def do_start(self, arg):
+            name = self.get_service_name()
+            try:
+                win32serviceutil.StartService(name)
+                print 'Started Windows Service "%s"' % name
+            except pywintypes.error as e:
+                traceback.print_exc()
+                # TODO: pretty print error, which typically is:
+                #       (1056, 'StartService', 'An instance of the service is already running.')
+
+        def do_stop(self, arg):
+            name = self.get_service_name()
+            try:
+                win32serviceutil.StopService(name)
+                print 'Stopped Windows Service "%s"' % name
+            except pywintypes.error as e:
+                traceback.print_exc()
+                # TODO: pretty print error, which typically is:
+                #       (1062, 'ControlService', 'The service has not been started.')
+
+        def do_restart(self, arg):
+            # name = self.get_service_name()
+            # win32serviceutil.StopService(name)
+            # TODO: wait until really stopped
+            # win32serviceutil.StartService(name)
+            print 'Not yet implemented. Please first stop, then start.'
+
+        def do_remove(self, arg):
+            ret_code = 0
+            name = self.get_service_name()
+            try:
+                win32serviceutil.RemoveService(name)
+                print 'Removed Windows Service "%s"' % name
+            except pywintypes.error as e:
+                ret_code = 1
+                traceback.print_exc()
+
+            return ret_code
 
         def get_status(self):
             zopectl.ZopeCmd.get_status(self)
@@ -78,7 +186,15 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             # in the event that anyone actually cares about it.
             self.zd_pid = self._get_pid_from_pidfile()
 
-    # not WIN32:
+        def help_EOF(self):
+            print 'To quit, type CTRL+Z or use the quit command.'
+
+        def help_console(self):
+            print 'console -- Run the program in the console.'
+            print '    In contrast to "foreground" this does not turn on debug mode, nor is anything written to the console.'
+
+
+    # end of "if zopectl.WIN"
     else:
 
         def do_start(self, arg):
