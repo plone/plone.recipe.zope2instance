@@ -1,7 +1,7 @@
 Changelog
 =========
 
-4.0.2 - Unreleased
+4.0.2 - 2010-08-04
 ------------------
 
 - Rewritten major parts of commands specific for the Windows Service, inspired
