@@ -129,7 +129,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
 
                 print 'Installed Zope as Windows Service "%s"' % name
 
-            except pywintypes.error as e:
+            except pywintypes.error:
                 traceback.print_exc()
                 # TODO: pretty print error, which typically is:
                 # (1073, 'CreateService', 'The specified service already exists.')
@@ -139,14 +139,14 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
 
         def help_install(self):
             print 'install -- Installs Zope as a Windows service that must be manually started.'
-            print 'install auto --- Installs Zope as a Windows service that starts at system logon.'
+            print 'install auto -- Installs Zope as a Windows service that starts at system startup.'
 
         def do_start(self, arg):
             name = self.get_service_name()
             try:
                 win32serviceutil.StartService(name)
                 print 'Started Windows Service "%s"' % name
-            except pywintypes.error as e:
+            except pywintypes.error:
                 traceback.print_exc()
                 # TODO: pretty print error, which typically is:
                 #       (1056, 'StartService', 'An instance of the service is already running.')
@@ -156,7 +156,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             try:
                 win32serviceutil.StopService(name)
                 print 'Stopped Windows Service "%s"' % name
-            except pywintypes.error as e:
+            except pywintypes.error:
                 traceback.print_exc()
                 # TODO: pretty print error, which typically is:
                 #       (1062, 'ControlService', 'The service has not been started.')
@@ -174,7 +174,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             try:
                 win32serviceutil.RemoveService(name)
                 print 'Removed Windows Service "%s"' % name
-            except pywintypes.error as e:
+            except pywintypes.error:
                 ret_code = 1
                 traceback.print_exc()
 
@@ -188,10 +188,6 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
 
         def help_EOF(self):
             print 'To quit, type CTRL+Z or use the quit command.'
-
-        def help_console(self):
-            print 'console -- Run the program in the console.'
-            print '    In contrast to "foreground" this does not turn on debug mode, nor is anything written to the console.'
 
 
     # end of "if zopectl.WIN"
