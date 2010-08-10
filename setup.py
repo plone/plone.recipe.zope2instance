@@ -12,6 +12,8 @@ long_description=(
         read('CHANGES.txt')
     )
 
+tests_require = ['zope.testing']
+
 setup(
     name = name,
     version = version,
@@ -28,7 +30,6 @@ setup(
       "Framework :: Plone",
       "Framework :: Zope2",
       ],
-    tests_require=['zope.testing'],
     packages = find_packages('src'),
     include_package_data = True,
     package_dir = {'':'src'},
@@ -38,8 +39,9 @@ setup(
         'setuptools',
         'mailinglogger',
         'zc.recipe.egg',
-        'zope.testing',
     ],
+    tests_require=tests_require,
+    extras_require=dict(test=tests_require),
     zip_safe=False,
     entry_points = {'zc.buildout': ['default = %s:Recipe' % name]},
     )

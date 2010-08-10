@@ -4,6 +4,10 @@ Changelog
 3.9 (unreleased)
 ----------------
 
+- Avoid install time dependency on zope.testing by moving it out of
+  the install_requires.
+  [maurits]
+
 
 3.8 (2010-06-28)
 ----------------
