@@ -8,7 +8,6 @@ Changelog
   the install_requires.
   [maurits]
 
-
 3.8 (2010-06-28)
 ----------------
 

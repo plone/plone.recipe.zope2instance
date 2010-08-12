@@ -3,16 +3,14 @@ from setuptools import setup, find_packages
 name = "plone.recipe.zope2instance"
 version = '3.9'
 
+
 def read(name):
     return open(name).read()
 
 long_description=(
         read('README.txt')
         + '\n' +
-        read('CHANGES.txt')
-    )
-
-tests_require = ['zope.testing']
+        read('CHANGES.txt'))
 
 setup(
     name = name,
@@ -32,7 +30,7 @@ setup(
       ],
     packages = find_packages('src'),
     include_package_data = True,
-    package_dir = {'':'src'},
+    package_dir = {'': 'src'},
     namespace_packages = ['plone', 'plone.recipe'],
     install_requires = [
         'zc.buildout',
@@ -40,8 +38,9 @@ setup(
         'mailinglogger',
         'zc.recipe.egg',
     ],
-    tests_require=tests_require,
-    extras_require=dict(test=tests_require),
+    extras_require=dict(
+        test=['zope.testing'],
+    ),
     zip_safe=False,
     entry_points = {'zc.buildout': ['default = %s:Recipe' % name]},
     )
