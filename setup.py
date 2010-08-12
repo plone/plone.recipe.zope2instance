@@ -3,22 +3,14 @@ from setuptools import setup, find_packages
 name = "plone.recipe.zope2instance"
 version = '3.9'
 
-
-def read(name):
-    return open(name).read()
-
-long_description=(
-        read('README.txt')
-        + '\n' +
-        read('CHANGES.txt'))
-
 setup(
     name = name,
     version = version,
     author = "Hanno Schlichting",
     author_email = "hannosch@plone.org",
     description = "ZC Buildout recipe for installing a Zope 2 instance",
-    long_description=long_description,
+    long_description=open('README.txt').read() + '\n' +
+                     open('CHANGES.txt').read(),
     license = "ZPL 2.1",
     keywords = "zope2 buildout",
     url='http://pypi.python.org/pypi/plone.recipe.zope2instance',
