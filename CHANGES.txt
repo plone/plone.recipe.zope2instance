@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.9 (unreleased)
+3.9 (2010-08-12)
 ----------------
 
 - Avoid install time dependency on zope.testing by moving it out of
