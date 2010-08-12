@@ -31,6 +31,8 @@ setup(
         'zc.recipe.egg',
     ],
     extras_require=dict(
+        # zope.testing isn't only a test dependency, but specifying it as a
+        # real dependency breaks buildouts in Plone 3 with fake-eggs
         test=['zope.testing'],
     ),
     zip_safe=False,
