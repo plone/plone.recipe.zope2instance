@@ -62,6 +62,29 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         def get_service_name(self):
             return 'Zope%s' % str(hash(self.options.directory.lower()))
 
+        def _get_service_status(self):
+            """ Return status of Windows service, or None if not installed.
+
+            Possible status values are:
+
+            win32service.SERVICE_START_PENDING
+            win32service.SERVICE_RUNNING
+            win32service.SERVICE_STOP_PENDING
+            win32service.SERVICE_STOPPED
+
+            """
+            name = self.get_service_name()
+            try:
+                status = win32serviceutil.QueryServiceStatus(name)[1]
+            except pywintypes.error, err:
+                # (1060, 'GetServiceKeyName', 'The specified service does not exist as an installed service.')
+                if err[0] == 1060:
+                    return None
+                else:
+                    # be lazy: don't bother to take care of unexpected errors
+                    traceback.print_exc()
+            return status
+
         def get_service_class_string(self):
             return '%s.Service' % pkg_resources.resource_filename(
                 'nt_svcutils', 'service')
@@ -94,6 +117,12 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         def do_install(self, arg):
             # see "collective.buildout.cluster.base.ClusterBase.install()"
 
+            status = self._get_service_status()
+            if status is not None:
+                print 'ERROR: Zope is already installed as a Windows service.'
+                return
+
+            #TODO: Investigate if return values from do_ methods are really taken care of.
             ret_code = 0
 
             class_string = self.get_service_class_string()
@@ -138,28 +167,41 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             return ret_code
 
         def help_install(self):
-            print 'install -- Installs Zope as a Windows service that must be manually started.'
-            print 'install auto -- Installs Zope as a Windows service that starts at system startup.'
+            print 'install -- Install Zope as a Windows service that must be manually started.'
+            print 'install auto -- Install Zope as a Windows service that starts at system startup.'
 
         def do_start(self, arg):
+            status = self._get_service_status()
+            if status is None:
+                print 'ERROR: Zope is not installed as Windows service.'
+                return
+            elif status == win32service.SERVICE_START_PENDING:
+                print 'ERROR: The Zope Windows service is about to start.'
+                return
+            elif status == win32service.SERVICE_RUNNING:
+                print 'ERROR: The Zope Windows service is already running.'
+                return
             name = self.get_service_name()
             try:
                 win32serviceutil.StartService(name)
                 print 'Started Windows Service "%s"' % name
             except pywintypes.error:
                 traceback.print_exc()
-                # TODO: pretty print error, which typically is:
-                #       (1056, 'StartService', 'An instance of the service is already running.')
 
         def do_stop(self, arg):
+            status = self._get_service_status()
+            if status is None:
+                print 'ERROR: Zope is not installed as Windows service.'
+                return
+            elif status == win32service.SERVICE_STOPPED:
+                print 'ERROR: The Zope Windows service has not been started.'
+                return
             name = self.get_service_name()
             try:
                 win32serviceutil.StopService(name)
                 print 'Stopped Windows Service "%s"' % name
             except pywintypes.error:
                 traceback.print_exc()
-                # TODO: pretty print error, which typically is:
-                #       (1062, 'ControlService', 'The service has not been started.')
 
         def do_restart(self, arg):
             # name = self.get_service_name()
@@ -169,6 +211,11 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             print 'Not yet implemented. Please first stop, then start.'
 
         def do_remove(self, arg):
+            status = self._get_service_status()
+            if status is None:
+                print 'ERROR: Zope is not installed as a Windows service.'
+                return
+
             ret_code = 0
             name = self.get_service_name()
             try:
