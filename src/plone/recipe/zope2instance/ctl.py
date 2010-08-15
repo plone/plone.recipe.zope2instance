@@ -34,9 +34,9 @@ from pkg_resources import iter_entry_points
 from Zope2.Startup import zopectl
 
 if zopectl.WIN:
-    import pkg_resources
-    import pywintypes
     import traceback
+    from pkg_resources import resource_filename
+    import pywintypes
     import win32api
     import win32con
     import win32service
@@ -45,6 +45,14 @@ if zopectl.WIN:
 class AdjustedZopeCmd(zopectl.ZopeCmd):
 
     if zopectl.WIN:
+
+        # printable representations of the Windows service states
+        service_state_map = {
+            win32service.SERVICE_START_PENDING: 'starting',
+            win32service.SERVICE_RUNNING:       'started',
+            win32service.SERVICE_STOP_PENDING:  'stopping',
+            win32service.SERVICE_STOPPED:       'stopped',
+        }
 
         def _get_pid_from_pidfile(self):
             fname = self.options.configroot.pid_filename
@@ -59,7 +67,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             else:
                 return 0
 
-        def get_service_name(self):
+        def _get_service_name(self):
             return 'Zope%s' % str(hash(self.options.directory.lower()))
 
         def _get_service_status(self):
@@ -73,7 +81,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             win32service.SERVICE_STOPPED
 
             """
-            name = self.get_service_name()
+            name = self._get_service_name()
             try:
                 status = win32serviceutil.QueryServiceStatus(name)[1]
             except pywintypes.error, err:
@@ -85,8 +93,8 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                     traceback.print_exc()
             return status
 
-        def get_service_class_string(self):
-            return '%s.Service' % pkg_resources.resource_filename(
+        def _get_service_class_string(self):
+            return '%s.Service' % resource_filename(
                 'nt_svcutils', 'service')
 
         def set_winreg_key(self, name, value, keyname='PythonClass'):
@@ -95,7 +103,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
 
             def open_key(keyname=None):
                 keypath = ('System\\CurrentControlSet\\Services\\' +
-                           self.get_service_name())
+                           self._get_service_name())
                 if keyname:
                     keypath += ('\\' + keyname)
                 return win32api.RegOpenKey(
@@ -125,8 +133,8 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             #TODO: Investigate if return values from do_ methods are really taken care of.
             ret_code = 0
 
-            class_string = self.get_service_class_string()
-            name = self.get_service_name()
+            class_string = self._get_service_class_string()
+            name = self._get_service_name()
             display_name = 'Zope instance at '+ self.options.directory
 
             if arg.lower() == 'auto':
@@ -156,12 +164,10 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                 self.set_winreg_key('pid_filename',
                              self.options.configroot.pid_filename)
 
-                print 'Installed Zope as Windows Service "%s"' % name
+                print 'Installed Zope as Windows Service "%s".' % name
 
             except pywintypes.error:
                 traceback.print_exc()
-                # TODO: pretty print error, which typically is:
-                # (1073, 'CreateService', 'The specified service already exists.')
                 ret_code = 1
 
             return ret_code
@@ -181,10 +187,10 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             elif status == win32service.SERVICE_RUNNING:
                 print 'ERROR: The Zope Windows service is already running.'
                 return
-            name = self.get_service_name()
+            name = self._get_service_name()
             try:
                 win32serviceutil.StartService(name)
-                print 'Started Windows Service "%s"' % name
+                print 'Started Windows Service "%s".' % name
             except pywintypes.error:
                 traceback.print_exc()
 
@@ -196,15 +202,15 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             elif status == win32service.SERVICE_STOPPED:
                 print 'ERROR: The Zope Windows service has not been started.'
                 return
-            name = self.get_service_name()
+            name = self._get_service_name()
             try:
                 win32serviceutil.StopService(name)
-                print 'Stopped Windows Service "%s"' % name
+                print 'Stopped Windows Service "%s".' % name
             except pywintypes.error:
                 traceback.print_exc()
 
         def do_restart(self, arg):
-            # name = self.get_service_name()
+            # name = self._get_service_name()
             # win32serviceutil.StopService(name)
             # TODO: wait until really stopped
             # win32serviceutil.StartService(name)
@@ -215,27 +221,65 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             if status is None:
                 print 'ERROR: Zope is not installed as a Windows service.'
                 return
+            elif not status is win32service.SERVICE_STOPPED:
+                print 'ERROR: Please stop the Windows service before removing it.'
+                return
 
             ret_code = 0
-            name = self.get_service_name()
+            name = self._get_service_name()
             try:
                 win32serviceutil.RemoveService(name)
-                print 'Removed Windows Service "%s"' % name
+                print 'Removed Windows Service "%s".' % name
             except pywintypes.error:
                 ret_code = 1
                 traceback.print_exc()
 
             return ret_code
 
+        # NOTE: do not rename! called also on windows by non-windows "do_" methods
         def get_status(self):
+            """This method only has side effects, despite its name:
+
+            - Set "self.zd_pid" to the PID (0 if no PID found), base on
+            the content of the PID file, e.g. "var/instance.pid".
+            This value is checked by the startup machinery of Zope.
+
+            - Set "self.zd_up" to 1 or 0 (unclear what this is used for)
+
+            """
             zopectl.ZopeCmd.get_status(self)
-            # Try reading actual pid from the filename,
-            # in the event that anyone actually cares about it.
+            # override value set by zopectl.ZopeCmd.get_status() (always -1 or 0)
             self.zd_pid = self._get_pid_from_pidfile()
+
+            if self.zd_pid > 0:
+                self.zd_up = 1
+            else:
+                self.zd_up = 0
+
+        def do_status(self, arg=''):
+            if arg not in ('', '-l'):
+                print 'ERROR: The only valid option is "-l".'
+                return
+            service_status = self._get_service_status()
+            if service_status is None:
+                print 'Zope is not installed as a Windows service.'
+            else:
+                name = self._get_service_name()
+                state = self.service_state_map.get(
+                    service_status, 'in an unknown state')
+                print('Zope is installed as Windows service "%s", '
+                      'this service is currently %s.' % (name, state))
+            if arg == '-l' and self.zd_status:
+                print self.zd_status
+
+            # TODO: what about "self.zd_up"?
+
+        def help_status(self):
+            print 'status -- Print status of the Windows service.'
+            print 'status -l -- Print status of the Windows service, and raw status output.'
 
         def help_EOF(self):
             print 'To quit, type CTRL+Z or use the quit command.'
-
 
     # end of "if zopectl.WIN"
     else:
