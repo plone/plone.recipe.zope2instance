@@ -4,6 +4,11 @@ Changelog
 4.0.3 - unreleased
 ------------------
 
+- Setuptools / Subversion ignores empty directories and doesn't include them
+  into the source distribution. Added readme files to the `bin` and `var`
+  directories inside the skeleton. This lets persistent ZEO caches work again,
+  which want to put their files into the `var` directory.
+  [hannosch]
 
 4.0.2 - 2010-08-04
 ------------------
