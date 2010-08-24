@@ -97,7 +97,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             return '%s.Service' % resource_filename(
                 'nt_svcutils', 'service')
 
-        def set_winreg_key(self, name, value, keyname='PythonClass'):
+        def _set_winreg_key(self, name, value, keyname='PythonClass'):
             # see "collective.buildout.cluster.ClusterBase"
             # TODO: use Python module "_winreg"
 
@@ -159,9 +159,9 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                 pos = instance_script.rfind(script_suffix)
                 instance_exe = instance_script[:pos] + '.exe'
 
-                self.set_winreg_key('command',
+                self._set_winreg_key('command',
                              '"%s" console' % instance_exe)
-                self.set_winreg_key('pid_filename',
+                self._set_winreg_key('pid_filename',
                              self.options.configroot.pid_filename)
 
                 print 'Installed Zope as Windows Service "%s".' % name
@@ -190,7 +190,22 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             name = self._get_service_name()
             try:
                 win32serviceutil.StartService(name)
-                print 'Started Windows Service "%s".' % name
+                print 'Starting Windows Service "%s".' % name
+            except pywintypes.error:
+                traceback.print_exc()
+
+        def do_restart(self, arg):
+            status = self._get_service_status()
+            if status is None:
+                print 'ERROR: Zope is not installed as Windows service.'
+                return
+            elif status == win32service.SERVICE_STOPPED:
+                print 'ERROR: The Zope Windows service has not been started.'
+                return
+            name = self._get_service_name()
+            try:
+                win32serviceutil.RestartService(name)
+                print 'Restarting Windows Service "%s".' % name
             except pywintypes.error:
                 traceback.print_exc()
 
@@ -205,16 +220,9 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             name = self._get_service_name()
             try:
                 win32serviceutil.StopService(name)
-                print 'Stopped Windows Service "%s".' % name
+                print 'Stopping Windows Service "%s".' % name
             except pywintypes.error:
                 traceback.print_exc()
-
-        def do_restart(self, arg):
-            # name = self._get_service_name()
-            # win32serviceutil.StopService(name)
-            # TODO: wait until really stopped
-            # win32serviceutil.StartService(name)
-            print 'Not yet implemented. Please first stop, then start.'
 
         def do_remove(self, arg):
             status = self._get_service_status()
