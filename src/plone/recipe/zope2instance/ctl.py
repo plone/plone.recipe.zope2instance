@@ -248,7 +248,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         def get_status(self):
             """This method only has side effects, despite its name:
 
-            - Set "self.zd_pid" to the PID (0 if no PID found), base on
+            - Set "self.zd_pid" to the PID (0 if no PID found), based on
             the content of the PID file, e.g. "var/instance.pid".
             This value is checked by the startup machinery of Zope.
 
@@ -437,7 +437,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
 
         if debug or zopectl.WIN:
             try:
-                return subprocess.call(command, env=env)
+                self._exitstatus = subprocess.call(command, env=env)
             except KeyboardInterrupt:
                 return
             finally:
