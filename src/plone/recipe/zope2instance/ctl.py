@@ -38,9 +38,15 @@ if zopectl.WIN:
     from pkg_resources import resource_filename
     import pywintypes
     import win32api
+    from win32com.shell import shell
     import win32con
     import win32service
     import win32serviceutil
+
+    ERR_MSG_NOT_ADMIN = (
+        'ERROR: You are not member of the "Administrators" group, '
+        'or you have not run the shell as Administrator.')
+
 
 class AdjustedZopeCmd(zopectl.ZopeCmd):
 
@@ -53,6 +59,14 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             win32service.SERVICE_STOP_PENDING:  'stopping',
             win32service.SERVICE_STOPPED:       'stopped',
         }
+
+        def is_user_admin(self):
+            # http://msdn.microsoft.com/en-us/library/bb776463%28VS.85%29.aspx:
+            # " This function is available through Windows Vista. It might be
+            #   altered or unavailable in subsequent versions of Windows."
+            # It's still available in Windows 7, but we should consider using
+            # CheckTokenMembership() instead in a later Plone version.
+            return shell.IsUserAnAdmin()
 
         def _get_pid_from_pidfile(self):
             fname = self.options.configroot.pid_filename
@@ -125,6 +139,10 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         def do_install(self, arg):
             # see "collective.buildout.cluster.base.ClusterBase.install()"
 
+            if not shell.IsUserAnAdmin():
+                print(ERR_MSG_NOT_ADMIN)
+                return
+
             status = self._get_service_status()
             if status is not None:
                 print 'ERROR: Zope is already installed as a Windows service.'
@@ -181,6 +199,11 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             print 'install auto -- Install Zope as a Windows service that starts at system startup.'
 
         def do_start(self, arg):
+
+            if not shell.IsUserAnAdmin():
+                print(ERR_MSG_NOT_ADMIN)
+                return
+
             status = self._get_service_status()
             if status is None:
                 print 'ERROR: Zope is not installed as Windows service.'
@@ -199,6 +222,11 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                 traceback.print_exc()
 
         def do_restart(self, arg):
+
+            if not shell.IsUserAnAdmin():
+                print(ERR_MSG_NOT_ADMIN)
+                return
+
             status = self._get_service_status()
             if status is None:
                 print 'ERROR: Zope is not installed as Windows service.'
@@ -214,6 +242,11 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                 traceback.print_exc()
 
         def do_stop(self, arg):
+
+            if not shell.IsUserAnAdmin():
+                print(ERR_MSG_NOT_ADMIN)
+                return
+
             status = self._get_service_status()
             if status is None:
                 print 'ERROR: Zope is not installed as Windows service.'
@@ -229,6 +262,11 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                 traceback.print_exc()
 
         def do_remove(self, arg):
+
+            if not shell.IsUserAnAdmin():
+                print(ERR_MSG_NOT_ADMIN)
+                return
+
             status = self._get_service_status()
             if status is None:
                 print 'ERROR: Zope is not installed as a Windows service.'
