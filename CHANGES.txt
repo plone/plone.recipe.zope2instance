@@ -1,7 +1,7 @@
 Changelog
 =========
 
-4.0.4 - unreleased
+4.0.4 - 2010-09-09
 ------------------
 
 - Add friendly error message if non-admin tries
