@@ -13,11 +13,7 @@ Changelog
   [kleist]
 
 - Implemented the "restart" command for "bin/instance.exe".
-  (Note that this method of restarting is completely different from the one
-  initiated from ZMI (which does currently not work, but cause a shutdown)
-  or from the Plone controlpanel (which is currently disabled).
   [kleist]
-
 
 4.0.3 - 2010-08-20
 ------------------
