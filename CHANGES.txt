@@ -1,7 +1,7 @@
 Changelog
 =========
 
-4.0.5 - unreleased
+4.0.5 - 2010-10-22
 ------------------
 
 - Added support for specifying the new RelStorage options shared-blob-dir,
