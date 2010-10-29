@@ -4,6 +4,9 @@ Changelog
 3.10 (unreleased)
 -----------------
 
+- Backporting RelStorage options from trunk: shared-blob-dir, blob-cache-size, 
+  blob-cache-size-check, blob-chunk-size, cache-prefix
+  [stonor]
 
 3.9 (2010-08-12)
 ----------------
