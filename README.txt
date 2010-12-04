@@ -59,8 +59,8 @@ environment-vars
 
     environment-vars =
       TZ US/Eastern
-      TMP /var/tmp
-      DISABLE_PTS True
+      zope_i18n_allowed_languages en
+      zope_i18n_compile_mo_files true
 
 Development options
 -------------------
