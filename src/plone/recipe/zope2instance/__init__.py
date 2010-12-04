@@ -372,6 +372,10 @@ class Recipe:
         zeo_storage = options.get('zeo-storage', '1')
 
         if zeo_client.lower() in ('yes', 'true', 'on', '1'):
+            if relstorage:
+                raise ValueError('You cannot use both ZEO and RelStorage '
+                    'at the same time.')
+
             zeo_client_name = options.get('zeo-client-name', self.name)
             zeo_var_dir = options.get('zeo-var',
                                       os.path.join(instance_home, 'var'))

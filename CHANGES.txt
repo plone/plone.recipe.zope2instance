@@ -4,6 +4,10 @@ Changelog
 4.1 - unreleased
 ----------------
 
+- Raise an exception if both ZEO and RelStorage are configured at the same
+  time. This closes https://bugs.launchpad.net/collective.buildout/+bug/645100.
+  [hannosch]
+
 - Added support for zc.buildout 1.5, while retaining support for 1.4. Thanks
   to Jeff Rush for the patch. This closes
   https://bugs.launchpad.net/collective.buildout/+bug/683584.
