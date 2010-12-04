@@ -579,10 +579,11 @@ class Recipe:
 
                 if '-' in package:
                     package, suff = package.split('-')
+                    file_suff = suff
                     if suff not in ('configure', 'meta', 'overrides'):
-                        raise ValueError('Invalid zcml', orig)
+                        file_suff = '%s-configure' % suff
                 else:
-                    suff = 'configure'
+                    suff = file_suff = 'configure'
 
                 if filename is None:
                     filename = suff + '.zcml'
@@ -592,7 +593,7 @@ class Recipe:
 
                 path = os.path.join(
                     includes_path,
-                    "%3.3d-%s-%s.zcml" % (n, package, suff),
+                    "%3.3d-%s-%s.zcml" % (n, package, file_suff),
                     )
                 open(path, 'w').write(
                     '<include package="%s" file="%s" />\n'

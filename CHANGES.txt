@@ -4,6 +4,11 @@ Changelog
 4.1 - unreleased
 ----------------
 
+- Add some flexibility to `site.zcml` creation. Thanks to Wolfgang Schnerring
+  for the patch. This closes
+  https://bugs.launchpad.net/collective.buildout/+bug/335311.
+  [hannosch]
+
 - Raise an exception if both ZEO and RelStorage are configured at the same
   time. This closes https://bugs.launchpad.net/collective.buildout/+bug/645100.
   [hannosch]
