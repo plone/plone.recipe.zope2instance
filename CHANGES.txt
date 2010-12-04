@@ -4,6 +4,10 @@ Changelog
 4.1 - unreleased
 ----------------
 
+- Give the `readme` an overhaul, group options into sections and mention the
+  most commonly used ones at the top.
+  [hannosch]
+
 - Add some flexibility to `site.zcml` creation. Thanks to Wolfgang Schnerring
   for the patch. This closes
   https://bugs.launchpad.net/collective.buildout/+bug/335311.
