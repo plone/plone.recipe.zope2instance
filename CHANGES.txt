@@ -1,7 +1,7 @@
 Changelog
 =========
 
-4.1.2 - unreleased
+4.1.2 - 2010-12-05
 ------------------
 
 - Fixed error introduced in 4.1.1.
