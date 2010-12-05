@@ -4,6 +4,8 @@ Changelog
 4.1.2 - unreleased
 ------------------
 
+- Fixed error introduced in 4.1.1.
+  [hannosch]
 
 4.1.1 - 2010-12-05
 ------------------

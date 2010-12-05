@@ -253,7 +253,7 @@ class Recipe:
             default_zpublisher_encoding = 'default-zpublisher-encoding %s' %\
                                           default_zpublisher_encoding
 
-        zeo_client = options.get('zeo-client', False)
+        zeo_client = options.get('zeo-client', '')
         zeo_client = zeo_client.lower() in ('yes', 'true', 'on', '1')
         shared_blob_dir = options.get('shared-blob', 'no')
 
