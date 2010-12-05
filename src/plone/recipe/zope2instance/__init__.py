@@ -253,6 +253,10 @@ class Recipe:
             default_zpublisher_encoding = 'default-zpublisher-encoding %s' %\
                                           default_zpublisher_encoding
 
+        zeo_client = options.get('zeo-client', False)
+        zeo_client = zeo_client.lower() in ('yes', 'true', 'on', '1')
+        shared_blob_dir = options.get('shared-blob', 'no')
+
         relstorage = options.get('rel-storage')
         if relstorage:
             def _split(el):
@@ -322,15 +326,19 @@ class Recipe:
             if not os.path.exists(file_storage_dir):
                 os.makedirs(file_storage_dir)
             storage_snippet = file_storage_template % file_storage
-            blob_storage = options.get('blob-storage',
-                                       os.path.join(var_dir, 'blobstorage'))
+
+            # Don't try to use the actual blobstorage as a cache
+            default_blob = os.path.join(var_dir, 'blobstorage')
+            if zeo_client and shared_blob_dir == 'no':
+                default_blob = os.path.join(var_dir, 'blobcache')
+            blob_storage = options.get('blob-storage', default_blob)
 
             demo_storage = options.get('demo-storage', 'off') \
                          not in ('off', 'disable', 'false')
 
             if demo_storage:
                 # Disable blob storage when using a demo storage, is that
-                # really not support in Zope 2.12?
+                # really not supported in Zope 2.12?
                 blob_storage = None
 
             if blob_storage:
@@ -355,7 +363,6 @@ class Recipe:
         if enable_products:
             enable_products = "enable-product-installation %s" % enable_products
 
-        zeo_client = options.get('zeo-client', '')
         zeo_address = options.get('zeo-address', '8100')
 
         zodb_cache_size = options.get('zodb-cache-size', '10000')
@@ -371,7 +378,7 @@ class Recipe:
         zeo_client_cache_size = options.get('zeo-client-cache-size', '128MB')
         zeo_storage = options.get('zeo-storage', '1')
 
-        if zeo_client.lower() in ('yes', 'true', 'on', '1'):
+        if zeo_client:
             if relstorage:
                 raise ValueError('You cannot use both ZEO and RelStorage '
                     'at the same time.')
@@ -382,7 +389,6 @@ class Recipe:
             zeo_client_client = options.get('zeo-client-client', '')
             zeo_client_min_disconnect_poll = options.get('min-disconnect-poll', "")
             zeo_client_max_disconnect_poll = options.get('max-disconnect-poll', "")
-            shared_blob_dir = options.get('shared-blob', 'no')
             if zeo_client_name:
                 zeo_client_name = 'zeo-client-name %s' % zeo_client_name
             if zeo_client_client:

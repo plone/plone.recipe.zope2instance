@@ -4,6 +4,11 @@ Changelog
 4.1.1 - unreleased
 ------------------
 
+- Disambiguate the `blob-storage` option if `shared-blob` isn't used. In this
+  case we use `var/blobcache` as a default location, so we don't accidentally
+  overwrite the real blob data with a blob zeocache. Refs
+  https://bugs.launchpad.net/bugs/645904.
+  [hannosch]
 
 4.1 - 2010-12-04
 ----------------

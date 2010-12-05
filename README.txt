@@ -77,10 +77,11 @@ directly without running a database server process.
 
 file-storage
   The filename where the ZODB data file will be stored.
-  Defaults to var/filestorage/Data.fs.
+  Defaults to `var/filestorage/Data.fs`.
 
 blob-storage
-  The name of the directory where the ZODB blob data will be stored.
+  The name of the directory where the ZODB blob data will be stored, defaults
+  to `var/blobstorage`.
 
 Basic ZEO storage
 -----------------
@@ -97,14 +98,19 @@ zeo-client
   To set up a ZEO server, you can use the plone.recipe.zeoserver recipe.
   Defaults to 'off'.
 
+blob-storage
+  The location of the blob zeocache, defaults to `var/blobcache`. If
+  `shared-blob` is on it defaults to `var/blobstorage`.
+
 shared-blob
-  If 'zeo-client' is set to 'on' and 'blob-storage' is set to a directory that
-  is shared between this instance and the ZEO server (as configured by the
-  'blob-dir' setting on zeo.conf, then setting 'shared-blob' to 'on' causes
-  this instance not to stream the blob file through the ZEO connection, but
-  just to send the information of the file location to the ZEO server. You can
-  only use this if your database and application processes run on the same
-  machine or share a filesystem via NFS or similar technology.
+  Defaults to `off`. Set this to `on` if the ZEO server and the instance have
+  access to the same directory. Either by being on the same physical machine or
+  by virtue of a network file system like NFS. Make sure this instances
+  `blob-storage` is set to the same directory used for the ZEO servers
+  `blob-storage`. In this case the instance will not stream the blob file
+  through the ZEO connection, but just send the information of the file
+  location to the ZEO server, resulting in faster execution and less memory
+  overhead.
 
 ZEO authentication
 ------------------
