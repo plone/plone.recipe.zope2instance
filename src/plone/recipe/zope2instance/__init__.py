@@ -737,7 +737,6 @@ icp_server_template = """
 
 webdav_server_template = """
 <webdav-source-server>
-  # valid keys are "address" and "force-connection-close"
   address %s
   force-connection-close %s
 </webdav-source-server>
@@ -782,7 +781,6 @@ verbose-security %(verbose_security)s
 </logger>
 
 <http-server>
-  # valid keys are "address" and "force-connection-close"
   address %(http_address)s
 %(http_force_connection_close)s
 %(http_fast_listen)s

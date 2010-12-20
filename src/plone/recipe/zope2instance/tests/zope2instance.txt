@@ -76,7 +76,6 @@ We should have a zope instance, with a basic zope.conf::
     </logger>
     <BLANKLINE>
     <http-server>
-      # valid keys are "address" and "force-connection-close"
       address 8080
     <BLANKLINE>
     </http-server>
@@ -182,7 +181,6 @@ Our WebDAV server should be set up now::
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <webdav-source-server>
-      # valid keys are "address" and "force-connection-close"
       address 1980
       force-connection-close off
     </webdav-source-server>
@@ -218,7 +216,6 @@ Our WebDAV server should be set up now::
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <webdav-source-server>
-      # valid keys are "address" and "force-connection-close"
       address 1980
       force-connection-close on
     </webdav-source-server>
@@ -453,7 +450,7 @@ We should have a zope instance, with a basic zope.conf::
     <zodb_db main>
         ...
         <zeoclient>
-            blob-dir .../sample-buildout/var/blobstorage
+            blob-dir .../sample-buildout/var/blobcache
             shared-blob-dir no
             server 8100
             storage 1
@@ -504,7 +501,7 @@ We should have a zope instance, with a basic zope.conf::
     <zodb_db main>
         ...
         <zeoclient>
-            blob-dir .../sample-buildout/var/blobstorage
+            blob-dir .../sample-buildout/var/blobcache
             shared-blob-dir no
             server 8100
             storage 1
@@ -935,6 +932,47 @@ Our environment variables should be set now::
     >>> re.search(env_vars, zope_conf).group('vars')
     'TZ US/Eastern\nTMP /var/tmp\nDISABLE_PTS True'
 
+
+HTTP server
+===========
+
+Check additional options to the HTTP server::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... user = me:me
+    ... http-force-connection-close = on
+    ... http-fast-listen = off
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Uninstalling instance.
+    Installing instance.
+
+And check it::
+
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    <http-server>
+      address 8080
+      force-connection-close on
+      # Set to off to defer opening of the HTTP socket until the end of the
+      # startup phase:
+      fast-listen off
+    <BLANKLINE>
+    </http-server>
+    ...
 
 Edge Cases
 ==========
