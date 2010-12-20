@@ -150,6 +150,11 @@ class Recipe:
         if port_base:
             port_base = 'port-base %s' % port_base
         http_address = options.get('http-address', '8080')
+        http_force_connection_close = options.get('http-force-connection-close', None)
+        if http_force_connection_close is None:
+            http_force_connection_close = ''
+        else:
+            http_force_connection_close = http_force_connection_close_template % http_force_connection_close
         http_fast_listen = options.get('http-fast-listen', None)
         if http_fast_listen is None:
             http_fast_listen = ''
@@ -470,6 +475,7 @@ class Recipe:
                                     storage_snippet = storage_snippet.strip(),
                                     port_base = port_base,
                                     http_address = http_address,
+                                    http_force_connection_close = http_force_connection_close,
                                     http_fast_listen = http_fast_listen,
                                     ftp_address = ftp_address,
                                     webdav_address = webdav_address,
@@ -691,6 +697,10 @@ zodb_temporary_storage_template="""
 </zodb_db>
 """.strip()
 
+http_force_connection_close_template="""\
+  force-connection-close %s
+""".rstrip()
+
 http_fast_listen_template="""\
   # Set to off to defer opening of the HTTP socket until the end of the
   # startup phase:
@@ -774,6 +784,7 @@ verbose-security %(verbose_security)s
 <http-server>
   # valid keys are "address" and "force-connection-close"
   address %(http_address)s
+%(http_force_connection_close)s
 %(http_fast_listen)s
 </http-server>
 

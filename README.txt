@@ -269,6 +269,11 @@ enable-product-installation
 ftp-address
   Give a port for the FTP server. This enables the FTP server.
 
+http-force-connection-close
+  Set to `on` to enforce Zope to set ``Connection: close header``.
+  This is useful if for example a 304 leaves the connection open with
+  Varnish in front and Varnish tries to reuse the connection.
+
 http-fast-listen
   Set to `off` to defer opening of the HTTP socket until the end of the Zope
   startup phase. Defaults to on.
