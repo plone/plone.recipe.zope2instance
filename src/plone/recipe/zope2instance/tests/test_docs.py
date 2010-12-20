@@ -34,7 +34,8 @@ def tearDown(test):
 
 def test_suite():
     suite = []
-    flags = (doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE)
+    flags = (doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE |
+        doctest.REPORT_NDIFF)
 
     suite.append(doctest.DocFileSuite('zope2instance.txt', optionflags=flags,
                  setUp=setUp, tearDown=tearDown))
