@@ -221,10 +221,6 @@ zcml-additional
 Advanced ZEO options
 --------------------
 
-zeo-client-name
-  Set the name of the ZEO client. Defaults to the name of the part. If a false
-  value is provided no zeo-client-name will be set.
-
 zeo-client-cache-size
   Set the size of the ZEO client cache. Defaults to '30MB'. The ZEO cache is
   a disk based cache shared between application threads. It's stored inside

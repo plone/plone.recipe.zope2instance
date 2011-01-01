@@ -388,14 +388,11 @@ class Recipe:
                 raise ValueError('You cannot use both ZEO and RelStorage '
                     'at the same time.')
 
-            zeo_client_name = options.get('zeo-client-name', self.name)
             zeo_var_dir = options.get('zeo-var',
                                       os.path.join(instance_home, 'var'))
             zeo_client_client = options.get('zeo-client-client', '')
             zeo_client_min_disconnect_poll = options.get('min-disconnect-poll', "")
             zeo_client_max_disconnect_poll = options.get('max-disconnect-poll', "")
-            if zeo_client_name:
-                zeo_client_name = 'zeo-client-name %s' % zeo_client_name
             if zeo_client_client:
                 zeo_client_client = 'client %s' % zeo_client_client
             if zeo_client_min_disconnect_poll:
@@ -435,7 +432,6 @@ class Recipe:
         else:
             # no zeo-client
             zeo_client_client = ''
-            zeo_client_name = ''
 
         zodb_tmp_storage = options.get('zodb-temporary-storage',
                                        zodb_temporary_storage_template)
@@ -483,7 +479,6 @@ class Recipe:
                                     zserver_threads = zserver_threads,
                                     zodb_cache_size = zodb_cache_size,
                                     zodb_cache_size_bytes = zodb_cache_size_bytes,
-                                    zeo_client_name = zeo_client_name,
                                     zodb_tmp_storage = zodb_tmp_storage,
                                     pid_file = pid_file,
                                     lock_file = lock_file,
@@ -764,7 +759,6 @@ verbose-security %(verbose_security)s
 %(effective_user)s
 %(ip_address)s
 %(zserver_threads)s
-%(zeo_client_name)s
 %(environment_vars)s
 %(deprecation_warnings)s
 
