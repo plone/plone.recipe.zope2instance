@@ -1,7 +1,7 @@
 Changelog
 =========
 
-4.1.4 - unreleased
+4.1.4 - 2011-01-01
 ------------------
 
 - Removed `zeo-client-name` option. The option had no effect since ZODB 3.2
