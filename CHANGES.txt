@@ -4,6 +4,11 @@ Changelog
 3.10 (unreleased)
 -----------------
 
+- Raise an exception if both ZEO and RelStorage are configured at the same
+  time. This closes https://bugs.launchpad.net/collective.buildout/+bug/645100. 
+  Backported from trunk.
+  [maurits]
+
 - Backporting RelStorage options from trunk: shared-blob-dir, blob-cache-size, 
   blob-cache-size-check, blob-chunk-size, cache-prefix
   [stonor]
