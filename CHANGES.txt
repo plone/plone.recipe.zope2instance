@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.10 (unreleased)
+3.10 (2011-01-10)
 -----------------
 
 - Raise an exception if both ZEO and RelStorage are configured at the same
