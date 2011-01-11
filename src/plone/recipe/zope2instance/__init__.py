@@ -128,7 +128,8 @@ class Recipe:
         if not os.path.exists(client_home):
             os.makedirs(client_home)
 
-        client_import = os.path.join(client_home, 'import')
+        client_import = options.get('import-directory', os.path.join(
+                                                    client_home, 'import'))
         if not os.path.exists(client_import):
             os.makedirs(client_import)
 

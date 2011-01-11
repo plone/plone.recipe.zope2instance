@@ -296,6 +296,10 @@ var
   Used to configure the base directory for all things going into var.
   Defaults to ${buildout:directory}/var.
 
+import-directory
+  Used to configure the import directory for instance.
+  Defaults to <client-home>/import.
+
 webdav-address
   Give a port for the WebDAV server.  This enables the WebDAV server
 
