@@ -16,7 +16,7 @@ setup(
     name = name,
     version = version,
     author = "Hanno Schlichting",
-    author_email = "hannosch@plone.org",
+    author_email = "hanno@hannosch.eu",
     description = "Buildout recipe for creating a Zope 2 instance",
     long_description=long_description,
     license = "ZPL 2.1",
