@@ -277,6 +277,10 @@ http-fast-listen
 icp-address
   Give a port for the ICP server. This enables the ICP server.
 
+import-directory
+  Used to configure the import directory for instance.
+  Defaults to `<client-home>/import`.
+
 port-base
   Offset applied to the port numbers used for ZServer configurations. For
   example, if the http-server port is 8080 and the port-base is 1000, the HTTP
@@ -295,10 +299,6 @@ relative-paths
 var
   Used to configure the base directory for all things going into var.
   Defaults to ${buildout:directory}/var.
-
-import-directory
-  Used to configure the import directory for instance.
-  Defaults to <client-home>/import.
 
 webdav-address
   Give a port for the WebDAV server.  This enables the WebDAV server
