@@ -59,6 +59,11 @@ class Recipe:
         else:
             self._relative_paths = ''
 
+        self._include_site_packages = options.get(
+            'include-site-packages',
+            buildout['buildout'].get('include-site-packages', 'false')
+            ) not in ('off', 'disable', 'false')
+
     def install(self, update=False):
         options = self.options
         location = options['location']
@@ -519,7 +524,7 @@ class Recipe:
                 interpreter=None,
                 extra_paths=extra_paths,
                 initialization='',
-                include_site_packages=False,
+                include_site_packages=self._include_site_packages,
                 exec_sitecustomize=False,
                 relative_paths=self._relative_paths,
                 script_arguments = ('\n        ["-C", %r]'

@@ -4,6 +4,10 @@ Changelog
 4.1.5 - unreleased
 ------------------
 
+- Respect new `include-site-packages` buildout option introduced in buildout
+  1.5. Closes https://bugs.launchpad.net/bugs/716360.
+  [yuppie, hannosch]
+
 - Added option `import-directory` to point to custom import folder.
   [garbas]
 
