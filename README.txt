@@ -7,6 +7,10 @@ The name of the control script is the the name of the part in buildout.
 By default various runtime and log information will be stored inside the var/
 directory.
 
+*Note: This recipe is not intended to setup a Zope 2 WSGI based instance and
+will not work for this use-case. There's no special recipe required to setup
+WSGI any longer and you can use simple template recipes instead.*
+
 You can use it with a part like this::
 
   [instance]
