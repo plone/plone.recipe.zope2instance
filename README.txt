@@ -73,7 +73,9 @@ Please refer to `<http://pypi.python.org/pypi/plone.resource>`_ for more
 details and setup instructions.
 
 resources
-  Specify a central resource directory.
+  Specify a central resource directory. Example::
+
+    resources = ${buildout:directory}/resources
 
 Development options
 -------------------
