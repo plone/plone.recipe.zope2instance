@@ -1,7 +1,7 @@
 Changelog
 =========
 
-4.1.6 - unreleased
+4.1.6 - 2011-06-01
 ------------------
 
 - Add new `resources` option for specifying a plone.resource central resource
