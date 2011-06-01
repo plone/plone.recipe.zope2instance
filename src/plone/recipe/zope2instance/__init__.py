@@ -553,6 +553,7 @@ class Recipe:
         zcml = self.options.get('zcml')
         site_zcml = self.options.get('site-zcml')
         additional_zcml = self.options.get("zcml-additional")
+        resources = self.options.get("resources")
 
         if site_zcml:
             open(sitezcml_path, 'w').write(site_zcml)
@@ -561,7 +562,7 @@ class Recipe:
         if zcml:
             zcml = zcml.split()
 
-        if additional_zcml or zcml:
+        if additional_zcml or resources or zcml:
             includes_path = os.path.join(location, 'etc', 'package-includes')
 
             if not os.path.exists(includes_path):
@@ -578,6 +579,12 @@ class Recipe:
         if additional_zcml:
             path=os.path.join(includes_path, "999-additional-overrides.zcml")
             open(path, "w").write(additional_zcml.strip())
+
+        if resources:
+            path=os.path.join(includes_path, "998-resources.zcml")
+            open(path, "w").write(
+                resources_zcml % dict(directory=resources.strip())
+                )
 
         if zcml:
             n = 0
@@ -806,4 +813,13 @@ lock-filename %(lock_file)s
 %(enable_products)s
 
 %(zope_conf_additional)s
+"""
+
+# Template used for plone.resource directory
+resources_zcml = """\
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:plone="http://namespaces.plone.org/plone">
+    <include package="plone.resource" file="meta.zcml"/>
+    <plone:static directory="%(directory)s"/>
+</configure>
 """

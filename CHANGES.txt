@@ -4,6 +4,9 @@ Changelog
 4.1.6 - unreleased
 ------------------
 
+- Add new `resources` option for specifying a plone.resource central resource
+  directory.
+  [elro]
 
 4.1.5 - 2011-02-17
 ------------------

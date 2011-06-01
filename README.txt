@@ -66,6 +66,15 @@ environment-vars
       zope_i18n_allowed_languages en
       zope_i18n_compile_mo_files true
 
+Theme resources
+---------------
+
+Please refer to `<http://pypi.python.org/pypi/plone.resource>`_ for more
+details and setup instructions.
+
+resources
+  Specify a central resource directory.
+
 Development options
 -------------------
 
