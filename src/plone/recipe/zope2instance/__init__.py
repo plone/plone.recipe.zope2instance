@@ -581,7 +581,7 @@ class Recipe:
             open(path, "w").write(additional_zcml.strip())
 
         if resources:
-            path=os.path.join(includes_path, "998-resources.zcml")
+            path=os.path.join(includes_path, "998-resources-configure.zcml")
             open(path, "w").write(
                 resources_zcml % dict(directory=resources.strip())
                 )

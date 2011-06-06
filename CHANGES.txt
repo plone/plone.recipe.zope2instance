@@ -4,6 +4,12 @@ Changelog
 4.1.7 - unreleased
 ------------------
 
+- Renamed the optional ``998-resources.zcml`` (introduced in 4.1.6) to
+  ``998-resources-configure.zcml``, otherwise it does not get loaded
+  in the standard ``site.zcml``.
+  [maurits]
+
+
 4.1.6 - 2011-06-01
 ------------------
 
