@@ -4,6 +4,10 @@ Changelog
 4.1.8 - unreleased
 ------------------
 
+- If a resource directory is specified using `resources`, create it if it does
+  not yet exist.
+  [davisagli]
+
 4.1.7 - 2011-06-07
 ------------------
 
