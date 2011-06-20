@@ -336,6 +336,7 @@ class Recipe:
                 'cache-delta-size-limit',
                 'commit-lock-timeout',
                 'commit-lock-id',
+                'create-schema',
                 )
 
             opts = dict(
