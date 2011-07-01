@@ -4,6 +4,11 @@ Changelog
 4.1.8 - unreleased
 ------------------
 
+- Added `zeo-client-blob-cache-size` and `zeo-client-blob-cache-size-check`
+  options to control maximum size of blob cache, and when to check the size,
+  when using ClientStorage without shared blobs.
+  [davidjb]
+
 - If a resource directory is specified using `resources`, create it if it does
   not yet exist.
   [davisagli]

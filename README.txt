@@ -246,6 +246,16 @@ zeo-client-client
   filenames. This enabled the ZEO cache to be persisted. Persistent cache
   files are disabled by default.
 
+zeo-client-blob-cache-size
+  Set the maximum size of the ZEO blob cache, in bytes.  If not set, then
+  the cache size isn't checked and the blob directory will grow without bound.
+
+zeo-client-blob-cache-size-check
+  Set the ZEO check size as percent of `zeo-client-blob-cache-size` (for 
+  example, `10` for 10%).  The ZEO cache size will be checked when this many 
+  bytes have been loaded into the cache. Defaults to 10% of the blob cache 
+  size. This option is ignored if `shared-blob` is enabled.
+
 zeo-storage
   Set the storage number of the ZEO storage. Defaults to '1'.
 

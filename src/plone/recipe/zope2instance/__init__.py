@@ -398,10 +398,21 @@ class Recipe:
             zeo_var_dir = options.get('zeo-var',
                                       os.path.join(instance_home, 'var'))
             zeo_client_client = options.get('zeo-client-client', '')
+            zeo_client_blob_cache_size = \
+                    options.get('zeo-client-blob-cache-size', '')
+            zeo_client_blob_cache_size_check = \
+                    options.get('zeo-client-blob-cache-size-check', '')
             zeo_client_min_disconnect_poll = options.get('min-disconnect-poll', "")
             zeo_client_max_disconnect_poll = options.get('max-disconnect-poll', "")
             if zeo_client_client:
                 zeo_client_client = 'client %s' % zeo_client_client
+            if zeo_client_blob_cache_size:
+                zeo_client_blob_cache_size = \
+                      'blob-cache-size %s' % zeo_client_blob_cache_size
+            if zeo_client_blob_cache_size_check:
+                zeo_client_blob_cache_size_check = \
+                        'blob-cache-size-check %s' % \
+                        zeo_client_blob_cache_size_check
             if zeo_client_min_disconnect_poll:
                 zeo_client_min_disconnect_poll = "min-disconnect-poll %s" % zeo_client_min_disconnect_poll
             if zeo_client_max_disconnect_poll:
@@ -429,6 +440,9 @@ class Recipe:
                 shared_blob_dir = shared_blob_dir,
                 zeo_address = zeo_address,
                 zeo_client_cache_size = zeo_client_cache_size,
+                zeo_client_blob_cache_size=zeo_client_blob_cache_size,
+                zeo_client_blob_cache_size_check=\
+                    zeo_client_blob_cache_size_check,
                 zeo_authentication = zeo_authentication,
                 zeo_client_client = zeo_client_client,
                 zeo_storage = zeo_storage,
@@ -587,7 +601,7 @@ class Recipe:
             open(path, "w").write(
                 resources_zcml % dict(directory=resources_path)
                 )
-            
+
             if not os.path.exists(resources_path):
                 os.mkdir(resources_path)
 
@@ -692,6 +706,8 @@ zeo_blob_storage_template="""
       name zeostorage
       var %(zeo_var_dir)s
       cache-size %(zeo_client_cache_size)s
+      %(zeo_client_blob_cache_size)s
+      %(zeo_client_blob_cache_size_check)s
       %(zeo_authentication)s
       %(zeo_client_client)s
       %(zeo_client_min_disconnect_poll)s

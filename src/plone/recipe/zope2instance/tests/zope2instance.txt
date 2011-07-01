@@ -467,7 +467,9 @@ We should have a zope instance, with a basic zope.conf::
     ...
     <BLANKLINE>
 
-If zope-client-client is specified it should get into that section as well.
+If `zeo-client-client` and other relevant ZEO options such as 
+`zeo-client-blob-cache-size` and `zeo-client-blob-cache-size-check` are 
+specified, they should get included in that section as well.
 
     >>> write('buildout.cfg',
     ... '''
@@ -482,6 +484,8 @@ If zope-client-client is specified it should get into that section as well.
     ... zeo-client-client = persistentcache88
     ... min-disconnect-poll = 10
     ... max-disconnect-poll = 20
+    ... zeo-client-blob-cache-size = 5GB
+    ... zeo-client-blob-cache-size-check = 50
     ... ''' % options)
 
 Let's run it::
@@ -508,6 +512,8 @@ We should have a zope instance, with a basic zope.conf::
             name zeostorage
             var .../sample-buildout/parts/instance/var
             cache-size 128MB
+            blob-cache-size 5GB
+            blob-cache-size-check 50
     <BLANKLINE>
             client persistentcache88
             min-disconnect-poll 10
