@@ -4,6 +4,9 @@ Changelog
 4.1.8 - unreleased
 ------------------
 
+- Add preliminary support for Zope 4.0, by re-using the skeleton for 2.13.
+  [hannosch]
+
 - Added `zeo-client-blob-cache-size` and `zeo-client-blob-cache-size-check`
   options to control maximum size of blob cache, and when to check the size,
   when using ClientStorage without shared blobs.

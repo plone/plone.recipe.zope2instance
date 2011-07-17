@@ -76,10 +76,15 @@ class Recipe:
             dist = pkg_resources.get_distribution('Zope2')
             parsed = dist.parsed_version
             major, minor = parsed[0:2]
-            major, minor = int(major), int(minor)
-            # We only support creating instances for 2.12 and 2.13
-            if minor > 13:
+            major = int(major)
+            # We support creating instances for 2.12, 2.13 and 4.0
+            if major >= 4:
+                major = 2
                 minor = 13
+            elif major == 2:
+                minor = int(minor)
+                if minor > 13:
+                    minor = 13
             version = str(major) + str(minor)
             make.make_instance(options.get('user', None), location, version)
 
