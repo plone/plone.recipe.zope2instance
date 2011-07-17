@@ -1,7 +1,7 @@
 Changelog
 =========
 
-4.1.8 - unreleased
+4.1.8 - 2011-07-17
 ------------------
 
 - Add preliminary support for Zope 4.0, by re-using the skeleton for 2.13.
