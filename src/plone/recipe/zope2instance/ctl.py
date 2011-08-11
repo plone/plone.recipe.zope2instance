@@ -28,6 +28,7 @@ available actions.
 
 import csv
 import os
+import os.path
 import sys
 from pkg_resources import iter_entry_points
 
@@ -375,9 +376,13 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
     def environment(self):
         configroot = self.options.configroot
         env = dict(os.environ)
-        env.update({'INSTANCE_HOME': configroot.instancehome,
-                    'PYTHONPATH': os.pathsep.join(sys.path + [
-                        configroot.softwarehome])})
+        try:
+            shome = configroot.softwarehome
+        except AttributeError:
+            shome = None
+        env.update({'INSTANCE_HOME': configroot.instancehome})
+        if shome:
+            env.update({'PYTHONPATH': os.pathsep.join(sys.path + [shome])})
         return env
 
     def get_startup_cmd(self, python, more, pyflags=""):
@@ -508,8 +513,9 @@ def main(args=None):
     options.realize(args, doc=__doc__)
 
     # Change the program to avoid warning messages
-    script = os.path.join(
-        options.configroot.softwarehome, 'Zope2', 'Startup', 'run.py')
+    startup = os.path.dirname(zopectl.__file__)
+
+    script = os.path.join(startup, 'run.py')
     options.program = [options.python, script, '-C', options.configfile]
 
     # We use our own ZopeCmd set, that is derived from the original one.

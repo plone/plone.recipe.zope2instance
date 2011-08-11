@@ -4,6 +4,8 @@ Changelog
 4.1.9 - unreleased
 ------------------
 
+- No longer rely on `softwarehome` in startup script.
+  [hannosch]
 
 4.1.8 - 2011-07-17
 ------------------
