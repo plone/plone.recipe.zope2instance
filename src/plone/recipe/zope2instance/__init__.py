@@ -22,9 +22,9 @@ import sys
 import pkg_resources
 import zc.buildout
 import zc.buildout.easy_install
-import zc.recipe.egg
 
 from plone.recipe.zope2instance import make
+from zc.recipe.egg.egg import Egg, Scripts
 
 IS_WIN = sys.platform[:3].lower() == 'win'
 
@@ -35,18 +35,23 @@ except ImportError:
     BUILDOUT15 = False
 
 
-class Recipe:
+class Recipe(Scripts):
 
     def __init__(self, buildout, name, options):
-        self.egg = zc.recipe.egg.Egg(buildout, options['recipe'], options)
+        self.egg = Egg(buildout, options['recipe'], options)
         self.buildout, self.options, self.name = buildout, options, name
+        self.scripts = True
 
         options['location'] = os.path.join(
             buildout['buildout']['parts-directory'],
             self.name,
             )
         options['bin-directory'] = buildout['buildout']['bin-directory']
-        options['scripts'] = '' # suppress script generation.
+
+        if 'scripts' in options:
+            if options['scripts'] == '':
+                options['scripts'] = '' # suppress script generation.
+                self.scripts = False
 
         # Relative path support for the generated scripts
         relative_paths = options.get(
@@ -63,6 +68,9 @@ class Recipe:
             'include-site-packages',
             buildout['buildout'].get('include-site-packages', 'false')
             ) not in ('off', 'disable', 'false')
+
+        # Get Scripts' attributes
+        return Scripts.__init__(self, buildout, name, options)
 
     def install(self, update=False):
         options = self.options
@@ -103,7 +111,12 @@ class Recipe:
                 shutil.rmtree(location)
             raise
 
-        return location
+        if self.scripts:
+            retval = Scripts.install(self)
+            retval.append(location)
+        else:
+            retval = location
+        return retval
 
     def update(self):
         return self.install(update=True)

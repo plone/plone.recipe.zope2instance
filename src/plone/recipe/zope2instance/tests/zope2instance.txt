@@ -24,6 +24,7 @@ plone.recipe.zope2instance::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... eggs =
     ... user = me:me
     ... ''' % options)
 
@@ -128,6 +129,7 @@ Let's start off by adding an FTP address::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... eggs =
     ... user = me:me
     ... ftp-address = 8021
     ... ''' % options)
@@ -162,6 +164,7 @@ Next we will add a WebDAV server::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... eggs =
     ... user = me:me
     ... webdav-address = 1980
     ... ''' % options)
@@ -196,6 +199,7 @@ Next we will add a WebDAV server with force-connection-close on::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... eggs =
     ... user = me:me
     ... webdav-address = 1980
     ... webdav-force-connection-close = on
@@ -234,6 +238,7 @@ To have a DemoStorage configuration, you can use demo-storage::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... eggs =
     ... user = me:me
     ... file-storage = newfs/Data.fs
     ... demo-storage = on
@@ -279,6 +284,7 @@ Verify that demostorage can be disable::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... eggs =
     ... user = me:me
     ... file-storage = newfs/Data.fs
     ... demo-storage = off
@@ -328,6 +334,7 @@ To have a BlobStorage configuration, you can use blob-storage::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... eggs =
     ... user = me:me
     ... blob-storage = ${buildout:directory}/var/blob
     ...
@@ -376,6 +383,7 @@ To have a RelStorage configuration, you can use rel-storage::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... eggs =
     ... user = me:me
     ... rel-storage =
     ...   type postgresql
@@ -429,6 +437,7 @@ for the plone.recipe.zope2instance recipe.
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... eggs =
     ... user = me:me
     ... zeo-client = yes
     ... ''' % options)
@@ -479,6 +488,7 @@ specified, they should get included in that section as well.
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... eggs =
     ... user = me:me
     ... zeo-client = yes
     ... zeo-client-client = persistentcache88
@@ -534,6 +544,7 @@ Verify that demo-storage is correctly applied
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... eggs =
     ... user = me:me
     ... zeo-client = yes
     ... demo-storage = yes
@@ -585,6 +596,7 @@ Verify that demo-storage is correctly applied
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... eggs =
     ... user = me:me
     ... zeo-client = yes
     ... blob-storage = ${buildout:directory}/var/blob
@@ -640,6 +652,7 @@ to use `rotatezlogs`::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... eggs =
     ... user = me:me
     ...
     ... event-log-custom =
@@ -693,6 +706,7 @@ Mailing logger
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... eggs =
     ... user = me:me
     ...
     ... mailinglogger =
@@ -753,6 +767,7 @@ to use `rotatezlogs`::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... eggs =
     ... user = me:me
     ...
     ... access-log-custom =
@@ -805,6 +820,7 @@ When this option is used the `zcml` option is ignored. Let's try it::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... eggs =
     ... user = me:me
     ... # the zcml option will be ignored when a site-zcml option is given
     ... zcml =
@@ -854,6 +870,7 @@ between several servers::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... eggs =
     ... user = me:me
     ... environment-vars = TZ US/Eastern
     ... ''' % options)
@@ -887,6 +904,7 @@ Now let's add several environment variables::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... eggs =
     ... user = me:me
     ... environment-vars =
     ...     TZ US/Eastern
@@ -920,6 +938,7 @@ Several all on one line::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... eggs =
     ... user = me:me
     ... environment-vars = TZ US/Eastern TMP /var/tmp DISABLE_PTS True
     ... ''' % options)
@@ -952,6 +971,7 @@ Check additional options to the HTTP server::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... eggs =
     ... user = me:me
     ... http-force-connection-close = on
     ... http-fast-listen = off
@@ -995,6 +1015,7 @@ we don't error::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... eggs =
     ... user = me:me
     ... ''' % options)
 
@@ -1018,6 +1039,7 @@ The recipe supports the generation of scripts with relative paths.
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... eggs =
     ... user = me:me
     ... ''' % options)
     >>> print system(join('bin', 'buildout')),
@@ -1049,6 +1071,7 @@ Custom Zope Conf
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... eggs =
     ... user = me:me
     ... zope-conf = /some/path/my.conf
     ... ''' % options)
