@@ -321,6 +321,22 @@ relative-paths
   Set this to `true` to make the generated scripts use relative
   paths. You can also enable this in the `[buildout]` section.
 
+scripts
+  Add this parameter with no arguments to suppress script generation.
+  Otherwise (i.e. without this parameter), scripts for packages added
+  to the `eggs` parameter will be generated. You may also configure
+  per package. E.g.::
+
+    [instance]
+    recipe = plone.recipe.zope2instance
+    eggs = 
+      Plone
+      mr.migrator
+      zopeskel
+    scripts = zopeskel
+
+  In the above example, only zopeskel's scripts will be generated.
+
 var
   Used to configure the base directory for all things going into var.
   Defaults to ${buildout:directory}/var.
