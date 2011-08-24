@@ -859,6 +859,6 @@ resources_zcml = """\
 <configure xmlns="http://namespaces.zope.org/zope"
            xmlns:plone="http://namespaces.plone.org/plone">
     <include package="plone.resource" file="meta.zcml"/>
-    <plone:static directory="%(directory)s"/>
+    <plone:static directory="%(directory)s" type="theme"/>
 </configure>
 """

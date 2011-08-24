@@ -4,6 +4,10 @@ Changelog
 4.2 - unreleased
 ----------------
 
+- Fix `resource` parameter bug causing resource directory registration to
+  fail.
+  [aclark]
+
 - Make script suppression optional (via empty `scripts` parameter). Otherwise,
   scripts for packages listed in `eggs` parameter will be generated. 
   [aclark]
