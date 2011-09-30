@@ -8,6 +8,11 @@ Changelog
   scripts for packages listed in `eggs` parameter will be generated. 
   [aclark]
 
+- Support all RelStorage options, even future options. Used a simple pattern
+  to recognize where options should be placed: any option name containing a
+  dash is a generic option; the rest (except "name") are database-specific.
+  [hathawsh]
+
 4.1.9 - 2011-08-11
 ------------------
 
