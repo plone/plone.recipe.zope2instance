@@ -309,41 +309,20 @@ class Recipe(Scripts):
                 del rel_storage['password']
                 rel_storage['dsn'] = dsn
 
-            rel_storage_outer_opts = (
-                'name',
-                'read-only',
-                'blob-dir',
-                'shared-blob-dir',
-                'blob-cache-size',
-                'blob-cache-size-check',
-                'blob-chunk-size',
-                'keep-history',
-                'replica-conf',
-                'replica-timeout',
-                'poll-interval',
-                'pack-gc',
-                'pack-dry-run',
-                'pack-batch-timeout',
-                'pack-duty-cycle',
-                'pack-max-delay',
-                'cache-servers',
-                'cache-module-name',
-                'cache-prefix',
-                'cache-local-mb',
-                'cache-delta-size-limit',
-                'commit-lock-timeout',
-                'commit-lock-id',
-                'create-schema',
-                )
+            def is_rs_option(name):
+                # All generic RelStorage options have a dash in their name,
+                # except the "name" option. Other options are
+                # database-specific.
+                return '-' in name or name == 'name'
 
             opts = dict(
                 type=type_,
                 db_opts='\n'.join(' ' * 12 + ' '.join((k, v))
                                   for k, v in rel_storage.iteritems()
-                                  if k not in rel_storage_outer_opts),
+                                  if not is_rs_option(k)),
                 rs_opts='\n'.join(' ' * 8 + ' '.join((k, v))
                                   for k, v in rel_storage.iteritems()
-                                  if k in rel_storage_outer_opts),
+                                  if is_rs_option(k)),
                 )
             storage_snippet = rel_storage_template % opts
 
