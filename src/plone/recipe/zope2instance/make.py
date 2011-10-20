@@ -4,7 +4,7 @@ import shutil
 import sys
 from hashlib import sha1
 
-VCS_DIRS = [os.path.normcase("CVS"), os.path.normcase(".svn")]
+VCS_DIRS = [os.path.normcase("CVS"), os.path.normcase(".svn"), os.path.normcase(".git")]
 
 
 def make_instance(user=None, instancehome=None, version="212"):
