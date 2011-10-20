@@ -1,22 +1,24 @@
 from binascii import b2a_base64
+from hashlib import sha1
 import os
 import shutil
 import sys
-from hashlib import sha1
 
-VCS_DIRS = [os.path.normcase("CVS"), os.path.normcase(".svn"), os.path.normcase(".git")]
+VCS_DIRS = [os.path.normcase('CVS'),
+            os.path.normcase('.svn'),
+            os.path.normcase('.git')]
 
 
-def make_instance(user=None, instancehome=None, version="212"):
+def make_instance(user=None, instancehome=None, version='212'):
     instancehome = os.path.abspath(os.path.expanduser(instancehome))
     password = None
     if user:
-        user, password = user.split(":", 1)
+        user, password = user.split(':', 1)
 
     # Use our own skeleton
-    skelsrc = os.path.join(os.path.dirname(__file__), "skel" + version)
+    skelsrc = os.path.join(os.path.dirname(__file__), 'skel' + version)
 
-    inituser = os.path.join(instancehome, "inituser")
+    inituser = os.path.join(instancehome, 'inituser')
     if not (user or os.path.exists(inituser)):
         user, password = get_inituser()
 
@@ -31,22 +33,22 @@ def get_inituser():
     print 'These will be the credentials you use to initially manage'
     print 'your new Zope instance.'
     print
-    user = raw_input("Username: ").strip()
+    user = raw_input('Username: ').strip()
     if user == '':
         return None, None
     while 1:
-        passwd = getpass.getpass("Password: ")
-        verify = getpass.getpass("Verify password: ")
+        passwd = getpass.getpass('Password: ')
+        verify = getpass.getpass('Verify password: ')
         if verify == passwd:
             break
         else:
             passwd = verify = ''
-            print "Password mismatch, please try again..."
+            print 'Password mismatch, please try again...'
     return user, passwd
 
 
 def write_inituser(fn, user, password):
-    fp = open(fn, "w")
+    fp = open(fn, 'w')
     pw = b2a_base64(sha1(password).digest())[:-1]
     fp.write('%s:{SHA}%s\n' % (user, pw))
     fp.close()
@@ -58,9 +60,8 @@ def copyskel(sourcedir, targetdir):
     if not os.path.exists(targetdir):
         os.makedirs(targetdir)
 
-    # This is fairly ugly.  The chdir() makes path manipulation in the
-    # walk() callback a little easier (less magical), so we'll live
-    # with it.
+    # This is fairly ugly. The chdir() makes path manipulation in the
+    # walk() callback a little easier (less magical), so we'll live with it.
     pwd = os.getcwd()
     os.chdir(sourcedir)
     try:
