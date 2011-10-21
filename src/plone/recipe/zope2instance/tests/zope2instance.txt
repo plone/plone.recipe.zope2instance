@@ -1,4 +1,4 @@
-==========================
+=========================
 plone.recipe.zope2instance
 ==========================
 
@@ -92,6 +92,7 @@ We should have a zope instance, with a basic zope.conf::
     # Blob-enabled FileStorage database
         <blobstorage>
           blob-dir .../sample-buildout/var/blobstorage
+          # FileStorage database
           <filestorage>
             path .../sample-buildout/var/filestorage/Data.fs
           </filestorage>
@@ -262,12 +263,15 @@ We should have a zope instance, with a basic zope.conf::
     <zodb_db main>
         # Main database
         cache-size 10000
-        # Demostorage
+    <BLANKLINE>
+    # DemoStorage
         <demostorage>
-          # FileStorage database
+    <BLANKLINE>
+        # FileStorage database
         <filestorage>
           path .../sample-buildout/var/newfs/Data.fs
         </filestorage>
+    <BLANKLINE>
         </demostorage>
         mount-point /
     </zodb_db>
@@ -312,10 +316,297 @@ We should have a zope instance, with a basic zope.conf without demostorage::
     # Blob-enabled FileStorage database
         <blobstorage>
           blob-dir .../sample-buildout/var/blobstorage
+          # FileStorage database
           <filestorage>
             path .../sample-buildout/var/newfs/Data.fs
           </filestorage>
         </blobstorage>
+        mount-point /
+    </zodb_db>
+    ...
+    <BLANKLINE>
+
+You can add file storage to the demo-storage to be able to keep
+changes::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... file-storage = newfs/Data.fs
+    ... demo-storage = on
+    ... demo-file-storage = demofs/Data.fs
+    ...
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Uninstalling instance.
+    Installing instance.
+
+We should have a zope instance, with a basic zope.conf::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    <zodb_db main>
+        # Main database
+        cache-size 10000
+    <BLANKLINE>
+    # DemoStorage
+        <demostorage>
+    <BLANKLINE>
+        # FileStorage database
+        <filestorage base>
+          path .../sample-buildout/var/newfs/Data.fs
+        </filestorage>
+    <BLANKLINE>
+    <BLANKLINE>
+        # FileStorage database
+        <filestorage changes>
+          path .../sample-buildout/var/demofs/Data.fs
+        </filestorage>
+    <BLANKLINE>
+        </demostorage>
+        mount-point /
+    </zodb_db>
+    ...
+    <BLANKLINE>
+
+You can add a blob storage to the demo-storage as well::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... file-storage = newfs/Data.fs
+    ... blob-storage = ${buildout:directory}/var/blob
+    ... demo-storage = on
+    ... demo-file-storage = demofs/Data.fs
+    ... demo-blob-storage = ${buildout:directory}/var/demoblob
+    ...
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Uninstalling instance.
+    Installing instance.
+
+We should have a zope instance, with a basic zope.conf::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+        <blobstorage base>
+          blob-dir .../sample-buildout/var/blob
+          # FileStorage database
+          <filestorage>
+            path .../sample-buildout/var/newfs/Data.fs
+          </filestorage>
+        </blobstorage>
+    ...
+        <blobstorage changes>
+          blob-dir .../sample-buildout/var/demoblob
+          # FileStorage database
+          <filestorage>
+            path .../sample-buildout/var/demofs/Data.fs
+          </filestorage>
+        </blobstorage>
+    ...
+
+Finally, you can add only a blob storage. Changes will then not be
+persisted on disk, but blob support will be available separately (it's
+not supported by the in-memory demostorage)::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... file-storage = newfs/Data.fs
+    ... demo-storage = on
+    ... demo-blob-storage = ${buildout:directory}/var/demoblob
+    ...
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Uninstalling instance.
+    Installing instance.
+
+We should have a zope instance, with a basic zope.conf::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    <zodb_db main>
+        # Main database
+        cache-size 10000
+    <BLANKLINE>
+    # DemoStorage
+        <demostorage>
+    <BLANKLINE>
+        # FileStorage database
+        <filestorage base>
+          path .../sample-buildout/var/newfs/Data.fs
+        </filestorage>
+    <BLANKLINE>
+    <BLANKLINE>
+        # Blob-enabled FileStorage database
+        <blobstorage changes>
+          blob-dir .../sample-buildout/var/demoblob
+          <demostorage />
+        </blobstorage>
+    <BLANKLINE>
+        </demostorage>
+        mount-point /
+    </zodb_db>
+    ...
+
+BeforeStorage
+=============
+
+To have a BeforeStorage configuration, you can use before-storage::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... file-storage = newfs/Data.fs
+    ... before-storage = now
+    ...
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Uninstalling instance.
+    Installing instance.
+
+We should have a zope instance, with a basic zope.conf::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    <zodb_db main>
+        # Main database
+        cache-size 10000
+    <BLANKLINE>
+    %import zc.beforestorage
+        # BeforeStorage
+        <before>
+          before now
+    <BLANKLINE>
+          # Blob-enabled FileStorage database
+          <blobstorage>
+            blob-dir .../sample-buildout/var/blobstorage
+            # FileStorage database
+            <filestorage>
+              path .../sample-buildout/var/newfs/Data.fs
+            </filestorage>
+          </blobstorage>
+    <BLANKLINE>
+        </before>
+        mount-point /
+    </zodb_db>
+    ...
+    <BLANKLINE>
+
+The before-storage option can be combined with a demo-storage::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... file-storage = newfs/Data.fs
+    ... before-storage = now
+    ... demo-storage = on
+    ...
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Uninstalling instance.
+    Installing instance.
+
+We should have a zope instance, with a basic zope.conf::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    <zodb_db main>
+        # Main database
+        cache-size 10000
+    <BLANKLINE>
+        # DemoStorage
+        <demostorage>
+    <BLANKLINE>
+        %import zc.beforestorage
+        # BeforeStorage
+        <before>
+          before now
+    <BLANKLINE>
+          # Blob-enabled FileStorage database
+          <blobstorage>
+            blob-dir .../sample-buildout/var/blobstorage
+            # FileStorage database
+            <filestorage>
+              path .../sample-buildout/var/newfs/Data.fs
+            </filestorage>
+          </blobstorage>
+    <BLANKLINE>
+        </before>
+    <BLANKLINE>
+    <BLANKLINE>
+        </demostorage>
         mount-point /
     </zodb_db>
     ...
@@ -360,6 +651,7 @@ We should have a zope instance, with a basic zope.conf::
         # Blob-enabled FileStorage database
         <blobstorage>
           blob-dir .../sample-buildout/var/blob
+          # FileStorage database
           <filestorage>
             path .../sample-buildout/var/filestorage/Data.fs
           </filestorage>
@@ -426,6 +718,7 @@ We should have a zope instance, with a basic zope.conf::
 
 ZEO storage
 ===========
+
 If you want to connect to a zeo server you specify some additional properties
 for the plone.recipe.zope2instance recipe.
 
@@ -566,7 +859,7 @@ We should have a zope instance, with a basic zope.conf::
     ...
     <zodb_db main>
         ...
-        # Demostorage
+        # DemoStorage
         <demostorage>
         # ZEOStorage database
         <zeoclient>
@@ -586,7 +879,7 @@ We should have a zope instance, with a basic zope.conf::
     ...
     <BLANKLINE>
 
-Verify that demo-storage is correctly applied
+Verify that blob-storage is correctly applied
 
     >>> write('buildout.cfg',
     ... '''
@@ -633,6 +926,73 @@ We should have a zope instance, with a basic zope.conf::
     <BLANKLINE>
         </zeoclient>
         ...
+    </zodb_db>
+    ...
+    <BLANKLINE>
+
+Verify that demo-storage is correctly applied together with
+before-storage::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... zeo-client = yes
+    ... demo-storage = yes
+    ... before-storage = now
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Uninstalling instance.
+    Installing instance.
+
+We should have a zope instance, with a basic zope.conf::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    <zodb_db main>
+        # Main database
+        cache-size 10000
+    <BLANKLINE>
+    # DemoStorage
+        <demostorage>
+    <BLANKLINE>
+        %import zc.beforestorage
+        # BeforeStorage
+        <before>
+          before now
+        # Blob-enabled ZEOStorage database
+          <zeoclient>
+            blob-dir .../sample-buildout/var/blobcache
+            shared-blob-dir no
+            server 8100
+            storage 1
+            name zeostorage
+            var .../sample-buildout/parts/instance/var
+            cache-size 128MB
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+          </zeoclient>
+        </before>
+    <BLANKLINE>
+        </demostorage>
+        mount-point /
     </zodb_db>
     ...
     <BLANKLINE>

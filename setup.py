@@ -38,6 +38,7 @@ setup(
         'mailinglogger',
         'zc.recipe.egg',
         'Zope2 >= 2.12.1',
+        'ZODB3 >= 3.9',
     ],
     zip_safe=False,
     entry_points = {'zc.buildout': ['default = %s:Recipe' % name]},

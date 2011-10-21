@@ -35,6 +35,11 @@ except ImportError:
     BUILDOUT15 = False
 
 
+def indent(snippet, amount):
+    ws = " " * amount
+    return "\n".join(ws + s if s else "" for s in snippet.split('\n'))
+
+
 class Recipe(Scripts):
 
     def __init__(self, buildout, name, options):
@@ -286,6 +291,26 @@ class Recipe(Scripts):
         zeo_client = zeo_client.lower() in ('yes', 'true', 'on', '1')
         shared_blob_dir = options.get('shared-blob', 'no')
 
+        before_storage = options.get('before-storage')
+        demo_storage = options.get('demo-storage', 'off') \
+                       not in ('off', 'disable', 'false')
+
+        default_blob = os.path.join(var_dir, 'blobstorage')
+        default_file = os.path.sep.join(('filestorage', 'Data.fs',))
+
+        # Don't try to use the actual blobstorage as a cache
+        if zeo_client and shared_blob_dir == 'no':
+            default_blob = os.path.join(var_dir, 'blobcache')
+
+        # Only set blob storage default if we're using a before
+        # storage, or not a demo storage (otherwise, the default
+        # would be an invalid setting)
+        if demo_storage and not before_storage:
+            default_blob = None
+
+        blob_storage = options.get('blob-storage', default_blob)
+        file_storage = options.get('file-storage', default_file)
+
         relstorage = options.get('rel-storage')
         if relstorage:
             def _split(el):
@@ -324,41 +349,10 @@ class Recipe(Scripts):
                                   for k, v in rel_storage.iteritems()
                                   if is_rs_option(k)),
                 )
-            storage_snippet = rel_storage_template % opts
-
+            file_storage_snippet = rel_storage_template % opts
         else:
-            file_storage = options.get('file-storage',
-                                       os.path.sep.join(('filestorage',
-                                                         'Data.fs',)))
-            file_storage = os.path.join(var_dir, file_storage)
-            file_storage_dir = os.path.dirname(file_storage)
-            if not os.path.exists(file_storage_dir):
-                os.makedirs(file_storage_dir)
-            storage_snippet = file_storage_template % file_storage
-
-            # Don't try to use the actual blobstorage as a cache
-            default_blob = os.path.join(var_dir, 'blobstorage')
-            if zeo_client and shared_blob_dir == 'no':
-                default_blob = os.path.join(var_dir, 'blobcache')
-            blob_storage = options.get('blob-storage', default_blob)
-
-            demo_storage = options.get('demo-storage', 'off') \
-                         not in ('off', 'disable', 'false')
-
-            if demo_storage:
-                # Disable blob storage when using a demo storage, is that
-                # really not supported in Zope 2.12?
-                blob_storage = None
-
-            if blob_storage:
-                blob_storage = os.path.join(base_dir, blob_storage)
-                if not os.path.exists(blob_storage):
-                    os.makedirs(blob_storage)
-                storage_snippet = blob_storage_template % (blob_storage,
-                                                           file_storage)
-
-            elif demo_storage:
-                storage_snippet = demo_storage_template % storage_snippet
+            file_storage_snippet = self.render_file_storage(
+                file_storage, blob_storage, base_dir, var_dir)
 
         zserver_threads = options.get('zserver-threads', '2')
         if zserver_threads:
@@ -427,8 +421,6 @@ class Recipe(Scripts):
 
             if blob_storage:
                 storage_snippet_template = zeo_blob_storage_template
-            elif demo_storage:
-                storage_snippet_template = demo_storage_template % zeo_storage_template
             else:
                 storage_snippet_template = zeo_storage_template
 
@@ -450,6 +442,34 @@ class Recipe(Scripts):
         else:
             # no zeo-client
             zeo_client_client = ''
+            storage_snippet = file_storage_snippet
+
+        if before_storage:
+            storage_snippet = (before_storage_template % before_storage) % \
+                              indent(storage_snippet, 2)
+
+        if demo_storage:
+            demo_file_storage = options.get('demo-file-storage')
+            demo_blob_storage = options.get('demo-blob-storage')
+
+            if demo_file_storage or demo_blob_storage:
+                base = storage_snippet.replace('>', ' base>', 1)
+                changes = self.render_file_storage(
+                    demo_file_storage, demo_blob_storage, base_dir, var_dir).\
+                    replace('>', ' changes>', 1)
+
+                storage_snippet = demo_storage2_template % (base, changes)
+
+            elif 'blob-storage' in options:
+                raise ValueError(
+                    "Both blob and demo storage cannot be used"
+                    " at the same time (use a before storage instead)."
+                    )
+            else:
+                storage_snippet = demo_storage_template % storage_snippet
+        elif 'demo-file-storage' in options:
+            raise ValueError("Must enable demo-storage to use demo-file-storage.")
+
 
         zodb_tmp_storage = options.get('zodb-temporary-storage',
                                        zodb_temporary_storage_template)
@@ -636,6 +656,27 @@ class Recipe(Scripts):
                     % (package, filename)
                     )
 
+    def render_file_storage(self, file_storage, blob_storage, base_dir, var_dir):
+        if file_storage:
+            file_storage = os.path.join(var_dir, file_storage)
+            file_storage_dir = os.path.dirname(file_storage)
+            if not os.path.exists(file_storage_dir):
+                os.makedirs(file_storage_dir)
+            storage = file_storage_template % file_storage
+        else:
+            storage = "    <demostorage />"
+
+        if not blob_storage:
+            return storage
+
+        blob_storage = os.path.join(base_dir, blob_storage)
+        if not os.path.exists(blob_storage):
+            os.makedirs(blob_storage)
+
+        storage = indent(storage, 2)
+
+        return blob_storage_template % (blob_storage, storage)
+
 
 # Storage snippets for zope.conf template
 file_storage_template="""
@@ -646,8 +687,25 @@ file_storage_template="""
 """
 
 demo_storage_template="""
-    # Demostorage
+    # DemoStorage
     <demostorage>
+%s
+    </demostorage>
+"""
+
+before_storage_template="""
+    %%%%import zc.beforestorage
+    # BeforeStorage
+    <before>
+      before %s
+  %%s
+    </before>
+"""
+
+demo_storage2_template="""
+    # DemoStorage
+    <demostorage>
+%s
 %s
     </demostorage>
 """
@@ -666,9 +724,7 @@ blob_storage_template="""
     # Blob-enabled FileStorage database
     <blobstorage>
       blob-dir %s
-      <filestorage>
-        path %s
-      </filestorage>
+%s
     </blobstorage>
 """
 
