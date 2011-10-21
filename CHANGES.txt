@@ -4,8 +4,15 @@ Changelog
 4.2 - unreleased
 ----------------
 
+- Add support for a changes storage for demo storage (in addition to
+  the base storage). Local file and blob storage is supported.
+  [malthe]
+
+- Add support for before storage (via the ``zc.beforestorage`` package).
+  [malthe]
+
 - Make script suppression optional (via empty `scripts` parameter). Otherwise,
-  scripts for packages listed in `eggs` parameter will be generated. 
+  scripts for packages listed in `eggs` parameter will be generated.
   [aclark]
 
 - Support all RelStorage options, even future options. Used a simple pattern
