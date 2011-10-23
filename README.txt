@@ -266,6 +266,14 @@ zeo-var
 Advanced options
 ----------------
 
+before-storage
+  Wraps the base storage in a "before storage" which sets it in
+  read-only mode from the time given (or "now" for the current time).
+
+  This option is normally used together with demo-storage for a
+  normally running site in order for changes to be made to the
+  database.
+
 client-home
   Sets the clienthome for the generated instance.
   Defaults to ${buildout:directory}/var/<name of the section>.
@@ -276,8 +284,25 @@ default-zpublisher-encoding
   Plone requires this to be set to `utf-8`.
 
 demo-storage
-  If 'on' it enables the `demostorage`. It is not compatible with
-  `blob-storage` or `rel-storage`.
+  If 'on' it enables the demo storage. By default, this is a
+  memory-based storage option; changes are not persisted (see the
+  demo-file-storage option to use a persistent storage for changes
+  made during the demonstration).
+
+  To use with a base storage option configured with a blob-storage,
+  you must set a demo-blob-storage.
+
+demo-file-storage
+  If provided, the filename where the ZODB data file for changes
+  committed during a demonstration will be stored.
+
+demo-blob-storage
+  If provided, the name of the directory where demonstration ZODB blob
+  data will be stored.
+
+  This storage may be connected to a demonstration file storage, or
+  used with the default memory-based demo storage (in this case you
+  might want to use a temporary directory).
 
 effective-user
   The name of the effective user for the Zope process. Defaults to not setting
