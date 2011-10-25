@@ -658,13 +658,14 @@ class Recipe(Scripts):
                     % (package, filename)
                     )
 
-    def render_file_storage(self, fstorage, bstorage, base_dir, var_dir, zlib):
-        if fstorage:
-            fstorage = os.path.join(var_dir, fstorage)
-            file_storage_dir = os.path.dirname(fstorage)
+    def render_file_storage(self, file_storage, blob_storage,
+                            base_dir, var_dir, zlib):
+        if file_storage:
+            file_storage = os.path.join(var_dir, file_storage)
+            file_storage_dir = os.path.dirname(file_storage)
             if not os.path.exists(file_storage_dir):
                 os.makedirs(file_storage_dir)
-            storage = file_storage_template % fstorage
+            storage = file_storage_template % file_storage
             if zlib is not None:
                 if zlib == 'active':
                     compress = 'true'
@@ -682,16 +683,16 @@ class Recipe(Scripts):
         else:
             storage = "    <demostorage />"
 
-        if not bstorage:
+        if not blob_storage:
             return storage
 
-        bstorage = os.path.join(base_dir, bstorage)
-        if not os.path.exists(bstorage):
-            os.makedirs(bstorage)
+        blob_storage = os.path.join(base_dir, blob_storage)
+        if not os.path.exists(blob_storage):
+            os.makedirs(blob_storage)
 
         storage = indent(storage, 2)
 
-        return blob_storage_template % (bstorage, storage)
+        return blob_storage_template % (blob_storage, storage)
 
 
 # Storage snippets for zope.conf template
