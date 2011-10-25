@@ -372,6 +372,15 @@ webdav-address
 webdav-force-connection-close
   Valid options are off and on. Defaults to off
 
+zlib-storage
+  Adds support for file compression on a file storage database. The
+  option accepts the values 'active' (compress new records) or
+  'passive' (do not compress new records). Both options support
+  already compressed records.
+
+  You can use the 'passive' setting while you prepare a number of
+  connected clients for compressed records.
+
 zodb-cache-size-bytes
   Set the ZODB cache sizes in bytes. This feature is still experimental.
 

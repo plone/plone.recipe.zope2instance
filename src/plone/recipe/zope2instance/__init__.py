@@ -295,6 +295,8 @@ class Recipe(Scripts):
         demo_storage = options.get('demo-storage', 'off') \
                        not in ('off', 'disable', 'false')
 
+        zlib = options.get('zlib-storage')
+
         default_blob = os.path.join(var_dir, 'blobstorage')
         default_file = os.path.sep.join(('filestorage', 'Data.fs',))
 
@@ -352,7 +354,7 @@ class Recipe(Scripts):
             file_storage_snippet = rel_storage_template % opts
         else:
             file_storage_snippet = self.render_file_storage(
-                file_storage, blob_storage, base_dir, var_dir)
+                file_storage, blob_storage, base_dir, var_dir, zlib)
 
         zserver_threads = options.get('zserver-threads', '2')
         if zserver_threads:
@@ -455,7 +457,7 @@ class Recipe(Scripts):
             if demo_file_storage or demo_blob_storage:
                 base = storage_snippet.replace('>', ' base>', 1)
                 changes = self.render_file_storage(
-                    demo_file_storage, demo_blob_storage, base_dir, var_dir).\
+                    demo_file_storage, demo_blob_storage, base_dir, var_dir, zlib).\
                     replace('>', ' changes>', 1)
 
                 storage_snippet = demo_storage2_template % (base, changes)
@@ -656,26 +658,40 @@ class Recipe(Scripts):
                     % (package, filename)
                     )
 
-    def render_file_storage(self, file_storage, blob_storage, base_dir, var_dir):
-        if file_storage:
-            file_storage = os.path.join(var_dir, file_storage)
-            file_storage_dir = os.path.dirname(file_storage)
+    def render_file_storage(self, fstorage, bstorage, base_dir, var_dir, zlib):
+        if fstorage:
+            fstorage = os.path.join(var_dir, fstorage)
+            file_storage_dir = os.path.dirname(fstorage)
             if not os.path.exists(file_storage_dir):
                 os.makedirs(file_storage_dir)
-            storage = file_storage_template % file_storage
+            storage = file_storage_template % fstorage
+            if zlib is not None:
+                if zlib == 'active':
+                    compress = 'true'
+                elif zlib == 'passive':
+                    compress = 'false'
+                else:
+                    raise ValueError(
+                        "Valid options for ``zlib-storage`` are "\
+                        "('compress', 'uncompress'). Got: %s." % zlib
+                        )
+
+                storage = zlib_storage_template % (
+                    compress, indent(storage, 2)
+                    )
         else:
             storage = "    <demostorage />"
 
-        if not blob_storage:
+        if not bstorage:
             return storage
 
-        blob_storage = os.path.join(base_dir, blob_storage)
-        if not os.path.exists(blob_storage):
-            os.makedirs(blob_storage)
+        bstorage = os.path.join(base_dir, bstorage)
+        if not os.path.exists(bstorage):
+            os.makedirs(bstorage)
 
         storage = indent(storage, 2)
 
-        return blob_storage_template % (blob_storage, storage)
+        return blob_storage_template % (bstorage, storage)
 
 
 # Storage snippets for zope.conf template
@@ -684,6 +700,15 @@ file_storage_template="""
     <filestorage>
       path %s
     </filestorage>
+"""
+
+zlib_storage_template="""
+    %%import zc.zlibstorage
+    # ZlibStorage wrapper
+    <zlibstorage>
+      compress %s
+%s
+    </zlibstorage>
 """
 
 demo_storage_template="""
