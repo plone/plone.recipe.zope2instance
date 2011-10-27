@@ -301,6 +301,9 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
 
+
+
+
 We should have a zope instance, with a basic zope.conf without demostorage::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
@@ -491,6 +494,126 @@ We should have a zope instance, with a basic zope.conf::
         mount-point /
     </zodb_db>
     ...
+
+
+ZlibStorage
+===========
+
+To have a ZlibStorage configuration, you can use zlib-storage::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... file-storage = newfs/Data.fs
+    ... zlib-storage = active
+    ...
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Uninstalling instance.
+    Installing instance.
+
+We should have a zope instance, with a basic zope.conf::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    <zodb_db main>
+        # Main database
+        cache-size 10000
+    <BLANKLINE>
+    # Blob-enabled FileStorage database
+        <blobstorage>
+          blob-dir .../sample-buildout/var/blobstorage
+    <BLANKLINE>
+          %import zc.zlibstorage
+          # ZlibStorage wrapper
+          <zlibstorage>
+            compress true
+    <BLANKLINE>
+            # FileStorage database
+            <filestorage>
+              path .../sample-buildout/var/newfs/Data.fs
+            </filestorage>
+    <BLANKLINE>
+          </zlibstorage>
+    <BLANKLINE>
+        </blobstorage>
+        mount-point /
+    </zodb_db>
+    ...
+    <BLANKLINE>
+
+To have a ZlibStorage configuration with no active compression, you
+can set the ``zlib-storage`` option to 'passive'::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... file-storage = newfs/Data.fs
+    ... zlib-storage = passive
+    ...
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Uninstalling instance.
+    Installing instance.
+
+We should have a zope instance, with a basic zope.conf::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    <zodb_db main>
+        # Main database
+        cache-size 10000
+    <BLANKLINE>
+    # Blob-enabled FileStorage database
+        <blobstorage>
+          blob-dir .../sample-buildout/var/blobstorage
+    <BLANKLINE>
+          %import zc.zlibstorage
+          # ZlibStorage wrapper
+          <zlibstorage>
+            compress false
+    <BLANKLINE>
+            # FileStorage database
+            <filestorage>
+              path .../sample-buildout/var/newfs/Data.fs
+            </filestorage>
+    <BLANKLINE>
+          </zlibstorage>
+    <BLANKLINE>
+        </blobstorage>
+        mount-point /
+    </zodb_db>
+    ...
+    <BLANKLINE>
+
 
 BeforeStorage
 =============
