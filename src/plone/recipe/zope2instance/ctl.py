@@ -460,7 +460,8 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         self.get_status()
         pid = self.zd_pid
         if pid:
-            print "To run the program in the foreground, please stop it first."
+            print('The program seems already to be running. If you believe not, '
+                  'check for dangling .pid and .lock files in var/.')
             return
 
         import subprocess
