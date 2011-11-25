@@ -1,7 +1,7 @@
 Changelog
 =========
 
-4.2 - unreleased
+4.2 (2011-11-24)
 ----------------
 
 - Add support for a changes storage for demo storage (in addition to
