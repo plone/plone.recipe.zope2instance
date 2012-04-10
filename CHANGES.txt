@@ -4,8 +4,10 @@ Changelog
 4.2.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Add control script `debug` and `run` support to set up a REQUEST,
+  log in the AccessControl.SpecialUsers.system user, and traverse to
+  an object, such as a CMF portal.
+  [rpatterson]
 
 4.2 (2011-11-24)
 ----------------

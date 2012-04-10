@@ -402,6 +402,27 @@ zope-conf-additional
       locale fr_FR
       http-realm Slipknot
 
+Additional Control Script `debug` and `run` Commands
+----------------------------------------------------
+
+The extended Zope 2 control script installed by this recipe, usually
+`bin\instance` by convention, offers a `debug` command and another
+`run` command.  The `debug` command starts an interactive Python
+prompt with the Zope 2 application available via the `app` name.
+Similarly, the `run` command accepts a Python script as an argument
+that will be run under the same conditions.
+
+These commands have also been extended to set up a more complete
+environment.  Specifically, these commands set up a REQUEST, log in
+the AccessControl.SpecialUsers.system user, and may traverse to an
+object, such as a CMF portal.  This environment set up is controlled
+with following options::
+
+    -R/--no-request -- do not set up a REQUEST.
+    -L/--no-login -- do not login the system user.
+    -P/--object-path <path> -- Traverse to <path> from the app 
+                               and make available as `obj`.
+
 Additional control script commands
 ----------------------------------
 

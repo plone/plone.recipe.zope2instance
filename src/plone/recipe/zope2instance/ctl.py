@@ -395,6 +395,41 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                    'configure(r\'%s\'); '
                    'import Zope2; app=Zope2.app(); '
                    % (python, pyflags, self.options.configfile))
+
+        if not self.options.no_request:
+            cmdline += (
+                'from Testing.ZopeTestCase.utils import makerequest; '
+                'app = makerequest(app); '
+                # REQUEST.traverse needs this but no reason not to set
+                # this even if we're not traversing to an object
+                'app.REQUEST[\'PARENTS\'] = [app]; '
+                # five.globalrequest does setRequest at IPubStart
+                # which is called outside of REQUEST.traverse
+                'from zope.globalrequest import setRequest ;'
+                'setRequest(app.REQUEST); ')
+        # Need to login at different points depending on REQUEST.traverse
+        login_cmdline = (
+            'from AccessControl.SpecialUsers import system as user; '
+            'from AccessControl.SecurityManagement import newSecurityManager; '
+            'newSecurityManager(None, user); ')
+        if self.options.object_path:
+            if not self.options.no_request:
+                cmdline += (
+                    # populate the request, setSite, skin, theme, etc.
+                    'app.REQUEST.traverse(r\'%s\'); '
+                    % self.options.object_path)
+            if not self.options.no_login:
+                # REQUEST.traverse will do setSecurityManager with Anonymous 
+                # so we login after
+                cmdline += login_cmdline
+            cmdline += (
+                'obj = app.restrictedTraverse(r\'%s\'); '
+                % self.options.object_path)
+        elif not self.options.no_login:
+            # Login if we're not getting a object and we don't need to
+            # worry about REQUEST.traverse
+            cmdline += login_cmdline
+
         cmdline = cmdline + more + '\"'
         if zopectl.WIN:
             # entire command line must be quoted
@@ -402,6 +437,16 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             return '"%s"' % cmdline
         else:
             return cmdline
+
+    def help_startup_command(self):
+        print "    Also sets up a REQUEST, logs in the "
+        print "    AccessControl.SpecialUsers.system user, and may traverse "
+        print "    to an object, such as a CMF portal.  This environment set "
+        print "    up is controlled with following options:"
+        print "    -R/--no-request -- do not set up a REQUEST."
+        print "    -L/--no-login -- do not login the system user."
+        print "    -P/--object-path <path> -- Traverse to <path> from the app "
+        print "                               and make available as `obj`."
 
     def do_run(self, arg):
         # If the command line was something like
@@ -442,6 +487,10 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
 
         self._exitstatus = os.system(cmdline)
 
+    def help_run(self):
+        zopectl.ZopeCmd.help_run(self)
+        self.help_startup_command()
+
     def do_console(self, arg):
         self.do_foreground(arg, debug=False)
 
@@ -455,6 +504,10 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         print ('Starting debugger (the name "app" is bound to the top-level '
                'Zope object)')
         os.system(cmdline)
+
+    def help_debug(self):
+        zopectl.ZopeCmd.help_debug(self)
+        self.help_startup_command()
 
     def do_foreground(self, arg, debug=True):
         self.get_status()
@@ -510,6 +563,9 @@ def main(args=None):
     """ Customized entry point for launching Zope without forking other processes """
 
     options = zopectl.ZopeCtlOptions()
+    options.add(name="no_request", short="R", long="no-request", flag=1)
+    options.add(name="no_login", short="L", long="no-login", flag=1)
+    options.add(name="object_path", short="O:", long="object-path=")
     # Realize arguments and set documentation which is used in the -h option
     options.realize(args, doc=__doc__)
 
