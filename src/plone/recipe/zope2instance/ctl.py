@@ -392,8 +392,9 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         # Also, don't forget that 'python'
         # may have spaces and needs to be quoted.
         cmdline = ('"%s" %s -c "from Zope2 import configure; '
-                   'configure(r\'%s\'); ' %
-                   (python, pyflags, self.options.configfile))
+                   'configure(r\'%s\'); '
+                   'import Zope2; app=Zope2.app(); '
+                   % (python, pyflags, self.options.configfile))
         cmdline = cmdline + more + '\"'
         if zopectl.WIN:
             # entire command line must be quoted
@@ -436,7 +437,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         if len(tup) > 1:
             argv = tup[1:]
             cmd += '[sys.argv.append(x) for x in %s]; ' % argv
-        cmd += 'import Zope2; app=Zope2.app(); execfile(r\'%s\')' % script
+        cmd += 'execfile(r\'%s\')' % script
         cmdline = self.get_startup_cmd(self.options.python, cmd)
 
         self._exitstatus = os.system(cmdline)
@@ -449,8 +450,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         print "    In contrast to foreground this does not turn on debug mode."
 
     def do_debug(self, arg):
-        cmdline = self.get_startup_cmd(self.options.python,
-                                       'import Zope2; app=Zope2.app()',
+        cmdline = self.get_startup_cmd(self.options.python, '',
                                        pyflags = '-i', )
         print ('Starting debugger (the name "app" is bound to the top-level '
                'Zope object)')
