@@ -1,7 +1,7 @@
 Changelog
 =========
 
-4.2.1 (unreleased)
+4.2.1 (2012-04-15)
 ------------------
 
 - Add control script `debug` and `run` support to set up a REQUEST,
