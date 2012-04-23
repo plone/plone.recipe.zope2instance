@@ -77,6 +77,28 @@ resources
 
     resources = ${buildout:directory}/resources
 
+Locales
+-------
+
+locales
+  Specify a locales directory. Example::
+
+    locales = ${buildout:directory}/locales
+
+This registers a locales directory with extra or different
+translations.  If you want to override a few translations from the
+plone domain in the English language, you can add a
+``en/LC_MESSAGES/plone.po`` file in this directory, with standard
+headers at the top, followed by something like this::
+
+  #. Default: "You are here:"
+  #: plone.app.layout/plone/app/layout/viewlets/path_bar.pt:6
+  msgid "you_are_here"
+  msgstr "You are very welcome here:"
+
+Translations for other message ids are not affected and will continue
+to work.
+
 Development options
 -------------------
 
