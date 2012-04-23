@@ -31,8 +31,7 @@ plone.recipe.zope2instance::
 Let's run it::
 
     >>> print system(join('bin', 'buildout')),
-    Installing instance.
-    ...
+    Installing instance...
     Generated script '...instance'.
 
 We should have a zope instance, with a basic zope.conf::
