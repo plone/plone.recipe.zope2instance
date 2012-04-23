@@ -1573,3 +1573,83 @@ We should have a zope instance script with the custom config file::
     ...     instance_path += '-script.py'
     >>> open(instance_path).read()
     '...plone.recipe.zope2instance.ctl.main(...["-C", \'/some/path/my.conf\']...'
+
+
+Resources directory
+===================
+
+`resources` is an option that allows you to register a
+plone.app.theming resources directory.
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... resources = ${buildout:directory}/myresources
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '...instance'.
+
+The directory should have been generated, and zope config created::
+
+    >>> 'myresources' in os.listdir(os.curdir)
+    True
+    >>> includes_path = join('parts', 'instance', 'etc', 'package-includes')
+    >>> ls(includes_path)
+    -  998-resources-configure.zcml
+    >>> cat(includes_path, '998-resources-configure.zcml')
+    <configure xmlns="http://namespaces.zope.org/zope"
+               xmlns:plone="http://namespaces.plone.org/plone">
+        <include package="plone.resource" file="meta.zcml"/>
+        <plone:static directory=".../sample-buildout/myresources"/>
+    </configure>
+
+
+Locales directory
+===================
+
+`locales` is an option that allows you to register a
+plone.app.theming locales directory.
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... locales = ${buildout:directory}/mylocales
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Uninstalling instance.
+    Installing instance.
+
+The directory should have been generated, and zope config created::
+
+    >>> 'mylocales' in os.listdir(os.curdir)
+    True
+    >>> includes_path = join('parts', 'instance', 'etc', 'package-includes')
+    >>> ls(includes_path)
+    -  997-locales-configure.zcml
+    >>> cat(includes_path, '997-locales-configure.zcml')
+    <configure xmlns="http://namespaces.zope.org/zope"
+               xmlns:i18n="http://namespaces.zope.org/i18n">
+        <i18n:registerTranslations directory=".../sample-buildout/mylocales" />
+    </configure>
