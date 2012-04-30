@@ -588,6 +588,7 @@ class Recipe(Scripts):
         site_zcml = self.options.get('site-zcml')
         additional_zcml = self.options.get("zcml-additional")
         resources = self.options.get("resources")
+        locales = self.options.get("locales")
 
         if site_zcml:
             open(sitezcml_path, 'w').write(site_zcml)
@@ -596,7 +597,7 @@ class Recipe(Scripts):
         if zcml:
             zcml = zcml.split()
 
-        if additional_zcml or resources or zcml:
+        if additional_zcml or resources or locales or zcml:
             includes_path = os.path.join(location, 'etc', 'package-includes')
 
             if not os.path.exists(includes_path):
@@ -623,6 +624,16 @@ class Recipe(Scripts):
 
             if not os.path.exists(resources_path):
                 os.mkdir(resources_path)
+
+        if locales:
+            locales_path = locales.strip()
+            path=os.path.join(includes_path, "997-locales-configure.zcml")
+            open(path, "w").write(
+                locales_zcml % dict(directory=locales_path)
+                )
+
+            if not os.path.exists(locales_path):
+                os.mkdir(locales_path)
 
         if zcml:
             n = 0
@@ -921,5 +932,13 @@ resources_zcml = """\
            xmlns:plone="http://namespaces.plone.org/plone">
     <include package="plone.resource" file="meta.zcml"/>
     <plone:static directory="%(directory)s"/>
+</configure>
+"""
+
+# Template used for locales directory
+locales_zcml = """\
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:i18n="http://namespaces.zope.org/i18n">
+    <i18n:registerTranslations directory="%(directory)s" />
 </configure>
 """
