@@ -370,7 +370,7 @@ class Recipe(Scripts):
 
         zeo_address = options.get('zeo-address', '8100')
 
-        zodb_cache_size = options.get('zodb-cache-size', '10000')
+        zodb_cache_size = options.get('zodb-cache-size', '30000')
         if zodb_cache_size:
             zodb_cache_size = "cache-size %s" % zodb_cache_size
         else:

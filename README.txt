@@ -51,7 +51,7 @@ ip-address
 
 zodb-cache-size
   Set the ZODB cache size, i.e. the number of objects which the ZODB cache
-  will try to hold. Defaults to 10000.
+  will try to hold. Defaults to 30000.
 
 zserver-threads
   Specify the number of threads that Zope's ZServer web server will use to

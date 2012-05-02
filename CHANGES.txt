@@ -4,6 +4,10 @@ Changelog
 4.2.2 (unreleased)
 ------------------
 
+- Changed client connection cache defaults. We specify a cache size of 30000
+  instead of 10000.
+  [hvelarde]
+
 - Add new `locales` option for specifying a locales directory with
   extra or different translations.
   [maurits]
