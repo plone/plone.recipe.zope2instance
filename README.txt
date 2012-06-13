@@ -114,11 +114,11 @@ directly without running a database server process.
 
 file-storage
   The filename where the ZODB data file will be stored.
-  Defaults to `var/filestorage/Data.fs`.
+  Defaults to `${buildout:directory}/var/filestorage/Data.fs`.
 
 blob-storage
   The name of the directory where the ZODB blob data will be stored, defaults
-  to `var/blobstorage`.
+  to `${buildout:directory}/var/blobstorage`.
 
 Basic ZEO storage
 -----------------
@@ -137,7 +137,7 @@ zeo-client
 
 blob-storage
   The location of the blob zeocache, defaults to `var/blobcache`. If
-  `shared-blob` is on it defaults to `var/blobstorage`.
+  `shared-blob` is on it defaults to `${buildout:directory}/var/blobstorage`.
 
 shared-blob
   Defaults to `off`. Set this to `on` if the ZEO server and the instance have
@@ -198,7 +198,7 @@ In most cases you don't need to adjust any of this, you might want to adjust
 log levels or configure `mailinglogger`.
 
 event-log
-  The filename of the event log. Defaults to var/log/${partname}.log
+  The filename of the event log. Defaults to ${buildout:directory}/var/log/${partname}.log
 
 event-log-level
   Set the level of the console output for the event log. Level may be any of
