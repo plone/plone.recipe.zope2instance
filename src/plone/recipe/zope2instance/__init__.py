@@ -627,7 +627,7 @@ class Recipe(Scripts):
 
         if locales:
             locales_path = locales.strip()
-            path=os.path.join(includes_path, "997-locales-configure.zcml")
+            path=os.path.join(includes_path, "001-locales-configure.zcml")
             open(path, "w").write(
                 locales_zcml % dict(directory=locales_path)
                 )
@@ -636,7 +636,7 @@ class Recipe(Scripts):
                 os.mkdir(locales_path)
 
         if zcml:
-            n = 0
+            n = 1 # 001 is reserved for an optional locales-configure
             package_match = re.compile('\w+([.]\w+)*$').match
             for package in zcml:
                 n += 1

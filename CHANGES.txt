@@ -4,7 +4,8 @@ Changelog
 4.2.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix zcml load order of the optional locales directory. Translation overrides need to be loaded first.
+  [sunew]
 
 
 4.2.2 (2012-07-02)
