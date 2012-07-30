@@ -1647,8 +1647,8 @@ The directory should have been generated, and zope config created::
     True
     >>> includes_path = join('parts', 'instance', 'etc', 'package-includes')
     >>> ls(includes_path)
-    -  997-locales-configure.zcml
-    >>> cat(includes_path, '997-locales-configure.zcml')
+    -  001-locales-configure.zcml
+    >>> cat(includes_path, '001-locales-configure.zcml')
     <configure xmlns="http://namespaces.zope.org/zope"
                xmlns:i18n="http://namespaces.zope.org/i18n">
         <i18n:registerTranslations directory=".../sample-buildout/mylocales" />
