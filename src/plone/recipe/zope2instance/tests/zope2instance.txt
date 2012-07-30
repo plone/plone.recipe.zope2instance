@@ -87,7 +87,7 @@ We should have a zope instance, with a basic zope.conf::
     <BLANKLINE>
     <zodb_db main>
         # Main database
-        cache-size 10000
+        cache-size 30000
     <BLANKLINE>
     # Blob-enabled FileStorage database
         <blobstorage>
@@ -262,7 +262,7 @@ We should have a zope instance, with a basic zope.conf::
     ...
     <zodb_db main>
         # Main database
-        cache-size 10000
+        cache-size 30000
     <BLANKLINE>
     # DemoStorage
         <demostorage>
@@ -314,7 +314,7 @@ We should have a zope instance, with a basic zope.conf without demostorage::
     ...
     <zodb_db main>
         # Main database
-        cache-size 10000
+        cache-size 30000
     <BLANKLINE>
     # Blob-enabled FileStorage database
         <blobstorage>
@@ -364,7 +364,7 @@ We should have a zope instance, with a basic zope.conf::
     ...
     <zodb_db main>
         # Main database
-        cache-size 10000
+        cache-size 30000
     <BLANKLINE>
     # DemoStorage
         <demostorage>
@@ -473,7 +473,7 @@ We should have a zope instance, with a basic zope.conf::
     ...
     <zodb_db main>
         # Main database
-        cache-size 10000
+        cache-size 30000
     <BLANKLINE>
     # DemoStorage
         <demostorage>
@@ -532,7 +532,7 @@ We should have a zope instance, with a basic zope.conf::
     ...
     <zodb_db main>
         # Main database
-        cache-size 10000
+        cache-size 30000
     <BLANKLINE>
     # Blob-enabled FileStorage database
         <blobstorage>
@@ -590,7 +590,7 @@ We should have a zope instance, with a basic zope.conf::
     ...
     <zodb_db main>
         # Main database
-        cache-size 10000
+        cache-size 30000
     <BLANKLINE>
     # Blob-enabled FileStorage database
         <blobstorage>
@@ -651,7 +651,7 @@ We should have a zope instance, with a basic zope.conf::
     ...
     <zodb_db main>
         # Main database
-        cache-size 10000
+        cache-size 30000
     <BLANKLINE>
     %import zc.beforestorage
         # BeforeStorage
@@ -707,7 +707,7 @@ We should have a zope instance, with a basic zope.conf::
     ...
     <zodb_db main>
         # Main database
-        cache-size 10000
+        cache-size 30000
     <BLANKLINE>
         # DemoStorage
         <demostorage>
@@ -770,7 +770,7 @@ We should have a zope instance, with a basic zope.conf::
     ...
     <zodb_db main>
         # Main database
-        cache-size 10000
+        cache-size 30000
         # Blob-enabled FileStorage database
         <blobstorage>
           blob-dir .../sample-buildout/var/blob
@@ -826,7 +826,7 @@ We should have a zope instance, with a basic zope.conf::
     ...
     <zodb_db main>
         # Main database
-        cache-size 10000
+        cache-size 30000
     %import relstorage
         <relstorage>
             keep-history false
@@ -1087,7 +1087,7 @@ We should have a zope instance, with a basic zope.conf::
     ...
     <zodb_db main>
         # Main database
-        cache-size 10000
+        cache-size 30000
     <BLANKLINE>
     # DemoStorage
         <demostorage>
