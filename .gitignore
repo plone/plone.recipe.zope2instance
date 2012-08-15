@@ -1,9 +1,5 @@
-.installed.cfg
-bin
+*.egg-info
+*.pyc
+*.pyo
 build
-develop-eggs
 dist
-downloads
-eggs
-parts
-var
