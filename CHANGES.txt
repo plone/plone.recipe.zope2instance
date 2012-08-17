@@ -4,8 +4,13 @@ Changelog
 4.2.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Expose 'drop-cache-rather-verify' ZEO client option which indicates that
+  the cache should be dropped rather than verified when the verification 
+  optimization is not available (e.g. when the ZEO server restarted).
+  [runyaga]
 
+- Strip all empty lines out of zeo.conf to provide more compact view.
+  [runyaga]
 
 4.2.3 (2012-08-04)
 ------------------

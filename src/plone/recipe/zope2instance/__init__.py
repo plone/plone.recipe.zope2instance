@@ -388,6 +388,10 @@ class Recipe(Scripts):
                 raise ValueError('You cannot use both ZEO and RelStorage '
                     'at the same time.')
 
+            zeo_drop_cache_rather_verify = options.get('zeo-drop-cache-rather-verify', '')
+            if zeo_drop_cache_rather_verify:
+                zeo_drop_cache_rather_verify = 'drop-cache-rather-verify %s' % \
+                        zeo_drop_cache_rather_verify
             zeo_var_dir = options.get('zeo-var',
                                       os.path.join(instance_home, 'var'))
             zeo_client_client = options.get('zeo-client-client', '')
@@ -438,6 +442,7 @@ class Recipe(Scripts):
                 zeo_client_client = zeo_client_client,
                 zeo_storage = zeo_storage,
                 zeo_var_dir=zeo_var_dir,
+                zeo_drop_cache_rather_verify = zeo_drop_cache_rather_verify,
                 zeo_client_min_disconnect_poll=zeo_client_min_disconnect_poll,
                 zeo_client_max_disconnect_poll=zeo_client_max_disconnect_poll,
                 )
@@ -508,7 +513,7 @@ class Recipe(Scripts):
                                     access_event_log = access_event_log,
                                     z_log_level = z_log_level,
                                     default_zpublisher_encoding = default_zpublisher_encoding,
-                                    storage_snippet = storage_snippet.strip(),
+                                    storage_snippet = storage_snippet,
                                     port_base = port_base,
                                     http_address = http_address,
                                     http_force_connection_close = http_force_connection_close,
@@ -528,6 +533,7 @@ class Recipe(Scripts):
                                     enable_products = enable_products,
                                     zope_conf_additional = zope_conf_additional,)
 
+        zope_conf = '\n'.join([l for l in zope_conf.splitlines() if l.rstrip()])
         zope_conf_path = os.path.join(location, 'etc', 'zope.conf')
         try:
             fd = open(zope_conf_path, 'w')
@@ -783,6 +789,7 @@ zeo_storage_template="""
       %(zeo_client_client)s
       %(zeo_client_min_disconnect_poll)s
       %(zeo_client_max_disconnect_poll)s
+      %(zeo_drop_cache_rather_verify)s
     </zeoclient>
 """.strip()
 
@@ -802,6 +809,7 @@ zeo_blob_storage_template="""
       %(zeo_client_client)s
       %(zeo_client_min_disconnect_poll)s
       %(zeo_client_max_disconnect_poll)s
+      %(zeo_drop_cache_rather_verify)s
     </zeoclient>
 """.strip()
 

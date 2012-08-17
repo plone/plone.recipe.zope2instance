@@ -285,6 +285,11 @@ zeo-var
   Used in the ZEO storage snippets to configure the ZEO var folder.
   Defaults to $INSTANCE_HOME/var.
 
+zeo-drop-cache-rather-verify
+  Indicates that the cache should be dropped rather than verified when
+  the verification optimization is not available (e.g. when the ZEO server
+  restarted). Defaults to 'False'.
+
 Advanced options
 ----------------
 
