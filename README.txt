@@ -278,17 +278,17 @@ zeo-client-blob-cache-size-check
   bytes have been loaded into the cache. Defaults to 10% of the blob cache 
   size. This option is ignored if `shared-blob` is enabled.
 
+zeo-client-drop-cache-rather-verify
+  Indicates that the cache should be dropped rather than verified when
+  the verification optimization is not available (e.g. when the ZEO server
+  restarted). Defaults to 'False'.
+
 zeo-storage
   Set the storage number of the ZEO storage. Defaults to '1'.
 
 zeo-var
   Used in the ZEO storage snippets to configure the ZEO var folder.
   Defaults to $INSTANCE_HOME/var.
-
-zeo-drop-cache-rather-verify
-  Indicates that the cache should be dropped rather than verified when
-  the verification optimization is not available (e.g. when the ZEO server
-  restarted). Defaults to 'False'.
 
 Advanced options
 ----------------
