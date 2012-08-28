@@ -1,4 +1,3 @@
-
 # ##############################################################################
 #
 # Copyright (c) 2006-2008 Zope Corporation and Contributors.
@@ -388,10 +387,10 @@ class Recipe(Scripts):
                 raise ValueError('You cannot use both ZEO and RelStorage '
                     'at the same time.')
 
-            zeo_drop_cache_rather_verify = options.get('zeo-drop-cache-rather-verify', '')
-            if zeo_drop_cache_rather_verify:
-                zeo_drop_cache_rather_verify = 'drop-cache-rather-verify %s' % \
-                        zeo_drop_cache_rather_verify
+            zeo_client_drop_cache_rather_verify = options.get('zeo-client-drop-cache-rather-verify', '')
+            if zeo_client_drop_cache_rather_verify:
+                zeo_client_drop_cache_rather_verify = 'drop-cache-rather-verify %s' % \
+                        zeo_client_drop_cache_rather_verify
             zeo_var_dir = options.get('zeo-var',
                                       os.path.join(instance_home, 'var'))
             zeo_client_client = options.get('zeo-client-client', '')
