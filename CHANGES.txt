@@ -1,7 +1,7 @@
 Changelog
 =========
 
-4.2.4 (unreleased)
+4.2.4 (2012-08-29)
 ------------------
 
 - Expose 'drop-cache-rather-verify' ZEO client option which indicates that
