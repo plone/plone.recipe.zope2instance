@@ -447,8 +447,11 @@ with following options::
 
     -R/--no-request -- do not set up a REQUEST.
     -L/--no-login -- do not login the system user.
-    -P/--object-path <path> -- Traverse to <path> from the app 
+    -O/--object-path <path> -- Traverse to <path> from the app
                                and make available as `obj`.
+
+Note that these options must come before the script name,
+e.g. `bin/instance -RLOPlone/front-page debug`
 
 Additional control script commands
 ----------------------------------

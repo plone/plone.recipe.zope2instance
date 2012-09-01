@@ -445,8 +445,9 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         print "    up is controlled with following options:"
         print "    -R/--no-request -- do not set up a REQUEST."
         print "    -L/--no-login -- do not login the system user."
-        print "    -P/--object-path <path> -- Traverse to <path> from the app "
+        print "    -O/--object-path <path> -- Traverse to <path> from the app "
         print "                               and make available as `obj`."
+        print "    Example usage: bin/instance -RLOPlone/front-page debug"
 
     def do_run(self, arg):
         # If the command line was something like
