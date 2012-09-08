@@ -441,7 +441,7 @@ class Recipe(Scripts):
                 zeo_client_client = zeo_client_client,
                 zeo_storage = zeo_storage,
                 zeo_var_dir=zeo_var_dir,
-                zeo_drop_cache_rather_verify = zeo_drop_cache_rather_verify,
+                zeo_client_drop_cache_rather_verify = zeo_client_drop_cache_rather_verify,
                 zeo_client_min_disconnect_poll=zeo_client_min_disconnect_poll,
                 zeo_client_max_disconnect_poll=zeo_client_max_disconnect_poll,
                 )
@@ -788,7 +788,7 @@ zeo_storage_template="""
       %(zeo_client_client)s
       %(zeo_client_min_disconnect_poll)s
       %(zeo_client_max_disconnect_poll)s
-      %(zeo_drop_cache_rather_verify)s
+      %(zeo_client_drop_cache_rather_verify)s
     </zeoclient>
 """.strip()
 
@@ -808,7 +808,7 @@ zeo_blob_storage_template="""
       %(zeo_client_client)s
       %(zeo_client_min_disconnect_poll)s
       %(zeo_client_max_disconnect_poll)s
-      %(zeo_drop_cache_rather_verify)s
+      %(zeo_client_drop_cache_rather_verify)s
     </zeoclient>
 """.strip()
 
