@@ -256,9 +256,9 @@ class Recipe(Scripts):
                 event_log_old_files = options.get('event-log-old-files', 1)
                 event_log_rotate = '\n'.join((
                     "max-size %s" % event_log_max_size,
-                    "old-files %s" % event_log_old_files))
+                    "    old-files %s" % event_log_old_files))
             event_log = event_logfile % {'event_logfile': event_file,
-                                         'event_log_level': event_log_level}
+                                         'event_log_level': event_log_level,
                                          'event_log_rotate': event_log_rotate}
         # custom log
         else:
@@ -289,7 +289,7 @@ class Recipe(Scripts):
                 access_log_old_files = options.get('access-log-old-files', 1)
                 access_log_rotate = '\n'.join((
                     "max-size %s" % access_log_max_size,
-                    "old-files %s" % access_log_old_files))
+                    "    old-files %s" % access_log_old_files))
             access_event_log = access_event_logfile % {'z_log': z_log,
                                          'access_log_rotate': access_log_rotate}
         # custom directive
@@ -853,7 +853,7 @@ event_logfile = """
   <logfile>
     path %(event_logfile)s
     level %(event_log_level)s
-    %(event_log_rotate)
+    %(event_log_rotate)s
   </logfile>
 """.strip()
 
@@ -861,7 +861,7 @@ access_event_logfile = """
   <logfile>
     path %(z_log)s
     format %%(message)s
-    %(access_log_rotate)
+    %(access_log_rotate)s
   </logfile>
 """.strip()
 
