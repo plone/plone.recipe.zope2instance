@@ -250,8 +250,16 @@ class Recipe(Scripts):
             event_log_dir = os.path.dirname(event_file)
             if not os.path.exists(event_log_dir):
                 os.makedirs(event_log_dir)
+            event_log_rotate = ''
+            event_log_max_size = options.get('event-log-max-size', None)
+            if event_log_max_size:
+                event_log_old_files = options.get('event-log-old-files', 1)
+                event_log_rotate = '\n'.join((
+                    "max-size %s" % event_log_max_size,
+                    "old-files %s" % event_log_old_files))
             event_log = event_logfile % {'event_logfile': event_file,
                                          'event_log_level': event_log_level}
+                                         'event_log_rotate': event_log_rotate}
         # custom log
         else:
             event_log = custom_event_log
@@ -837,6 +845,7 @@ event_logfile = """
   <logfile>
     path %(event_logfile)s
     level %(event_log_level)s
+    %(event_log_rotate)
   </logfile>
 """.strip()
 
