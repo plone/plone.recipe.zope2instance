@@ -283,7 +283,15 @@ class Recipe(Scripts):
         custom_access_event_log = options.get('access-log-custom', None)
         # filelog directive
         if custom_access_event_log is None:
-            access_event_log = access_event_logfile % {'z_log': z_log}
+            access_log_rotate = ''
+            access_log_max_size = options.get('access-log-max-size', None)
+            if access_log_max_size:
+                access_log_old_files = options.get('access-log-old-files', 1)
+                access_log_rotate = '\n'.join((
+                    "max-size %s" % access_log_max_size,
+                    "old-files %s" % access_log_old_files))
+            access_event_log = access_event_logfile % {'z_log': z_log,
+                                         'access_log_rotate': access_log_rotate}
         # custom directive
         else:
             access_event_log = custom_access_event_log
@@ -853,6 +861,7 @@ access_event_logfile = """
   <logfile>
     path %(z_log)s
     format %%(message)s
+    %(access_log_rotate)
   </logfile>
 """.strip()
 
