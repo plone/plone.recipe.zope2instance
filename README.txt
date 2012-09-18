@@ -204,6 +204,12 @@ event-log-level
   Set the level of the console output for the event log. Level may be any of
   CRITICAL, ERROR, WARN, INFO, DEBUG, or ALL. Defaults to INFO.
 
+event-log-max-size
+  Maximum size of event log file. Enables log rotation.
+
+event-log-old-files
+  Number of previous log files to retain when log rotation is enabled. Defaults to 1.
+
 event-log-custom
   A custom section for the eventlog, to be able to use another
   event logger than `logfile`
@@ -226,6 +232,12 @@ z2-log
 z2-log-level
   Set the log level for the access log. Level may be any of CRITICAL, ERROR,
   WARN, INFO, DEBUG, or ALL. Defaults to WARN.
+
+access-log-max-size
+  Maximum size of access log file. Enables log rotation.
+
+access-log-old-files
+  Number of previous log files to retain when log rotation is enabled. Defaults to 1.
 
 access-log-custom
   Like `event-log-custom`, a custom section for the access logger, to be able
