@@ -85,14 +85,13 @@ locales
 
     locales = ${buildout:directory}/locales
 
-This registers a locales directory with extra or different
-translations.  If you want to override a few translations from the
-plone domain in the English language, you can add a
-``en/LC_MESSAGES/plone.po`` file in this directory, with standard
-headers at the top, followed by something like this::
+This registers a locales directory with extra or different translations.
+If you want to override a few translations from the `plone` domain in the
+English language, you can add a ``en/LC_MESSAGES/plone.po`` file in this
+directory, with standard headers at the top, followed by something like
+this::
 
   #. Default: "You are here:"
-  #: plone.app.layout/plone/app/layout/viewlets/path_bar.pt:6
   msgid "you_are_here"
   msgstr "You are very welcome here:"
 
@@ -208,7 +207,8 @@ event-log-max-size
   Maximum size of event log file. Enables log rotation.
 
 event-log-old-files
-  Number of previous log files to retain when log rotation is enabled. Defaults to 1.
+  Number of previous log files to retain when log rotation is enabled.
+  Defaults to 1.
 
 event-log-custom
   A custom section for the eventlog, to be able to use another
@@ -237,7 +237,8 @@ access-log-max-size
   Maximum size of access log file. Enables log rotation.
 
 access-log-old-files
-  Number of previous log files to retain when log rotation is enabled. Defaults to 1.
+  Number of previous log files to retain when log rotation is enabled.
+  Defaults to 1.
 
 access-log-custom
   Like `event-log-custom`, a custom section for the access logger, to be able
@@ -285,9 +286,9 @@ zeo-client-blob-cache-size
   the cache size isn't checked and the blob directory will grow without bound.
 
 zeo-client-blob-cache-size-check
-  Set the ZEO check size as percent of `zeo-client-blob-cache-size` (for 
-  example, `10` for 10%).  The ZEO cache size will be checked when this many 
-  bytes have been loaded into the cache. Defaults to 10% of the blob cache 
+  Set the ZEO check size as percent of `zeo-client-blob-cache-size` (for
+  example, `10` for 10%). The ZEO cache size will be checked when this many
+  bytes have been loaded into the cache. Defaults to 10% of the blob cache
   size. This option is ignored if `shared-blob` is enabled.
 
 zeo-client-drop-cache-rather-verify
@@ -393,7 +394,7 @@ scripts
 
     [instance]
     recipe = plone.recipe.zope2instance
-    eggs = 
+    eggs =
       Plone
       mr.migrator
       zopeskel
@@ -452,9 +453,9 @@ Similarly, the `run` command accepts a Python script as an argument
 that will be run under the same conditions.
 
 These commands have also been extended to set up a more complete
-environment.  Specifically, these commands set up a REQUEST, log in
+environment. Specifically, these commands set up a REQUEST, log in
 the AccessControl.SpecialUsers.system user, and may traverse to an
-object, such as a CMF portal.  This environment set up is controlled
+object, such as a CMF portal. This environment set up is controlled
 with following options::
 
     -R/--no-request -- do not set up a REQUEST.
@@ -487,7 +488,7 @@ the following entry point configuration in setup.py::
 
 This would allow invoking the foo method by running `bin/instance foo`
 (assuming the instance control script was installed by a buildout part
-called `instance`.)  The entry point is invoked with the following
+called `instance`.) The entry point is invoked with the following
 parameters:
 
   self
