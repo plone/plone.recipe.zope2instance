@@ -7,7 +7,7 @@ def read(name):
     return open(name).read()
 
 long_description=(
-        read('README.txt')
+        read('README.rst')
         + '\n' +
         read('CHANGES.txt')
     )
