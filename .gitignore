@@ -1,5 +1,9 @@
 *.egg-info
 *.pyc
 *.pyo
+bin
 build
+develop-eggs
 dist
+eggs
+parts
