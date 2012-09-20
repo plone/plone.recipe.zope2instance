@@ -4,15 +4,14 @@ Changelog
 4.2.5 (unreleased)
 ------------------
 
-- Added event and access log rotation capability
+- Added event and access log rotation capability.
   [sureshvv]
-
 
 4.2.4 (2012-08-29)
 ------------------
 
 - Expose 'drop-cache-rather-verify' ZEO client option which indicates that
-  the cache should be dropped rather than verified when the verification 
+  the cache should be dropped rather than verified when the verification
   optimization is not available (e.g. when the ZEO server restarted).
   [runyaga]
 
@@ -22,9 +21,9 @@ Changelog
 4.2.3 (2012-08-04)
 ------------------
 
-- Fix zcml load order of the optional locales directory. Translation overrides need to be loaded first.
+- Fix zcml load order of the optional locales directory. Translation overrides
+  need to be loaded first.
   [sunew]
-
 
 4.2.2 (2012-07-02)
 ------------------
