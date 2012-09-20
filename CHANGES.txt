@@ -1,7 +1,7 @@
 Changelog
 =========
 
-4.2.5 (unreleased)
+4.2.5 (2012-09-20)
 ------------------
 
 - Added event and access log rotation capability.
