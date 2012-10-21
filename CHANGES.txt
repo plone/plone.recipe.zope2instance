@@ -4,6 +4,10 @@ Changelog
 4.2.6 (unreleased)
 ------------------
 
+- Use interpreter script instead of setting PYTHONPATH.  Fixes Windows
+  "the environment variable is longer than 32767 bytes" error.
+  [rossp]
+
 - Make the zope.conf http-server optional by setting http-address to
   an empty string.  Useful for configurations used under an external
   server such as a WSGI deployment.
