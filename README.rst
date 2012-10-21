@@ -40,7 +40,9 @@ zcml
   to create. Some examples: ``my.distribution`` ``my.distribution-meta``.
 
 http-address
-  Give a port for the HTTP server. Defaults to 8080.
+  Give a port for the HTTP server. Defaults to 8080.  Set to an empty
+  string to disable the HTTP server.  You may want to do this when
+  running Zope under an external server such as a WSGI deployment.
 
 ip-address
   The default IP address on which Zope's various server protocol

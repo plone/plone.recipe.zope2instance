@@ -4,6 +4,10 @@ Changelog
 4.2.6 (unreleased)
 ------------------
 
+- Make the zope.conf http-server optional by setting http-address to
+  an empty string.  Useful for configurations used under an external
+  server such as a WSGI deployment.
+  [rossp]
 
 4.2.5 (2012-09-20)
 ------------------

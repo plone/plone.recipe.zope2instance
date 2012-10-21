@@ -177,7 +177,6 @@ class Recipe(Scripts):
         port_base = options.get('port-base', '')
         if port_base:
             port_base = 'port-base %s' % port_base
-        http_address = options.get('http-address', '8080')
         http_force_connection_close = options.get('http-force-connection-close', None)
         if http_force_connection_close is None:
             http_force_connection_close = ''
@@ -188,6 +187,12 @@ class Recipe(Scripts):
             http_fast_listen = ''
         else:
             http_fast_listen = http_fast_listen_template % http_fast_listen
+        http_address = options.get('http-address', '8080')
+        if http_address:
+            http_address = http_server_template % dict(
+                http_address=http_address,
+                http_force_connection_close=http_force_connection_close,
+                http_fast_listen=http_fast_listen)
         ftp_address = options.get('ftp-address', '')
         if ftp_address:
             ftp_address = ftp_server_template % ftp_address
@@ -865,6 +870,14 @@ access_event_logfile = """
   </logfile>
 """.strip()
 
+http_server_template = """
+<http-server>
+  address %(http_address)s
+%(http_force_connection_close)s
+%(http_fast_listen)s
+</http-server>
+"""
+
 ftp_server_template = """
 <ftp-server>
   # valid key is "address"
@@ -923,12 +936,7 @@ verbose-security %(verbose_security)s
   %(access_event_log)s
 </logger>
 
-<http-server>
-  address %(http_address)s
-%(http_force_connection_close)s
-%(http_fast_listen)s
-</http-server>
-
+%(http_address)s
 %(ftp_address)s
 %(webdav_address)s
 %(icp_address)s
