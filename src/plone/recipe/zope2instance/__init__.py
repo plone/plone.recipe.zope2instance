@@ -573,13 +573,20 @@ class Recipe(Scripts):
         requirements, ws = self.egg.working_set(['plone.recipe.zope2instance'])
         reqs = [(self.options.get('control-script', self.name),
                  'plone.recipe.zope2instance.ctl', 'main')]
-        arguments = ('\n        ["-C", %r]'
-                     '\n        + sys.argv[1:]' % zope_conf_path)
+        script_arguments = ('\n        ["-C", %r]'
+                            '\n        + sys.argv[1:]' % zope_conf_path)
 
+        self._install_scripts(
+            options['bin-directory'], ws, reqs=reqs, extra_paths=extra_paths,
+            script_arguments=script_arguments)
+
+    def _install_scripts(self, dest, working_set, reqs=(), extra_paths=(),
+                         script_arguments=''):
+        options = self.options
         if BUILDOUT15:
             sitepackage_safe_scripts(
-                dest=options['bin-directory'],
-                working_set=ws,
+                dest=dest,
+                working_set=working_set,
                 executable=options['executable'],
                 site_py_dest=options['location'],
                 reqs=reqs,
@@ -590,14 +597,14 @@ class Recipe(Scripts):
                 include_site_packages=self._include_site_packages,
                 exec_sitecustomize=False,
                 relative_paths=self._relative_paths,
-                script_arguments=arguments,
+                script_arguments=script_arguments,
                 )
         else:
             zc.buildout.easy_install.scripts(
-                reqs, ws,
+                reqs, working_set,
                 options['executable'], options['bin-directory'],
                 extra_paths=extra_paths,
-                arguments=arguments,
+                arguments=script_arguments,
                 relative_paths=self._relative_paths,)
 
     def build_package_includes(self):
