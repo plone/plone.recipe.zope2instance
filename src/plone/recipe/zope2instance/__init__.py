@@ -79,6 +79,7 @@ class Recipe(Scripts):
     def install(self, update=False):
         options = self.options
         location = options['location']
+        installed = [location]
 
         if not update:
             if os.path.exists(location):
@@ -105,7 +106,7 @@ class Recipe(Scripts):
             self.build_zope_conf()
 
             # Install extra scripts
-            self.install_scripts()
+            installed.extend(self.install_scripts())
 
             # Add zcml files to package-includes
             self.build_package_includes()
@@ -117,9 +118,9 @@ class Recipe(Scripts):
 
         if self.scripts:
             retval = Scripts.install(self)
-            retval.append(location)
+            retval.extend(installed)
         else:
-            retval = location
+            retval = installed
         return retval
 
     def update(self):
@@ -576,18 +577,19 @@ class Recipe(Scripts):
         script_arguments = ('\n        ["-C", %r]'
                             '\n        + sys.argv[1:]' % zope_conf_path)
 
-        self._install_scripts(
+        generated = self._install_scripts(
             options['bin-directory'], ws, reqs=reqs, extra_paths=extra_paths,
             script_arguments=script_arguments)
-        self._install_scripts(
+        generated.extend(self._install_scripts(
             os.path.join(options['location'], 'bin'), ws,
-            interpreter='interpreter', extra_paths=extra_paths)
+            interpreter='interpreter', extra_paths=extra_paths))
+        return generated
 
     def _install_scripts(self, dest, working_set, reqs=(), interpreter=None,
                          extra_paths=(), script_arguments=''):
         options = self.options
         if BUILDOUT15:
-            sitepackage_safe_scripts(
+            return sitepackage_safe_scripts(
                 dest=dest,
                 working_set=working_set,
                 executable=options['executable'],
@@ -603,7 +605,7 @@ class Recipe(Scripts):
                 script_arguments=script_arguments,
                 )
         else:
-            zc.buildout.easy_install.scripts(
+            return zc.buildout.easy_install.scripts(
                 reqs, working_set,
                 options['executable'], options['bin-directory'],
                 extra_paths=extra_paths,
