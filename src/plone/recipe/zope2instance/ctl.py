@@ -339,7 +339,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             self.get_status()
             if not self.zd_up:
                 args = [
-                    self.options.python,
+                    self.options.python, self.options.interpreter,
                     self.options.zdrun,
                     ]
                 args += self._get_override("-S", "schemafile")
@@ -380,9 +380,8 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             shome = configroot.softwarehome
         except AttributeError:
             shome = None
+            shome  # pyflakes
         env.update({'INSTANCE_HOME': configroot.instancehome})
-        if shome:
-            env.update({'PYTHONPATH': os.pathsep.join(sys.path + [shome])})
         return env
 
     def get_startup_cmd(self, python, more, pyflags=""):
@@ -391,10 +390,11 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         # will act as escapes.  Use r'' instead.
         # Also, don't forget that 'python'
         # may have spaces and needs to be quoted.
-        cmdline = ('"%s" %s -c "from Zope2 import configure; '
+        cmdline = ('"%s" %s "%s" -c "from Zope2 import configure; '
                    'configure(r\'%s\'); '
                    'import Zope2; app=Zope2.app(); '
-                   % (python, pyflags, self.options.configfile))
+                   % (python, pyflags,
+                      self.options.interpreter, self.options.configfile))
 
         if not self.options.no_request:
             cmdline += (
@@ -573,8 +573,10 @@ def main(args=None):
     # Change the program to avoid warning messages
     startup = os.path.dirname(zopectl.__file__)
 
+    options.interpreter = os.path.join(options.directory, 'bin', 'interpreter')
     script = os.path.join(startup, 'run.py')
-    options.program = [options.python, script, '-C', options.configfile]
+    options.program = [
+        options.python, options.interpreter, script, '-C', options.configfile]
 
     # We use our own ZopeCmd set, that is derived from the original one.
     c = AdjustedZopeCmd(options)
@@ -586,10 +588,6 @@ def main(args=None):
         # avoid overwriting the standard commands
         if func_name not in dir(c):
             setattr(c.__class__, func_name, func)
-
-    # The PYTHONPATH is not set, so all commands starting a new shell fail
-    # unless we set it explicitly
-    os.environ['PYTHONPATH'] = os.path.pathsep.join(sys.path)
 
     # If a command was specified: call the corresponding do_*() method.
     #

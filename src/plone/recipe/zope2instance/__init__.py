@@ -579,9 +579,12 @@ class Recipe(Scripts):
         self._install_scripts(
             options['bin-directory'], ws, reqs=reqs, extra_paths=extra_paths,
             script_arguments=script_arguments)
+        self._install_scripts(
+            os.path.join(options['location'], 'bin'), ws,
+            interpreter='interpreter', extra_paths=extra_paths)
 
-    def _install_scripts(self, dest, working_set, reqs=(), extra_paths=(),
-                         script_arguments=''):
+    def _install_scripts(self, dest, working_set, reqs=(), interpreter=None,
+                         extra_paths=(), script_arguments=''):
         options = self.options
         if BUILDOUT15:
             sitepackage_safe_scripts(
@@ -591,7 +594,7 @@ class Recipe(Scripts):
                 site_py_dest=options['location'],
                 reqs=reqs,
                 scripts=None,
-                interpreter=None,
+                interpreter=interpreter,
                 extra_paths=extra_paths,
                 initialization='',
                 include_site_packages=self._include_site_packages,
@@ -605,6 +608,7 @@ class Recipe(Scripts):
                 options['executable'], options['bin-directory'],
                 extra_paths=extra_paths,
                 arguments=script_arguments,
+                interpreter=interpreter,
                 relative_paths=self._relative_paths,)
 
     def build_package_includes(self):
