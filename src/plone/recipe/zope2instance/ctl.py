@@ -574,6 +574,8 @@ def main(args=None):
     startup = os.path.dirname(zopectl.__file__)
 
     options.interpreter = os.path.join(options.directory, 'bin', 'interpreter')
+    if sys.platform == 'win32':
+        options.interpreter += '-script.py'
     script = os.path.join(startup, 'run.py')
     options.program = [
         options.python, options.interpreter, script, '-C', options.configfile]
