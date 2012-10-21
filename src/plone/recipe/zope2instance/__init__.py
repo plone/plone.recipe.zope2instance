@@ -571,6 +571,10 @@ class Recipe(Scripts):
 
         extra_paths = options.get('extra-paths', '').split()
         requirements, ws = self.egg.working_set(['plone.recipe.zope2instance'])
+        reqs = [(self.options.get('control-script', self.name),
+                 'plone.recipe.zope2instance.ctl', 'main')]
+        arguments = ('\n        ["-C", %r]'
+                     '\n        + sys.argv[1:]' % zope_conf_path)
 
         if BUILDOUT15:
             sitepackage_safe_scripts(
@@ -578,8 +582,7 @@ class Recipe(Scripts):
                 working_set=ws,
                 executable=options['executable'],
                 site_py_dest=options['location'],
-                reqs=[(self.options.get('control-script', self.name),
-                      'plone.recipe.zope2instance.ctl', 'main')],
+                reqs=reqs,
                 scripts=None,
                 interpreter=None,
                 extra_paths=extra_paths,
@@ -587,23 +590,15 @@ class Recipe(Scripts):
                 include_site_packages=self._include_site_packages,
                 exec_sitecustomize=False,
                 relative_paths=self._relative_paths,
-                script_arguments = ('\n        ["-C", %r]'
-                                    '\n        + sys.argv[1:]'
-                                    % zope_conf_path
-                                    ),
+                script_arguments = arguments,
                 )
         else:
             zc.buildout.easy_install.scripts(
-                [(self.options.get('control-script', self.name),
-                  'plone.recipe.zope2instance.ctl', 'main')],
-                ws, options['executable'], options['bin-directory'],
+                reqs, ws,
+                options['executable'], options['bin-directory'],
                 extra_paths = extra_paths,
-                arguments = ('\n        ["-C", %r]'
-                             '\n        + sys.argv[1:]'
-                             % zope_conf_path
-                             ),
-                relative_paths=self._relative_paths,
-                )
+                arguments = arguments,
+                relative_paths=self._relative_paths,)
 
     def build_package_includes(self):
         """Create ZCML slugs in etc/package-includes
