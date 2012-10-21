@@ -590,14 +590,14 @@ class Recipe(Scripts):
                 include_site_packages=self._include_site_packages,
                 exec_sitecustomize=False,
                 relative_paths=self._relative_paths,
-                script_arguments = arguments,
+                script_arguments=arguments,
                 )
         else:
             zc.buildout.easy_install.scripts(
                 reqs, ws,
                 options['executable'], options['bin-directory'],
-                extra_paths = extra_paths,
-                arguments = arguments,
+                extra_paths=extra_paths,
+                arguments=arguments,
                 relative_paths=self._relative_paths,)
 
     def build_package_includes(self):
