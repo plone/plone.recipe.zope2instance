@@ -606,8 +606,10 @@ class Recipe(Scripts):
                 )
         else:
             return zc.buildout.easy_install.scripts(
-                reqs, working_set,
-                options['executable'], options['bin-directory'],
+                dest=dest,
+                reqs=reqs,
+                working_set=working_set,
+                executable=options['executable'],
                 extra_paths=extra_paths,
                 arguments=script_arguments,
                 interpreter=interpreter,
