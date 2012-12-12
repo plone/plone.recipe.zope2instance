@@ -503,8 +503,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         # `-c` disables the PYTHONSTARTUP feature; load it explicitly
         interactive_startup = ("import os;"
             "os.path.exists(os.environ.get('PYTHONSTARTUP', '')) "
-            "and execfile(os.environ['PYTHONSTARTUP']); del os;"
-            'import Zope2; app=Zope2.app()')
+            "and execfile(os.environ['PYTHONSTARTUP']); del os;")
         cmdline = self.get_startup_cmd(self.options.python,
                                        interactive_startup,
                                        pyflags = '-i', )
