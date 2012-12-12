@@ -4,7 +4,8 @@ Changelog
 4.2.7 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Load PYTHONSTARTUP if defined when running the debug command.
+  [mj]
 
 
 4.2.6 (2012-12-09)
