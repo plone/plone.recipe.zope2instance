@@ -500,7 +500,13 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         print "    In contrast to foreground this does not turn on debug mode."
 
     def do_debug(self, arg):
-        cmdline = self.get_startup_cmd(self.options.python, '',
+        # `-c` disables the PYTHONSTARTUP feature; load it explicitly
+        interactive_startup = ("import os;"
+            "os.path.exists(os.environ.get('PYTHONSTARTUP', '')) "
+            "and execfile(os.environ['PYTHONSTARTUP']); del os;"
+            'import Zope2; app=Zope2.app()')
+        cmdline = self.get_startup_cmd(self.options.python,
+                                       interactive_startup,
                                        pyflags = '-i', )
         print ('Starting debugger (the name "app" is bound to the top-level '
                'Zope object)')
