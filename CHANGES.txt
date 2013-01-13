@@ -1,7 +1,7 @@
 Changelog
 =========
 
-4.2.7 (unreleased)
+4.2.7 (2013-01-13)
 ------------------
 
 - Load PYTHONSTARTUP if defined when running the debug command.
