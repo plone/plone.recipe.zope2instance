@@ -390,11 +390,11 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         # will act as escapes.  Use r'' instead.
         # Also, don't forget that 'python'
         # may have spaces and needs to be quoted.
-        cmdline = ('"%s" %s "%s" -c "from Zope2 import configure; '
+        cmdline = ('"%s" %s "%s" %s -c "from Zope2 import configure; '
                    'configure(r\'%s\'); '
                    'import Zope2; app=Zope2.app(); '
                    % (python, pyflags,
-                      self.options.interpreter, self.options.configfile))
+                      self.options.interpreter, pyflags, self.options.configfile))
 
         if not self.options.no_request:
             cmdline += (

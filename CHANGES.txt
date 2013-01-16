@@ -4,7 +4,9 @@ Changelog
 4.2.8 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Pass python flags to Zope interpreter as well. This prevents the debug
+  command from exiting directly.
+  [wichert]
 
 
 4.2.7 (2013-01-13)
