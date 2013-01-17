@@ -1,7 +1,7 @@
 Changelog
 =========
 
-4.2.8 (unreleased)
+4.2.8 (2013-01-17)
 ------------------
 
 - Pass python flags to Zope interpreter as well. This prevents the debug
