@@ -4,7 +4,8 @@ Changelog
 4.2.9 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add trove classifiers to note Python version compatibility.
+  [hannosch]
 
 
 4.2.8 (2013-01-17)
