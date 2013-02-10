@@ -1,7 +1,7 @@
 Changelog
 =========
 
-4.2.9 (unreleased)
+4.2.9 (2013-02-10)
 ------------------
 
 - Add trove classifiers to note Python version compatibility.
