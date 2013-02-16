@@ -86,10 +86,8 @@ def copydir(targetdir, sourcedir, names):
             if os.path.exists(dst):
                 continue
             shutil.copyfile(src, dst)
-            shutil.copymode(src, dst)
         else:
             # Directory:
             dn = os.path.join(targetdir, sourcedir, name)
             if not os.path.exists(dn):
                 os.mkdir(dn)
-                shutil.copymode(src, dn)
