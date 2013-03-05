@@ -1,8 +1,8 @@
 Changelog
 =========
 
-4.2.10 (unreleased)
-----------------
+4.2.10 (2013-03-05)
+-------------------
 
 - Recipe would fail if eggs are stored in readonly cache. Don't copy 
   permissions from the egg.
