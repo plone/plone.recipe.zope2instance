@@ -1,9 +1,12 @@
 Changelog
 =========
 
-4.3 (unreleased)
+4.2.10 (unreleased)
 ----------------
 
+- Recipe would fail if eggs are stored in readonly cache. Don't copy 
+  permissions from the egg.
+  [garbas]
 
 4.2.9 (2013-02-10)
 ------------------
