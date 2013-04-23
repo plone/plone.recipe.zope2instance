@@ -250,7 +250,7 @@ class Recipe(Scripts):
         custom_event_log = options.get('event-log-custom', None)
         default_log = os.path.sep.join(('log', self.name + '.log',))
         # log file
-        if custom_event_log is None:
+        if not custom_event_log:
             event_log_name = options.get('event-log', default_log)
             event_file = os.path.join(var_dir, event_log_name)
             event_log_dir = os.path.dirname(event_file)
@@ -288,7 +288,7 @@ class Recipe(Scripts):
         # access event log
         custom_access_event_log = options.get('access-log-custom', None)
         # filelog directive
-        if custom_access_event_log is None:
+        if not custom_access_event_log:
             access_log_rotate = ''
             access_log_max_size = options.get('access-log-max-size', None)
             if access_log_max_size:
