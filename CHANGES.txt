@@ -4,13 +4,14 @@ Changelog
 4.2.11 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Fixed check for empty custom_access_event_log and custom_event_log.
+  [alecghica]
 
 
 4.2.10 (2013-03-05)
 -------------------
 
-- Recipe would fail if eggs are stored in readonly cache. Don't copy 
+- Recipe would fail if eggs are stored in readonly cache. Don't copy
   permissions from the egg.
   [garbas]
 
