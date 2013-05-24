@@ -1,7 +1,7 @@
 Changelog
 =========
 
-4.2.11 (unreleased)
+4.2.11 (2013-05-23)
 -------------------
 
 - Fixed check for empty custom_access_event_log and custom_event_log.
