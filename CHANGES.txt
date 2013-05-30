@@ -4,7 +4,7 @@ Changelog
 4.2.12 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- be able to set zeo client as read only from buildout configuration
 
 
 4.2.11 (2013-05-23)
