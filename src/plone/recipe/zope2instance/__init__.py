@@ -570,13 +570,16 @@ class Recipe(Scripts):
         # The instance control script
         zope_conf = os.path.join(location, 'etc', 'zope.conf')
         zope_conf_path = options.get('zope-conf', zope_conf)
+        zopectl_umask = options.get('zopectl-umask', '')
 
         extra_paths = options.get('extra-paths', '').split()
         requirements, ws = self.egg.working_set(['plone.recipe.zope2instance'])
         reqs = [(self.options.get('control-script', self.name),
                  'plone.recipe.zope2instance.ctl', 'main')]
-        script_arguments = ('\n        ["-C", %r]'
-                            '\n        + sys.argv[1:]' % zope_conf_path)
+        script_arguments = ('\n        ["-C", %(zope_conf_path)r, "--umask", %(zopectl_umask)s]'
+                            '\n        + sys.argv[1:]' % {
+                                            'zope_conf_path': zope_conf_path,
+                                            'zopectl_umask': zopectl_umask})
 
         generated = self._install_scripts(
             options['bin-directory'], ws, reqs=reqs, extra_paths=extra_paths,
