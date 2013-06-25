@@ -4,7 +4,8 @@ Changelog
 4.2.13 (unreleased)
 -------------------
 
-- nothing changed
+- adding support for zopectl umask
+  [hman]
 
 
 4.2.12 (2013-06-04)
