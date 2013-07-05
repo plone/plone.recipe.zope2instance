@@ -735,7 +735,9 @@ class Recipe(Scripts):
 
         blob_storage = os.path.join(base_dir, blob_storage)
         if not os.path.exists(blob_storage):
-            os.makedirs(blob_storage)
+            # Make it only readable for the current user, otherwise
+            # you get a ZODB warning on startup.
+            os.makedirs(blob_storage, 0700)
 
         storage = indent(storage, 2)
 

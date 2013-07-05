@@ -4,6 +4,12 @@ Changelog
 4.2.11 (unreleased)
 -------------------
 
+- When creating the blobstorage dir, make it only readable for the
+  current user, otherwise you get a ZODB warning on startup.  This
+  uses code from the ZODB, which does the same when Zope starts up and
+  the blobstorage directory does not exist yet.
+  [maurits]
+
 - Fixed check for empty custom_access_event_log and custom_event_log.
   [alecghica]
 
@@ -14,6 +20,7 @@ Changelog
 - Recipe would fail if eggs are stored in readonly cache. Don't copy
   permissions from the egg.
   [garbas]
+
 
 4.2.9 (2013-02-10)
 ------------------

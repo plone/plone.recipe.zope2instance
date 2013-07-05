@@ -118,6 +118,22 @@ We should have a zope instance, with a basic zope.conf::
     <BLANKLINE>
     <BLANKLINE>
 
+We should have a blobstorage directory.
+
+    >>> ls('var')
+    d  blobstorage
+    d  filestorage
+    d  instance
+    d  log
+
+The blobstorage directory should only be readable by the current user,
+otherwise you get a warning when the zope instance starts up.  The
+(POSIX) path mode bits should be 0700.
+
+    >>> (os.stat(os.path.join('var', 'blobstorage')).st_mode & 077) == 0
+    True
+
+
 FTP and WebDAV
 ==============
 
