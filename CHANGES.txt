@@ -1,7 +1,20 @@
 Changelog
 =========
 
-4.2.11 (unreleased)
+4.2.13 (unreleased)
+-------------------
+
+- nothing changed
+
+
+4.2.12 (2013-06-04)
+-------------------
+
+- be able to set zeo client as read only from buildout configuration
+  [vangheem]
+
+
+4.2.11 (2013-05-23)
 -------------------
 
 - When creating the blobstorage dir, make it only readable for the

@@ -150,6 +150,9 @@ shared-blob
   location to the ZEO server, resulting in faster execution and less memory
   overhead.
 
+read-only
+  Set zeo client as read only
+
 ZEO authentication
 ------------------
 

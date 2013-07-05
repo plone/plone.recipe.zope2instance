@@ -466,6 +466,7 @@ class Recipe(Scripts):
                 zeo_client_drop_cache_rather_verify = zeo_client_drop_cache_rather_verify,
                 zeo_client_min_disconnect_poll=zeo_client_min_disconnect_poll,
                 zeo_client_max_disconnect_poll=zeo_client_max_disconnect_poll,
+                read_only=options.get('read-only', 'false')
                 )
         else:
             # no zeo-client
@@ -812,6 +813,7 @@ zeo_authentication_template="""
 zeo_storage_template="""
     # ZEOStorage database
     <zeoclient>
+      read-only %(read_only)s
       server %(zeo_address)s
       storage %(zeo_storage)s
       name zeostorage
@@ -828,6 +830,7 @@ zeo_storage_template="""
 zeo_blob_storage_template="""
     # Blob-enabled ZEOStorage database
     <zeoclient>
+      read-only %(read_only)s
       blob-dir %(blob_storage)s
       shared-blob-dir %(shared_blob_dir)s
       server %(zeo_address)s
