@@ -447,6 +447,13 @@ zope-conf-additional
       locale fr_FR
       http-realm Slipknot
 
+zopectl-umask
+  Manually set the umask for the zopectl process
+
+  Example::
+
+    zopectl-umask = 002
+
 Additional Control Script `debug` and `run` Commands
 ----------------------------------------------------
 

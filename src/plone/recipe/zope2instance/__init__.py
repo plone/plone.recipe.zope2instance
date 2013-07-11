@@ -571,12 +571,18 @@ class Recipe(Scripts):
         zope_conf = os.path.join(location, 'etc', 'zope.conf')
         zope_conf_path = options.get('zope-conf', zope_conf)
 
+        zopectl_umask = options.get('zopectl-umask', '')
+
         extra_paths = options.get('extra-paths', '').split()
         requirements, ws = self.egg.working_set(['plone.recipe.zope2instance'])
         reqs = [(self.options.get('control-script', self.name),
                  'plone.recipe.zope2instance.ctl', 'main')]
-        script_arguments = ('\n        ["-C", %r]'
-                            '\n        + sys.argv[1:]' % zope_conf_path)
+
+        arguments = ["-C", zope_conf_path]
+        if zopectl_umask:
+            arguments.extend(["--umask", int(zopectl_umask, 8)])
+        script_arguments = ('\n        ' + repr(arguments) +
+                            '\n        + sys.argv[1:]')
 
         generated = self._install_scripts(
             options['bin-directory'], ws, reqs=reqs, extra_paths=extra_paths,
