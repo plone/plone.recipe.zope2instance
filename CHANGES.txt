@@ -1,7 +1,7 @@
 Changelog
 =========
 
-4.2.13 (unreleased)
+4.2.13 (2013-07-28)
 -------------------
 
 - adding support for zopectl umask
