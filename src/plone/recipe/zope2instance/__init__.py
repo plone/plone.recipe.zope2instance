@@ -429,6 +429,7 @@ class Recipe(Scripts):
                     options.get('zeo-client-blob-cache-size-check', '')
             zeo_client_min_disconnect_poll = options.get('min-disconnect-poll', "")
             zeo_client_max_disconnect_poll = options.get('max-disconnect-poll', "")
+            zeo_client_read_only_fallback = options.get('zeo-client-read-only-fallback', 'false')
             if zeo_client_client:
                 zeo_client_client = 'client %s' % zeo_client_client
             if zeo_client_blob_cache_size:
@@ -442,6 +443,8 @@ class Recipe(Scripts):
                 zeo_client_min_disconnect_poll = "min-disconnect-poll %s" % zeo_client_min_disconnect_poll
             if zeo_client_max_disconnect_poll:
                 zeo_client_max_disconnect_poll = "max-disconnect-poll %s" % zeo_client_max_disconnect_poll
+            if zeo_client_read_only_fallback:
+                zeo_client_read_only_fallback = "read-only-fallback %s" % zeo_client_read_only_fallback
             if options.get('zeo-username', ''):
                 if not options.get('zeo-password', ''):
                     raise zc.buildout.UserError('No ZEO password specified')
@@ -473,7 +476,8 @@ class Recipe(Scripts):
                 zeo_client_drop_cache_rather_verify = zeo_client_drop_cache_rather_verify,
                 zeo_client_min_disconnect_poll=zeo_client_min_disconnect_poll,
                 zeo_client_max_disconnect_poll=zeo_client_max_disconnect_poll,
-                read_only=options.get('read-only', 'false')
+                read_only=options.get('read-only', 'false'),
+                zeo_client_read_only_fallback=zeo_client_read_only_fallback
                 )
         else:
             # no zeo-client
@@ -831,6 +835,7 @@ zeo_storage_template="""
     # ZEOStorage database
     <zeoclient>
       read-only %(read_only)s
+      %(zeo_client_read_only_fallback)s
       %(zeo_address_list)s
       storage %(zeo_storage)s
       name zeostorage
@@ -848,6 +853,7 @@ zeo_blob_storage_template="""
     # Blob-enabled ZEOStorage database
     <zeoclient>
       read-only %(read_only)s
+      %(zeo_client_read_only_fallback)s
       blob-dir %(blob_storage)s
       shared-blob-dir %(shared_blob_dir)s
       %(zeo_address_list)s
