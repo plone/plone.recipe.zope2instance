@@ -4,7 +4,8 @@ Changelog
 4.2.14 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Link to zope.conf is now relativitize if option relative-paths is true.
+  [bsuttor]
 
 
 4.2.13 (2013-07-28)
