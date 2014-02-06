@@ -588,10 +588,11 @@ class Recipe(Scripts):
                     return str(self.s)
 
             zope_conf_path = zope_conf_path(
-                    zc.buildout.easy_install._relativitize(
-                        zope_conf,
-                        options['buildout-directory'] + '/',
-                        self._relative_paths)
+                        zc.buildout.easy_install._relativitize(
+                            zope_conf,
+                            options['buildout-directory'] + '/',
+                            self._relative_paths
+                        )
                     )
 
         arguments = ["-C", zope_conf_path]
