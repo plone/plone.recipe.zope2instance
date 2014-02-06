@@ -580,12 +580,9 @@ class Recipe(Scripts):
                  'plone.recipe.zope2instance.ctl', 'main')]
 
         if options.get('relative-paths'):
-            class zope_conf_path():
-                def __init__(self, s):
-                    self.s = s
-
+            class zope_conf_path(str):
                 def __repr__(self):
-                    return str(self.s)
+                    return str(self)
 
             zope_conf_path = zope_conf_path(
                         zc.buildout.easy_install._relativitize(
