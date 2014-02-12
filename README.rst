@@ -448,11 +448,20 @@ zope-conf-additional
       http-realm Slipknot
 
 zopectl-umask
-  Manually set the umask for the zopectl process
+  Manually set the umask for the zopectl process.
 
   Example::
 
     zopectl-umask = 002
+
+http-header-max-length
+  Manually set the maximum size of received HTTP header being processed by Zope.
+  The request is discarded and considered as a DoS attack if the header size exceeds
+  this limit. Default: 8192
+
+  Example::
+
+    http-header-max-length = 16384
 
 Additional Control Script `debug` and `run` Commands
 ----------------------------------------------------
