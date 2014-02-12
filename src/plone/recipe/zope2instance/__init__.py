@@ -207,6 +207,9 @@ class Recipe(Scripts):
         icp_address = options.get('icp-address', '')
         if icp_address:
             icp_address = icp_server_template % icp_address
+        http_header_max_length = options.get('http-header-max-length', '8192')
+        if http_header_max_length:
+            http_header_max_length = 'http-header-max-length %s' % http_header_max_length
         effective_user = options.get('effective-user', '')
         if effective_user:
             effective_user = 'effective-user %s' % effective_user
@@ -527,6 +530,7 @@ class Recipe(Scripts):
                                     security_implementation = security_implementation,
                                     verbose_security = verbose_security,
                                     effective_user = effective_user,
+                                    http_header_max_length = http_header_max_length,
                                     ip_address = ip_address,
                                     mailinglogger_import = mailinglogger_import,
                                     mailinglogger_config = mailinglogger_config,
@@ -940,6 +944,7 @@ verbose-security %(verbose_security)s
 %(default_zpublisher_encoding)s
 %(port_base)s
 %(effective_user)s
+%(http_header_max_length)s
 %(ip_address)s
 %(zserver_threads)s
 %(environment_vars)s

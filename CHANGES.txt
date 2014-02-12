@@ -4,7 +4,8 @@ Changelog
 4.2.14 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- added support for http-header-max-length
+  [alecghica]
 
 
 4.2.13 (2013-07-28)
