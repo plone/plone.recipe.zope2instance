@@ -587,7 +587,7 @@ class Recipe(Scripts):
             zope_conf_path = zope_conf_path(
                         zc.buildout.easy_install._relativitize(
                             zope_conf,
-                            options['buildout-directory'] + '/',
+                            options['buildout-directory'] + os.sep,
                             self._relative_paths
                         )
                     )
