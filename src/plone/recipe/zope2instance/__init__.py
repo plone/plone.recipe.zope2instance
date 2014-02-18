@@ -52,6 +52,9 @@ class Recipe(Scripts):
             )
         options['bin-directory'] = buildout['buildout']['bin-directory']
 
+        if 'initialization' not in options:
+            options['initialization'] = ''
+
         if 'scripts' in options:
             if options['scripts'] == '':
                 options['scripts'] = '' # suppress script generation.
@@ -609,7 +612,7 @@ class Recipe(Scripts):
                 scripts=None,
                 interpreter=interpreter,
                 extra_paths=extra_paths,
-                initialization='',
+                initialization=options['initialization'],
                 include_site_packages=self._include_site_packages,
                 exec_sitecustomize=False,
                 relative_paths=self._relative_paths,
@@ -622,6 +625,7 @@ class Recipe(Scripts):
                 working_set=working_set,
                 executable=options['executable'],
                 extra_paths=extra_paths,
+                initialization=options['initialization'],
                 arguments=script_arguments,
                 interpreter=interpreter,
                 relative_paths=self._relative_paths,)

@@ -1731,3 +1731,40 @@ The directory should have been generated, and zope config created::
                xmlns:i18n="http://namespaces.zope.org/i18n">
         <i18n:registerTranslations directory=".../sample-buildout/mylocales" />
     </configure>
+
+
+Initialization
+==============
+
+`initialization` is an option that allows you to add custom Python
+code to the initialization process. 
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... initialization = 
+    ...     print 'Initialization complete!' 
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '...instance'.
+    Generated interpreter '.../parts/instance/bin/interpreter'.
+
+We should see the given initialization commands included in the instance
+script::
+
+    >>> instance = open(os.path.join(sample_buildout, 'bin', 'instance')).read()
+    >>> "print 'Initialization complete!'" in instance
+    True
+

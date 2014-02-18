@@ -68,6 +68,12 @@ environment-vars
       zope_i18n_allowed_languages en
       zope_i18n_compile_mo_files true
 
+initialization
+   Specify some Python initialization code to include within the generated
+   ``sitecustomize.py`` script (Buildout >= 1.5) or within the instance script
+   (Buildout < 1.5). This is very limited. In particular, be aware that leading
+   whitespace is stripped from the code given.
+
 Theme resources
 ---------------
 

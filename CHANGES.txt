@@ -4,6 +4,9 @@ Changelog
 4.2.14 (unreleased)
 -------------------
 
+- Added ability to set ``initialization`` to configure Python
+  code to run on instance start up.
+  [davidjb]
 - added support for http-header-max-length
   [alecghica]
 
