@@ -68,6 +68,12 @@ environment-vars
       zope_i18n_allowed_languages en
       zope_i18n_compile_mo_files true
 
+initialization
+   Specify some Python initialization code to include within the generated
+   ``sitecustomize.py`` script (Buildout >= 1.5) or within the instance script
+   (Buildout < 1.5). This is very limited. In particular, be aware that leading
+   whitespace is stripped from the code given.
+
 Theme resources
 ---------------
 
@@ -448,11 +454,20 @@ zope-conf-additional
       http-realm Slipknot
 
 zopectl-umask
-  Manually set the umask for the zopectl process
+  Manually set the umask for the zopectl process.
 
   Example::
 
     zopectl-umask = 002
+
+http-header-max-length
+  Manually set the maximum size of received HTTP header being processed by Zope.
+  The request is discarded and considered as a DoS attack if the header size exceeds
+  this limit. Default: 8192
+
+  Example::
+
+    http-header-max-length = 16384
 
 Additional Control Script `debug` and `run` Commands
 ----------------------------------------------------
