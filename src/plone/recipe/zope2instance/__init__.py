@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ##############################################################################
 #
 # Copyright (c) 2006-2008 Zope Corporation and Contributors.
@@ -584,6 +585,19 @@ class Recipe(Scripts):
         requirements, ws = self.egg.working_set(['plone.recipe.zope2instance'])
         reqs = [(self.options.get('control-script', self.name),
                  'plone.recipe.zope2instance.ctl', 'main')]
+
+        if options.get('relative-paths'):
+            class zope_conf_path(str):
+                def __repr__(self):
+                    return str(self)
+
+            zope_conf_path = zope_conf_path(
+                        zc.buildout.easy_install._relativitize(
+                            zope_conf,
+                            options['buildout-directory'] + os.sep,
+                            self._relative_paths
+                        )
+                    )
 
         arguments = ["-C", zope_conf_path]
         if zopectl_umask:
