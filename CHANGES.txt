@@ -1,7 +1,7 @@
 Changelog
 =========
 
-4.2.14 (unreleased)
+4.2.14 (2014-03-02)
 -------------------
 
 - Link to zope.conf is now relativitize if option relative-paths is true.
