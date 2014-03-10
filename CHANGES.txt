@@ -1,6 +1,11 @@
 Changelog
 =========
 
+4.2.15 (unreleased)
+-------------------
+- Add support for multiple zeo servers
+  [ivant]
+
 4.2.14 (unreleased)
 -------------------
 
