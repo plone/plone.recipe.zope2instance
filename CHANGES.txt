@@ -6,10 +6,17 @@ Changelog
 - Add support for multiple zeo servers
   [ivant]
 
-4.2.14 (unreleased)
+
+4.2.14 (2014-03-02)
 -------------------
 
-- Nothing changed yet.
+- Link to zope.conf is now relativitize if option relative-paths is true.
+  [bsuttor]
+- Added ability to set ``initialization`` to configure Python
+  code to run on instance start up.
+  [davidjb]
+- added support for http-header-max-length
+  [alecghica]
 
 
 4.2.13 (2013-07-28)

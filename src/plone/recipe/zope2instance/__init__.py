@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # ##############################################################################
 #
 # Copyright (c) 2006-2008 Zope Corporation and Contributors.
@@ -51,6 +52,9 @@ class Recipe(Scripts):
             self.name,
             )
         options['bin-directory'] = buildout['buildout']['bin-directory']
+
+        if 'initialization' not in options:
+            options['initialization'] = ''
 
         if 'scripts' in options:
             if options['scripts'] == '':
@@ -207,6 +211,9 @@ class Recipe(Scripts):
         icp_address = options.get('icp-address', '')
         if icp_address:
             icp_address = icp_server_template % icp_address
+        http_header_max_length = options.get('http-header-max-length', '8192')
+        if http_header_max_length:
+            http_header_max_length = 'http-header-max-length %s' % http_header_max_length
         effective_user = options.get('effective-user', '')
         if effective_user:
             effective_user = 'effective-user %s' % effective_user
@@ -538,6 +545,7 @@ class Recipe(Scripts):
                                     security_implementation = security_implementation,
                                     verbose_security = verbose_security,
                                     effective_user = effective_user,
+                                    http_header_max_length = http_header_max_length,
                                     ip_address = ip_address,
                                     mailinglogger_import = mailinglogger_import,
                                     mailinglogger_config = mailinglogger_config,
@@ -589,6 +597,19 @@ class Recipe(Scripts):
         reqs = [(self.options.get('control-script', self.name),
                  'plone.recipe.zope2instance.ctl', 'main')]
 
+        if options.get('relative-paths'):
+            class zope_conf_path(str):
+                def __repr__(self):
+                    return str(self)
+
+            zope_conf_path = zope_conf_path(
+                        zc.buildout.easy_install._relativitize(
+                            zope_conf,
+                            options['buildout-directory'] + os.sep,
+                            self._relative_paths
+                        )
+                    )
+
         arguments = ["-C", zope_conf_path]
         if zopectl_umask:
             arguments.extend(["--umask", int(zopectl_umask, 8)])
@@ -616,7 +637,7 @@ class Recipe(Scripts):
                 scripts=None,
                 interpreter=interpreter,
                 extra_paths=extra_paths,
-                initialization='',
+                initialization=options['initialization'],
                 include_site_packages=self._include_site_packages,
                 exec_sitecustomize=False,
                 relative_paths=self._relative_paths,
@@ -629,6 +650,7 @@ class Recipe(Scripts):
                 working_set=working_set,
                 executable=options['executable'],
                 extra_paths=extra_paths,
+                initialization=options['initialization'],
                 arguments=script_arguments,
                 interpreter=interpreter,
                 relative_paths=self._relative_paths,)
@@ -957,6 +979,7 @@ verbose-security %(verbose_security)s
 %(default_zpublisher_encoding)s
 %(port_base)s
 %(effective_user)s
+%(http_header_max_length)s
 %(ip_address)s
 %(zserver_threads)s
 %(environment_vars)s
