@@ -677,6 +677,7 @@ class Recipe(Scripts):
                     os.mkdir(includes_path)
 
         if additional_zcml:
+            additional_zcml = additional_zcml_template % additional_zcml
             path=os.path.join(includes_path, "999-additional-overrides.zcml")
             open(path, "w").write(additional_zcml.strip())
 
@@ -1017,5 +1018,12 @@ locales_zcml = """\
 <configure xmlns="http://namespaces.zope.org/zope"
            xmlns:i18n="http://namespaces.zope.org/i18n">
     <i18n:registerTranslations directory="%(directory)s" />
+</configure>
+"""
+
+# Template used for additional ZCML
+additional_zcml_template = """\
+<configure xmlns="http://namespaces.zope.org/zope">
+    %s
 </configure>
 """
