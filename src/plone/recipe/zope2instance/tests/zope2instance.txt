@@ -51,6 +51,7 @@ We should have a zope instance, with a basic zope.conf::
     security-policy-implementation C
     verbose-security off
     default-zpublisher-encoding utf-8
+    http-header-max-length 8192
     <BLANKLINE>
     <BLANKLINE>
     <BLANKLINE>
@@ -922,6 +923,7 @@ We should have a zope instance, with a basic zope.conf::
     <zodb_db main>
         ...
         <zeoclient>
+            read-only false
             blob-dir .../sample-buildout/var/blobcache
             shared-blob-dir no
             server 8100
@@ -980,6 +982,7 @@ We should have a zope instance, with a basic zope.conf::
     <zodb_db main>
         ...
         <zeoclient>
+            read-only false
             blob-dir .../sample-buildout/var/blobcache
             shared-blob-dir no
             server 8100
@@ -1037,6 +1040,7 @@ We should have a zope instance, with a basic zope.conf::
         <demostorage>
         # ZEOStorage database
         <zeoclient>
+            read-only false
             server 8100
             storage 1
             name zeostorage
@@ -1089,6 +1093,7 @@ We should have a zope instance, with a basic zope.conf::
         ...
     # Blob-enabled ZEOStorage database
         <zeoclient>
+          read-only false
           blob-dir .../sample-buildout/var/blob
           shared-blob-dir no
           server 8100
@@ -1153,6 +1158,7 @@ We should have a zope instance, with a basic zope.conf::
           before now
         # Blob-enabled ZEOStorage database
           <zeoclient>
+            read-only false
             blob-dir .../sample-buildout/var/blobcache
             shared-blob-dir no
             server 8100
@@ -1613,7 +1619,7 @@ Our generated script now has a reference to the relative path.
     >>> if WINDOWS:
     ...     instance_path += '-script.py'
     >>> open(instance_path).read()
-    '...base = ...__file__...'
+    "...base = ...__file__..."
 
 Custom Zope Conf
 =================
@@ -1647,7 +1653,7 @@ We should have a zope instance script with the custom config file::
     >>> if WINDOWS:
     ...     instance_path += '-script.py'
     >>> open(instance_path).read()
-    '...plone.recipe.zope2instance.ctl.main(...["-C", \'/some/path/my.conf\']...'
+    "...plone.recipe.zope2instance.ctl.main(...['-C', '/some/path/my.conf']..."
 
 
 Resources directory
