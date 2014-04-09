@@ -4,7 +4,9 @@ Changelog
 4.2.15 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Always wrap contents of zcml-additional with a <configure /> node.
+  This makes it possible to use += assignments with zcml-additional.
+  [lgraf]
 
 
 4.2.14 (2014-03-02)
