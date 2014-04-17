@@ -72,7 +72,7 @@ initialization
    Specify some Python initialization code to include within the generated
    ``sitecustomize.py`` script (Buildout >= 1.5) or within the instance script
    (Buildout < 1.5). This is very limited. In particular, be aware that leading
-   whitespace is stripped from the code given.
+   whitespace is stripped from the code given. *added in version 4.2.14*
 
 Theme resources
 ---------------
@@ -157,7 +157,7 @@ shared-blob
   overhead.
 
 read-only
-  Set zeo client as read only
+  Set zeo client as read only *added in version 4.2.12*
 
 ZEO authentication
 ------------------
