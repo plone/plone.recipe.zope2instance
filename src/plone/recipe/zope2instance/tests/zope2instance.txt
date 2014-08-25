@@ -942,8 +942,8 @@ We should have a zope instance, with a basic zope.conf::
     ...
     <BLANKLINE>
 
-If `zeo-client-client` and other relevant ZEO options such as 
-`zeo-client-blob-cache-size` and `zeo-client-blob-cache-size-check` are 
+If `zeo-client-client` and other relevant ZEO options such as
+`zeo-client-blob-cache-size` and `zeo-client-blob-cache-size-check` are
 specified, they should get included in that section as well.
 
     >>> write('buildout.cfg',
@@ -1728,7 +1728,7 @@ The recipe supports the generation of scripts with relative paths.
 Our generated script now has a reference to the relative path.
 
     >>> import sys
-    >>> 
+    >>>
 
     >>> instance_path = join('bin', 'instance')
     >>> if WINDOWS:
@@ -1858,7 +1858,7 @@ Initialization
 ==============
 
 `initialization` is an option that allows you to add custom Python
-code to the initialization process. 
+code to the initialization process.
 
     >>> write('buildout.cfg',
     ... '''
@@ -1870,8 +1870,8 @@ code to the initialization process.
     ... recipe = plone.recipe.zope2instance
     ... eggs =
     ... user = me:me
-    ... initialization = 
-    ...     print 'Initialization complete!' 
+    ... initialization =
+    ...     print 'Initialization complete!'
     ... ''' % options)
 
 Let's run it::

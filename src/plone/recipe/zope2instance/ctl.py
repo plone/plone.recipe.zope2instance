@@ -419,7 +419,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                     'app.REQUEST.traverse(r\'%s\'); '
                     % self.options.object_path)
             if not self.options.no_login:
-                # REQUEST.traverse will do setSecurityManager with Anonymous 
+                # REQUEST.traverse will do setSecurityManager with Anonymous
                 # so we login after
                 cmdline += login_cmdline
             cmdline += (
