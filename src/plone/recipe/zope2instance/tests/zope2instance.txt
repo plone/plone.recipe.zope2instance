@@ -924,6 +924,7 @@ We should have a zope instance, with a basic zope.conf::
         ...
         <zeoclient>
             read-only false
+            read-only-fallback false
             blob-dir .../sample-buildout/var/blobcache
             shared-blob-dir no
             server 8100
@@ -983,6 +984,7 @@ We should have a zope instance, with a basic zope.conf::
         ...
         <zeoclient>
             read-only false
+            read-only-fallback false
             blob-dir .../sample-buildout/var/blobcache
             shared-blob-dir no
             server 8100
@@ -1041,6 +1043,7 @@ We should have a zope instance, with a basic zope.conf::
         # ZEOStorage database
         <zeoclient>
             read-only false
+            read-only-fallback false
             server 8100
             storage 1
             name zeostorage
@@ -1094,6 +1097,7 @@ We should have a zope instance, with a basic zope.conf::
     # Blob-enabled ZEOStorage database
         <zeoclient>
           read-only false
+          read-only-fallback false
           blob-dir .../sample-buildout/var/blob
           shared-blob-dir no
           server 8100
@@ -1159,6 +1163,7 @@ We should have a zope instance, with a basic zope.conf::
         # Blob-enabled ZEOStorage database
           <zeoclient>
             read-only false
+            read-only-fallback false
             blob-dir .../sample-buildout/var/blobcache
             shared-blob-dir no
             server 8100
