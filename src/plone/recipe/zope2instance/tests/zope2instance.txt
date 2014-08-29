@@ -962,6 +962,7 @@ specified, they should get included in that section as well.
     ... max-disconnect-poll = 20
     ... zeo-client-blob-cache-size = 5GB
     ... zeo-client-blob-cache-size-check = 50
+    ... zeo-client-read-only-fallback = true
     ... ''' % options)
 
 Let's run it::
@@ -984,7 +985,7 @@ We should have a zope instance, with a basic zope.conf::
         ...
         <zeoclient>
             read-only false
-            read-only-fallback false
+            read-only-fallback true
             blob-dir .../sample-buildout/var/blobcache
             shared-blob-dir no
             server 8100
