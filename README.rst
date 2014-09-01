@@ -1,6 +1,12 @@
 Introduction
 ============
 
+.. image:: http://img.shields.io/pypi/v/plone.recipe.zope2instance.svg
+   :target: https://pypi.python.org/pypi/plone.recipe.zope2instance
+
+.. image:: http://img.shields.io/travis/plone/plone.recipe.zope2instance.svg
+   :target: https://travis-ci.org/plone/plone.recipe.zope2instance
+
 This recipe creates and configures a Zope 2 instance in parts. It also
 installs a control script, which is like zopectl, in the bin/ directory.
 The name of the control script is the the name of the part in buildout.
