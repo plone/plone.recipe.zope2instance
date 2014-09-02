@@ -1,6 +1,12 @@
 Introduction
 ============
 
+.. image:: http://img.shields.io/pypi/v/plone.recipe.zope2instance.svg
+   :target: https://pypi.python.org/pypi/plone.recipe.zope2instance
+
+.. image:: http://img.shields.io/travis/plone/plone.recipe.zope2instance.svg
+   :target: https://travis-ci.org/plone/plone.recipe.zope2instance
+
 This recipe creates and configures a Zope 2 instance in parts. It also
 installs a control script, which is like zopectl, in the bin/ directory.
 The name of the control script is the the name of the part in buildout.
@@ -134,7 +140,9 @@ If you want multiple application processes you need to run a separate
 database server process and connect to it, either via ZEO or RelStorage.
 
 zeo-address
-  Set the address of the ZEO server. Defaults to 8100.
+  Set the address of the ZEO server. Defaults to 8100. You can set
+  more than one address (white space delimited). Alternative addresses will
+  be used if the primary address is down.
 
 zeo-client
   Set to 'on' to make this instance a ZEO client. In this case, setting the
@@ -155,6 +163,10 @@ shared-blob
   through the ZEO connection, but just send the information of the file
   location to the ZEO server, resulting in faster execution and less memory
   overhead.
+
+zeo-client-read-only-fallback
+  A flag indicating whether a read-only remote storage should be acceptable as
+  a fallback when no writable storages are available. Defaults to false.
 
 read-only
   Set zeo client as read only *added in version 4.2.12*

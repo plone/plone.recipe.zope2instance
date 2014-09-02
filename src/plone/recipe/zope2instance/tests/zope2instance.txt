@@ -924,6 +924,7 @@ We should have a zope instance, with a basic zope.conf::
         ...
         <zeoclient>
             read-only false
+            read-only-fallback false
             blob-dir .../sample-buildout/var/blobcache
             shared-blob-dir no
             server 8100
@@ -961,6 +962,7 @@ specified, they should get included in that section as well.
     ... max-disconnect-poll = 20
     ... zeo-client-blob-cache-size = 5GB
     ... zeo-client-blob-cache-size-check = 50
+    ... zeo-client-read-only-fallback = true
     ... ''' % options)
 
 Let's run it::
@@ -983,6 +985,7 @@ We should have a zope instance, with a basic zope.conf::
         ...
         <zeoclient>
             read-only false
+            read-only-fallback true
             blob-dir .../sample-buildout/var/blobcache
             shared-blob-dir no
             server 8100
@@ -1041,6 +1044,7 @@ We should have a zope instance, with a basic zope.conf::
         # ZEOStorage database
         <zeoclient>
             read-only false
+            read-only-fallback false
             server 8100
             storage 1
             name zeostorage
@@ -1094,6 +1098,7 @@ We should have a zope instance, with a basic zope.conf::
     # Blob-enabled ZEOStorage database
         <zeoclient>
           read-only false
+          read-only-fallback false
           blob-dir .../sample-buildout/var/blob
           shared-blob-dir no
           server 8100
@@ -1159,6 +1164,7 @@ We should have a zope instance, with a basic zope.conf::
         # Blob-enabled ZEOStorage database
           <zeoclient>
             read-only false
+            read-only-fallback false
             blob-dir .../sample-buildout/var/blobcache
             shared-blob-dir no
             server 8100
@@ -1177,6 +1183,115 @@ We should have a zope instance, with a basic zope.conf::
     <BLANKLINE>
         </demostorage>
         mount-point /
+    </zodb_db>
+    ...
+    <BLANKLINE>
+
+You can get specific zeo server address using `zeo-address`.
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... zeo-client = yes
+    ... zeo-address = 127.0.0.1:8101
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '...instance'.
+    Generated interpreter '.../parts/instance/bin/interpreter'.
+
+We should have a zope instance, with a basic zope.conf::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    <zodb_db main>
+        ...
+        <zeoclient>
+            read-only false
+            read-only-fallback false
+            blob-dir .../sample-buildout/var/blobcache
+            shared-blob-dir no
+            server 127.0.0.1:8101
+            storage 1
+            name zeostorage
+            var .../sample-buildout/parts/instance/var
+            cache-size 128MB
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+        </zeoclient>
+        ...
+    </zodb_db>
+    ...
+    <BLANKLINE>
+
+You can also set multiple zeo server addresses using `zeo-address`.
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... zeo-client = yes
+    ... zeo-address = 127.0.0.1:8101 127.0.0.1:8102
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '...instance'.
+    Generated interpreter '.../parts/instance/bin/interpreter'.
+
+We should have a zope instance, with a basic zope.conf::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    <zodb_db main>
+        ...
+        <zeoclient>
+            read-only false
+            read-only-fallback false
+            blob-dir .../sample-buildout/var/blobcache
+            shared-blob-dir no
+            server 127.0.0.1:8101
+            server 127.0.0.1:8102
+            storage 1
+            name zeostorage
+            var .../sample-buildout/parts/instance/var
+            cache-size 128MB
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+        </zeoclient>
+        ...
     </zodb_db>
     ...
     <BLANKLINE>

@@ -397,6 +397,13 @@ class Recipe(Scripts):
             enable_products = "enable-product-installation %s" % enable_products
 
         zeo_address = options.get('zeo-address', '8100')
+        zeo_addresses = zeo_address.split(' ')
+        zeo_address_list = ''
+        for address in zeo_addresses:
+            if not address:
+                continue
+            zeo_address_list += zeo_address_list_template % dict(
+                                zeo_address = address)
 
         zodb_cache_size = options.get('zodb-cache-size', '30000')
         if zodb_cache_size:
@@ -429,6 +436,7 @@ class Recipe(Scripts):
                     options.get('zeo-client-blob-cache-size-check', '')
             zeo_client_min_disconnect_poll = options.get('min-disconnect-poll', "")
             zeo_client_max_disconnect_poll = options.get('max-disconnect-poll', "")
+            zeo_client_read_only_fallback = options.get('zeo-client-read-only-fallback', 'false')
             if zeo_client_client:
                 zeo_client_client = 'client %s' % zeo_client_client
             if zeo_client_blob_cache_size:
@@ -442,6 +450,8 @@ class Recipe(Scripts):
                 zeo_client_min_disconnect_poll = "min-disconnect-poll %s" % zeo_client_min_disconnect_poll
             if zeo_client_max_disconnect_poll:
                 zeo_client_max_disconnect_poll = "max-disconnect-poll %s" % zeo_client_max_disconnect_poll
+            if zeo_client_read_only_fallback:
+                zeo_client_read_only_fallback = "read-only-fallback %s" % zeo_client_read_only_fallback
             if options.get('zeo-username', ''):
                 if not options.get('zeo-password', ''):
                     raise zc.buildout.UserError('No ZEO password specified')
@@ -461,7 +471,7 @@ class Recipe(Scripts):
             storage_snippet = storage_snippet_template % dict(
                 blob_storage = blob_storage,
                 shared_blob_dir = shared_blob_dir,
-                zeo_address = zeo_address,
+                zeo_address_list = zeo_address_list,
                 zeo_client_cache_size = zeo_client_cache_size,
                 zeo_client_blob_cache_size=zeo_client_blob_cache_size,
                 zeo_client_blob_cache_size_check=\
@@ -473,7 +483,8 @@ class Recipe(Scripts):
                 zeo_client_drop_cache_rather_verify = zeo_client_drop_cache_rather_verify,
                 zeo_client_min_disconnect_poll=zeo_client_min_disconnect_poll,
                 zeo_client_max_disconnect_poll=zeo_client_max_disconnect_poll,
-                read_only=options.get('read-only', 'false')
+                read_only=options.get('read-only', 'false'),
+                zeo_client_read_only_fallback=zeo_client_read_only_fallback
                 )
         else:
             # no zeo-client
@@ -839,11 +850,16 @@ zeo_authentication_template="""
       password %(password)s
 """.strip()
 
+zeo_address_list_template="""
+      server %(zeo_address)s
+"""
+
 zeo_storage_template="""
     # ZEOStorage database
     <zeoclient>
       read-only %(read_only)s
-      server %(zeo_address)s
+      %(zeo_client_read_only_fallback)s
+      %(zeo_address_list)s
       storage %(zeo_storage)s
       name zeostorage
       var %(zeo_var_dir)s
@@ -860,9 +876,10 @@ zeo_blob_storage_template="""
     # Blob-enabled ZEOStorage database
     <zeoclient>
       read-only %(read_only)s
+      %(zeo_client_read_only_fallback)s
       blob-dir %(blob_storage)s
       shared-blob-dir %(shared_blob_dir)s
-      server %(zeo_address)s
+      %(zeo_address_list)s
       storage %(zeo_storage)s
       name zeostorage
       var %(zeo_var_dir)s
