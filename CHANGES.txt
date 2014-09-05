@@ -9,6 +9,9 @@ Changelog
   [lgraf]
 - Add support for multiple zeo servers
   [ivant]
+- Add documentation for console command, for supervisor and IDE
+  debugging
+  [do3cc]
 
 
 4.2.14 (2014-03-02)
