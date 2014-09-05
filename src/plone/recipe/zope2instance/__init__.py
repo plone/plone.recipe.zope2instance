@@ -514,9 +514,6 @@ class Recipe(Scripts):
                     )
             else:
                 storage_snippet = demo_storage_template % storage_snippet
-        elif 'demo-file-storage' in options:
-            raise ValueError("Must enable demo-storage to use demo-file-storage.")
-
 
         zodb_tmp_storage = options.get('zodb-temporary-storage',
                                        zodb_temporary_storage_template)
