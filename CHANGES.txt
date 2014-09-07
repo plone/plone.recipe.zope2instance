@@ -1,7 +1,7 @@
 Changelog
 =========
 
-4.2.15 (unreleased)
+4.2.15 (2014-09-07)
 -------------------
 
 - Always wrap contents of zcml-additional with a <configure /> node.
