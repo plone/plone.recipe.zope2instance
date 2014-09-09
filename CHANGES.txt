@@ -10,6 +10,9 @@ Changelog
 4.2.15 (2014-09-07)
 -------------------
 
+- If ''demo-file-storage' is set, but 'demo-storage' is off, do not
+  raise an exception
+  [frapell]
 - Always wrap contents of zcml-additional with a <configure /> node.
   This makes it possible to use += assignments with zcml-additional.
   [lgraf]
