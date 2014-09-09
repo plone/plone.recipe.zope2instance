@@ -481,8 +481,8 @@ http-header-max-length
 
     http-header-max-length = 16384
 
-Additional Control Script `debug` and `run` Commands
-----------------------------------------------------
+Additional Control Script `debug`, `console` and `run` Commands
+---------------------------------------------------------------
 
 The extended Zope 2 control script installed by this recipe, usually
 `bin\instance` by convention, offers a `debug` command and another
@@ -504,6 +504,15 @@ with following options::
 
 Note that these options must come before the script name,
 e.g. `bin/instance -RLOPlone/front-page debug`
+
+The `console` command is similar to the fg command, but it does not
+create a subprocess to start up Zope 2. This is useful for two
+use cases. First, the supervisor program, to supervise long running
+processes like a Zope, require the process not to fork away, so that
+supervisor can control it.
+Second, IDEs like WingIDE and PyCharm support debugging running
+processes from within. For this to work, the process should also
+not fork away.
 
 Additional control script commands
 ----------------------------------
