@@ -295,7 +295,7 @@ Advanced ZEO options
 --------------------
 
 zeo-client-cache-size
-  Set the size of the ZEO client cache. Defaults to '30MB'. The ZEO cache is
+  Set the size of the ZEO client cache. Defaults to '128MB'. The ZEO cache is
   a disk based cache shared between application threads. It's stored inside
   the directory designated by the `TMP` environment variable.
 
