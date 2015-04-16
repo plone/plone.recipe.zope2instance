@@ -455,6 +455,18 @@ zope-conf
   A relative or absolute path to a `zope.conf` file. If this is given, many of
   the options in the recipe will be ignored.
 
+zope-conf-imports
+  You can define custom sections within zope.conf using the ZConfig API.
+  But, in order for Zope to understand your custom sections, you'll have to
+  import the python packages that define these custom sections using `%import`
+  syntax.
+
+  Example::
+
+    zope-conf-imports =
+      mailinglogger
+      eea.graylogger
+
 zope-conf-additional
   Give additional lines to `zope.conf`. Make sure you indent any lines after
   the one with the parameter.

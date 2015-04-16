@@ -1770,6 +1770,45 @@ We should have a zope instance script with the custom config file::
     >>> open(instance_path).read()
     "...plone.recipe.zope2instance.ctl.main(...['-C', '/some/path/my.conf']..."
 
+Custom Zope Conf Imports
+========================
+`zope-conf-imports` is an option that allows you to import python packages that
+define custom zope.conf sections using ZConfig API.
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... zope-conf-imports =
+    ...   mailinglogger
+    ...   eea.graylogger
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '...instance'.
+    Generated interpreter '.../parts/instance/bin/interpreter'.
+
+We should have a zope instance, with custom imports::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
+    %import mailinglogger
+    %import eea.graylogger
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    <BLANKLINE>
 
 Resources directory
 ===================

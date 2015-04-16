@@ -4,7 +4,9 @@ Changelog
 4.2.17 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Added `zope-conf-imports` option to easily import ZConfig components
+  within zope.conf using %import syntax.
+  [avoinea]
 
 
 4.2.16 (2014-11-01)
