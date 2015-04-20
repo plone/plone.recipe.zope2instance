@@ -141,6 +141,13 @@ class Recipe(Scripts):
         if zope_conf_path is not None:
             return
 
+        imports = options.get('zope-conf-imports', '')
+        if imports:
+            imports = imports.split('\n')
+            # Filter out empty lines
+            imports = [i for i in imports if i]
+        imports_lines = '\n'.join(('%%import %s' % i for i in imports))
+
         products = options.get('products', '')
         if products:
             products = products.split('\n')
@@ -536,6 +543,7 @@ class Recipe(Scripts):
 
         zope_conf = template % dict(instance_home = instance_home,
                                     client_home = client_home,
+                                    imports_lines = imports_lines,
                                     paths_lines = paths_lines,
                                     products_lines = products_lines,
                                     debug_mode = debug_mode,
@@ -965,6 +973,7 @@ environment_template = """
 
 # The template used to build zope.conf
 zope_conf_template="""\
+%(imports_lines)s
 %%define INSTANCEHOME %(instance_home)s
 instancehome $INSTANCEHOME
 %%define CLIENTHOME %(client_home)s
