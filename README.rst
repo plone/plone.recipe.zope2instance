@@ -221,6 +221,7 @@ log levels or configure `mailinglogger`.
 
 event-log
   The filename of the event log. Defaults to ${buildout:directory}/var/log/${partname}.log
+  Setting this value to 'disable' will make the <eventlog> section to be omitted
 
 event-log-level
   Set the level of the console output for the event log. Level may be any of
@@ -251,6 +252,7 @@ mailinglogger
 
 z2-log
   The filename for the Z2 access log. Defaults to var/log/${partname}-Z2.log.
+  Setting this value to 'disable' will make the <logger access> section to be omitted
 
 z2-log-level
   Set the log level for the access log. Level may be any of CRITICAL, ERROR,
