@@ -1471,6 +1471,85 @@ We should have a zope instance, with the custom event log::
     ...
     <BLANKLINE>
 
+
+Disable access log
+==================
+
+If we assign `disable` to `z2-log`, the whole <logger access> section
+will be omitted::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ...
+    ... z2-log = disable
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '...instance'.
+    Generated interpreter '.../parts/instance/bin/interpreter'.
+
+We should have a zope instance, with no access log::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> "logger access" in zope_conf
+    False
+    >>> "eventlog" in zope_conf
+    True
+
+
+Disable events log
+==================
+
+If we assign `disable` to `event-log`, the whole <eventlog> section
+will be omitted::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ...
+    ... event-log = disable
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '...instance'.
+    Generated interpreter '.../parts/instance/bin/interpreter'.
+
+We should have a zope instance, with no access log::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> "logger access" in zope_conf
+    True
+    >>> "eventlog" in zope_conf
+    False
+
+
 Custom site.zcml file
 =====================
 
