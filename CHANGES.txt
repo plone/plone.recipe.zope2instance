@@ -4,7 +4,8 @@ Changelog
 4.2.18 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Allow to disable logs
+  [frapell]
 
 
 4.2.17 (2015-04-29)

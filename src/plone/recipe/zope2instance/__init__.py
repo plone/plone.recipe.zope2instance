@@ -260,29 +260,6 @@ class Recipe(Scripts):
         zope_conf_additional = options.get('zope-conf-additional', '')
 
         # logging
-        event_log_level = options.get('event-log-level', 'INFO')
-        custom_event_log = options.get('event-log-custom', None)
-        default_log = os.path.sep.join(('log', self.name + '.log',))
-        # log file
-        if not custom_event_log:
-            event_log_name = options.get('event-log', default_log)
-            event_file = os.path.join(var_dir, event_log_name)
-            event_log_dir = os.path.dirname(event_file)
-            if not os.path.exists(event_log_dir):
-                os.makedirs(event_log_dir)
-            event_log_rotate = ''
-            event_log_max_size = options.get('event-log-max-size', None)
-            if event_log_max_size:
-                event_log_old_files = options.get('event-log-old-files', 1)
-                event_log_rotate = '\n'.join((
-                    "max-size %s" % event_log_max_size,
-                    "    old-files %s" % event_log_old_files))
-            event_log = event_logfile % {'event_logfile': event_file,
-                                         'event_log_level': event_log_level,
-                                         'event_log_rotate': event_log_rotate}
-        # custom log
-        else:
-            event_log = custom_event_log
 
         mailinglogger_config = options.get('mailinglogger', '')
         mailinglogger_import = ''
@@ -290,31 +267,73 @@ class Recipe(Scripts):
             mailinglogger_config = mailinglogger_config.strip()
             mailinglogger_import = '%import mailinglogger'
 
+        default_log = os.path.sep.join(('log', self.name + '.log',))
+        event_log_name = options.get('event-log', default_log)
+
+        if event_log_name.lower() == 'disable':
+            event_log = ''
+        else:
+            event_log_level = options.get('event-log-level', 'INFO')
+            custom_event_log = options.get('event-log-custom', None)
+            # log file
+            if not custom_event_log:
+                event_file = os.path.join(var_dir, event_log_name)
+                event_log_dir = os.path.dirname(event_file)
+                if not os.path.exists(event_log_dir):
+                    os.makedirs(event_log_dir)
+                event_log_rotate = ''
+                event_log_max_size = options.get('event-log-max-size', None)
+                if event_log_max_size:
+                    event_log_old_files = options.get('event-log-old-files', 1)
+                    event_log_rotate = '\n'.join((
+                        "max-size %s" % event_log_max_size,
+                        "    old-files %s" % event_log_old_files))
+                event_log = event_logfile % {'event_logfile': event_file,
+                                             'event_log_level': event_log_level,
+                                             'event_log_rotate': event_log_rotate}
+            # custom log
+            else:
+                event_log = custom_event_log
+
+            event_log = event_log_template % {
+                'mailinglogger_config': mailinglogger_config,
+                'event_log_level': event_log_level,
+                'event_log': event_log,
+            }
+
         z_log_name = os.path.sep.join(('log', self.name + '-Z2.log'))
         z_log_name = options.get('z2-log', z_log_name)
-        z_log = os.path.join(var_dir, z_log_name)
-        z_log_dir = os.path.dirname(z_log)
-        if not os.path.exists(z_log_dir):
-            os.makedirs(z_log_dir)
-
-        z_log_level = options.get('z2-log-level', 'WARN')
-
-        # access event log
-        custom_access_event_log = options.get('access-log-custom', None)
-        # filelog directive
-        if not custom_access_event_log:
-            access_log_rotate = ''
-            access_log_max_size = options.get('access-log-max-size', None)
-            if access_log_max_size:
-                access_log_old_files = options.get('access-log-old-files', 1)
-                access_log_rotate = '\n'.join((
-                    "max-size %s" % access_log_max_size,
-                    "    old-files %s" % access_log_old_files))
-            access_event_log = access_event_logfile % {'z_log': z_log,
-                                         'access_log_rotate': access_log_rotate}
-        # custom directive
+        if z_log_name.lower() == 'disable':
+            access_event_log = ''
         else:
-            access_event_log = custom_access_event_log
+            z_log = os.path.join(var_dir, z_log_name)
+            z_log_dir = os.path.dirname(z_log)
+            if not os.path.exists(z_log_dir):
+                os.makedirs(z_log_dir)
+
+            z_log_level = options.get('z2-log-level', 'WARN')
+
+            # access event log
+            custom_access_event_log = options.get('access-log-custom', None)
+            # filelog directive
+            if not custom_access_event_log:
+                access_log_rotate = ''
+                access_log_max_size = options.get('access-log-max-size', None)
+                if access_log_max_size:
+                    access_log_old_files = options.get('access-log-old-files', 1)
+                    access_log_rotate = '\n'.join((
+                        "max-size %s" % access_log_max_size,
+                        "    old-files %s" % access_log_old_files))
+                access_event_log = access_event_logfile % {'z_log': z_log,
+                                             'access_log_rotate': access_log_rotate}
+            # custom directive
+            else:
+                access_event_log = custom_access_event_log
+
+            access_event_log = access_log_template % {
+                'z_log_level': z_log_level,
+                'access_event_log': access_event_log,
+            }
 
         default_zpublisher_encoding = options.get('default-zpublisher-encoding',
                                                   'utf-8')
@@ -553,11 +572,8 @@ class Recipe(Scripts):
                                     http_header_max_length = http_header_max_length,
                                     ip_address = ip_address,
                                     mailinglogger_import = mailinglogger_import,
-                                    mailinglogger_config = mailinglogger_config,
                                     event_log = event_log,
-                                    event_log_level = event_log_level,
                                     access_event_log = access_event_log,
-                                    z_log_level = z_log_level,
                                     default_zpublisher_encoding = default_zpublisher_encoding,
                                     storage_snippet = storage_snippet,
                                     port_base = port_base,
@@ -993,16 +1009,10 @@ verbose-security %(verbose_security)s
 %(deprecation_warnings)s
 
 %(mailinglogger_import)s
-<eventlog>
-  %(mailinglogger_config)s
-  level %(event_log_level)s
-  %(event_log)s
-</eventlog>
 
-<logger access>
-  level %(z_log_level)s
-  %(access_event_log)s
-</logger>
+%(event_log)s
+
+%(access_event_log)s
 
 %(http_address)s
 %(ftp_address)s
@@ -1025,6 +1035,21 @@ lock-filename %(lock_file)s
 %(enable_products)s
 
 %(zope_conf_additional)s
+"""
+
+event_log_template = """\
+<eventlog>
+  %(mailinglogger_config)s
+  level %(event_log_level)s
+  %(event_log)s
+</eventlog>
+"""
+
+access_log_template = """\
+<logger access>
+  level %(z_log_level)s
+  %(access_event_log)s
+</logger>
 """
 
 # Template used for plone.resource directory
