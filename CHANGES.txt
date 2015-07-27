@@ -1,7 +1,7 @@
 Changelog
 =========
 
-4.2.18 (unreleased)
+4.2.18 (2015-07-27)
 -------------------
 
 - Allow to disable logs.  Set ``z2-log`` to the value ``disable`` to
