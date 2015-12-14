@@ -501,7 +501,7 @@ Additional Control Script `debug`, `console` and `run` Commands
 ---------------------------------------------------------------
 
 The extended Zope 2 control script installed by this recipe, usually
-`bin\instance` by convention, offers a `debug` command and another
+`bin/instance` by convention, offers a `debug` command and another
 `run` command.  The `debug` command starts an interactive Python
 prompt with the Zope 2 application available via the `app` name.
 Similarly, the `run` command accepts a Python script as an argument
