@@ -596,6 +596,15 @@ def main(args=None):
         if func_name not in dir(c):
             setattr(c.__class__, func_name, func)
 
+    # Mix in any additional commands supplied by other packages
+    # registered for zopectl:
+    for ep in iter_entry_points('zopectl.command'):
+        func_name = 'do_' + ep.name
+        func = ep.load()
+        # avoid overwriting the standard commands
+        if func_name not in dir(c):
+            setattr(c.__class__, func_name, func)
+
     # If a command was specified: call the corresponding do_*() method.
     #
     # If that method set an exit status, exit this Python script
