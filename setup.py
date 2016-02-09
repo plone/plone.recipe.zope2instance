@@ -13,7 +13,7 @@ setup(
         open('CHANGES.txt').read()),
     license="ZPL 2.1",
     keywords="zope2 buildout",
-    url='http://pypi.python.org/pypi/plone.recipe.zope2instance',
+    url='https://pypi.python.org/pypi/plone.recipe.zope2instance',
     classifiers=[
         "License :: OSI Approved :: Zope Public License",
         "Framework :: Buildout",
