@@ -9,8 +9,8 @@ setup(
     author="Hanno Schlichting",
     author_email="hanno@hannosch.eu",
     description="Buildout recipe for creating a Zope 2 instance",
-    long_description=(open('README.rst').read() + '\n' +
-        open('CHANGES.txt').read()),
+    long_description=((open('README.rst').read() + '\n' +
+                       open('CHANGES.rst').read())),
     license="ZPL 2.1",
     keywords="zope2 buildout",
     url='https://pypi.python.org/pypi/plone.recipe.zope2instance',
