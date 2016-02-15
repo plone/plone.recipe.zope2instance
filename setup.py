@@ -18,6 +18,8 @@ setup(
         "License :: OSI Approved :: Zope Public License",
         "Framework :: Buildout",
         "Framework :: Plone",
+        "Framework :: Plone :: 4.3",
+        "Framework :: Plone :: 5.0",
         "Framework :: Zope2",
         "Programming Language :: Python",
         "Programming Language :: Python :: 2 :: Only",
