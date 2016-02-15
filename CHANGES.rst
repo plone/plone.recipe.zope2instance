@@ -4,9 +4,11 @@ Changelog
 4.2.19 (unreleased)
 -------------------
 
-- Handle commands registered for zopectl as well,
-  up to now they were handled but not displayed at all
-  (ie in help and descriptions).
+New:
+
+- Handle commands registered for zopectl as well.
+  Up to now they were handled but not displayed at all
+  (i.e. in help and descriptions).
   https://github.com/plone/plone.recipe.zope2instance/issues/18
   [gforcada]
 
