@@ -10,7 +10,10 @@ New:
 
 Fixes:
 
-- *add item here*
+- Revert changes made on previous release.
+  The way zopectl and this recipe handle commands
+  is totally different.
+  [gforcada]
 
 
 4.2.19 (2016-02-15)
