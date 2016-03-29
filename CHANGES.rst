@@ -1,6 +1,22 @@
 Changelog
 =========
 
+4.2.21 (unreleased)
+-------------------
+
+Incompatibilities:
+
+- *add item here*
+
+New:
+
+- *add item here*
+
+Fixes:
+
+- *add item here*
+
+
 4.2.20 (2016-03-29)
 -------------------
 
