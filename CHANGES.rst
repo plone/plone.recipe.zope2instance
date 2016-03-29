@@ -1,12 +1,8 @@
 Changelog
 =========
 
-4.2.20 (unreleased)
+4.2.20 (2016-03-29)
 -------------------
-
-New:
-
-- *add item here*
 
 Fixes:
 
