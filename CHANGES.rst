@@ -1,8 +1,8 @@
 Changelog
 =========
 
-4.2.21 (unreleased)
--------------------
+4.3.0 (unreleased)
+------------------
 
 Incompatibilities:
 
@@ -10,7 +10,7 @@ Incompatibilities:
 
 New:
 
-- *add item here*
+- Python 3 compatibility.
 
 Fixes:
 
