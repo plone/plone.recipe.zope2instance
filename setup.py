@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 name = "plone.recipe.zope2instance"
-version = '4.2.21.dev0'
+version = '4.3.0.dev0'
 
 setup(
     name=name,
@@ -22,9 +22,11 @@ setup(
         "Framework :: Plone :: 5.0",
         "Framework :: Zope2",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2 :: Only",
+        "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: Implementation :: CPython",
     ],
     packages=find_packages('src'),
