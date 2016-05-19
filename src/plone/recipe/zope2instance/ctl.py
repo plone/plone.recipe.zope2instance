@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2006-2007 Zope Corporation and Contributors.
@@ -100,7 +101,8 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             try:
                 status = win32serviceutil.QueryServiceStatus(name)[1]
             except pywintypes.error, err:
-                # (1060, 'GetServiceKeyName', 'The specified service does not exist as an installed service.')
+                # (1060, 'GetServiceKeyName', 'The specified service does not
+                # exist as an installed service.')
                 if err[0] == 1060:
                     return None
                 else:
@@ -149,7 +151,8 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                 print 'ERROR: Zope is already installed as a Windows service.'
                 return
 
-            # TODO: Are return values from do_ methods are really taken care of?
+            # TODO:
+            # Are return values from do_ methods are really taken care of?
             # http://docs.python.org/library/cmd.html: "The return value is a
             # flag indicating whether interpretation of commands
             # by the interpreter should stop."
@@ -182,10 +185,14 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                 pos = instance_script.rfind(script_suffix)
                 instance_exe = instance_script[:pos] + '.exe'
 
-                self._set_winreg_key('command',
-                             '"%s" console' % instance_exe)
-                self._set_winreg_key('pid_filename',
-                             self.options.configroot.pid_filename)
+                self._set_winreg_key(
+                    'command',
+                    '"%s" console' % instance_exe
+                )
+                self._set_winreg_key(
+                    'pid_filename',
+                    self.options.configroot.pid_filename
+                )
 
                 print 'Installed Zope as Windows Service "%s".' % name
 
@@ -196,8 +203,10 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             return ret_code
 
         def help_install(self):
-            print 'install -- Install Zope as a Windows service that must be manually started.'
-            print 'install auto -- Install Zope as a Windows service that starts at system startup.'
+            print 'install -- Install Zope as a Windows service that must be '\
+                  'manually started.'
+            print 'install auto -- Install Zope as a Windows service that '\
+                  'starts at system startup.'
 
         def do_start(self, arg):
 
@@ -272,8 +281,9 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             if status is None:
                 print 'ERROR: Zope is not installed as a Windows service.'
                 return
-            elif not status is win32service.SERVICE_STOPPED:
-                print 'ERROR: Please stop the Windows service before removing it.'
+            elif status is not win32service.SERVICE_STOPPED:
+                print 'ERROR: Please stop the Windows service before '\
+                      'removing it.'
                 return
 
             ret_code = 0
@@ -287,7 +297,8 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
 
             return ret_code
 
-        # NOTE: do not rename! called also on windows by non-windows "do_" methods
+        # NOTE: do not rename! called also on windows by non-windows
+        # "do_" methods
         def get_status(self):
             """This method only has side effects, despite its name:
 
@@ -299,7 +310,8 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
 
             """
             zopectl.ZopeCmd.get_status(self)
-            # override value set by zopectl.ZopeCmd.get_status() (always -1 or 0)
+            # override value set by zopectl.ZopeCmd.get_status()
+            # (always -1 or 0)
             self.zd_pid = self._get_pid_from_pidfile()
 
             if self.zd_pid > 0:
@@ -327,7 +339,8 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
 
         def help_status(self):
             print 'status -- Print status of the Windows service.'
-            print 'status -l -- Print status of the Windows service, and raw status output.'
+            print 'status -l -- Print status of the Windows service, '\
+                  'and raw status output.'
 
         def help_EOF(self):
             print 'To quit, type CTRL+Z or use the quit command.'
@@ -339,9 +352,10 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             self.get_status()
             if not self.zd_up:
                 args = [
-                    self.options.python, self.options.interpreter,
+                    self.options.python,
+                    self.options.interpreter,
                     self.options.zdrun,
-                    ]
+                ]
                 args += self._get_override("-S", "schemafile")
                 args += self._get_override("-C", "configfile")
                 args += self._get_override("-b", "backofflimit")
@@ -352,8 +366,10 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                 if self.options.umask:
                     args += self._get_override("-m", "umask",
                                                oct(self.options.umask))
-                args += self._get_override("-x", "exitcodes",
-                    ",".join(map(str, self.options.exitcodes)))
+                args += self._get_override(
+                    "-x", "exitcodes",
+                    ",".join(map(str, self.options.exitcodes))
+                )
                 args += self._get_override("-z", "directory")
 
                 args.extend(self.options.program)
@@ -370,8 +386,14 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             else:
                 print "daemon process already running; pid=%d" % self.zd_pid
                 return
-            self.awhile(lambda: self.zd_pid,
-                        "daemon process started, pid=%(zd_pid)d")
+
+            def cond(n=0):
+                return self.zd_pid
+
+            self.awhile(
+                cond,
+                'daemon process started, pid=%(zd_pid)d'
+            )
 
     def environment(self):
         configroot = self.options.configroot
@@ -390,11 +412,16 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         # will act as escapes.  Use r'' instead.
         # Also, don't forget that 'python'
         # may have spaces and needs to be quoted.
-        cmdline = ('"%s" %s "%s" %s -c "from Zope2 import configure; '
-                   'configure(r\'%s\'); '
-                   'import Zope2; app=Zope2.app(); '
-                   % (python, pyflags,
-                      self.options.interpreter, pyflags, self.options.configfile))
+        cmdline = (
+            '"%s" %s "%s" %s -c "from Zope2 import configure; '
+            'configure(r\'%s\'); '
+            'import Zope2; app=Zope2.app(); ' % (
+                python, pyflags,
+                self.options.interpreter,
+                pyflags,
+                self.options.configfile
+            )
+        )
 
         if not self.options.no_request:
             cmdline += (
@@ -501,12 +528,16 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
 
     def do_debug(self, arg):
         # `-c` disables the PYTHONSTARTUP feature; load it explicitly
-        interactive_startup = ("import os;"
+        interactive_startup = (
+            "import os;"
             "os.path.exists(os.environ.get('PYTHONSTARTUP', '')) "
-            "and execfile(os.environ['PYTHONSTARTUP']); del os;")
-        cmdline = self.get_startup_cmd(self.options.python,
-                                       interactive_startup,
-                                       pyflags = '-i', )
+            "and execfile(os.environ['PYTHONSTARTUP']); del os;"
+        )
+        cmdline = self.get_startup_cmd(
+            self.options.python,
+            interactive_startup,
+            pyflags='-i',
+        )
         print ('Starting debugger (the name "app" is bound to the top-level '
                'Zope object)')
         os.system(cmdline)
@@ -519,8 +550,10 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         self.get_status()
         pid = self.zd_pid
         if pid:
-            print('The program seems already to be running. If you believe not, '
-                  'check for dangling .pid and .lock files in var/.')
+            print(
+                'The program seems already to be running. If you believe not, '
+                'check for dangling .pid and .lock files in var/.'
+            )
             return
 
         import subprocess
@@ -566,7 +599,8 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
 
 
 def main(args=None):
-    """ Customized entry point for launching Zope without forking other processes """
+    """Customized entry point for launching Zope without forking other processes
+    """
 
     options = zopectl.ZopeCtlOptions()
     options.add(name="no_request", short="R", long="no-request", flag=1)
@@ -605,7 +639,8 @@ def main(args=None):
     # The exit status is used for "Restart" on the ZMI Control Panel or
     # @@maintenance-controlpanel (see http://dev.plone.org/plone/ticket/10906).
     #
-    # Arguably we should return the exit status and let the wrapper script exit.
+    # Arguably we should return the exit status and let the wrapper script
+    # exit.
     # But it's generated by setuptools, and doesn't have that functionality.
 
     if options.args:

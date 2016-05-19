@@ -14,7 +14,8 @@ New:
 
 Fixes:
 
-- *add item here*
+- Fix #23: "TypeError: <lambda>() takes no arguments (1 given)" on ./bin/instance start
+  [jensens]
 
 
 4.2.20 (2016-03-29)
