@@ -4,14 +4,6 @@ Changelog
 4.2.21 (unreleased)
 -------------------
 
-Incompatibilities:
-
-- *add item here*
-
-New:
-
-- *add item here*
-
 Fixes:
 
 - Fix #23: "TypeError: <lambda>() takes no arguments (1 given)" on ./bin/instance start
