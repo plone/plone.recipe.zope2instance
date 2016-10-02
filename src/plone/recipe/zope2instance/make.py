@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from binascii import b2a_base64
 from hashlib import sha1
 import os
