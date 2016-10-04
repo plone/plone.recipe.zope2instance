@@ -4,14 +4,6 @@ Changelog
 4.2.22 (unreleased)
 -------------------
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
 Bug fixes:
 
 - Add coding headers on python files.
