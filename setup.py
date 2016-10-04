@@ -2,7 +2,7 @@
 from setuptools import setup, find_packages
 
 name = "plone.recipe.zope2instance"
-version = '4.2.22.dev0'
+version = '4.2.22'
 
 setup(
     name=name,
