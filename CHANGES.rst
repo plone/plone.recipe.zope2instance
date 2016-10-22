@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Fix import. zopectl moved to ZServer
+  [pbauer]
 
 
 4.3 (2017-06-28)

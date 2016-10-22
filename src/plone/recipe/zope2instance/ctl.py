@@ -33,7 +33,7 @@ import os.path
 import sys
 from pkg_resources import iter_entry_points
 
-from Zope2.Startup import zopectl
+from ZServer.Zope2.Startup import zopectl
 
 if zopectl.WIN:
     import traceback
