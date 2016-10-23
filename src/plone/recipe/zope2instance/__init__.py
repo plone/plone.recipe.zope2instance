@@ -624,18 +624,24 @@ class Recipe(Scripts):
                  'plone.recipe.zope2instance.ctl', 'main')]
 
         if options.get('relative-paths'):
-            class zope_conf_path(str):
+            class relative_path_str(str):
                 def __repr__(self):
                     return str(self)
 
-            zope_conf_path = zope_conf_path(
-                        zc.buildout.easy_install._relativitize(
-                            zope_conf,
-                            options['buildout-directory'] + os.sep,
-                            self._relative_paths
-                        )
+            zope_conf_path = relative_path_str(
+                zc.buildout.easy_install._relativitize(
+                    zope_conf,
+                    options['buildout-directory'] + os.sep,
+                    self._relative_paths
                     )
-            # XXX relativize program_path
+                )
+            program_path = relative_path_str(
+                zc.buildout.easy_install._relativitize(
+                    program_path,
+                    options['buildout-directory'] + os.sep,
+                    self._relative_paths
+                    )
+                )
 
         arguments = ["-C", zope_conf_path, '-p', program_path]
         if zopectl_umask:
