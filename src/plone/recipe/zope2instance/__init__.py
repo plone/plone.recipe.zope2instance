@@ -613,6 +613,8 @@ class Recipe(Scripts):
         # The instance control script
         zope_conf = os.path.join(location, 'etc', 'zope.conf')
         zope_conf_path = options.get('zope-conf', zope_conf)
+        program_name = 'interpreter'
+        program_path = os.path.join(location, 'bin', program_name)
 
         zopectl_umask = options.get('zopectl-umask', '')
 
@@ -633,8 +635,9 @@ class Recipe(Scripts):
                             self._relative_paths
                         )
                     )
+            # XXX relativize program_path
 
-        arguments = ["-C", zope_conf_path]
+        arguments = ["-C", zope_conf_path, '-p', program_path]
         if zopectl_umask:
             arguments.extend(["--umask", int(zopectl_umask, 8)])
         script_arguments = ('\n        ' + repr(arguments) +
@@ -645,7 +648,7 @@ class Recipe(Scripts):
             script_arguments=script_arguments)
         generated.extend(self._install_scripts(
             os.path.join(options['location'], 'bin'), ws,
-            interpreter='interpreter', extra_paths=extra_paths))
+            interpreter=program_name, extra_paths=extra_paths))
         return generated
 
     def _install_scripts(self, dest, working_set, reqs=(), interpreter=None,
