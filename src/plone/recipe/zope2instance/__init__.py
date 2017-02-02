@@ -77,6 +77,7 @@ class Recipe(Scripts):
             buildout['buildout'].get('include-site-packages', 'false')
             ) not in ('off', 'disable', 'false')
 
+        self.wsgi = options.get('wsgi') in ('waitress', 'on')
         # Get Scripts' attributes
         return Scripts.__init__(self, buildout, name, options)
 
@@ -546,8 +547,7 @@ class Recipe(Scripts):
 
         zodb_tmp_storage = options.get('zodb-temporary-storage',
                                        zodb_temporary_storage_template)
-
-        template = zope_conf_template
+        template = wsgi_conf_template if self.wsgi else zope_conf_template
 
         pid_file = options.get(
             'pid-file',
@@ -620,8 +620,13 @@ class Recipe(Scripts):
 
         extra_paths = options.get('extra-paths', '').split()
         requirements, ws = self.egg.working_set(['plone.recipe.zope2instance'])
-        reqs = [(self.options.get('control-script', self.name),
-                 'plone.recipe.zope2instance.ctl', 'main')]
+        reqs = [self.options.get('control-script', self.name)]
+        if self.wsgi:
+            reqs.extend(['plone.recipe.zope2instance.wsgi', 'waitress_main'])
+            options['initialization'] = wsgi_initialization
+        else:
+            reqs.extend(['plone.recipe.zope2instance.ctl', 'main'])
+        reqs = [tuple(reqs)]
 
         if options.get('relative-paths'):
             class relative_path_str(str):
@@ -643,6 +648,7 @@ class Recipe(Scripts):
                     )
                 )
 
+        options['zope-conf'] = zope_conf_path
         arguments = ["-C", zope_conf_path, '-p', program_path]
         if zopectl_umask:
             arguments.extend(["--umask", int(zopectl_umask, 8)])
@@ -652,9 +658,10 @@ class Recipe(Scripts):
         generated = self._install_scripts(
             options['bin-directory'], ws, reqs=reqs, extra_paths=extra_paths,
             script_arguments=script_arguments)
-        generated.extend(self._install_scripts(
-            os.path.join(options['location'], 'bin'), ws,
-            interpreter=program_name, extra_paths=extra_paths))
+        if not self.wsgi:
+            generated.extend(self._install_scripts(
+                os.path.join(options['location'], 'bin'), ws,
+                interpreter=program_name, extra_paths=extra_paths))
         return generated
 
     def _install_scripts(self, dest, working_set, reqs=(), interpreter=None,
@@ -683,7 +690,7 @@ class Recipe(Scripts):
                 working_set=working_set,
                 executable=options['executable'],
                 extra_paths=extra_paths,
-                initialization=options['initialization'],
+                initialization=options['initialization'] % options,
                 arguments=script_arguments,
                 interpreter=interpreter,
                 relative_paths=self._relative_paths,)
@@ -1049,6 +1056,38 @@ lock-filename %(lock_file)s
 %(zope_conf_additional)s
 """
 
+wsgi_conf_template = """\
+%(imports_lines)s
+%%define INSTANCEHOME %(instance_home)s
+instancehome $INSTANCEHOME
+%%define CLIENTHOME %(client_home)s
+clienthome $CLIENTHOME
+%(paths_lines)s
+%(products_lines)s
+debug-mode %(debug_mode)s
+security-policy-implementation %(security_implementation)s
+verbose-security %(verbose_security)s
+%(default_zpublisher_encoding)s
+%(port_base)s
+%(effective_user)s
+%(environment_vars)s
+%(deprecation_warnings)s
+
+%(mailinglogger_import)s
+
+<zodb_db main>
+    # Main database
+    %(zodb_cache_size)s
+    %(zodb_cache_size_bytes)s
+%(storage_snippet)s
+    mount-point /
+</zodb_db>
+
+%(python_check_interval)s
+
+%(zope_conf_additional)s
+"""
+
 event_log_template = """\
 <eventlog>
   %(mailinglogger_config)s
@@ -1086,4 +1125,10 @@ additional_zcml_template = """\
 <configure xmlns="http://namespaces.zope.org/zope">
     %s
 </configure>
+"""
+
+wsgi_initialization = """\
+from Zope2.Startup.run import make_wsgi_app
+wsgiapp = make_wsgi_app({}, '%(zope-conf)s')
+def application(*args, **kwargs):return wsgiapp(*args, **kwargs)
 """
