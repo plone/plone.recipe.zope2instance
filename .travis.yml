@@ -4,6 +4,5 @@ python:
 install:
   - pip install setuptools==33.1.1 zc.buildout==2.5.3
   - buildout bootstrap
-  - python bootstrap.py
   - bin/buildout -t 3
 script: bin/test
