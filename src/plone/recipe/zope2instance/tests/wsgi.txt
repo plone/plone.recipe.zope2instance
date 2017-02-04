@@ -1,0 +1,61 @@
+=====================
+Test wsgi.py creation
+=====================
+
+
+    >>> from zc.buildout.testing import *
+    >>> from os.path import join
+    >>> import sys, os
+    >>> options = globals()
+
+Let's create a minimum buildout that uses the current
+plone.recipe.zope2instance::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = wsgi.py
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [wsgi.py]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... wsgi = on
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Installing wsgi.py.
+    Generated script '...wsgi.py'.
+    ...
+
+We should have a wsgi.py part, with a basic zope.conf::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'wsgi.py')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
+    %define INSTANCEHOME .../sample-buildout/parts/wsgi.py
+    instancehome $INSTANCEHOME
+    %define CLIENTHOME .../sample-buildout/var/wsgi.py
+    clienthome $CLIENTHOME
+    debug-mode off
+    security-policy-implementation C
+    verbose-security off
+    default-zpublisher-encoding utf-8
+    <zodb_db main>
+        # Main database
+        cache-size 30000
+        # Blob-enabled FileStorage database
+        <blobstorage>
+           blob-dir .../sample-buildout/var/blobstorage
+           # FileStorage database
+           <filestorage>
+             path .../sample-buildout/var/filestorage/Data.fs
+           </filestorage>
+        </blobstorage>
+        mount-point /
+    </zodb_db>
+    python-check-interval 1000
