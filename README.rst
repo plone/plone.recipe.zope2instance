@@ -371,6 +371,10 @@ demo-blob-storage
   used with the default memory-based demo storage (in this case you
   might want to use a temporary directory).
 
+storage-wrapper
+  Template for arbitrary configuration to be wrapped around the main storage.
+  %s will be replaced with the existing storage configuration.
+
 effective-user
   The name of the effective user for the Zope process. Defaults to not setting
   an effective user.
