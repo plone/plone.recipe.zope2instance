@@ -541,6 +541,9 @@ class Recipe(Scripts):
             else:
                 storage_snippet = demo_storage_template % storage_snippet
 
+        if options.get('storage-wrapper'):
+            storage_snippet = indent(options['storage-wrapper'] % storage_snippet, 4)
+
         zodb_tmp_storage = options.get('zodb-temporary-storage',
                                        zodb_temporary_storage_template)
 

@@ -10,7 +10,8 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Added ``storage-wrapper`` option to wrap storage configuration.
+  [davisagli]
 
 Bug fixes:
 
