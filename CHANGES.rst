@@ -1,8 +1,8 @@
 Changelog
 =========
 
-4.2.23 (unreleased)
--------------------
+4.3 (unreleased)
+----------------
 
 New features:
 
