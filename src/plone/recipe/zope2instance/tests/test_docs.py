@@ -16,7 +16,12 @@ def setUp(test):
     install_develop('plone.recipe.zope2instance', test)
     install('zc.recipe.egg', test)
     install('mailinglogger', test)
-    dependencies = pkg_resources.working_set.require('Zope2')
+    install('ZODB3', test)
+    install_dependencies(pkg_resources.working_set.require('ZEO'), test)
+    install_dependencies(pkg_resources.working_set.require('Zope2'), test)
+
+
+def install_dependencies(dependencies, test):
     for dep in dependencies:
         try:
             install(dep.project_name, test)
