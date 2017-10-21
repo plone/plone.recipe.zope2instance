@@ -1,7 +1,9 @@
 Changelog
 =========
 
-4.3.1 (unreleased)
+
+
+5.0.0 (unreleased)
 ------------------
 
 Breaking changes:
@@ -10,7 +12,8 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Add wsgi support
+  [tschorr]
 
 Bug fixes:
 
