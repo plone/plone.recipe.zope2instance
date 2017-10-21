@@ -10,9 +10,7 @@ works fine. It is based on zc.buildout testing module::
     >>> from zc.buildout.testing import *
     >>> from os.path import join
     >>> import sys, os
-
     >>> options = globals()
-
     >>> WINDOWS = sys.platform == 'win32'
 
 Let's create a minimum buildout that uses the current
