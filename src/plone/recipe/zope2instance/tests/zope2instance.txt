@@ -6,11 +6,11 @@ plone.recipe.zope2instance
 This is the doctest for plone.recipe.zope2instance. It ensures the template
 works fine. It is based on zc.buildout testing module::
 
+    >>> from __future__ import print_function
     >>> from zc.buildout.testing import *
     >>> from os.path import join
     >>> import sys, os
-    >>> if sys.version_info.major == '2':
-    ...     from __future__ import print_function
+
     >>> options = globals()
 
     >>> WINDOWS = sys.platform == 'win32'
