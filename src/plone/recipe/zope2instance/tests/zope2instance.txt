@@ -132,7 +132,7 @@ The blobstorage directory should only be readable by the current user,
 otherwise you get a warning when the zope instance starts up.  The
 (POSIX) path mode bits should be 0700.
 
-    >>> (os.stat(os.path.join('var', 'blobstorage')).st_mode & 077) == 0
+    >>> (os.stat(os.path.join('var', 'blobstorage')).st_mode & 0o077) == 0
     True
 
 
