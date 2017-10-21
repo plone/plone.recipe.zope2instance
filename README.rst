@@ -251,6 +251,8 @@ mailinglogger
       subject [My domain error] [%(hostname)s] %(line)s
     </mailing-logger>
 
+  You will need to add `mailinglogger` to your buildout's egg section to make this work.
+
 z2-log
   The filename for the Z2 access log. Defaults to var/log/${partname}-Z2.log.
   Setting this value to 'disable' will make the <logger access> section to be omitted,
