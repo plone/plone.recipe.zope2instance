@@ -1,20 +1,48 @@
 Changelog
 =========
 
-4.3.0 (unreleased)
+5.0.0 (unreleased)
 ------------------
 
-Incompatibilities:
-
-- *add item here*
-
-New:
+Breaking changes:
 
 - Python 3 compatibility.
 
+New features:
+
+- Add wsgi support
+  [tschorr]
+
+Bug fixes:
+
+- Fix import. zopectl moved to ZServer
+  [pbauer]
+
+
+4.3 (2017-06-28)
+----------------
+
+New features:
+
+- Added ``storage-wrapper`` option to wrap storage configuration.
+  [davisagli]
+
+
+4.2.22 (2016-10-05)
+-------------------
+
+Bug fixes:
+
+- Add coding headers on python files.
+  [gforcada]
+
+4.2.21 (2016-05-26)
+-------------------
+
 Fixes:
 
-- *add item here*
+- Fix #23: "TypeError: <lambda>() takes no arguments (1 given)" on ./bin/instance start
+  [jensens]
 
 
 4.2.20 (2016-03-29)

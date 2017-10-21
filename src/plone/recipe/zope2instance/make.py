@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import print_function
 from binascii import b2a_base64
 from hashlib import sha1

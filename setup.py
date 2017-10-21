@@ -1,7 +1,10 @@
-from setuptools import setup, find_packages
+# -*- coding: utf-8 -*-
+from setuptools import find_packages
+from setuptools import setup
+
 
 name = "plone.recipe.zope2instance"
-version = '4.3.0.dev0'
+version = '5.0.dev0'
 
 setup(
     name=name,
@@ -20,6 +23,7 @@ setup(
         "Framework :: Plone",
         "Framework :: Plone :: 4.3",
         "Framework :: Plone :: 5.0",
+        "Framework :: Plone :: 5.1",
         "Framework :: Zope2",
         "Programming Language :: Python",
         "Programming Language :: Python :: 2",
@@ -39,7 +43,7 @@ setup(
         'mailinglogger',
         'zc.recipe.egg',
         'Zope2 >= 2.12.1',
-        'ZODB3 >= 3.9',
+        'ZODB >= 5.1.1',
     ],
     zip_safe=False,
     entry_points={'zc.buildout': ['default = %s:Recipe' % name]},

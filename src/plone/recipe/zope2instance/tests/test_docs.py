@@ -19,6 +19,7 @@ def setUp(test):
     install('ZODB3', test)
     install_dependencies(pkg_resources.working_set.require('ZEO'), test)
     install_dependencies(pkg_resources.working_set.require('Zope2'), test)
+    install_dependencies(pkg_resources.working_set.require('ZODB'), test)
 
 
 def install_dependencies(dependencies, test):
@@ -39,10 +40,15 @@ def tearDown(test):
 
 def test_suite():
     suite = []
-    flags = (doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE |
+    flags = (
+        doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE |
         doctest.REPORT_NDIFF)
 
-    suite.append(doctest.DocFileSuite('zope2instance.txt', optionflags=flags,
-                 setUp=setUp, tearDown=tearDown))
+    suite.append(doctest.DocFileSuite(
+        'zope2instance.txt',
+        'wsgi.txt',
+        optionflags=flags,
+        setUp=setUp,
+        tearDown=tearDown))
 
     return unittest.TestSuite(suite)

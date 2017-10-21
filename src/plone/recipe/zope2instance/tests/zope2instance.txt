@@ -1,4 +1,4 @@
-=========================
+==========================
 plone.recipe.zope2instance
 ==========================
 
@@ -1315,6 +1315,57 @@ We should have a zope instance, with a basic zope.conf::
     ...
     <BLANKLINE>
 
+Custom storage wrapper
+======================
+
+To add custom configuration around the storage,
+use the `storage-wrapper` option::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... storage-wrapper =
+    ...   <foo>
+    ...   %%s
+    ...   </foo>
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '...instance'.
+    Generated interpreter '.../parts/instance/bin/interpreter'.
+    ...
+
+Now zope.conf should include the custom storage wrapper::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    <zodb_db main>
+        ...
+        <foo>
+            # Blob-enabled FileStorage database
+            ...
+        </foo>
+        ...
+    </zodb_db>
+    ...
+    <BLANKLINE>
+
+
 Custom Event log
 ================
 
@@ -1879,7 +1930,7 @@ We should have a zope instance script with the custom config file::
     >>> if WINDOWS:
     ...     instance_path += '-script.py'
     >>> open(instance_path).read()
-    "...plone.recipe.zope2instance.ctl.main(...['-C', '/some/path/my.conf']..."
+    "...plone.recipe.zope2instance.ctl.main(...['-C', '/some/path/my.conf', '-p', '.../bin/interpreter']..."
 
 Custom Zope Conf Imports
 ========================
