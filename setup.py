@@ -44,6 +44,7 @@ setup(
         'zc.recipe.egg',
         'Zope2 >= 2.12.1',
         'ZODB >= 5.1.1',
+        'ZEO',
     ],
     zip_safe=False,
     entry_points={'zc.buildout': ['default = %s:Recipe' % name]},
