@@ -400,10 +400,10 @@ class Recipe(Scripts):
             opts = dict(
                 type=type_,
                 db_opts='\n'.join(' ' * 12 + ' '.join((k, v))
-                                  for k, v in rel_storage.iteritems()
+                                  for k, v in rel_storage.items()
                                   if not is_rs_option(k)),
                 rs_opts='\n'.join(' ' * 8 + ' '.join((k, v))
-                                  for k, v in rel_storage.iteritems()
+                                  for k, v in rel_storage.items()
                                   if is_rs_option(k)),
                 )
             file_storage_snippet = rel_storage_template % opts
