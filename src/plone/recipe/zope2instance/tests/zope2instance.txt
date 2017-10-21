@@ -9,6 +9,8 @@ works fine. It is based on zc.buildout testing module::
     >>> from zc.buildout.testing import *
     >>> from os.path import join
     >>> import sys, os
+    >>> if sys.version_info.major == '2':
+    ...     from __future__ import print_function
     >>> options = globals()
 
     >>> WINDOWS = sys.platform == 'win32'
@@ -30,7 +32,7 @@ plone.recipe.zope2instance::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Installing instance.
     Generated script '...instance'.
     Generated interpreter '.../parts/instance/bin/interpreter'.
@@ -41,7 +43,7 @@ We should have a zope instance, with a basic zope.conf::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     instancehome $INSTANCEHOME
     %define CLIENTHOME .../sample-buildout/var/instance
@@ -156,7 +158,7 @@ Let's start off by adding an FTP address::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -168,7 +170,7 @@ Our FTP server should be set up now::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <ftp-server>
@@ -194,7 +196,7 @@ Next we will add a WebDAV server::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -206,7 +208,7 @@ Our WebDAV server should be set up now::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <webdav-source-server>
@@ -233,7 +235,7 @@ Next we will add a WebDAV server with force-connection-close on::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -245,7 +247,7 @@ Our WebDAV server should be set up now::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <webdav-source-server>
@@ -276,7 +278,7 @@ To have a DemoStorage configuration, you can use demo-storage::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -288,7 +290,7 @@ We should have a zope instance, with a basic zope.conf::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <zodb_db main>
@@ -328,7 +330,7 @@ Verify that demostorage can be disable::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -340,7 +342,7 @@ We should have a zope instance, with a basic zope.conf without demostorage::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <zodb_db main>
@@ -381,7 +383,7 @@ changes::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -393,7 +395,7 @@ We should have a zope instance, with a basic zope.conf::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <zodb_db main>
@@ -442,7 +444,7 @@ You can add a blob storage to the demo-storage as well::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -454,7 +456,7 @@ We should have a zope instance, with a basic zope.conf::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
         <blobstorage base>
@@ -496,7 +498,7 @@ not supported by the in-memory demostorage)::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -508,7 +510,7 @@ We should have a zope instance, with a basic zope.conf::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <zodb_db main>
@@ -558,7 +560,7 @@ To have a ZlibStorage configuration, you can use zlib-storage::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -570,7 +572,7 @@ We should have a zope instance, with a basic zope.conf::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <zodb_db main>
@@ -619,7 +621,7 @@ can set the ``zlib-storage`` option to 'passive'::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -631,7 +633,7 @@ We should have a zope instance, with a basic zope.conf::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <zodb_db main>
@@ -683,7 +685,7 @@ To have a BeforeStorage configuration, you can use before-storage::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -695,7 +697,7 @@ We should have a zope instance, with a basic zope.conf::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <zodb_db main>
@@ -742,7 +744,7 @@ The before-storage option can be combined with a demo-storage::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -754,7 +756,7 @@ We should have a zope instance, with a basic zope.conf::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <zodb_db main>
@@ -808,7 +810,7 @@ To have a BlobStorage configuration, you can use blob-storage::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -820,7 +822,7 @@ We should have a zope instance, with a basic zope.conf::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <zodb_db main>
@@ -867,7 +869,7 @@ To have a RelStorage configuration, you can use rel-storage::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -879,7 +881,7 @@ We should have a zope instance, with a basic zope.conf::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <zodb_db main>
@@ -918,7 +920,7 @@ for the plone.recipe.zope2instance recipe.
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -930,7 +932,7 @@ We should have a zope instance, with a basic zope.conf::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <zodb_db main>
@@ -980,7 +982,7 @@ specified, they should get included in that section as well.
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -992,7 +994,7 @@ We should have a zope instance, with a basic zope.conf::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <zodb_db main>
@@ -1037,7 +1039,7 @@ Verify that demo-storage is correctly applied
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -1049,7 +1051,7 @@ We should have a zope instance, with a basic zope.conf::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <zodb_db main>
@@ -1094,7 +1096,7 @@ Verify that blob-storage is correctly applied
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -1106,7 +1108,7 @@ We should have a zope instance, with a basic zope.conf::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <zodb_db main>
@@ -1152,7 +1154,7 @@ before-storage::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -1164,7 +1166,7 @@ We should have a zope instance, with a basic zope.conf::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <zodb_db main>
@@ -1222,7 +1224,7 @@ You can get specific zeo server address using `zeo-address`.
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -1234,7 +1236,7 @@ We should have a zope instance, with a basic zope.conf::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <zodb_db main>
@@ -1277,7 +1279,7 @@ You can also set multiple zeo server addresses using `zeo-address`.
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -1289,7 +1291,7 @@ We should have a zope instance, with a basic zope.conf::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <zodb_db main>
@@ -1339,7 +1341,7 @@ use the `storage-wrapper` option::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -1351,7 +1353,7 @@ Now zope.conf should include the custom storage wrapper::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <zodb_db main>
@@ -1397,7 +1399,7 @@ to use `rotatezlogs`::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -1409,7 +1411,7 @@ We should have a zope instance, with the custom event log::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <eventlog>
@@ -1455,7 +1457,7 @@ Mailing logger
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -1467,7 +1469,7 @@ We should have a zope instance, with the mailing logger::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     %import mailinglogger
@@ -1517,7 +1519,7 @@ to use `rotatezlogs`::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -1529,7 +1531,7 @@ We should have a zope instance, with the custom event log::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <logger access>
@@ -1567,7 +1569,7 @@ will be omitted::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -1607,7 +1609,7 @@ will be omitted::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -1657,7 +1659,7 @@ When this option is used the `zcml` option is ignored. Let's try it::
 
 Let's run the buildout::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -1667,7 +1669,7 @@ Let's run the buildout::
 Now let's check that we have a zope instance, with the custom site.zcml::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> print open(os.path.join(instance, 'etc', 'site.zcml')).read()
+    >>> print(open(os.path.join(instance, 'etc', 'site.zcml')).read())
     <configure xmlns="http://namespaces.zope.org/zope"
                xmlns:five="http://namespaces.zope.org/five">
         <include package="Products.Five" />
@@ -1699,7 +1701,7 @@ between several servers::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -1711,7 +1713,7 @@ Our environment variables should be set now::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <environment>
@@ -1739,7 +1741,7 @@ Now let's add several environment variables::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -1773,7 +1775,7 @@ Several all on one line::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -1810,7 +1812,7 @@ Check additional options to the HTTP server::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -1821,7 +1823,7 @@ And check it::
 
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <http-server>
@@ -1855,7 +1857,7 @@ we don't error::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -1879,7 +1881,7 @@ The recipe supports the generation of scripts with relative paths.
     ... eggs =
     ... user = me:me
     ... ''' % options)
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -1917,7 +1919,7 @@ Custom Zope Conf
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -1954,7 +1956,7 @@ define custom zope.conf sections using ZConfig API.
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -1966,7 +1968,7 @@ We should have a zope instance, with custom imports::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %import mailinglogger
     %import eea.graylogger
     %define INSTANCEHOME .../sample-buildout/parts/instance
@@ -1994,7 +1996,7 @@ plone.app.theming resources directory.
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -2037,7 +2039,7 @@ plone.app.theming locales directory.
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -2075,12 +2077,12 @@ code to the initialization process.
     ... eggs =
     ... user = me:me
     ... initialization =
-    ...     print 'Initialization complete!'
+    ...     print('Initialization complete!')
     ... ''' % options)
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
@@ -2091,6 +2093,6 @@ We should see the given initialization commands included in the instance
 script::
 
     >>> instance = open(os.path.join(sample_buildout, 'bin', 'instance')).read()
-    >>> "print 'Initialization complete!'" in instance
+    >>> "print('Initialization complete!')" in instance
     True
 
