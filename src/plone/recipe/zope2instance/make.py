@@ -2,6 +2,7 @@
 from __future__ import print_function
 from binascii import b2a_base64
 from hashlib import sha1
+from six.moves import input
 
 import os
 import os.path
@@ -39,7 +40,7 @@ Please choose a username and password for the initial user.
 These will be the credentials you use to initially manage
 your new Zope instance.
 """)
-    user = raw_input('Username: ').strip()
+    user = input('Username: ').strip()
     if user == '':
         return None, None
     while 1:

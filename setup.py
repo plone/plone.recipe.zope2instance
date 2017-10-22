@@ -40,6 +40,7 @@ setup(
     install_requires=[
         'zc.buildout',
         'setuptools',
+        'six',
         'zc.recipe.egg',
         'Zope2 >= 2.12.1',
         'ZODB >= 5.1.1',
