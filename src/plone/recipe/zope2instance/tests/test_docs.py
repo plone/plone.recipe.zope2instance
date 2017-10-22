@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
-import doctest
-import unittest
-import shutil
-
-import pkg_resources
 from zc.buildout.testing import buildoutSetUp
 from zc.buildout.testing import buildoutTearDown
 from zc.buildout.testing import install
 from zc.buildout.testing import install_develop
+
+import doctest
+import pkg_resources
+import shutil
+import unittest
 
 
 def setUp(test):

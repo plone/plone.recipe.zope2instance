@@ -1,4 +1,6 @@
-from paste.deploy.loadwsgi import ConfigLoader, SERVER, APP
+from paste.deploy.loadwsgi import APP
+from paste.deploy.loadwsgi import ConfigLoader
+from paste.deploy.loadwsgi import SERVER
 from Zope2.Startup.run import make_wsgi_app
 
 

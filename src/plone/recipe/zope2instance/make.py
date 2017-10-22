@@ -2,10 +2,12 @@
 from __future__ import print_function
 from binascii import b2a_base64
 from hashlib import sha1
+
 import os
 import os.path
 import shutil
 import sys
+
 
 VCS_DIRS = [os.path.normcase('CVS'),
             os.path.normcase('.svn'),

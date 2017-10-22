@@ -27,13 +27,14 @@ typed interactively is started. Use the action "help" to find out about
 available actions.
 """
 
+from pkg_resources import iter_entry_points
+from ZServer.Zope2.Startup import zopectl
+
 import csv
 import os
 import os.path
 import sys
-from pkg_resources import iter_entry_points
 
-from ZServer.Zope2.Startup import zopectl
 
 if zopectl.WIN:
     import traceback
