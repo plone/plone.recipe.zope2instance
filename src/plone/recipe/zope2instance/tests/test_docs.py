@@ -1,22 +1,26 @@
 # -*- coding: utf-8 -*-
 
-import doctest
-import unittest
-import shutil
-
-import pkg_resources
 from zc.buildout.testing import buildoutSetUp
 from zc.buildout.testing import buildoutTearDown
 from zc.buildout.testing import install
 from zc.buildout.testing import install_develop
+
+import doctest
+import pkg_resources
+import shutil
+import unittest
 
 
 def setUp(test):
     buildoutSetUp(test)
     install_develop('plone.recipe.zope2instance', test)
     install('zc.recipe.egg', test)
-    install('mailinglogger', test)
-    dependencies = pkg_resources.working_set.require('Zope2', 'ZODB')
+    install_dependencies(pkg_resources.working_set.require('ZEO'), test)
+    install_dependencies(pkg_resources.working_set.require('Zope2'), test)
+    install_dependencies(pkg_resources.working_set.require('ZODB'), test)
+
+
+def install_dependencies(dependencies, test):
     for dep in dependencies:
         try:
             install(dep.project_name, test)

@@ -3,6 +3,7 @@ Test wsgi.py creation
 =====================
 
 
+    >>> from __future__ import print_function
     >>> from zc.buildout.testing import *
     >>> from os.path import join
     >>> import sys, os
@@ -26,7 +27,7 @@ plone.recipe.zope2instance::
 
 Let's run it::
 
-    >>> print system(join('bin', 'buildout')),
+    >>> print(system(join('bin', 'buildout'))),
     Installing wsgi.py.
     Generated script '...wsgi.py'.
     ...
@@ -36,7 +37,7 @@ We should have a wsgi.py part, with a basic zope.conf::
     >>> instance = os.path.join(sample_buildout, 'parts', 'wsgi.py')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> print zope_conf
+    >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/wsgi.py
     instancehome $INSTANCEHOME
     %define CLIENTHOME .../sample-buildout/var/wsgi.py

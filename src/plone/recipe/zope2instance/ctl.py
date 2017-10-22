@@ -27,13 +27,14 @@ typed interactively is started. Use the action "help" to find out about
 available actions.
 """
 
+from pkg_resources import iter_entry_points
+from ZServer.Zope2.Startup import zopectl
+
 import csv
 import os
 import os.path
 import sys
-from pkg_resources import iter_entry_points
 
-from ZServer.Zope2.Startup import zopectl
 
 if zopectl.WIN:
     import traceback
@@ -78,7 +79,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                         return int(f.read().strip())
                     except ValueError:
                         # pid file for any reason empty or corrupt
-                        print 'ERROR: Corrupt pid file: %s' % fname
+                        print('ERROR: Corrupt pid file: {}'.format(fname))
                         return 0
             else:
                 return 0
@@ -148,7 +149,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
 
             status = self._get_service_status()
             if status is not None:
-                print 'ERROR: Zope is already installed as a Windows service.'
+                print('ERROR: Zope is already installed as a Windows service.')
                 return
 
             # TODO:
@@ -194,7 +195,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                     self.options.configroot.pid_filename
                 )
 
-                print 'Installed Zope as Windows Service "%s".' % name
+                print('Installed Zope as Windows Service "{}".'.format(name))
 
             except pywintypes.error:
                 traceback.print_exc()
@@ -216,18 +217,18 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
 
             status = self._get_service_status()
             if status is None:
-                print 'ERROR: Zope is not installed as Windows service.'
+                print('ERROR: Zope is not installed as Windows service.')
                 return
             elif status == win32service.SERVICE_START_PENDING:
-                print 'ERROR: The Zope Windows service is about to start.'
+                print('ERROR: The Zope Windows service is about to start.')
                 return
             elif status == win32service.SERVICE_RUNNING:
-                print 'ERROR: The Zope Windows service is already running.'
+                print('ERROR: The Zope Windows service is already running.')
                 return
             name = self._get_service_name()
             try:
                 win32serviceutil.StartService(name)
-                print 'Starting Windows Service "%s".' % name
+                print('Starting Windows Service "{}".'.format(name))
             except pywintypes.error:
                 traceback.print_exc()
 
@@ -239,15 +240,15 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
 
             status = self._get_service_status()
             if status is None:
-                print 'ERROR: Zope is not installed as Windows service.'
+                print('ERROR: Zope is not installed as Windows service.')
                 return
             elif status == win32service.SERVICE_STOPPED:
-                print 'ERROR: The Zope Windows service has not been started.'
+                print('ERROR: The Zope Windows service has not been started.')
                 return
             name = self._get_service_name()
             try:
                 win32serviceutil.RestartService(name)
-                print 'Restarting Windows Service "%s".' % name
+                print('Restarting Windows Service "{}".'.format(name))
             except pywintypes.error:
                 traceback.print_exc()
 
@@ -259,15 +260,15 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
 
             status = self._get_service_status()
             if status is None:
-                print 'ERROR: Zope is not installed as Windows service.'
+                print('ERROR: Zope is not installed as Windows service.')
                 return
             elif status == win32service.SERVICE_STOPPED:
-                print 'ERROR: The Zope Windows service has not been started.'
+                print('ERROR: The Zope Windows service has not been started.')
                 return
             name = self._get_service_name()
             try:
                 win32serviceutil.StopService(name)
-                print 'Stopping Windows Service "%s".' % name
+                print('Stopping Windows Service "{}".'.format(name))
             except pywintypes.error:
                 traceback.print_exc()
 
@@ -279,7 +280,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
 
             status = self._get_service_status()
             if status is None:
-                print 'ERROR: Zope is not installed as a Windows service.'
+                print('ERROR: Zope is not installed as a Windows service.')
                 return
             elif status is not win32service.SERVICE_STOPPED:
                 print 'ERROR: Please stop the Windows service before '\
@@ -290,7 +291,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             name = self._get_service_name()
             try:
                 win32serviceutil.RemoveService(name)
-                print 'Removed Windows Service "%s".' % name
+                print('Removed Windows Service "{}".'.format(name))
             except pywintypes.error:
                 ret_code = 1
                 traceback.print_exc()
@@ -321,11 +322,11 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
 
         def do_status(self, arg=''):
             if arg not in ('', '-l'):
-                print 'ERROR: The only valid option is "-l".'
+                print('ERROR: The only valid option is "-l".')
                 return
             service_status = self._get_service_status()
             if service_status is None:
-                print 'Zope is not installed as a Windows service.'
+                print('Zope is not installed as a Windows service.')
             else:
                 name = self._get_service_name()
                 state = self.service_state_map.get(
@@ -333,7 +334,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                 print('Zope is installed as Windows service "%s", '
                       'this service is currently %s.' % (name, state))
             if arg == '-l' and self.zd_status:
-                print self.zd_status
+                print(self.zd_status)
 
             # TODO: what about "self.zd_up"?
 
@@ -343,7 +344,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                   'and raw status output.'
 
         def help_EOF(self):
-            print 'To quit, type CTRL+Z or use the quit command.'
+            print('To quit, type CTRL+Z or use the quit command.')
 
     # end of "if zopectl.WIN"
     else:
@@ -384,7 +385,8 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             elif not self.zd_pid:
                 self.send_action("start")
             else:
-                print "daemon process already running; pid=%d" % self.zd_pid
+                print('daemon process already running; pid={}'.format(
+                        self.zd_pid))
                 return
 
             def cond(n=0):
@@ -466,15 +468,16 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             return cmdline
 
     def help_startup_command(self):
-        print "    Also sets up a REQUEST, logs in the "
-        print "    AccessControl.SpecialUsers.system user, and may traverse "
-        print "    to an object, such as a CMF portal.  This environment set "
-        print "    up is controlled with following options:"
-        print "    -R/--no-request -- do not set up a REQUEST."
-        print "    -L/--no-login -- do not login the system user."
-        print "    -O/--object-path <path> -- Traverse to <path> from the app "
-        print "                               and make available as `obj`."
-        print "    Example usage: bin/instance -RLOPlone/front-page debug"
+        print("""\
+    Also sets up a REQUEST, logs in the
+    AccessControl.SpecialUsers.system user, and may traverse
+    to an object, such as a CMF portal.  This environment set
+    up is controlled with following options:
+    -R/--no-request -- do not set up a REQUEST.
+    -L/--no-login -- do not login the system user.
+    -O/--object-path <path> -- Traverse to <path> from the app
+                               and make available as `obj`.
+    Example usage: bin/instance -RLOPlone/front-page debug""")
 
     def do_run(self, arg):
         # If the command line was something like
@@ -497,7 +500,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             tup = self.options.args[1:]
 
         if not tup:
-            print "usage: run <script> [args]"
+            print("usage: run <script> [args]")
             return
 
         # If we pass the script filename as a win32 backslashed path
@@ -523,8 +526,9 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         self.do_foreground(arg, debug=False)
 
     def help_console(self):
-        print "console -- Run the program in the console."
-        print "    In contrast to foreground this does not turn on debug mode."
+        print("""\
+console -- Run the program in the console.
+    In contrast to foreground this does not turn on debug mode.""")
 
     def do_debug(self, arg):
         # `-c` disables the PYTHONSTARTUP feature; load it explicitly
@@ -653,6 +657,6 @@ def main(args=None):
         import readline
     except ImportError:
         pass
-    print 'Program: %s' % ' '.join(options.program)
+    print('Program: {}'.format(' '.join(options.program)))
     c.do_status()
     c.cmdloop()

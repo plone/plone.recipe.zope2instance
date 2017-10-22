@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from binascii import b2a_base64
 from hashlib import sha1
+
 import os
+import os.path
 import shutil
 import sys
+
 
 VCS_DIRS = [os.path.normcase('CVS'),
             os.path.normcase('.svn'),
@@ -30,10 +34,11 @@ def make_instance(user=None, instancehome=None, version='212'):
 
 def get_inituser():
     import getpass
-    print 'Please choose a username and password for the initial user.'
-    print 'These will be the credentials you use to initially manage'
-    print 'your new Zope instance.'
-    print
+    print("""\
+Please choose a username and password for the initial user.
+These will be the credentials you use to initially manage
+your new Zope instance.
+""")
     user = raw_input('Username: ').strip()
     if user == '':
         return None, None
@@ -44,16 +49,16 @@ def get_inituser():
             break
         else:
             passwd = verify = ''
-            print 'Password mismatch, please try again...'
+            print('Password mismatch, please try again...')
     return user, passwd
 
 
 def write_inituser(fn, user, password):
     fp = open(fn, 'w')
-    pw = b2a_base64(sha1(password).digest())[:-1]
+    pw = b2a_base64(sha1(password.encode('utf-8')).digest())[:-1]
     fp.write('%s:{SHA}%s\n' % (user, pw))
     fp.close()
-    os.chmod(fn, 0644)
+    os.chmod(fn, 0o644)
 
 
 def copyskel(sourcedir, targetdir):
@@ -67,28 +72,25 @@ def copyskel(sourcedir, targetdir):
     os.chdir(sourcedir)
     try:
         try:
-            os.path.walk(os.curdir, copydir, targetdir)
+            copydir(os.curdir, targetdir)
         finally:
             os.chdir(pwd)
-    except (IOError, OSError), msg:
-        print >>sys.stderr, msg
+    except (IOError, OSError) as msg:
+        print(msg, file=sys.stderr)
         sys.exit(1)
 
 
-def copydir(targetdir, sourcedir, names):
-    # Don't recurse into VCS directories:
-    for name in names[:]:
-        if os.path.normcase(name) in VCS_DIRS:
-            names.remove(name)
-        src = os.path.join(sourcedir, name)
-        if os.path.isfile(src):
-            # Copy the file:
+def copydir(sourcedir, targetdir):
+    for root, dirs, files in os.walk(sourcedir):
+        # Don't recurse into VCS directories:
+        dirs[:] = set(dirs).difference(VCS_DIRS)
+        for name in files:
+            src = os.path.join(root, name)
             dst = os.path.join(targetdir, src)
             if os.path.exists(dst):
                 continue
             shutil.copyfile(src, dst)
-        else:
-            # Directory:
+        for name in dirs:
             dn = os.path.join(targetdir, sourcedir, name)
             if not os.path.exists(dn):
                 os.mkdir(dn)

@@ -13,18 +13,19 @@
 #
 ##############################################################################
 
+from plone.recipe.zope2instance import make
+from zc.recipe.egg.egg import Egg
+from zc.recipe.egg.egg import Scripts
+
 import os
 import os.path
+import pkg_resources
 import re
 import shutil
 import sys
-
-import pkg_resources
 import zc.buildout
 import zc.buildout.easy_install
 
-from plone.recipe.zope2instance import make
-from zc.recipe.egg.egg import Egg, Scripts
 
 IS_WIN = sys.platform[:3].lower() == 'win'
 
@@ -400,10 +401,10 @@ class Recipe(Scripts):
             opts = dict(
                 type=type_,
                 db_opts='\n'.join(' ' * 12 + ' '.join((k, v))
-                                  for k, v in rel_storage.iteritems()
+                                  for k, v in rel_storage.items()
                                   if not is_rs_option(k)),
                 rs_opts='\n'.join(' ' * 8 + ' '.join((k, v))
-                                  for k, v in rel_storage.iteritems()
+                                  for k, v in rel_storage.items()
                                   if is_rs_option(k)),
                 )
             file_storage_snippet = rel_storage_template % opts
@@ -819,7 +820,7 @@ class Recipe(Scripts):
         if not os.path.exists(blob_storage):
             # Make it only readable for the current user, otherwise
             # you get a ZODB warning on startup.
-            os.makedirs(blob_storage, 0700)
+            os.makedirs(blob_storage, 0o700)
 
         storage = indent(storage, 2)
 

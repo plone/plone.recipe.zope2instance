@@ -1,14 +1,12 @@
 Changelog
 =========
 
-
-
 5.0.0 (unreleased)
 ------------------
 
 Breaking changes:
 
-- *add item here*
+- Python 3 compatibility.
 
 New features:
 
