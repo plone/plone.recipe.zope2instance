@@ -1,10 +1,14 @@
 *.egg-info
 *.pyc
 *.pyo
+.Python
 bin
 build
 develop-eggs
 dist
 eggs
+include/
+lib/
 parts
+pip-selfcheck.json
 /.installed.cfg

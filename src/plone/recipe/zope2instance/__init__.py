@@ -91,8 +91,8 @@ class Recipe(Scripts):
             if os.path.exists(location):
                 shutil.rmtree(location)
 
-            # Which Zope2 version do we have?
-            dist = pkg_resources.get_distribution('Zope2')
+            # Which Zope version do we have?
+            dist = pkg_resources.get_distribution('Zope')
             parsed = dist.parsed_version
             major, minor = parsed[0:2]
             major = int(major)
