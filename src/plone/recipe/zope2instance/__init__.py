@@ -19,7 +19,6 @@ from zc.recipe.egg.egg import Scripts
 
 import os
 import os.path
-import pkg_resources
 import re
 import shutil
 import sys
@@ -92,19 +91,11 @@ class Recipe(Scripts):
                 shutil.rmtree(location)
 
             # Which Zope version do we have?
-            dist = pkg_resources.get_distribution('Zope')
-            parsed = dist.parsed_version
-            major, minor = parsed[0:2]
-            major = int(major)
-            # We support creating instances for 2.12, 2.13 and 4.0
-            if major >= 4:
-                major = 2
-                minor = 13
-            elif major == 2:
-                minor = int(minor)
-                if minor > 13:
-                    minor = 13
-            version = str(major) + str(minor)
+            # dist = pkg_resources.get_distribution('Zope')
+            # parsed = dist.parsed_version
+            # We support creating instances for 4 only,
+            # which has the same structure as 2.13.
+            version = '213'
             make.make_instance(options.get('user', None), location, version)
 
         try:

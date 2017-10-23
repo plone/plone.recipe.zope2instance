@@ -15,7 +15,7 @@ VCS_DIRS = [os.path.normcase('CVS'),
             os.path.normcase('.git')]
 
 
-def make_instance(user=None, instancehome=None, version='212'):
+def make_instance(user=None, instancehome=None, version='213'):
     instancehome = os.path.abspath(os.path.expanduser(instancehome))
     password = None
     if user:
@@ -23,6 +23,9 @@ def make_instance(user=None, instancehome=None, version='212'):
 
     # Use our own skeleton
     skelsrc = os.path.join(os.path.dirname(__file__), 'skel' + version)
+    if not os.path.exists(skelsrc):
+        raise ValueError(
+            'No configuration skeleton found for version {0}'.format(version))
 
     inituser = os.path.join(instancehome, 'inituser')
     if not (user or os.path.exists(inituser)):
