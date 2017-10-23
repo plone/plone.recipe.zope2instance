@@ -101,7 +101,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             name = self._get_service_name()
             try:
                 status = win32serviceutil.QueryServiceStatus(name)[1]
-            except pywintypes.error, err:
+            except pywintypes.error as err:
                 # (1060, 'GetServiceKeyName', 'The specified service does not
                 # exist as an installed service.')
                 if err[0] == 1060:
@@ -162,7 +162,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
 
             class_string = self._get_service_class_string()
             name = self._get_service_name()
-            display_name = 'Zope instance at '+ self.options.directory
+            display_name = 'Zope instance at ' + self.options.directory
 
             if arg.lower() == 'auto':
                 start_type = win32service.SERVICE_AUTO_START
@@ -204,10 +204,14 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             return ret_code
 
         def help_install(self):
-            print 'install -- Install Zope as a Windows service that must be '\
-                  'manually started.'
-            print 'install auto -- Install Zope as a Windows service that '\
-                  'starts at system startup.'
+            print(
+                'install -- Install Zope as a Windows service that must be '
+                'manually started.'
+            )
+            print(
+                'install auto -- Install Zope as a Windows service that '
+                'starts at system startup.'
+            )
 
         def do_start(self, arg):
 
@@ -283,8 +287,10 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                 print('ERROR: Zope is not installed as a Windows service.')
                 return
             elif status is not win32service.SERVICE_STOPPED:
-                print 'ERROR: Please stop the Windows service before '\
-                      'removing it.'
+                print (
+                    'ERROR: Please stop the Windows service before '
+                    'removing it.'
+                )
                 return
 
             ret_code = 0
@@ -339,9 +345,11 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
             # TODO: what about "self.zd_up"?
 
         def help_status(self):
-            print 'status -- Print status of the Windows service.'
-            print 'status -l -- Print status of the Windows service, '\
-                  'and raw status output.'
+            print('status -- Print status of the Windows service.')
+            print(
+                'status -l -- Print status of the Windows service, '
+                'and raw status output.'
+            )
 
         def help_EOF(self):
             print('To quit, type CTRL+Z or use the quit command.')
@@ -386,7 +394,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                 self.send_action("start")
             else:
                 print('daemon process already running; pid={}'.format(
-                        self.zd_pid))
+                    self.zd_pid))
                 return
 
             def cond(n=0):
@@ -495,7 +503,7 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         # If that's the case, we'll use csv to do the parsing
         # so that we can split on spaces while respecting quotes.
         if len(self.options.args) == 1:
-            tup = csv.reader(self.options.args, delimiter=' ').next()[1:]
+            tup = next(csv.reader(self.options.args, delimiter=' '))[1:]
         else:
             tup = self.options.args[1:]
 

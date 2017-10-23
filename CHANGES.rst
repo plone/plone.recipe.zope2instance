@@ -15,6 +15,8 @@ New features:
 
 Bug fixes:
 
+- Python 3 compatibility with sixer
+  [ale-rt]
 - Fix import. zopectl moved to ZServer
   [pbauer]
 
