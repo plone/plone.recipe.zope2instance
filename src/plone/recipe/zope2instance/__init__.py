@@ -90,12 +90,9 @@ class Recipe(Scripts):
             if os.path.exists(location):
                 shutil.rmtree(location)
 
-            # Which Zope version do we have?
-            # dist = pkg_resources.get_distribution('Zope')
-            # parsed = dist.parsed_version
-            # We support creating instances for 4 only,
-            # which has the same structure as 2.13.
-            version = '213'
+            # We could check with pkg_resources which Zope version we have.
+            # But we support creating instances for 4 only.
+            version = '4'
             make.make_instance(options.get('user', None), location, version)
 
         try:

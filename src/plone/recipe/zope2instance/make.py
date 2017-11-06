@@ -15,7 +15,7 @@ VCS_DIRS = [os.path.normcase('CVS'),
             os.path.normcase('.git')]
 
 
-def make_instance(user=None, instancehome=None, version='213'):
+def make_instance(user=None, instancehome=None, version='4'):
     instancehome = os.path.abspath(os.path.expanduser(instancehome))
     password = None
     if user:
