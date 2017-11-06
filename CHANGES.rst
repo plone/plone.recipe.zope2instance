@@ -6,6 +6,10 @@ Changelog
 
 Breaking changes:
 
+- Require at least ZODB 5 and Zope 4.0b1.
+
+- Do not claim compatibility with Plone 4.3 and 5.0 anymore.
+
 - Python 3 compatibility.
 
 New features:
