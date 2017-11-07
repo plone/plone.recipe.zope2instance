@@ -2,8 +2,14 @@ language: python
 python:
   - 2.7
   - 3.5
+  - 3.6
 install:
   - pip install setuptools==33.1.1 zc.buildout==2.5.3
   - buildout bootstrap
   - bin/buildout -t 3
-script: bin/test
+script:
+  - bin/test -vv --auto-color
+cache:
+  pip: true
+  directories:
+    - eggs/

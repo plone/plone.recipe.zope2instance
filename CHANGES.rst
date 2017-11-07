@@ -8,14 +8,14 @@ Breaking changes:
 
 - Require at least ZODB 5 and Zope 4.0b1.
 
-- Do not claim compatibility with Plone 4.3 and 5.0 anymore.
-
-- Python 3 compatibility.
+- Drop support for Plone 4.3 and 5.0.
 
 New features:
 
 - Add wsgi support
   [tschorr]
+
+- Add support for Python 3.5 and 3.6.
 
 Bug fixes:
 

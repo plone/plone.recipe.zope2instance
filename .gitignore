@@ -11,4 +11,8 @@ include/
 lib/
 parts
 pip-selfcheck.json
+/.coverage
 /.installed.cfg
+/.tox
+/coverage.xml
+/htmlcov
