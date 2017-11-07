@@ -1,0 +1,6 @@
+[run]
+branch = True
+source = plone.recipe.zope2instance
+
+[report]
+precision = 2
