@@ -8,7 +8,7 @@ Breaking changes:
 
 - Require at least ZODB 5 and Zope 4.0b1.
 
-- Drop support for Plone 4.3 and 5.0.
+- Drop support for Plone 4.3, 5.0, and 5.1.
 
 New features:
 
