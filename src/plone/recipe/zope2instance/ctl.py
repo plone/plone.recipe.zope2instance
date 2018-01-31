@@ -449,9 +449,20 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
                 # REQUEST.traverse will do setSecurityManager with Anonymous
                 # so we login after
                 cmdline += login_cmdline
-            cmdline += (
-                'obj = app.restrictedTraverse(r\'%s\'); '
-                % self.options.object_path)
+            if self.options.no_request:
+                cmdline += (
+                    'obj = app.restrictedTraverse(r\'%s\'); '
+                    % self.options.object_path)
+            else:
+                cmdline += (
+                    # to support VHM prefix in object_path, we cannot do
+                    # restrictedTraverse, but try to find the requested object
+                    # from the request traversal stack (using app as fallback)
+                    'obj = ([o for o '
+                    'in ([app.REQUEST.PUBLISHED] + app.REQUEST.PARENTS) '
+                    'if getattr(o, \'__name__\', \'\') in r\'%s\''
+                    '] + [app])[0]; '
+                    % self.options.object_path)
         elif not self.options.no_login:
             # Login if we're not getting a object and we don't need to
             # worry about REQUEST.traverse

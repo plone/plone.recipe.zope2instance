@@ -14,7 +14,9 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Fix issue where it was not possible to use VHM prefix for object path (-O)
+  when executing instance script with commad run or debug
+  [datakurre]
 
 
 4.4.1 (2018-09-27)
