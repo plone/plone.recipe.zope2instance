@@ -60,7 +60,7 @@ your new Zope instance.
 def write_inituser(fn, user, password):
     fp = open(fn, 'w')
     pw = b2a_base64(sha1(password.encode('utf-8')).digest())[:-1]
-    fp.write('%s:{SHA}%s\n' % (user, pw))
+    fp.write('%s:{SHA}%s\n' % (user, pw.decode('ascii')))
     fp.close()
     os.chmod(fn, 0o644)
 
