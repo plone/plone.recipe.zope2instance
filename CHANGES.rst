@@ -14,7 +14,7 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Super user password created on Python 3 can now be read by Zope.
 
 
 5.0.0 (2018-01-27)
