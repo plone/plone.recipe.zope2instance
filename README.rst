@@ -341,6 +341,10 @@ before-storage
   normally running site in order for changes to be made to the
   database.
 
+instance-home
+  Sets the instancehome for the generated instance.
+  Defaults to ${buildout:directory}/parts/<name of the section>.
+
 client-home
   Sets the clienthome for the generated instance.
   Defaults to ${buildout:directory}/var/<name of the section>.

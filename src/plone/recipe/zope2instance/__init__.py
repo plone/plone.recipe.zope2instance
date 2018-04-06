@@ -161,7 +161,7 @@ class Recipe(Scripts):
         if not os.path.exists(var_dir):
             os.makedirs(var_dir)
 
-        instance_home = location
+        instance_home = options.get('instance-home', location)
         client_home = options.get('client-home', os.path.join(var_dir,
                                                               self.name))
         if not os.path.exists(client_home):
