@@ -2,6 +2,7 @@ language: python
 python:
   - 2.7
 install:
-  - python bootstrap.py
+  - pip install setuptools==33.1.1 zc.buildout==2.5.3
+  - buildout bootstrap
   - bin/buildout -t 3
 script: bin/test
