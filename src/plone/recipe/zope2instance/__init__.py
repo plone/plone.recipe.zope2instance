@@ -40,6 +40,24 @@ def indent(snippet, amount):
     return "\n".join(ws + s if s else "" for s in snippet.split('\n'))
 
 
+def handle_singleline_env_vars(vars_):
+    # if the vars are all given on one line we need to do some work
+    if not '\n' in vars_:
+        keys = []
+        values = []
+        env_vars = vars_.split()
+        # split out the odd and even items into keys, values
+        for var in env_vars:
+            if divmod(env_vars.index(var) + 1, 2)[1]:
+                keys.append(var)
+            else:
+                values.append(var)
+        env_vars = zip(keys, values)
+        return '\n'.join(
+            ["%s %s" % (env_var[0], env_var[1]) for env_var in env_vars])
+    return vars_
+
+
 class Recipe(Scripts):
 
     def __init__(self, buildout, name, options):
@@ -229,21 +247,12 @@ class Recipe(Scripts):
             ip_address = 'ip-address %s' % ip_address
         environment_vars = options.get('environment-vars', '')
         if environment_vars:
-            # if the vars are all given on one line we need to do some work
-            if not '\n' in environment_vars:
-                keys = []
-                values = []
-                env_vars = environment_vars.split()
-                # split out the odd and even items into keys, values
-                for var in env_vars:
-                    if divmod(env_vars.index(var) + 1, 2)[1]:
-                        keys.append(var)
-                    else:
-                        values.append(var)
-                env_vars = zip(keys, values)
-                environment_vars = '\n'.join(["%s %s" % (env_var[0], env_var[1])
-                                             for env_var in env_vars])
-            environment_vars = environment_template % environment_vars
+            environment_vars = environment_template % \
+                handle_singleline_env_vars(environment_vars)
+        cgi_environment_vars = options.get('cgi-environment-vars', '')
+        if cgi_environment_vars:
+            cgi_environment_vars = cgi_environment_template % \
+                handle_singleline_env_vars(cgi_environment_vars)
 
         deprecation_warnings = options.get('deprecation-warnings', '')
         if deprecation_warnings:
@@ -593,6 +602,7 @@ class Recipe(Scripts):
                                     pid_file = pid_file,
                                     lock_file = lock_file,
                                     environment_vars = environment_vars,
+                                    cgi_environment_vars = cgi_environment_vars,
                                     deprecation_warnings = deprecation_warnings,
                                     python_check_interval = python_check_interval,
                                     enable_products = enable_products,
@@ -990,6 +1000,12 @@ environment_template = """
 </environment>
 """
 
+cgi_environment_template = """
+<cgi-environment>
+    %s
+</cgi-environment>
+"""
+
 # The template used to build zope.conf
 zope_conf_template="""\
 %(imports_lines)s
@@ -1009,6 +1025,7 @@ verbose-security %(verbose_security)s
 %(ip_address)s
 %(zserver_threads)s
 %(environment_vars)s
+%(cgi_environment_vars)s
 %(deprecation_warnings)s
 
 %(mailinglogger_import)s

@@ -74,6 +74,13 @@ environment-vars
       zope_i18n_allowed_languages en
       zope_i18n_compile_mo_files true
 
+cgi-environment-vars
+  Define arbitrary key-value pairs for use as CGI environment variables during
+  Zope's run cycle. Example::
+
+    cgi-environment-vars =
+      HTTPS ON
+
 initialization
    Specify some Python initialization code to include within the generated
    ``sitecustomize.py`` script (Buildout >= 1.5) or within the instance script

@@ -13,6 +13,9 @@ New features:
 - Added support for setting `instance-home` option.
   [zupo]
 
+- Added support for setting CGI environment variables.
+  [zupo]
+
 Bug fixes:
 
 - *add item here*

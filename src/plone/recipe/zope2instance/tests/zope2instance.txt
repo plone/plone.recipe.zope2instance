@@ -1788,6 +1788,44 @@ Our environment variables should be set now::
     >>> re.search(env_vars, zope_conf).group('vars')
     'TZ US/Eastern\nTMP /var/tmp\nDISABLE_PTS True'
 
+We can also specify CGI environment variables for Zope.  This comes handy when
+hosting on PaaS providers, such as Heroku, where we don't have a reverse-proxy
+in front of Zope. For example, we can configure Zope to run in HTTPS mode::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... cgi-environment-vars = HTTPS ON
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print system(join('bin', 'buildout')),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '...instance'.
+    Generated interpreter '.../parts/instance/bin/interpreter'.
+    ...
+
+Our CGI environment variables should be set now::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print zope_conf
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    <cgi-environment>
+      HTTPS ON
+    </cgi-environment>
+    ...
 
 HTTP server
 ===========
