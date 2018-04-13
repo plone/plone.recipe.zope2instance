@@ -10,7 +10,11 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Added support for setting `instance-home` option.
+  [zupo]
+
+- Added support for setting CGI environment variables.
+  [zupo]
 
 Bug fixes:
 
