@@ -114,7 +114,8 @@ class Recipe(Scripts):
             # does not return an iterable anymore with 'parsed_version',
             # instead a class-object is returned. Let's re-parse that, to
             # support setuptools > 37.8.0, while keeping backwards-compat:
-            if not isinstance(parsed, tuple):
+            if (not isinstance(parsed, tuple)
+                and hasattr(parsed, "base_version")):
                 parsed = parsed.base_version.split('.')
 
             major, minor = parsed[0:2]
