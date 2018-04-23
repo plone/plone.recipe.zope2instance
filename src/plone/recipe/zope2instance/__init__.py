@@ -110,6 +110,14 @@ class Recipe(Scripts):
             # Which Zope2 version do we have?
             dist = pkg_resources.get_distribution('Zope2')
             parsed = dist.parsed_version
+            # Starting from version >= 37.8.0 pkg_resources of setuptools
+            # does not return an iterable anymore with 'parsed_version',
+            # instead a class-object is returned. Let's re-parse that, to
+            # support setuptools > 37.8.0, while keeping backwards-compat:
+            if (not isinstance(parsed, tuple)
+                and hasattr(parsed, "base_version")):
+                parsed = parsed.base_version.split('.')
+
             major, minor = parsed[0:2]
             major = int(major)
             # We support creating instances for 2.12, 2.13 and 4.0

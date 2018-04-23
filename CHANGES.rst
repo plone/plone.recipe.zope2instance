@@ -18,7 +18,9 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Regard 'parsed_version' of setuptools > 38.7.0 does not return
+  iterable anymore, fixes #37.
+  [ida]
 
 
 4.3 (2017-06-28)
