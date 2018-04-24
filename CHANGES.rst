@@ -4,10 +4,6 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
 New features:
 
 - Added support for setting `instance-home` option.
