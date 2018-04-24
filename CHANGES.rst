@@ -1,7 +1,7 @@
 Changelog
 =========
 
-4.3.1 (unreleased)
+4.4.0 (unreleased)
 ------------------
 
 New features:
