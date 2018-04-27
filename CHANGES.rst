@@ -15,6 +15,7 @@ New features:
 Bug fixes:
 
 - Super user password created on Python 3 can now be read by Zope.
+- Fix WSGI initialization [tschorr]
 
 
 5.0.0 (2018-01-27)
