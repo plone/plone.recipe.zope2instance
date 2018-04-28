@@ -14,16 +14,18 @@
 ##############################################################################
 
 from plone.recipe.zope2instance import make
-from zc.recipe.egg.egg import Egg
-from zc.recipe.egg.egg import Scripts
-
+try:
+    from zc.recipe.egg.egg import Egg
+    from zc.recipe.egg.egg import Scripts
+    import zc.buildout
+    import zc.buildout.easy_install
+except:
+    Scripts = object
 import os
 import os.path
 import re
 import shutil
 import sys
-import zc.buildout
-import zc.buildout.easy_install
 
 
 IS_WIN = sys.platform[:3].lower() == 'win'
