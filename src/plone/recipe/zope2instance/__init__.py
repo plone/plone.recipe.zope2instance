@@ -612,7 +612,6 @@ class Recipe(Scripts):
         reqs = [self.options.get('control-script', self.name)]
         if self.wsgi:
             reqs.extend(['plone.recipe.zope2instance.wsgi', 'waitress_main'])
-            options['initialization'] = wsgi_initialization
         else:
             reqs.extend(['plone.recipe.zope2instance.ctl', 'main'])
         reqs = [tuple(reqs)]
@@ -674,13 +673,17 @@ class Recipe(Scripts):
                 script_arguments=script_arguments,
                 )
         else:
+            if self.wsgi:
+                initialization = wsgi_initialization % options
+            else:
+                initialization = options['initialization'] % options
             return zc.buildout.easy_install.scripts(
                 dest=dest,
                 reqs=reqs,
                 working_set=working_set,
                 executable=options['executable'],
                 extra_paths=extra_paths,
-                initialization=options['initialization'] % options,
+                initialization=initialization,
                 arguments=script_arguments,
                 interpreter=interpreter,
                 relative_paths=self._relative_paths,)
