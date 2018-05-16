@@ -45,5 +45,5 @@ setup(
         'ZEO',
     ],
     zip_safe=False,
-    entry_points={'zc.buildout': ['default = %s:Recipe' % name]},
+    entry_points={'zc.buildout': ['default = %s.recipe:Recipe' % name]},
 )
