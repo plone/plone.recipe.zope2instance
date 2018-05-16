@@ -15,7 +15,11 @@ New features:
 Bug fixes:
 
 - Super user password created on Python 3 can now be read by Zope.
-- Fix WSGI initialization [tschorr]
+- Fix WSGI initialization
+  [tschorr]
+- Move Recipe from __init__.py to a new module to get rid of the dependency on
+  zc.recipe.egg in control scripts
+  [tschorr]
 
 
 5.0.0 (2018-01-27)
