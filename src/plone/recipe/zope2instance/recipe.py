@@ -611,7 +611,7 @@ class Recipe(Scripts):
         requirements, ws = self.egg.working_set(['plone.recipe.zope2instance'])
         reqs = [self.options.get('control-script', self.name)]
         if self.wsgi:
-            reqs.extend(['plone.recipe.zope2instance.wsgi', 'waitress_main'])
+            reqs.extend(['Zope2.Startup.serve', 'main'])
         else:
             reqs.extend(['plone.recipe.zope2instance.ctl', 'main'])
         reqs = [tuple(reqs)]
