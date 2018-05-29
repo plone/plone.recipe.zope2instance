@@ -14,7 +14,7 @@ New features:
 
 Bug fixes:
 
-- Improved error message for invalid comments in zcml variable assignment
+- Improved error message for invalid comments in zcml variable assignment; fixes #46
   [tobiasherp]
 
 
