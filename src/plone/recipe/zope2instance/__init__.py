@@ -758,6 +758,15 @@ class Recipe(Scripts):
             n = 1 # 001 is reserved for an optional locales-configure
             package_match = re.compile('\w+([.]\w+)*$').match
             for package in zcml:
+                if package.startswith('#'):
+                    comment_snippet = zcml[n-1:n+5]
+                    if zcml[n+5:]:
+                        comment_snippet.append('(...)')
+                    comment_snippet = ' '.join(comment_snippet)
+                    raise ValueError('Invalid comment in zcml assignment'
+                                     ' (must start in first column; something like'
+                                     ' %(comment_snippet)r)'
+                                     % locals())
                 n += 1
                 orig = package
                 if ':' in package:

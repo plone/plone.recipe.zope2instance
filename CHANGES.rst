@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Improved error message for invalid comments in zcml variable assignment
+  [tobiasherp]
 
 
 4.4.0 (2018-04-24)
