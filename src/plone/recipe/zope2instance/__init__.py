@@ -58,6 +58,36 @@ def handle_singleline_env_vars(vars_):
     return vars_
 
 
+def nocomments_split(s):
+    r"""
+    Split a multiline string, skipping comments.
+
+    >>> f = nocomments_split
+    >>> f('''one.two three
+    ... # ignored comment line
+    ... four # ignored trailing comment
+    ...    # another comment line
+    ... five
+    ... ''')
+    ['one.two', 'three', 'four', 'five']
+    >>> f('  \t')
+    []
+    >>> f('  # ignored')
+    []
+
+    Mixed eol styles don't matter:
+    >>> f('one\r\n  # ignored \rtwo \n  # another comment\n three')
+    ['one', 'two', 'three']
+    """
+    res = []
+    for line in s.splitlines():
+        if '#' in line:
+            line, comment = line.split('#', 1)
+        for word in line.split():
+            res.append(word)
+    return res
+
+
 class Recipe(Scripts):
 
     def __init__(self, buildout, name, options):
@@ -713,7 +743,7 @@ class Recipe(Scripts):
             return
 
         if zcml:
-            zcml = zcml.split()
+            zcml = nocomments_split(zcml)
 
         if additional_zcml or resources or locales or zcml:
             includes_path = os.path.join(location, 'etc', 'package-includes')
@@ -758,21 +788,6 @@ class Recipe(Scripts):
             n = 1 # 001 is reserved for an optional locales-configure
             package_match = re.compile('\w+([.]\w+)*$').match
             for package in zcml:
-                if package.startswith('#'):
-                    if package == '#':  # likely space and text following:
-                        nend = n + 1
-                    elif ' ' in package:  # OK: line-based split!
-                        continue
-                    else:
-                        nend = n
-                    comment_snippet = zcml[n-1:nend]
-                    if zcml[nend:]:
-                        comment_snippet.append('(...)')
-                    comment_snippet = ' '.join(comment_snippet)
-                    raise ValueError('Invalid comment in zcml assignment'
-                                     ' (must start in first column); '
-                                     'something like %(comment_snippet)r'
-                                     % locals())
                 n += 1
                 orig = package
                 if ':' in package:
