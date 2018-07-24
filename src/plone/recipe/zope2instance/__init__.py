@@ -761,6 +761,8 @@ class Recipe(Scripts):
                 if package.startswith('#'):
                     if package == '#':  # likely space and text following:
                         nend = n + 1
+                    elif ' ' in package:  # OK: line-based split!
+                        continue
                     else:
                         nend = n
                     comment_snippet = zcml[n-1:nend]
