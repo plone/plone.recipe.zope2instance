@@ -759,13 +759,17 @@ class Recipe(Scripts):
             package_match = re.compile('\w+([.]\w+)*$').match
             for package in zcml:
                 if package.startswith('#'):
-                    comment_snippet = zcml[n-1:n+5]
-                    if zcml[n+5:]:
+                    if package == '#':  # likely space and text following:
+                        nend = n + 1
+                    else:
+                        nend = n
+                    comment_snippet = zcml[n-1:nend]
+                    if zcml[nend:]:
                         comment_snippet.append('(...)')
                     comment_snippet = ' '.join(comment_snippet)
                     raise ValueError('Invalid comment in zcml assignment'
-                                     ' (must start in first column; something like'
-                                     ' %(comment_snippet)r)'
+                                     ' (must start in first column); '
+                                     'something like %(comment_snippet)r'
                                      % locals())
                 n += 1
                 orig = package
