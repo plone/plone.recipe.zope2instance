@@ -23,6 +23,9 @@ Bug fixes:
 - Make use of changes to Zope WSGI logging (https://github.com/zopefoundation/Zope/pull/280,
   https://github.com/zopefoundation/Zope/pull/276), use Zope2 WSGI startup code.
   [tschorr]
+- Make comments in zcml values work, even if not starting at the beginning of the line;
+  before, we had a confusing error message. Fixes #46
+  [tobiasherp]
 
 
 5.0.0 (2018-01-27)
