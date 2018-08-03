@@ -14,7 +14,9 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Make comments in zcml values work, even if not starting at the beginning of the line;
+  before, we had a confusing error message. Fixes #46
+  [tobiasherp]
 
 
 4.4.0 (2018-04-24)
