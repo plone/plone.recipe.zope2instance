@@ -638,7 +638,7 @@ class Recipe(Scripts):
 
         options['zope-conf'] = zope_conf_path
         arguments = ["-C", zope_conf_path, '-p', program_path] \
-            if not self.wsgi else []
+            if not self.wsgi else ['ignored']
         if zopectl_umask:
             arguments.extend(["--umask", int(zopectl_umask, 8)])
         script_arguments = ('\n        ' + repr(arguments) +

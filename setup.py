@@ -44,6 +44,11 @@ setup(
         'ZODB >= 5.1.1',
         'ZEO',
     ],
+    extras_require={
+        'test': [
+            'zope.testrunner',
+        ],
+    },
     zip_safe=False,
     entry_points={'zc.buildout': ['default = %s.recipe:Recipe' % name]},
 )

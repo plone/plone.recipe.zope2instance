@@ -20,9 +20,13 @@ Bug fixes:
 - Move Recipe from __init__.py to a new module to get rid of the dependency on
   zc.recipe.egg in control scripts
   [tschorr]
-- Make use of changes to Zope WSGI logging (https://github.com/zopefoundation/Zope/pull/280,
-  https://github.com/zopefoundation/Zope/pull/276), use Zope2 WSGI startup code.
+- Make use of changes to Zope WSGI logging
+  (`#280` <https://github.com/zopefoundation/Zope/pull/280>`_,
+  `#276`<https://github.com/zopefoundation/Zope/pull/276>`_),
+  use Zope2 WSGI startup code.
   [tschorr]
+- Fix the tests on Python 3 when running via tox or TravisCI.
+  [icemac]
 
 
 5.0.0 (2018-01-27)

@@ -33,8 +33,7 @@ Let's run it::
     >>> print(system(join('bin', 'buildout'))),
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should have a zope instance, with a basic zope.conf::
 
@@ -160,8 +159,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 Our FTP server should be set up now::
 
@@ -198,8 +196,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 Our WebDAV server should be set up now::
 
@@ -237,8 +234,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 Our WebDAV server should be set up now::
 
@@ -280,8 +276,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should have a zope instance, with a basic zope.conf::
 
@@ -332,8 +327,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should have a zope instance, with a basic zope.conf without demostorage::
 
@@ -385,8 +379,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should have a zope instance, with a basic zope.conf::
 
@@ -446,8 +439,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should have a zope instance, with a basic zope.conf::
 
@@ -500,8 +492,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should have a zope instance, with a basic zope.conf::
 
@@ -562,8 +553,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should have a zope instance, with a basic zope.conf::
 
@@ -623,8 +613,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should have a zope instance, with a basic zope.conf::
 
@@ -687,8 +676,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should have a zope instance, with a basic zope.conf::
 
@@ -746,8 +734,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should have a zope instance, with a basic zope.conf::
 
@@ -812,8 +799,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should have a zope instance, with a basic zope.conf::
 
@@ -871,8 +857,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should have a zope instance, with a basic zope.conf::
 
@@ -922,8 +907,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should have a zope instance, with a basic zope.conf::
 
@@ -984,8 +968,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should have a zope instance, with a basic zope.conf::
 
@@ -1041,8 +1024,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should have a zope instance, with a basic zope.conf::
 
@@ -1098,8 +1080,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should have a zope instance, with a basic zope.conf::
 
@@ -1156,8 +1137,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should have a zope instance, with a basic zope.conf::
 
@@ -1226,8 +1206,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should have a zope instance, with a basic zope.conf::
 
@@ -1281,8 +1260,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should have a zope instance, with a basic zope.conf::
 
@@ -1343,8 +1321,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 Now zope.conf should include the custom storage wrapper::
 
@@ -1401,8 +1378,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should have a zope instance, with the custom event log::
 
@@ -1459,8 +1435,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should have a zope instance, with the mailing logger::
 
@@ -1521,8 +1496,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should have a zope instance, with the custom event log::
 
@@ -1571,8 +1545,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should have a zope instance, with no access log::
 
@@ -1611,8 +1584,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should have a zope instance, with no access log::
 
@@ -1661,8 +1633,7 @@ Let's run the buildout::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 Now let's check that we have a zope instance, with the custom site.zcml::
 
@@ -1703,8 +1674,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 Our environment variables should be set now::
 
@@ -1743,8 +1713,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 Our environment variables should be set now::
 
@@ -1777,8 +1746,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 Our environment variables should be set now::
 
@@ -1814,8 +1782,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 And check it::
 
@@ -1859,8 +1826,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 Relative paths in scripts
 =========================
@@ -1883,8 +1849,7 @@ The recipe supports the generation of scripts with relative paths.
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 Our generated script now has a reference to the relative path.
 
@@ -1921,8 +1886,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should have a zope instance script with the custom config file::
 
@@ -1958,8 +1922,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should have a zope instance, with custom imports::
 
@@ -1998,8 +1961,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 The directory should have been generated, and zope config created::
 
@@ -2041,8 +2003,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 The directory should have been generated, and zope config created::
 
@@ -2084,8 +2045,7 @@ Let's run it::
     Uninstalling instance.
     Installing instance.
     Generated script '...instance'.
-    Generated interpreter '.../parts/instance/bin/interpreter'.
-    ...
+    Generated interpreter '.../parts/instance/bin/interpreter'...
 
 We should see the given initialization commands included in the instance
 script::
