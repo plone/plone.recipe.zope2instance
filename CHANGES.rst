@@ -4,14 +4,6 @@ Changelog
 4.4.1 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
 Bug fixes:
 
 - Make comments in zcml values work, even if not starting at the beginning of the line;
