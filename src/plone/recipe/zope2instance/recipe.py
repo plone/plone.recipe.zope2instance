@@ -1076,6 +1076,8 @@ verbose-security %(verbose_security)s
     mount-point /
 </zodb_db>
 
+%(zodb_tmp_storage)s
+
 %(python_check_interval)s
 
 %(zope_conf_additional)s
