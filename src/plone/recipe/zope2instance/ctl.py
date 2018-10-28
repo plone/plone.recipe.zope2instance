@@ -649,8 +649,7 @@ def main(args=None):
     else:
         from Zope2.Startup import serve
         script = serve.__file__
-        # @@@ generate this?
-        wsgi_ini = os.path.join(options.directory, 'etc', 'waitress.ini')
+        wsgi_ini = os.path.join(options.directory, 'etc', 'wsgi.ini')
         options.program = [
             options.python, options.interpreter, script, wsgi_ini
         ]
