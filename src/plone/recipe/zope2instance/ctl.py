@@ -28,7 +28,7 @@ available actions.
 """
 
 from pkg_resources import iter_entry_points
-from ZServer.Zope2.Startup import zopectl
+from . import zopectl
 
 import csv
 import os
@@ -49,6 +49,12 @@ if zopectl.WIN:
     ERR_MSG_NOT_ADMIN = (
         'ERROR: You are not member of the "Administrators" group, '
         'or you have not run the shell as Administrator.')
+
+try:
+    import ZServer
+    HAS_ZSERVER = True
+except ImportError:
+    HAS_ZSERVER = False
 
 
 class AdjustedZopeCmd(zopectl.ZopeCmd):
@@ -422,14 +428,24 @@ class AdjustedZopeCmd(zopectl.ZopeCmd):
         # will act as escapes.  Use r'' instead.
         # Also, don't forget that 'python'
         # may have spaces and needs to be quoted.
+        if HAS_ZSERVER:
+            cmd = (
+                "from Zope2 import configure; "
+                "configure(r'%s'); "
+                "import Zope2; app=Zope2.app(); "
+            )
+        else:
+            cmd = (
+                "from Zope2.Startup.run import configure_wsgi; "
+                "configure_wsgi(r'%s'); "
+                "import Zope2; app=Zope2.app(); "
+            )
         cmdline = (
-            '"%s" %s "%s" %s -c "from Zope2 import configure; '
-            'configure(r\'%s\'); '
-            'import Zope2; app=Zope2.app(); ' % (
+            '"%s" %s "%s" %s -c "%s' % (
                 python, pyflags,
                 self.options.interpreter,
                 pyflags,
-                self.options.configfile
+                cmd % self.options.configfile,
             )
         )
 
@@ -574,7 +590,7 @@ console -- Run the program in the console.
         local_additions = []
 
         if debug:
-            if not program.count('-X'):
+            if HAS_ZSERVER and not program.count('-X'):
                 local_additions += ['-X']
             if not program.count('debug-mode=on'):
                 local_additions += ['debug-mode=on']
@@ -621,15 +637,25 @@ def main(args=None):
     # Realize arguments and set documentation which is used in the -h option
     options.realize(args, doc=__doc__)
 
-    # Change the program to avoid warning messages
-    startup = os.path.dirname(zopectl.__file__)
-
+    # Run the right command depending on whether we have ZServer
     options.interpreter = os.path.join(options.directory, 'bin', 'interpreter')
     if sys.platform == 'win32':
         options.interpreter += '-script.py'
-    script = os.path.join(startup, 'run.py')
-    options.program = [
-        options.python, options.interpreter, script, '-C', options.configfile]
+    if HAS_ZSERVER:
+        from ZServer.Zope2.Startup import run
+        script = run.__file__
+        options.program = [
+            options.python, options.interpreter, script, '-C',
+            options.configfile
+        ]
+    else:
+        from Zope2.Startup import serve
+        script = serve.__file__
+        # @@@ generate this?
+        wsgi_ini = os.path.join(options.directory, 'etc', 'waitress.ini')
+        options.program = [
+            options.python, options.interpreter, script, wsgi_ini
+        ]
 
     # We use our own ZopeCmd set, that is derived from the original one.
     c = AdjustedZopeCmd(options)
