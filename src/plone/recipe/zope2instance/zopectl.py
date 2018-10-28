@@ -336,7 +336,9 @@ class ZopeCmd(ZDCmd):
         script = args.split(' ')[0]
         cmd = (
             "import sys; sys.argv[:]=%r.split(' ');"
-            "import Zope2; app=Zope2.app(); execfile(%r)"
+            "import Zope2; app=Zope2.app(); "
+            "f = open(%r, 'r'); src = f.read(); f.close(); "
+            "exec(src)"
         ) % (args, script)
         cmdline = self.get_startup_cmd(self.options.python, cmd)
         self._exitstatus = os.system(cmdline)
@@ -361,7 +363,7 @@ class ZopeCmd(ZDCmd):
             '\'%s\', \'%s\', [\'Manager\'], []); '
             'import transaction; '
             'transaction.commit(); '
-            'print \'Created user:\', result'
+            'print(\'Created user:\', result)'
         ) % (name, password)
         os.system(cmdline)
 
