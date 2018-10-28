@@ -77,6 +77,7 @@ class Recipe(Scripts):
             buildout['buildout'].get('include-site-packages', 'false')
             ) not in ('off', 'disable', 'false')
 
+        self.wsgi = options.get('wsgi') in ('on', 'waitress')
         # Get Scripts' attributes
         return Scripts.__init__(self, buildout, name, options)
 
@@ -95,10 +96,6 @@ class Recipe(Scripts):
             make.make_instance(options.get('user', None), location, version)
 
         try:
-            requirements, ws = self.egg.working_set(
-                ['plone.recipe.zope2instance'])
-            self.wsgi = 'zserver' not in ws.by_key
-
             # Make a new zope.conf and wsgi.ini
             # based on options in buildout.cfg
             self.build_zope_conf()
@@ -106,7 +103,7 @@ class Recipe(Scripts):
                 self.build_wsgi_ini()
 
             # Install extra scripts
-            installed.extend(self.install_scripts(ws))
+            installed.extend(self.install_scripts())
 
             # Add zcml files to package-includes
             self.build_package_includes()
@@ -609,7 +606,7 @@ class Recipe(Scripts):
         with open(wsgi_ini_path, 'w') as f:
             f.write(wsgi_ini)
 
-    def install_scripts(self, ws):
+    def install_scripts(self):
         options = self.options
         location = options['location']
 
@@ -622,6 +619,7 @@ class Recipe(Scripts):
         zopectl_umask = options.get('zopectl-umask', '')
 
         extra_paths = options.get('extra-paths', '').split()
+        requirements, ws = self.egg.working_set(['plone.recipe.zope2instance'])
         reqs = [self.options.get('control-script', self.name)]
         reqs.extend(['plone.recipe.zope2instance.ctl', 'main'])
         reqs = [tuple(reqs)]
