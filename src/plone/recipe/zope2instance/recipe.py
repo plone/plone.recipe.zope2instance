@@ -610,10 +610,7 @@ class Recipe(Scripts):
         extra_paths = options.get('extra-paths', '').split()
         requirements, ws = self.egg.working_set(['plone.recipe.zope2instance'])
         reqs = [self.options.get('control-script', self.name)]
-        if self.wsgi:
-            reqs.extend(['Zope2.Startup.serve', 'main'])
-        else:
-            reqs.extend(['plone.recipe.zope2instance.ctl', 'main'])
+        reqs.extend(['plone.recipe.zope2instance.ctl', 'main'])
         reqs = [tuple(reqs)]
 
         if options.get('relative-paths'):
@@ -637,8 +634,7 @@ class Recipe(Scripts):
                 )
 
         options['zope-conf'] = zope_conf_path
-        arguments = ["-C", zope_conf_path, '-p', program_path] \
-            if not self.wsgi else ['ignored']
+        arguments = ["-C", zope_conf_path, '-p', program_path]
         if zopectl_umask:
             arguments.extend(["--umask", int(zopectl_umask, 8)])
         script_arguments = ('\n        ' + repr(arguments) +
@@ -647,10 +643,9 @@ class Recipe(Scripts):
         generated = self._install_scripts(
             options['bin-directory'], ws, reqs=reqs, extra_paths=extra_paths,
             script_arguments=script_arguments)
-        if not self.wsgi:
-            generated.extend(self._install_scripts(
-                os.path.join(options['location'], 'bin'), ws,
-                interpreter=program_name, extra_paths=extra_paths))
+        generated.extend(self._install_scripts(
+            os.path.join(options['location'], 'bin'), ws,
+            interpreter=program_name, extra_paths=extra_paths))
         return generated
 
     def _install_scripts(self, dest, working_set, reqs=(), interpreter=None,
@@ -673,10 +668,7 @@ class Recipe(Scripts):
                 script_arguments=script_arguments,
                 )
         else:
-            if self.wsgi:
-                initialization = wsgi_initialization % options
-            else:
-                initialization = options['initialization'] % options
+            initialization = options['initialization'] % options
             return zc.buildout.easy_install.scripts(
                 dest=dest,
                 reqs=reqs,
@@ -1120,10 +1112,4 @@ additional_zcml_template = """\
 <configure xmlns="http://namespaces.zope.org/zope">
     %s
 </configure>
-"""
-
-wsgi_initialization = """\
-from Zope2.Startup.run import make_wsgi_app
-wsgiapp = make_wsgi_app({}, '%(zope-conf)s')
-def application(*args, **kwargs):return wsgiapp(*args, **kwargs)
 """
