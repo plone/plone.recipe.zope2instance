@@ -175,12 +175,6 @@ class ZopeCtlOptions(ZopeOptions, ZDCtlOptions):
                                   "zdrun.py")
 
         self.exitcodes = [0, 2]
-        if self.logfile is None and config.eventlog is not None:
-            for handler in config.eventlog.handler_factories:
-                if isinstance(handler, FileHandlerFactory):
-                    self.logfile = handler.section.path
-                    if self.logfile not in ("STDERR", "STDOUT"):
-                        break
 
     def load_schema(self):
         if self.schema is None:
