@@ -96,8 +96,10 @@ class Recipe(Scripts):
             make.make_instance(options.get('user', None), location, version)
 
         try:
-            # Make a new zope.conf based on options in buildout.cfg
+            # Make a new zope.conf and wsgi.ini based on options in buildout.cfg
             self.build_zope_conf()
+            if self.wsgi:
+                self.build_wsgi_ini()
 
             # Install extra scripts
             installed.extend(self.install_scripts())
@@ -589,11 +591,19 @@ class Recipe(Scripts):
 
         zope_conf = '\n'.join([l for l in zope_conf.splitlines() if l.rstrip()])
         zope_conf_path = os.path.join(location, 'etc', 'zope.conf')
-        try:
-            fd = open(zope_conf_path, 'w')
-            fd.write(zope_conf)
-        finally:
-            fd.close()
+        with open(zope_conf_path, 'w') as f:
+            f.write(zope_conf)
+
+    def build_wsgi_ini(self):
+        options = self.options
+        wsgi_ini_path = os.path.join(options['location'], 'etc', 'wsgi.ini')
+        options = {
+            'location': options['location'],
+            'http_address': options.get('http-address', '8080'),
+        }
+        wsgi_ini = wsgi_ini_template % options
+        with open(wsgi_ini_path, 'w') as f:
+            f.write(wsgi_ini)
 
     def install_scripts(self):
         options = self.options
@@ -1112,4 +1122,46 @@ additional_zcml_template = """\
 <configure xmlns="http://namespaces.zope.org/zope">
     %s
 </configure>
+"""
+
+wsgi_ini_template = """\
+[server:main]
+use = egg:waitress#main
+listen = 0.0.0.0:%(http_address)s
+
+[app:zope]
+use = egg:Zope#main
+zope_conf = %(location)s/etc/zope.conf
+
+[pipeline:main]
+pipeline =
+    egg:Zope#httpexceptions
+    zope
+
+[loggers]
+keys = root, plone
+
+[handlers]
+keys = console
+
+[formatters]
+keys = generic
+
+[logger_root]
+level = INFO
+handlers = console
+
+[logger_plone]
+level = DEBUG
+handlers =
+qualname = plone
+
+[handler_console]
+class = StreamHandler
+args = (sys.stderr,)
+level = NOTSET
+formatter = generic
+
+[formatter_generic]
+format = %%(asctime)s %%(levelname)-5.5s [%%(name)s:%%(lineno)s][%%(threadName)s] %%(message)s
 """
