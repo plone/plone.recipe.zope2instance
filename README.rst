@@ -50,7 +50,7 @@ ip-address
   implementations will listen for requests. If this is unset, Zope will listen
   on all IP addresses supported by the machine. This directive can be
   overridden on a per-server basis in the servers section. Defaults to not
-  setting an ip-address.
+  setting an ip-address. Used for ZServer only, not WSGI.
 
 zodb-cache-size
   Set the ZODB cache size, i.e. the number of objects which the ZODB cache
@@ -58,7 +58,7 @@ zodb-cache-size
 
 zserver-threads
   Specify the number of threads that Zope's ZServer web server will use to
-  service requests. The recipes default is 2.
+  service requests. The recipes default is 2. Used for ZServer only, not WSGI.
 
 environment-vars
   Define arbitrary key-value pairs for use as environment variables during
@@ -221,25 +221,28 @@ log levels or configure `mailinglogger`.
 event-log
   The filename of the event log. Defaults to ${buildout:directory}/var/log/${partname}.log
   Setting this value to 'disable' will make the <eventlog> section to be omitted,
-  disabling logging events by default to a .log file.
+  disabling logging events by default to a .log file. Used for ZServer only, not WSGI.
 
 event-log-level
   Set the level of the console output for the event log. Level may be any of
   CRITICAL, ERROR, WARN, INFO, DEBUG, or ALL. Defaults to INFO.
+  Used for ZServer only, not WSGI.
 
 event-log-max-size
   Maximum size of event log file. Enables log rotation.
+  Used for ZServer only, not WSGI.
 
 event-log-old-files
   Number of previous log files to retain when log rotation is enabled.
-  Defaults to 1.
+  Defaults to 1. Used for ZServer only, not WSGI.
 
 event-log-custom
   A custom section for the eventlog, to be able to use another
-  event logger than `logfile`
+  event logger than `logfile`. Used for ZServer only, not WSGI.
 
 mailinglogger
-  A mailinglogger section added into the event log. Example snippet::
+  A mailinglogger section added into the event log.
+  Used for ZServer only, not WSGI. Example snippet::
 
     <mailing-logger>
       level error
@@ -255,22 +258,23 @@ mailinglogger
 z2-log
   The filename for the Z2 access log. Defaults to var/log/${partname}-Z2.log.
   Setting this value to 'disable' will make the <logger access> section to be omitted,
-  disabling logging access events to a .log file
+  disabling logging access events to a .log file. Used for ZServer only, not WSGI.
 
 z2-log-level
   Set the log level for the access log. Level may be any of CRITICAL, ERROR,
-  WARN, INFO, DEBUG, or ALL. Defaults to WARN.
+  WARN, INFO, DEBUG, or ALL. Defaults to WARN. Used for ZServer only, not WSGI.
 
 access-log-max-size
   Maximum size of access log file. Enables log rotation.
+  Used for ZServer only, not WSGI.
 
 access-log-old-files
   Number of previous log files to retain when log rotation is enabled.
-  Defaults to 1.
+  Defaults to 1. Used for ZServer only, not WSGI.
 
 access-log-custom
   Like `event-log-custom`, a custom section for the access logger, to be able
-  to use another event logger than `logfile`.
+  to use another event logger than `logfile`. Used for ZServer only, not WSGI.
 
 Load non-setuptools compatible Python libraries
 -----------------------------------------------
@@ -386,6 +390,7 @@ enable-product-installation
 
 ftp-address
   Give a port for the FTP server. This enables the FTP server.
+  Used for ZServer only, not WSGI.
 
 http-force-connection-close
   Set to `on` to enforce Zope to set ``Connection: close header``.
@@ -398,6 +403,7 @@ http-fast-listen
 
 icp-address
   Give a port for the ICP server. This enables the ICP server.
+  Used for ZServer only, not WSGI.
 
 import-directory
   Used to configure the import directory for instance.
@@ -439,10 +445,12 @@ var
   Defaults to ${buildout:directory}/var.
 
 webdav-address
-  Give a port for the WebDAV server.  This enables the WebDAV server
+  Give a port for the WebDAV server.  This enables the WebDAV server.
+  Used for ZServer only, not WSGI.
 
 webdav-force-connection-close
-  Valid options are off and on. Defaults to off
+  Valid options are off and on. Defaults to off.
+  Used for ZServer only, not WSGI.
 
 zlib-storage
   Adds support for file compression on a file storage database. The
@@ -496,7 +504,7 @@ zopectl-umask
 http-header-max-length
   Manually set the maximum size of received HTTP header being processed by Zope.
   The request is discarded and considered as a DoS attack if the header size exceeds
-  this limit. Default: 8192
+  this limit. Default: 8192. Used for ZServer only, not WSGI.
 
   Example::
 
