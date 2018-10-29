@@ -1,12 +1,20 @@
 Changelog
 =========
 
-5.0.1 (unreleased)
+6.0.0 (unreleased)
 ------------------
 
 Breaking changes:
 
-- *add item here*
+- Determine whether to set up a WSGI-based instanced
+  automatically based on whether ZServer is included in the eggs,
+  instead of explicitly using the ``wsgi`` option.
+  [davisagli]
+
+- For WSGI-based instances, generate a zdaemon-based instance script
+  that works similarly to ZServer-based instances, instead of a
+  script that only handles running the WSGI server.
+  [davisagli]
 
 New features:
 
@@ -49,6 +57,7 @@ Bug fixes:
 
 - Python 3 compatibility with sixer
   [ale-rt]
+
 - Fix import. zopectl moved to ZServer
   [pbauer]
 

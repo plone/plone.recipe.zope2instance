@@ -641,14 +641,14 @@ def main(args=None):
         options.interpreter += '-script.py'
     if HAS_ZSERVER:
         from ZServer.Zope2.Startup import run
-        script = run.__file__
+        script = os.path.join(os.path.dirname(run.__file__), 'run.py')
         options.program = [
             options.python, options.interpreter, script, '-C',
             options.configfile
         ]
     else:
         from Zope2.Startup import serve
-        script = serve.__file__
+        script = os.path.join(os.path.dirname(serve.__file__), 'serve.py')
         wsgi_ini = os.path.join(options.directory, 'etc', 'wsgi.ini')
         options.program = [
             options.python, options.interpreter, script, wsgi_ini
