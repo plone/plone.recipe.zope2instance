@@ -4,14 +4,6 @@ Changelog
 5.0.1 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
 Bug fixes:
 
 - Super user password created on Python 3 can now be read by Zope.
