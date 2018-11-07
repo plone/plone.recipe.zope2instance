@@ -12,27 +12,30 @@
 #
 ##############################################################################
 
+from plone.recipe.zope2instance.ctl import ZopeCtlOptions
 import os
-import cStringIO
 import tempfile
 import unittest
-
 import ZConfig
 
-from plone.recipe.zope2instance.ctl import ZopeCtlOptions
 
-_SCHEMA = {}
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
+
+_SCHEMA = None
 TEMPNAME = tempfile.mktemp()
 TEMPVAR = os.path.join(TEMPNAME, "var")
 
 
-def getSchema(schemafile):
+def getSchema():
     global _SCHEMA
-    if schemafile not in _SCHEMA:
+    if not _SCHEMA:
         opts = ZopeCtlOptions()
         opts.load_schema()
-        _SCHEMA[schemafile] = opts.schema
-    return _SCHEMA[schemafile]
+        _SCHEMA = opts.schema
+    return _SCHEMA
 
 
 class StartupTestCase(unittest.TestCase):
@@ -46,7 +49,7 @@ class StartupTestCase(unittest.TestCase):
         # of the directory is checked.  This handles this in a
         # platform-independent way.
         schema = self.schema
-        sio = cStringIO.StringIO(
+        sio = StringIO(
             text.replace("<<INSTANCE_HOME>>", TEMPNAME))
         os.mkdir(TEMPNAME)
         os.mkdir(TEMPVAR)
@@ -76,7 +79,7 @@ class StartupTestCase(unittest.TestCase):
               NSYNC doesnt
             </environment>
             """)
-        items = conf.environment.items()
+        items = list(conf.environment.items())
         items.sort()
         self.assertEqual(
             items, [("FEARFACTORY", "rocks"), ("NSYNC", "doesnt")])
