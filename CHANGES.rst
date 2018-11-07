@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Restore ability to use `initialization` code when using WSGI.
+  [icemac]
 
 
 5.0.1 (2018-11-04)

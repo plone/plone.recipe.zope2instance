@@ -673,10 +673,7 @@ class Recipe(Scripts):
                 script_arguments=script_arguments,
                 )
         else:
-            if self.wsgi:
-                initialization = wsgi_initialization % options
-            else:
-                initialization = options['initialization'] % options
+            initialization = options['initialization'] % options
             return zc.buildout.easy_install.scripts(
                 dest=dest,
                 reqs=reqs,
@@ -1120,10 +1117,4 @@ additional_zcml_template = """\
 <configure xmlns="http://namespaces.zope.org/zope">
     %s
 </configure>
-"""
-
-wsgi_initialization = """\
-from Zope2.Startup.run import make_wsgi_app
-wsgiapp = make_wsgi_app({}, '%(zope-conf)s')
-def application(*args, **kwargs):return wsgiapp(*args, **kwargs)
 """
