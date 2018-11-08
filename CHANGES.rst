@@ -11,14 +11,6 @@ Breaking changes:
   script that only handles running the WSGI server.
   [davisagli]
 
-New features:
-
-- *add item here*
-
-Bug fixes:
-
-- *add item here*
-
 
 5.0.1 (2018-11-04)
 ------------------
