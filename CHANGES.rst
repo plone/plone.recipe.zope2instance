@@ -14,7 +14,7 @@ New features:
 
 Bug fixes:
 
-- Restore ability to use `initialization` code when using WSGI.
+- Remove `path` option from zope.conf generated when using WSGI as it is no longer understood.
   [icemac]
 
 
