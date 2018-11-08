@@ -77,7 +77,7 @@ class Recipe(Scripts):
             buildout['buildout'].get('include-site-packages', 'false')
             ) not in ('off', 'disable', 'false')
 
-        self.wsgi = options.get('wsgi') in ('waitress', 'on')
+        self.wsgi = options.get('wsgi') in ('on', 'waitress')
         # Get Scripts' attributes
         return Scripts.__init__(self, buildout, name, options)
 
@@ -96,8 +96,11 @@ class Recipe(Scripts):
             make.make_instance(options.get('user', None), location, version)
 
         try:
-            # Make a new zope.conf based on options in buildout.cfg
+            # Make a new zope.conf and wsgi.ini
+            # based on options in buildout.cfg
             self.build_zope_conf()
+            if self.wsgi:
+                self.build_wsgi_ini()
 
             # Install extra scripts
             installed.extend(self.install_scripts())
@@ -589,11 +592,19 @@ class Recipe(Scripts):
 
         zope_conf = '\n'.join([l for l in zope_conf.splitlines() if l.rstrip()])
         zope_conf_path = os.path.join(location, 'etc', 'zope.conf')
-        try:
-            fd = open(zope_conf_path, 'w')
-            fd.write(zope_conf)
-        finally:
-            fd.close()
+        with open(zope_conf_path, 'w') as f:
+            f.write(zope_conf)
+
+    def build_wsgi_ini(self):
+        options = self.options
+        wsgi_ini_path = os.path.join(options['location'], 'etc', 'wsgi.ini')
+        options = {
+            'location': options['location'],
+            'http_address': options.get('http-address', '8080'),
+        }
+        wsgi_ini = wsgi_ini_template % options
+        with open(wsgi_ini_path, 'w') as f:
+            f.write(wsgi_ini)
 
     def install_scripts(self):
         options = self.options
@@ -610,10 +621,7 @@ class Recipe(Scripts):
         extra_paths = options.get('extra-paths', '').split()
         requirements, ws = self.egg.working_set(['plone.recipe.zope2instance'])
         reqs = [self.options.get('control-script', self.name)]
-        if self.wsgi:
-            reqs.extend(['Zope2.Startup.serve', 'main'])
-        else:
-            reqs.extend(['plone.recipe.zope2instance.ctl', 'main'])
+        reqs.extend(['plone.recipe.zope2instance.ctl', 'main'])
         reqs = [tuple(reqs)]
 
         if options.get('relative-paths'):
@@ -637,8 +645,7 @@ class Recipe(Scripts):
                 )
 
         options['zope-conf'] = zope_conf_path
-        arguments = ["-C", zope_conf_path, '-p', program_path] \
-            if not self.wsgi else ['ignored']
+        arguments = ["-C", zope_conf_path, '-p', program_path]
         if zopectl_umask:
             arguments.extend(["--umask", int(zopectl_umask, 8)])
         script_arguments = ('\n        ' + repr(arguments) +
@@ -647,10 +654,9 @@ class Recipe(Scripts):
         generated = self._install_scripts(
             options['bin-directory'], ws, reqs=reqs, extra_paths=extra_paths,
             script_arguments=script_arguments)
-        if not self.wsgi:
-            generated.extend(self._install_scripts(
-                os.path.join(options['location'], 'bin'), ws,
-                interpreter=program_name, extra_paths=extra_paths))
+        generated.extend(self._install_scripts(
+            os.path.join(options['location'], 'bin'), ws,
+            interpreter=program_name, extra_paths=extra_paths))
         return generated
 
     def _install_scripts(self, dest, working_set, reqs=(), interpreter=None,
@@ -673,10 +679,7 @@ class Recipe(Scripts):
                 script_arguments=script_arguments,
                 )
         else:
-            if self.wsgi:
-                initialization = wsgi_initialization % options
-            else:
-                initialization = options['initialization'] % options
+            initialization = options['initialization'] % options
             return zc.buildout.easy_install.scripts(
                 dest=dest,
                 reqs=reqs,
@@ -1122,8 +1125,44 @@ additional_zcml_template = """\
 </configure>
 """
 
-wsgi_initialization = """\
-from Zope2.Startup.run import make_wsgi_app
-wsgiapp = make_wsgi_app({}, '%(zope-conf)s')
-def application(*args, **kwargs):return wsgiapp(*args, **kwargs)
+wsgi_ini_template = """\
+[server:main]
+use = egg:waitress#main
+listen = 0.0.0.0:%(http_address)s
+
+[app:zope]
+use = egg:Zope#main
+zope_conf = %(location)s/etc/zope.conf
+
+[pipeline:main]
+pipeline =
+    egg:Zope#httpexceptions
+    zope
+
+[loggers]
+keys = root, plone
+
+[handlers]
+keys = console
+
+[formatters]
+keys = generic
+
+[logger_root]
+level = INFO
+handlers = console
+
+[logger_plone]
+level = DEBUG
+handlers =
+qualname = plone
+
+[handler_console]
+class = StreamHandler
+args = (sys.stderr,)
+level = NOTSET
+formatter = generic
+
+[formatter_generic]
+format = %%(asctime)s %%(levelname)-5.5s [%%(name)s:%%(lineno)s][%%(threadName)s] %%(message)s
 """

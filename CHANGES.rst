@@ -1,12 +1,15 @@
 Changelog
 =========
 
-5.0.2 (unreleased)
+6.0.0 (unreleased)
 ------------------
 
 Breaking changes:
 
-- *add item here*
+- For WSGI-based instances, generate a zdaemon-based instance script
+  that works similarly to ZServer-based instances, instead of a
+  script that only handles running the WSGI server.
+  [davisagli]
 
 New features:
 
@@ -57,6 +60,7 @@ Bug fixes:
 
 - Python 3 compatibility with sixer
   [ale-rt]
+
 - Fix import. zopectl moved to ZServer
   [pbauer]
 
