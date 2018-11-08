@@ -1,0 +1,467 @@
+<schema prefix="Zope2.Startup.datatypes"
+        datatype=".root_wsgi_config"
+        handler="root_wsgi_handler">
+
+  <!-- type definitions -->
+
+  <import package="ZODB"/>
+  <import package="tempstorage" condition="tempstorage"/>
+
+  <sectiontype name="environment"
+               datatype=".environment"
+               keytype="identifier">
+    <description>
+     A section which allows you to define simple key-value pairs which
+     will be used as environment variable settings during startup.
+    </description>
+    <key name="+" attribute="environ">
+      <description>
+        Use any key/value pair, e.g. 'MY_PRODUCT_ENVVAR foo_bar'
+      </description>
+    </key>
+  </sectiontype>
+
+  <sectiontype name="zodb_db" datatype=".ZopeDatabase"
+               implements="ZODB.database" extends="zodb">
+
+    <description>
+      We need to specialize the database configuration section for Zope
+      only by including a (required) mount-point argument, which
+      is a string.  A Zope ZODB database can have multiple mount points,
+      so this is a multikey.
+    </description>
+    <multikey name="mount-point" required="yes" attribute="mount_points"
+              datatype=".mount_point">
+      <description>
+       The mount point is a slash-separated path to a 
+       'Products.ZODBMountPoint.Mount.MountPoint' instance in Zope. If 
+       such an instance exists, it can mount an object (the mounted 
+       object) into Zope.
+       By default, the object will be mounted at the same path in Zope (i.e.
+       '/foo/bar' in the database will be mounted at '/foo/bar' in Zope).
+
+       The object can be mounted at a different point using the
+       'virtual_path:real_path' syntax (e.g.  'mount-point /foo/bar:/bar' 
+       will mount the object at '/bar' in the database to '/foo/bar' in 
+       Zope). The name of the mount point ('bar') must be the same as 
+       the mounted object.
+
+       It is also possible to specify the root that should be used in the
+       mounted database by using the syntax
+       'virtual_path:~real_root:real_path'. The root defaults to 'Application'
+       and should not normally be changed.
+      </description>
+    </multikey>
+
+    <key name="connection-class" datatype=".importable_name">
+      <description>
+       Change the connection class a database uses on a per-database basis to
+       support different connection policies.  Use a Python dotted-path
+       name to specify the connection class.
+      </description>
+    </key>
+
+   <key name="class-factory" datatype=".importable_name"
+        default="Zope2.Startup.datatypes.simpleClassFactory">
+      <description>
+       Change the class factory function a database uses on a
+       per-database basis to support different class factory policy.
+       Use a Python dotted-path name to specify the class factory function.
+      </description>
+    </key>
+
+    <key name="container-class" datatype="string">
+      <description>
+       Change the container class a (mounted) database uses on a
+       per-database basis to support a different container than a plain
+       Folder. Use a Python dotted-path name to specify the container class.
+      </description>
+    </key>
+
+  </sectiontype>
+
+  <sectiontype name="zoperunner">
+    <description>
+      This section describes the options for zopectl.  These options
+      have no default value specified in the schema; in some cases,
+      zopectl calculates a dynamic default, in others, the feature
+      associated with the option is disabled.
+
+      For those options that also have corresponding command-line
+      options, the command line option (short and long form) are given
+      here too.
+    </description>
+
+    <multikey name="program" required="no">
+      <description>
+       The program(s) that will be run by the runner
+      </description>
+    </multikey>
+
+    <key name="daemon" datatype="boolean"
+         required="no" default="true">
+      <description>
+        Command-line option: -d or --daemon.
+
+        If this option is true, zdrun.py runs in the background as a
+        true daemon.  It forks an child process which becomes the
+        subprocess manager, while the parent exits (making the shell
+        that started it believe it is done).  The child process also
+        does the following:
+
+        - if the directory option is set, change into that directory
+
+        - redirect stdin, stdout and stderr to /dev/null
+
+        - call setsid() so it becomes a session leader
+
+        - call umask(022)
+      </description>
+    </key>
+
+    <key name="backoff-limit" datatype="integer"
+         required="no" default="10">
+      <description>
+        Command-line option: -b or --backoff-limit.
+
+        When the subprocess crashes, zdrun.py inserts a one-second
+        delay before it restarts it.  When the subprocess crashes
+        again right away, the delay is incremented by one second, and
+        so on.  What happens when the delay has reached the value of
+        backoff-limit (in seconds), depends on the value of the
+        forever option.  If forever is false, zdrun.py gives up at
+        this point, and exits.  An always-crashing subprocess will
+        have been restarted exactly backoff-limit times in this case.
+        If forever is true, zdrun.py continues to attempt to restart
+        the process, keeping the delay at backoff-limit seconds.
+
+        If the subprocess stays up for more than backoff-limit
+        seconds, the delay is reset to 1 second.
+      </description>
+    </key>
+
+    <key name="forever" datatype="boolean"
+         required="no" default="false">
+      <description>
+        Command-line option: -f or --forever.
+
+        If this option is true, zdrun.py will keep restarting a
+        crashing subprocess forever.  If it is false, it will give up
+        after backoff-limit crashes in a row.  See the description of
+        backoff-limit for details.
+      </description>
+    </key>
+
+    <key name="user" datatype="string"
+         required="no">
+      <description>
+        Command-line option: -u or --user.
+
+        When zdrun.py is started by root, this option specifies the
+        user as who the the zdrun.py process (and hence the daemon
+        subprocess) will run.  This can be a user name or a numeric
+        user id.  Both the user and the group are set from the
+        corresponding password entry, using setuid() and setgid().
+        This is done before zdrun.py does anything else besides
+        parsing its command line arguments.
+
+        NOTE: when zdrun.py is not started by root, specifying this
+        option is an error.  (XXX This may be a mistake.)
+
+        XXX The zdrun.py event log file may be opened *before*
+        setuid() is called.  Is this good or bad?
+      </description>
+    </key>
+
+    <key name="hang-around" datatype="boolean"
+         required="no" default="false">
+      <description>
+        If this option is true, the zdrun.py process will remain even
+        when the daemon subprocess is stopped.  In this case, zopectl
+        will restart zdrun.py as necessary.  If this option is false,
+        zdrun.py will exit when the daemon subprocess is stopped
+        (unless zdrun.py intends to restart it).
+      </description>
+    </key>
+
+    <key name="umask" datatype="zdaemon.zdoptions.octal_type"
+         required="no"
+         default="022">
+      <description>
+        Command-line option: -m or --umask.
+
+        When daemon mode is used, this option specifies the octal umask
+        of the subprocess.
+      </description>
+    </key>
+
+    <key name="default-to-interactive" datatype="boolean"
+         required="no" default="true">
+      <description>
+        If this option is true, zopectl enters interactive mode
+        when it is invoked without a positional command argument.  If
+        it is false, you must use the -i or --interactive command line
+        option to zopectl to enter interactive mode.
+      </description>
+    </key>
+
+    <key name="prompt" datatype="string"
+         required="no" default="zopectl>">
+       <description>
+         The prompt shown by zopectl program.
+       </description>
+    </key>
+
+    <key name="socket-name" datatype="existing-dirpath" required="no">
+      <description>
+        Command-line option: -s or --socket-name.
+
+        The pathname of the Unix domain socket used for communication
+        between zopectl.py and zdrun.py.  The default is relative to the
+        current directory in which zdctl.py and zdrun.py are started.
+        You want to specify an absolute pathname here.
+      </description>
+    </key>
+
+  </sectiontype>
+
+  <!-- end of type definitions -->
+
+  <!-- schema begins  -->
+
+  <section type="environment" attribute="environment" name="*">
+    <description>
+     A section which allows a user to define arbitrary key-value pairs for
+     use as environment variables during Zope's run cycle.  It
+     is not recommended to set system-related environment variables such as
+     PYTHONPATH within this section.
+    </description>
+  </section>
+
+  <key name="instancehome" datatype="existing-directory"
+       required="yes">
+    <description>
+      The top-level directory which contains the "instance" data for the
+      application server. It may also contain "etc", "bin", "log",
+      and "var" directories depending on how you've configured your Zope
+      instance.
+    </description>
+  </key>
+
+  <key name="clienthome" datatype="existing-directory">
+    <description>
+      The directory used to store the default filestorage file used to
+      back the ZODB database, as well as other files used by the
+      Zope applications server during runtime.
+    </description>
+    <metadefault>$instancehome/var</metadefault>
+  </key>
+
+  <key name="debug-mode" datatype="boolean" default="off">
+    <description>
+    A switch which controls several aspects of Zope operation useful for
+    developing under Zope.  When debug mode is on:
+
+     - Errors in product initialization will cause startup to fail
+       (instead of writing error messages to the event log file).
+
+     - Filesystem-based scripts such as skins, PageTemplateFiles, and
+       DTMLFiles can be edited while the server is running and the server
+       will detect these changes in real time.  When this switch is
+       off, you must restart the server to see the changes.
+
+     Setting this to 'off' when Zope is in a production environment is
+     encouraged, as it speeds execution (sometimes dramatically).
+    </description>
+    <metadefault>off</metadefault>
+  </key>
+
+  <key name="locale" datatype="locale" handler="locale">
+    <description>
+     Locale name to be used. See your operating system documentation for locale
+     information specific to your system. If the requested locale is not
+     supported by your system, an error will be raised and Zope will not start.
+    </description>
+    <metadefault>unset</metadefault>
+  </key>
+
+  <key name="datetime-format" datatype=".datetime_format"
+       handler="datetime_format" default="us">
+    <description>
+     Set this variable either to "us" or "international" to force the
+     DateTime module to parse date strings either with
+     month-before-days-before-year ("us") or
+     days-before-month-before-year ("international").  The default
+     behaviour of DateTime (when this setting is left unset) is to
+     parse dates as US dates.
+    </description>
+    <metadefault>us</metadefault>
+  </key>
+
+  <key name="python-check-interval" datatype="integer" default="1000">
+    <description>
+      Value passed to Python's sys.setcheckinterval() function.  The
+      higher this is, the less frequently the Python interpreter
+      checks for keyboard interrupts.  Setting this to higher values
+      also reduces the frequency of potential thread switches, which
+      can improve the performance of a busy server.
+    </description>
+  </key>
+
+  <key name="http-realm" default="Zope">
+    <description>
+     The HTTP "Realm" header value sent by this Zope instance. This value
+     often shows up in basic authentication dialogs.
+    </description>
+    <metadefault>Zope</metadefault>
+  </key>
+
+  <key name="automatically-quote-dtml-request-data" datatype="boolean"
+       default="on" handler="automatically_quote_dtml_request_data">
+     <description>
+     Set this directive to 'off' in order to disable the autoquoting of
+     implicitly retrieved REQUEST data by DTML code which contains a '&lt;'
+     when used in &lt;dtml-var&gt; construction. When this directive is 'on',
+     all data implicitly retrieved from the REQUEST in DTML (as opposed to
+     addressing REQUEST.somevarname directly) that contains a '&lt;' will be
+     HTML-quoted when interpolated via a &lt;dtml-var&gt; or &amp;dtml-
+     construct. This mitigates the possibility that DTML programmers will
+     leave their sites open to a "client-side trojan" attack.
+     </description>
+     <metadefault>on</metadefault>
+  </key>
+
+  <multikey name="trusted-proxy" datatype="ipaddr-or-hostname"
+       attribute="trusted_proxies">
+     <description>
+     Define one or more 'trusted-proxies' keys, each of which is a
+     hostname or an IP address.  The set of definitions comprises a list
+     of front-end proxies that are trusted to supply an accurate
+     X_FORWARDED_FOR header to Zope (security-related).
+     </description>
+     <metadefault>unset</metadefault>
+  </multikey>
+
+  <key name="max-conflict-retries" datatype="integer" default="3"
+       attribute="max_conflict_retries">
+    <description>
+      The maximum number of retries on a conflict error
+    </description>
+  </key>
+
+  <key name="security-policy-implementation"
+       datatype=".security_policy_implementation"
+       default="C">
+     <description>
+     The default Zope "security policy" implementation is written in C.
+     Set this key to "PYTHON" to use the Python implementation
+     (useful for debugging purposes); set it to "C" to use the C
+     implementation.
+     </description>
+     <metadefault>C</metadefault>
+  </key>
+
+  <key name="skip-authentication-checking" datatype="boolean"
+       default="off">
+     <description>
+     Set this directive to 'on' to cause Zope to prevent Zope from
+     attempting to authenticate users during normal operation.
+     Potentially dangerous from a security perspective.  Only works if
+     security-policy-implementation is set to 'C'.
+     </description>
+     <metadefault>off</metadefault>
+  </key>
+
+  <key name="skip-ownership-checking" datatype="boolean"
+       default="off">
+     <description>
+     Set this directive to 'on' to cause Zope to ignore ownership checking
+     when attempting to execute "through the web" code. By default, this
+     directive is off in order to prevent 'trojan horse' security problems
+     whereby a user with less privilege can cause a user with more
+     privilege to execute code which the less privileged user has written.
+     </description>
+     <metadefault>off</metadefault>
+  </key>
+
+  <key name="verbose-security" datatype="boolean"
+       default="off">
+     <description>
+     Set this directive to 'on' to enable verbose security exceptions.
+     This can help you track down the reason for Unauthorized exceptions,
+     but it is not suitable for public sites because it may reveal
+     unnecessary information about the structure of your site.  Only
+     works if security-policy-implementation is set to 'PYTHON'.
+     </description>
+     <metadefault>off</metadefault>
+  </key>
+
+  <multisection type="ZODB.Database" name="+" attribute="databases">
+    <description>
+       Zope ZODB databases must have a name, and they are required to be
+       referenced via the "zodb_db" database type because it is
+       the only kind of database definition that implements
+       the required mount-point argument.  There is another
+       database sectiontype named "zodb", but it cannot be used
+       in the context of a proper Zope configuration (due to
+       lack of a mount-point).
+    </description>
+  </multisection>
+
+  <key name="default-zpublisher-encoding"
+       datatype=".default_zpublisher_encoding"
+       default="utf-8">
+     <description>
+       This key controls what character set is used to encode unicode
+       data that reaches ZPublisher without any other specified encoding.
+     </description>
+  </key>
+
+  <abstracttype name="zope.product.base">
+    <description>
+      Base type for product-specific configuration sections.
+
+      Specific products should implement configuration sections by
+      defining section types that implement this abstract type and
+      using their own schema component to define meaningful settings.
+
+    </description>
+  </abstracttype>
+
+  <sectiontype name="product-config" implements="zope.product.base">
+    <description>
+    Product-specific configuration, expressed as arbitrary name-value pairs.
+    </description>
+
+    <key name="+"
+         attribute="mapping"
+         required="no"
+         />
+  </sectiontype>
+
+  <multisection type="zope.product.base" name="+"
+                attribute="product_config">
+   <description>
+    Product-specific configuration stanzas.
+
+    Products may use the &lt;product-config&gt; section type, or may supply
+    a component.xml which defines section types with their own schemas.
+
+    All sections for this multisection will be collected into the
+    'product_config' attribute of the configuration object.
+   </description>
+  </multisection>
+
+  <section type="zoperunner" name="*" attribute="runner"/>
+
+  <key name="python" datatype="existing-path"
+       required="no">
+    <description>
+      Path to the Python interpreter for use by zdaemon.
+      Defaults to sys.executable.
+      Needed for buildout-based instances to supply a python
+      that has all the correct eggs on the path.
+    </description>
+  </key>
+
+</schema>

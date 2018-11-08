@@ -1,7 +1,7 @@
 Changelog
 =========
 
-5.0.2 (unreleased)
+6.0.1 (unreleased)
 ------------------
 
 Breaking changes:
@@ -16,6 +16,17 @@ Bug fixes:
 
 - Restore ability to use `initialization` code when using WSGI.
   [icemac]
+
+
+6.0.0 (2018-11-08)
+------------------
+
+Breaking changes:
+
+- For WSGI-based instances, generate a zdaemon-based instance script
+  that works similarly to ZServer-based instances, instead of a
+  script that only handles running the WSGI server.
+  [davisagli]
 
 
 5.0.1 (2018-11-04)
@@ -58,6 +69,7 @@ Bug fixes:
 
 - Python 3 compatibility with sixer
   [ale-rt]
+
 - Fix import. zopectl moved to ZServer
   [pbauer]
 
