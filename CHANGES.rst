@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Remove `path` option from zope.conf generated when using WSGI as it is no longer understood.
+  [icemac]
 
 
 6.0.0 (2018-11-08)

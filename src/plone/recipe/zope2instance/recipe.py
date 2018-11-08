@@ -1058,7 +1058,6 @@ wsgi_conf_template = """\
 instancehome $INSTANCEHOME
 %%define CLIENTHOME %(client_home)s
 clienthome $CLIENTHOME
-%(paths_lines)s
 %(products_lines)s
 debug-mode %(debug_mode)s
 security-policy-implementation %(security_implementation)s
