@@ -14,6 +14,7 @@
 ##############################################################################
 
 from plone.recipe.zope2instance import make
+from warnings import warn
 from zc.recipe.egg.egg import Egg
 from zc.recipe.egg.egg import Scripts
 
@@ -403,7 +404,12 @@ class Recipe(Scripts):
             file_storage_snippet = self.render_file_storage(
                 file_storage, blob_storage, base_dir, var_dir, zlib)
 
-        zserver_threads = options.get('zserver-threads', '2')
+        if 'zserver-threads' in options:
+            warn(
+                'option "zserver-threads" is deprecated, please use "threads"',
+                DeprecationWarning)
+        zserver_threads = options.get(
+            'threads', options.get('zserver-threads', '2'))
         if zserver_threads:
             zserver_threads = 'zserver-threads %s' % zserver_threads
 
@@ -598,9 +604,13 @@ class Recipe(Scripts):
     def build_wsgi_ini(self):
         options = self.options
         wsgi_ini_path = os.path.join(options['location'], 'etc', 'wsgi.ini')
+        listen = options.get('http-address', '0.0.0.0:8080')
+        if ':' not in listen:
+            listen = '0.0.0.0:{}'.format(listen)
         options = {
             'location': options['location'],
-            'http_address': options.get('http-address', '8080'),
+            'http_address': listen,
+            'threads': options.get('threads', 4),
         }
         wsgi_ini = wsgi_ini_template % options
         with open(wsgi_ini_path, 'w') as f:
@@ -1128,7 +1138,8 @@ additional_zcml_template = """\
 wsgi_ini_template = """\
 [server:main]
 use = egg:waitress#main
-listen = 0.0.0.0:%(http_address)s
+listen = %(http_address)s
+threads = %(threads)s
 
 [app:zope]
 use = egg:Zope#main

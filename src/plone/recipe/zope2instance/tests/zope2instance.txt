@@ -1801,6 +1801,78 @@ And check it::
     </http-server>
     ...
 
+Configuring ZServer workers is also possible using the 'threads' option:
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... threads = 3
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print(system(join('bin', 'buildout'))),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '...instance'.
+    Generated interpreter '.../parts/instance/bin/interpreter'...
+
+And check it::
+
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print(zope_conf)
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    zserver-threads 3
+    ...
+    <http-server>
+    ...
+
+The 'zserver-threads' option is deprecated but still working:
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... zserver-threads = 3
+    ... ''' % options)
+
+Run it::
+
+    >>> import warnings
+    >>> warnings.simplefilter('error')
+    >>> print(system(join('bin', 'buildout')))
+    Uninstalling instance.
+    Installing instance.
+    Generated script '...instance'.
+    Generated interpreter '.../parts/instance/bin/interpreter'...
+
+And check it::
+
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print(zope_conf)
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    zserver-threads 3
+    ...
+    <http-server>
+    ...
+
 Edge Cases
 ==========
 
