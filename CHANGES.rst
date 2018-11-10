@@ -14,8 +14,15 @@ New features:
 
 Bug fixes:
 
+- Fixed serving Plone with WSGI when ZServer is also installed on Python 2.
+  [davisagli]
+
 - Remove `path` option from zope.conf generated when using WSGI as it is no longer understood.
   [icemac]
+
+- Remove `deprecation-warnings` option from zope.conf generated
+  when using WSGI as it is no longer understood.
+  [davisagli]
 
 
 6.0.0 (2018-11-08)
