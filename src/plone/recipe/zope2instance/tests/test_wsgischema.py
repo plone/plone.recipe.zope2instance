@@ -12,7 +12,7 @@
 #
 ##############################################################################
 
-from plone.recipe.zope2instance.ctl import ZopeCtlOptions
+from plone.recipe.zope2instance.ctl import WSGICtlOptions
 import os
 import tempfile
 import unittest
@@ -32,7 +32,7 @@ TEMPVAR = os.path.join(TEMPNAME, "var")
 def getSchema():
     global _SCHEMA
     if not _SCHEMA:
-        opts = ZopeCtlOptions()
+        opts = WSGICtlOptions()
         opts.load_schema()
         _SCHEMA = opts.schema
     return _SCHEMA

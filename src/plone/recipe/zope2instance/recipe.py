@@ -648,6 +648,8 @@ class Recipe(Scripts):
         arguments = ["-C", zope_conf_path, '-p', program_path]
         if zopectl_umask:
             arguments.extend(["--umask", int(zopectl_umask, 8)])
+        if self.wsgi:
+            arguments.append("--wsgi")
         script_arguments = ('\n        ' + repr(arguments) +
                             '\n        + sys.argv[1:]')
 
@@ -1066,7 +1068,6 @@ verbose-security %(verbose_security)s
 %(port_base)s
 %(effective_user)s
 %(environment_vars)s
-%(deprecation_warnings)s
 
 %(mailinglogger_import)s
 

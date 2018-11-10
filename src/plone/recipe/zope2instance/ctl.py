@@ -61,21 +61,8 @@ if WINDOWS:
         'ERROR: You are not member of the "Administrators" group, '
         'or you have not run the shell as Administrator.')
 
-try:
-    import ZServer  # noqa
-    HAS_ZSERVER = True
-except ImportError:
-    HAS_ZSERVER = False
 
-if HAS_ZSERVER:
-    from ZServer.Zope2.Startup.options import ZopeOptions
-else:
-    class ZopeOptions(ZDOptions):
-        schemadir = os.path.dirname(os.path.abspath(__file__))
-        schemafile = 'wsgischema.xml'
-
-
-class ZopeCtlOptions(ZopeOptions, ZDCtlOptions):
+class ZopeCtlOptions(ZDCtlOptions):
     # Zope controller options.
     #
     # After initialization, this should look very much like a
@@ -101,14 +88,17 @@ class ZopeCtlOptions(ZopeOptions, ZDCtlOptions):
     logsectionname = None
 
     def __init__(self):
-        ZopeOptions.__init__(self)
+        # Can't use super because our base class is a old-style class
+        # in Python 2
+        self.ZopeOptions = self.__class__.__bases__[-1]
+        self.ZopeOptions.__init__(self)
         ZDCtlOptions.__init__(self)
         self.add("interactive", None, "i", "interactive", flag=1)
         self.add("default_to_interactive", "runner.default_to_interactive",
                  default=1)
 
     def realize(self, *args, **kw):
-        ZopeOptions.realize(self, *args, **kw)
+        self.ZopeOptions.realize(self, *args, **kw)
         # Additional checking of user option; set uid and gid
         if self.user is not None:
             import pwd
@@ -172,6 +162,24 @@ class ZopeCtlOptions(ZopeOptions, ZDCtlOptions):
             self.schema = parser._schema
         finally:
             resource.close()
+
+
+try:
+    import ZServer  # noqa
+    HAS_ZSERVER = True
+except ImportError:
+    HAS_ZSERVER = False
+else:
+    from ZServer.Zope2.Startup.options import ZopeOptions
+
+    class ZServerCtlOptions(ZopeCtlOptions, ZopeOptions):
+        schemadir = ZopeOptions.schemadir
+        schemafile = ZopeOptions.schemafile
+
+
+class WSGICtlOptions(ZopeCtlOptions, ZDOptions):
+    schemadir = os.path.dirname(os.path.abspath(__file__))
+    schemafile = 'wsgischema.xml'
 
 
 class ZopeCmd(ZDCmd):
@@ -630,16 +638,16 @@ class ZopeCmd(ZDCmd):
         # will act as escapes.  Use r'' instead.
         # Also, don't forget that 'python'
         # may have spaces and needs to be quoted.
-        if HAS_ZSERVER:
+        if self.options.wsgi:
             cmd = (
-                "from Zope2 import configure; "
-                "configure(r'%s'); "
+                "from Zope2.Startup.run import configure_wsgi; "
+                "configure_wsgi(r'%s'); "
                 "import Zope2; app=Zope2.app(); "
             )
         else:
             cmd = (
-                "from Zope2.Startup.run import configure_wsgi; "
-                "configure_wsgi(r'%s'); "
+                "from Zope2 import configure; "
+                "configure(r'%s'); "
                 "import Zope2; app=Zope2.app(); "
             )
         cmdline = (
@@ -794,7 +802,7 @@ console -- Run the program in the console.
         local_additions = []
 
         if debug:
-            if HAS_ZSERVER and not program.count('-X'):
+            if not self.options.wsgi and not program.count('-X'):
                 local_additions += ['-X']
             if not program.count('debug-mode=on'):
                 local_additions += ['debug-mode=on']
@@ -855,10 +863,14 @@ def main(args=None):
     """Customized entry point for launching Zope without forking other processes
     """
 
-    options = ZopeCtlOptions()
+    if '--wsgi' in args:
+        options = WSGICtlOptions()
+    else:
+        options = ZServerCtlOptions()
     options.add(name="no_request", short="R", long="no-request", flag=1)
     options.add(name="no_login", short="L", long="no-login", flag=1)
     options.add(name="object_path", short="O:", long="object-path=")
+    options.add(name="wsgi", short='w', long='wsgi', flag=1)
     # Realize arguments and set documentation which is used in the -h option
     options.realize(args, doc=__doc__)
 
@@ -866,19 +878,19 @@ def main(args=None):
     options.interpreter = os.path.join(options.directory, 'bin', 'interpreter')
     if sys.platform == 'win32':
         options.interpreter += '-script.py'
-    if HAS_ZSERVER:
-        from ZServer.Zope2.Startup import run
-        script = os.path.join(os.path.dirname(run.__file__), 'run.py')
-        options.program = [
-            options.python, options.interpreter, script, '-C',
-            options.configfile
-        ]
-    else:
+    if options.wsgi:
         from Zope2.Startup import serve
         script = os.path.join(os.path.dirname(serve.__file__), 'serve.py')
         wsgi_ini = os.path.join(options.directory, 'etc', 'wsgi.ini')
         options.program = [
             options.python, options.interpreter, script, wsgi_ini
+        ]
+    else:
+        from ZServer.Zope2.Startup import run
+        script = os.path.join(os.path.dirname(run.__file__), 'run.py')
+        options.program = [
+            options.python, options.interpreter, script, '-C',
+            options.configfile
         ]
 
     c = ZopeCmd(options)
