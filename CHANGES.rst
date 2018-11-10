@@ -10,7 +10,9 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Add new option 'threads' used to specify the number of workers for both
+  waitress + ZServer, and a deprecation warning for 'zserver-threads'.
+  [tschorr]
 
 Bug fixes:
 
