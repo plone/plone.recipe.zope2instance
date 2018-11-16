@@ -1,7 +1,9 @@
-=====================
-Test wsgi.py creation
-=====================
+===========================
+Test wsgi instance creation
+===========================
 
+Test default configuration
+==========================
 
     >>> from __future__ import print_function
     >>> from zc.buildout.testing import *
@@ -15,10 +17,10 @@ plone.recipe.zope2instance::
     >>> write('buildout.cfg',
     ... '''
     ... [buildout]
-    ... parts = wsgi.py
+    ... parts = instance
     ... find-links = %(sample_buildout)s/eggs
     ...
-    ... [wsgi.py]
+    ... [instance]
     ... recipe = plone.recipe.zope2instance
     ... eggs =
     ... user = me:me
@@ -28,19 +30,18 @@ plone.recipe.zope2instance::
 Let's run it::
 
     >>> print(system(join('bin', 'buildout'))),
-    Installing wsgi.py.
-    Generated script '...wsgi.py'.
-    ...
+    Installing instance.
+    Generated script '...instance'...
 
-We should have a wsgi.py part, with a basic zope.conf::
+We should have an instance part, with a basic zope.conf::
 
-    >>> instance = os.path.join(sample_buildout, 'parts', 'wsgi.py')
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
     >>> print(zope_conf)
-    %define INSTANCEHOME .../sample-buildout/parts/wsgi.py
+    %define INSTANCEHOME .../sample-buildout/parts/instance
     instancehome $INSTANCEHOME
-    %define CLIENTHOME .../sample-buildout/var/wsgi.py
+    %define CLIENTHOME .../sample-buildout/var/instance
     clienthome $CLIENTHOME
     debug-mode off
     security-policy-implementation C
@@ -59,4 +60,100 @@ We should have a wsgi.py part, with a basic zope.conf::
         </blobstorage>
         mount-point /
     </zodb_db>
+    <zodb_db temporary>
+        # Temporary storage database (for sessions)
+        <temporarystorage>
+          name temporary storage for sessioning
+        </temporarystorage>
+        mount-point /temp_folder
+        container-class Products.TemporaryFolder.TemporaryContainer
+    </zodb_db>
     python-check-interval 1000
+
+The buildout has also created an INI file containing the waitress configuration:
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> wsgi_ini = open(os.path.join(instance, 'etc', 'wsgi.ini')).read()
+    >>> print(wsgi_ini)
+    [server:main]
+    use = egg:waitress#main
+    listen = 0.0.0.0:8080
+    threads = 4
+    <BLANKLINE>
+    [app:zope]
+    use = egg:Zope#main
+    zope_conf = .../sample-buildout/parts/instance/etc/zope.conf
+    <BLANKLINE>
+    [pipeline:main]
+    pipeline =
+        egg:Zope#httpexceptions
+        zope
+    <BLANKLINE>
+    [loggers]
+    keys = root, plone
+    <BLANKLINE>
+    [handlers]
+    keys = console
+    <BLANKLINE>
+    [formatters]
+    keys = generic
+    <BLANKLINE>
+    [logger_root]
+    level = INFO
+    handlers = console
+    <BLANKLINE>
+    [logger_plone]
+    level = DEBUG
+    handlers =
+    qualname = plone
+    <BLANKLINE>
+    [handler_console]
+    class = StreamHandler
+    args = (sys.stderr,)
+    level = NOTSET
+    formatter = generic
+    <BLANKLINE>
+    [formatter_generic]
+    format = %(asctime)s %(levelname)-5.5s [%(name)s:%(lineno)s][%(threadName)s] %(message)s
+    <BLANKLINE>
+
+Custom WSGI options
+=================
+
+Let's create another buildout configuring a custom port and a custom number of workers::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... http-address = localhost:6543
+    ... threads = 3
+    ... wsgi = on
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print(system(join('bin', 'buildout'))),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '.../sample-buildout/bin/instance'.
+    ...
+
+The buildout has updated our INI file:
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> wsgi_ini = open(os.path.join(instance, 'etc', 'wsgi.ini')).read()
+    >>> print(wsgi_ini)
+    [server:main]
+    use = egg:waitress#main
+    listen = localhost:6543
+    threads = 3
+    <BLANKLINE>
+    [app:zope]
+    ...

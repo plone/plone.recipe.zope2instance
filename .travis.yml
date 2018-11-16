@@ -4,12 +4,8 @@ python:
   - 3.5
   - 3.6
 install:
-  - pip install setuptools==33.1.1 zc.buildout==2.5.3
-  - buildout bootstrap
-  - bin/buildout -t 3
+  - pip install tox-travis
 script:
-  - bin/test -vv --auto-color
+  - tox
 cache:
   pip: true
-  directories:
-    - eggs/

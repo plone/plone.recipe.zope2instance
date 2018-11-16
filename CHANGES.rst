@@ -1,7 +1,7 @@
 Changelog
 =========
 
-5.0.1 (unreleased)
+6.0.1 (unreleased)
 ------------------
 
 Breaking changes:
@@ -10,7 +10,36 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Add new option 'threads' used to specify the number of workers for both
+  waitress + ZServer, and a deprecation warning for 'zserver-threads'.
+  [tschorr]
+
+Bug fixes:
+
+- Fixed serving Plone with WSGI when ZServer is also installed on Python 2.
+  [davisagli]
+
+- Remove `path` option from zope.conf generated when using WSGI as it is no longer understood.
+  [icemac]
+
+- Remove `deprecation-warnings` option from zope.conf generated
+  when using WSGI as it is no longer understood.
+  [davisagli]
+
+
+6.0.0 (2018-11-08)
+------------------
+
+Breaking changes:
+
+- For WSGI-based instances, generate a zdaemon-based instance script
+  that works similarly to ZServer-based instances, instead of a
+  script that only handles running the WSGI server.
+  [davisagli]
+
+
+5.0.1 (2018-11-04)
+------------------
 
 Bug fixes:
 
@@ -20,12 +49,16 @@ Bug fixes:
 - Move Recipe from __init__.py to a new module to get rid of the dependency on
   zc.recipe.egg in control scripts
   [tschorr]
-- Make use of changes to Zope WSGI logging (https://github.com/zopefoundation/Zope/pull/280,
-  https://github.com/zopefoundation/Zope/pull/276), use Zope2 WSGI startup code.
+- Make use of changes to Zope WSGI logging
+  (`#280` <https://github.com/zopefoundation/Zope/pull/280>`_,
+  `#276`<https://github.com/zopefoundation/Zope/pull/276>`_),
+  use Zope2 WSGI startup code.
   [tschorr]
 - Make comments in zcml values work, even if not starting at the beginning of the line;
   before, we had a confusing error message. Fixes #46
   [tobiasherp]
+- Fix the tests on Python 3 when running via tox or TravisCI.
+  [icemac]
 
 
 5.0.0 (2018-01-27)
@@ -48,6 +81,7 @@ Bug fixes:
 
 - Python 3 compatibility with sixer
   [ale-rt]
+
 - Fix import. zopectl moved to ZServer
   [pbauer]
 
