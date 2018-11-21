@@ -51,7 +51,7 @@ Bug fixes:
   [tschorr]
 - Make use of changes to Zope WSGI logging
   (`#280` <https://github.com/zopefoundation/Zope/pull/280>`_,
-  `#276`<https://github.com/zopefoundation/Zope/pull/276>`_),
+  `#276` <https://github.com/zopefoundation/Zope/pull/276>`_),
   use Zope2 WSGI startup code.
   [tschorr]
 - Fix the tests on Python 3 when running via tox or TravisCI.
