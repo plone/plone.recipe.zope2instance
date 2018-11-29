@@ -1,5 +1,4 @@
 include *.rst
-
-recursive-include src *
-
-global-exclude *pyc
+recursive-include src *.txt
+recursive-include src *.xml
+recursive-include src *.zcml
