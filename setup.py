@@ -15,8 +15,8 @@ setup(
     long_description=((open('README.rst').read() + '\n' +
                        open('CHANGES.rst').read())),
     license="ZPL 2.1",
-    keywords="zope2 buildout",
-    url='https://pypi.org/project/plone.recipe.zope2instance',
+    keywords="zope buildout",
+    url='https://github.com/plone/plone.recipe.zope2instance',
     classifiers=[
         "License :: OSI Approved :: Zope Public License",
         "Framework :: Buildout",
