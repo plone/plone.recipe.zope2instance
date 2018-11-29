@@ -14,6 +14,9 @@ New features:
   waitress + ZServer, and a deprecation warning for 'zserver-threads'.
   [tschorr]
 
+- Add support for Python 3.7 while dropping official support for Python 3.5.
+  (`#60 <https://github.com/plone/plone.recipe.zope2instance/issues/60>`_)
+
 Bug fixes:
 
 - Make comments in zcml values work, even if not starting at the beginning of the line;
