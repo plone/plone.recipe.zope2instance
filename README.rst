@@ -7,7 +7,8 @@ Introduction
 .. image:: http://img.shields.io/travis/plone/plone.recipe.zope2instance.svg
    :target: https://travis-ci.org/plone/plone.recipe.zope2instance
 
-This recipe creates and configures a Zope 2 instance in parts. It also
+This recipe creates and configures a Zope instance in parts.
+(Despite its name it nowadays only works for Zope 4+.) It also
 installs a control script, which is like zopectl, in the bin/ directory.
 The name of the control script is the the name of the part in buildout.
 By default various runtime and log information will be stored inside the var/
@@ -513,10 +514,10 @@ http-header-max-length
 Additional Control Script `debug`, `console` and `run` Commands
 ---------------------------------------------------------------
 
-The extended Zope 2 control script installed by this recipe, usually
+The extended Zope control script installed by this recipe, usually
 `bin/instance` by convention, offers a `debug` command and another
 `run` command.  The `debug` command starts an interactive Python
-prompt with the Zope 2 application available via the `app` name.
+prompt with the Zope application available via the `app` name.
 Similarly, the `run` command accepts a Python script as an argument
 that will be run under the same conditions.
 
@@ -535,7 +536,7 @@ Note that these options must come before the script name,
 e.g. `bin/instance -RLOPlone/front-page debug`
 
 The `console` command is similar to the fg command, but it does not
-create a subprocess to start up Zope 2. This is useful for two
+create a subprocess to start up Zope. This is useful for two
 use cases. First, the supervisor program, to supervise long running
 processes like a Zope, require the process not to fork away, so that
 supervisor can control it.
