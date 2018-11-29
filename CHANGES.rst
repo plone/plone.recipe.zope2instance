@@ -16,6 +16,10 @@ New features:
 
 Bug fixes:
 
+- Make comments in zcml values work, even if not starting at the beginning of the line;
+  before, we had a confusing error message. Fixes #46
+  [tobiasherp]
+
 - Fixed serving Plone with WSGI when ZServer is also installed on Python 2.
   [davisagli]
 

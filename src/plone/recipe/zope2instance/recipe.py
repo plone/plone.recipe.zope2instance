@@ -41,6 +41,36 @@ def indent(snippet, amount):
     return "\n".join(ws + s if s else "" for s in snippet.split('\n'))
 
 
+def nocomments_split(s):
+    r"""
+    Split a multiline string, skipping comments.
+
+    >>> f = nocomments_split
+    >>> f('''one.two three
+    ... # ignored comment line
+    ... four # ignored trailing comment
+    ...    # another comment line
+    ... five
+    ... ''')
+    ['one.two', 'three', 'four', 'five']
+    >>> f('  \t')
+    []
+    >>> f('  # ignored')
+    []
+
+    Mixed eol styles don't matter:
+    >>> f('one\r\n  # ignored \rtwo \n  # another comment\n three')
+    ['one', 'two', 'three']
+    """
+    res = []
+    for line in s.splitlines():
+        if '#' in line:
+            line, comment = line.split('#', 1)
+        for word in line.split():
+            res.append(word)
+    return res
+
+
 class Recipe(Scripts):
 
     def __init__(self, buildout, name, options):
@@ -719,7 +749,7 @@ class Recipe(Scripts):
             return
 
         if zcml:
-            zcml = zcml.split()
+            zcml = nocomments_split(zcml)
 
         if additional_zcml or resources or locales or zcml:
             includes_path = os.path.join(location, 'etc', 'package-includes')
