@@ -11,12 +11,12 @@ setup(
     version=version,
     author="Hanno Schlichting",
     author_email="hanno@hannosch.eu",
-    description="Buildout recipe for creating a Zope 2 instance",
+    description="Buildout recipe for creating a Zope instance",
     long_description=((open('README.rst').read() + '\n' +
                        open('CHANGES.rst').read())),
     license="ZPL 2.1",
-    keywords="zope2 buildout",
-    url='https://pypi.org/project/plone.recipe.zope2instance',
+    keywords="zope buildout",
+    url='https://github.com/plone/plone.recipe.zope2instance',
     classifiers=[
         "License :: OSI Approved :: Zope Public License",
         "Framework :: Buildout",
@@ -27,7 +27,6 @@ setup(
         "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: Implementation :: CPython",
