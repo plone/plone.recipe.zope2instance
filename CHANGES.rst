@@ -10,10 +10,6 @@ Changelog
 6.1.0 (2018-12-28)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
 New features:
 
 - Add new option 'threads' used to specify the number of workers for both
