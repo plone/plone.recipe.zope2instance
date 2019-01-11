@@ -103,7 +103,7 @@ The buildout has also created an INI file containing the waitress configuration:
     handlers = console
     <BLANKLINE>
     [logger_plone]
-    level = DEBUG
+    level = INFO
     handlers =
     qualname = plone
     <BLANKLINE>
