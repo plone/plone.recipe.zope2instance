@@ -1194,7 +1194,7 @@ level = INFO
 handlers = console
 
 [logger_plone]
-level = DEBUG
+level = INFO
 handlers =
 qualname = plone
 
