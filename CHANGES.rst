@@ -8,6 +8,10 @@ Changelog
   debugger.
   [icemac]
 
+- log level for Plone WSGI logger changed to INFO making the logging less
+  verbose
+  [ajung]
+
 
 6.1.0 (2018-12-28)
 ------------------
