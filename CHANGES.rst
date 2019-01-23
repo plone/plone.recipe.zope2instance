@@ -4,7 +4,9 @@ Changelog
 6.1.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Improve debugging of run scripts by providing the source code for the
+  debugger.
+  [icemac]
 
 
 6.1.0 (2018-12-28)

@@ -751,7 +751,8 @@ class ZopeCmd(ZDCmd):
             "f = open(%r)" % script,
             "src = f.read()",
             "f.close()",
-            "exec(src)",
+            "code = compile(src, filename=%r, mode='exec')" % script,
+            "exec(code)",
         ])
         cmdline = self.get_startup_cmd(self.options.python, "; ".join(cmd))
 
