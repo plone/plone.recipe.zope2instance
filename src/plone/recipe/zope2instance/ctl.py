@@ -739,14 +739,21 @@ class ZopeCmd(ZDCmd):
 
         # Remove -c and add script as sys.argv[0]
         script = tup[0]
-        cmd = 'import sys; sys.argv.pop(); sys.argv.append(%r); ' % script
+        cmd = [
+            "import sys",
+            "sys.argv.pop()",
+            "sys.argv.append(%r)" % script,
+        ]
         if len(tup) > 1:
             argv = tup[1:]
-            cmd += '[sys.argv.append(x) for x in %s]; ' % argv
-        cmd += (
-            "f = open(%r); src = f.read(); f.close(); exec(src)"
-        ) % script
-        cmdline = self.get_startup_cmd(self.options.python, cmd)
+            cmd.append('[sys.argv.append(x) for x in %s]' % argv)
+        cmd.extend([
+            "f = open(%r)" % script,
+            "src = f.read()",
+            "f.close()",
+            "exec(src)",
+        ])
+        cmdline = self.get_startup_cmd(self.options.python, "; ".join(cmd))
 
         self._exitstatus = os.system(cmdline)
 
