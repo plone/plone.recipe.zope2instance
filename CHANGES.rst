@@ -4,6 +4,10 @@ Changelog
 6.1.1 (unreleased)
 ------------------
 
+- Improve debugging of run scripts by providing the source code for the
+  debugger.
+  [icemac]
+
 - log level for Plone WSGI logger changed to INFO making the logging less
   verbose
   [ajung]
