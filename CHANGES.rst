@@ -4,6 +4,10 @@ Changelog
 6.1.1 (unreleased)
 ------------------
 
+- Use correct debug switch for WSGI.
+  (`Products.CMFPlone #2719 <https://github.com/plone/Products.CMFPlone/issues/2719>`_)
+  [tschorr]
+
 - Improve debugging of run scripts by providing the source code for the
   debugger.
   [icemac]
