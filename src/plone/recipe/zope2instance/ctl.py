@@ -810,8 +810,9 @@ console -- Run the program in the console.
         local_additions = []
 
         if debug:
-            if not self.options.wsgi and not program.count('-X'):
-                local_additions += ['-X']
+            debug_switch = '-d' if self.options.wsgi else '-X'
+            if not program.count(debug_switch):
+                local_additions += [debug_switch]
             if not program.count('debug-mode=on'):
                 local_additions += ['debug-mode=on']
             program.extend(local_additions)
