@@ -6,6 +6,8 @@ Changelog
 
 - Use correct debug switch for WSGI.
   (`Products.CMFPlone #2719 <https://github.com/plone/Products.CMFPlone/issues/2719>`_)
+  Display warnings in debug mode with WSGI (override with PYTHONWARNINGS).
+  (`Products.CMFPlone #2724 <https://github.com/plone/Products.CMFPlone/issues/2724>`_)
   [tschorr]
 
 - Improve debugging of run scripts by providing the source code for the
