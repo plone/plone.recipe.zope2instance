@@ -810,7 +810,12 @@ console -- Run the program in the console.
         local_additions = []
 
         if debug:
-            debug_switch = '-d' if self.options.wsgi else '-X'
+            if self.options.wsgi:
+                debug_switch = '-d'
+                if 'PYTHONWARNINGS' not in env:
+                    env['PYTHONWARNINGS'] = 'on'
+            else:
+                debug_switch = '-X'
             if not program.count(debug_switch):
                 local_additions += [debug_switch]
             if not program.count('debug-mode=on'):
