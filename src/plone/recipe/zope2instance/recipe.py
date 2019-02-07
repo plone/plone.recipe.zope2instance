@@ -81,7 +81,7 @@ class Recipe(Scripts):
         options['location'] = os.path.join(
             buildout['buildout']['parts-directory'],
             self.name,
-            )
+        )
         options['bin-directory'] = buildout['buildout']['bin-directory']
 
         if 'initialization' not in options:
@@ -89,14 +89,14 @@ class Recipe(Scripts):
 
         if 'scripts' in options:
             if options['scripts'] == '':
-                options['scripts'] = '' # suppress script generation.
+                options['scripts'] = ''  # suppress script generation.
                 self.scripts = False
 
         # Relative path support for the generated scripts
         relative_paths = options.get(
             'relative-paths',
             buildout['buildout'].get('relative-paths', 'false')
-            )
+        )
         if relative_paths == 'true':
             options['buildout-directory'] = buildout['buildout']['directory']
             self._relative_paths = options['buildout-directory']
@@ -106,7 +106,7 @@ class Recipe(Scripts):
         self._include_site_packages = options.get(
             'include-site-packages',
             buildout['buildout'].get('include-site-packages', 'false')
-            ) not in ('off', 'disable', 'false')
+        ) not in ('off', 'disable', 'false')
 
         self.wsgi = options.get('wsgi') in ('on', 'waitress')
         # Get Scripts' attributes
@@ -138,7 +138,7 @@ class Recipe(Scripts):
 
             # Add zcml files to package-includes
             self.build_package_includes()
-        except:
+        except Exception:
             # clean up
             if os.path.exists(location):
                 shutil.rmtree(location)
@@ -155,9 +155,7 @@ class Recipe(Scripts):
         return self.install(update=True)
 
     def build_zope_conf(self):
-        """Create a zope.conf file
-        """
-
+        """Create a zope.conf file."""
         options = self.options
         location = options['location']
         # Don't do this if we have a manual zope.conf
@@ -191,8 +189,8 @@ class Recipe(Scripts):
         if not os.path.exists(client_home):
             os.makedirs(client_home)
 
-        client_import = options.get('import-directory', os.path.join(
-                                                    client_home, 'import'))
+        client_import = options.get('import-directory',
+                                    os.path.join(client_home, 'import'))
         if not os.path.exists(client_import):
             os.makedirs(client_import)
 
@@ -213,11 +211,14 @@ class Recipe(Scripts):
         port_base = options.get('port-base', '')
         if port_base:
             port_base = 'port-base %s' % port_base
-        http_force_connection_close = options.get('http-force-connection-close', None)
+        http_force_connection_close = options.get(
+            'http-force-connection-close', None)
         if http_force_connection_close is None:
             http_force_connection_close = ''
         else:
-            http_force_connection_close = http_force_connection_close_template % http_force_connection_close
+            http_force_connection_close = (
+                http_force_connection_close_template
+                % http_force_connection_close)
         http_fast_listen = options.get('http-fast-listen', None)
         if http_fast_listen is None:
             http_fast_listen = ''
@@ -235,8 +236,7 @@ class Recipe(Scripts):
         webdav_address = options.get('webdav-address', '')
         if webdav_address:
             webdav_conn_close = options.get(
-                                    'webdav-force-connection-close',
-                                    'off')
+                'webdav-force-connection-close', 'off')
             webdav_address = webdav_server_template % (webdav_address,
                                                        webdav_conn_close)
         icp_address = options.get('icp-address', '')
@@ -244,7 +244,8 @@ class Recipe(Scripts):
             icp_address = icp_server_template % icp_address
         http_header_max_length = options.get('http-header-max-length', '8192')
         if http_header_max_length:
-            http_header_max_length = 'http-header-max-length %s' % http_header_max_length
+            http_header_max_length = (
+                'http-header-max-length %s' % http_header_max_length)
         effective_user = options.get('effective-user', '')
         if effective_user:
             effective_user = 'effective-user %s' % effective_user
@@ -254,7 +255,7 @@ class Recipe(Scripts):
         environment_vars = options.get('environment-vars', '')
         if environment_vars:
             # if the vars are all given on one line we need to do some work
-            if not '\n' in environment_vars:
+            if '\n' not in environment_vars:
                 keys = []
                 values = []
                 env_vars = environment_vars.split()
@@ -265,8 +266,9 @@ class Recipe(Scripts):
                     else:
                         values.append(var)
                 env_vars = zip(keys, values)
-                environment_vars = '\n'.join(["%s %s" % (env_var[0], env_var[1])
-                                             for env_var in env_vars])
+                environment_vars = '\n'.join([
+                    "%s %s" % (env_var[0], env_var[1])
+                    for env_var in env_vars])
             environment_vars = environment_template % environment_vars
 
         deprecation_warnings = options.get('deprecation-warnings', '')
@@ -312,9 +314,10 @@ class Recipe(Scripts):
                     event_log_rotate = '\n'.join((
                         "max-size %s" % event_log_max_size,
                         "    old-files %s" % event_log_old_files))
-                event_log = event_logfile % {'event_logfile': event_file,
-                                             'event_log_level': event_log_level,
-                                             'event_log_rotate': event_log_rotate}
+                event_log = event_logfile % {
+                    'event_logfile': event_file,
+                    'event_log_level': event_log_level,
+                    'event_log_rotate': event_log_rotate}
             # custom log
             else:
                 event_log = custom_event_log
@@ -344,12 +347,14 @@ class Recipe(Scripts):
                 access_log_rotate = ''
                 access_log_max_size = options.get('access-log-max-size', None)
                 if access_log_max_size:
-                    access_log_old_files = options.get('access-log-old-files', 1)
+                    access_log_old_files = options.get(
+                        'access-log-old-files', 1)
                     access_log_rotate = '\n'.join((
                         "max-size %s" % access_log_max_size,
                         "    old-files %s" % access_log_old_files))
-                access_event_log = access_event_logfile % {'z_log': z_log,
-                                             'access_log_rotate': access_log_rotate}
+                access_event_log = access_event_logfile % {
+                    'z_log': z_log,
+                    'access_log_rotate': access_log_rotate}
             # custom directive
             else:
                 access_event_log = custom_access_event_log
@@ -359,8 +364,8 @@ class Recipe(Scripts):
                 'access_event_log': access_event_log,
             }
 
-        default_zpublisher_encoding = options.get('default-zpublisher-encoding',
-                                                  'utf-8')
+        default_zpublisher_encoding = options.get(
+            'default-zpublisher-encoding', 'utf-8')
         if default_zpublisher_encoding:
             default_zpublisher_encoding = 'default-zpublisher-encoding %s' %\
                                           default_zpublisher_encoding
@@ -370,8 +375,8 @@ class Recipe(Scripts):
         shared_blob_dir = options.get('shared-blob', 'no')
 
         before_storage = options.get('before-storage')
-        demo_storage = options.get('demo-storage', 'off') \
-                       not in ('off', 'disable', 'false')
+        demo_storage = options.get(
+            'demo-storage', 'off') not in ('off', 'disable', 'false')
 
         zlib = options.get('zlib-storage')
 
@@ -402,7 +407,7 @@ class Recipe(Scripts):
                 if _split(el) is not None])
             type_ = rel_storage.pop('type', 'postgresql')
 
-            if type_ == 'postgresql' and not 'dsn' in rel_storage:
+            if type_ == 'postgresql' and 'dsn' not in rel_storage:
                 # Support zope2instance 1.4 style interpolation for
                 # postgresql
                 template = ("dbname='%(dbname)s' user='%(user)s' "
@@ -428,7 +433,7 @@ class Recipe(Scripts):
                 rs_opts='\n'.join(' ' * 8 + ' '.join((k, v))
                                   for k, v in rel_storage.items()
                                   if is_rs_option(k)),
-                )
+            )
             file_storage_snippet = rel_storage_template % opts
         else:
             file_storage_snippet = self.render_file_storage(
@@ -445,11 +450,13 @@ class Recipe(Scripts):
 
         python_check_interval = options.get('python-check-interval', '1000')
         if python_check_interval:
-            python_check_interval = "python-check-interval %s" % python_check_interval
+            python_check_interval = (
+                "python-check-interval %s" % python_check_interval)
 
         enable_products = options.get('enable-product-installation', 'off')
         if enable_products:
-            enable_products = "enable-product-installation %s" % enable_products
+            enable_products = (
+                "enable-product-installation %s" % enable_products)
 
         zeo_address = options.get('zeo-address', '8100')
         zeo_addresses = zeo_address.split(' ')
@@ -458,7 +465,7 @@ class Recipe(Scripts):
             if not address:
                 continue
             zeo_address_list += zeo_address_list_template % dict(
-                                zeo_address = address)
+                zeo_address=address)
 
         zodb_cache_size = options.get('zodb-cache-size', '30000')
         if zodb_cache_size:
@@ -467,7 +474,8 @@ class Recipe(Scripts):
             zodb_cache_size = ""
         zodb_cache_size_bytes = options.get('zodb-cache-size-bytes', None)
         if zodb_cache_size_bytes:
-            zodb_cache_size_bytes = "cache-size-bytes %s" % zodb_cache_size_bytes
+            zodb_cache_size_bytes = (
+                "cache-size-bytes %s" % zodb_cache_size_bytes)
         else:
             zodb_cache_size_bytes = ""
         zeo_client_cache_size = options.get('zeo-client-cache-size', '128MB')
@@ -475,46 +483,54 @@ class Recipe(Scripts):
 
         if zeo_client:
             if relstorage:
-                raise ValueError('You cannot use both ZEO and RelStorage '
-                    'at the same time.')
+                raise ValueError(
+                    'You cannot use both ZEO and RelStorage at the same time.')
 
-            zeo_client_drop_cache_rather_verify = options.get('zeo-client-drop-cache-rather-verify', '')
+            zeo_client_drop_cache_rather_verify = options.get(
+                'zeo-client-drop-cache-rather-verify', '')
             if zeo_client_drop_cache_rather_verify:
-                zeo_client_drop_cache_rather_verify = 'drop-cache-rather-verify %s' % \
-                        zeo_client_drop_cache_rather_verify
+                zeo_client_drop_cache_rather_verify = (
+                    'drop-cache-rather-verify %s'
+                    % zeo_client_drop_cache_rather_verify)
             zeo_var_dir = options.get('zeo-var',
                                       os.path.join(instance_home, 'var'))
             zeo_client_client = options.get('zeo-client-client', '')
-            zeo_client_blob_cache_size = \
-                    options.get('zeo-client-blob-cache-size', '')
-            zeo_client_blob_cache_size_check = \
-                    options.get('zeo-client-blob-cache-size-check', '')
-            zeo_client_min_disconnect_poll = options.get('min-disconnect-poll', "")
-            zeo_client_max_disconnect_poll = options.get('max-disconnect-poll', "")
-            zeo_client_read_only_fallback = options.get('zeo-client-read-only-fallback', 'false')
+            zeo_client_blob_cache_size = options.get(
+                'zeo-client-blob-cache-size', '')
+            zeo_client_blob_cache_size_check = options.get(
+                'zeo-client-blob-cache-size-check', '')
+            zeo_client_min_disconnect_poll = options.get(
+                'min-disconnect-poll', "")
+            zeo_client_max_disconnect_poll = options.get(
+                'max-disconnect-poll', "")
+            zeo_client_read_only_fallback = options.get(
+                'zeo-client-read-only-fallback', 'false')
             if zeo_client_client:
                 zeo_client_client = 'client %s' % zeo_client_client
             if zeo_client_blob_cache_size:
-                zeo_client_blob_cache_size = \
-                      'blob-cache-size %s' % zeo_client_blob_cache_size
+                zeo_client_blob_cache_size = (
+                    'blob-cache-size %s' % zeo_client_blob_cache_size)
             if zeo_client_blob_cache_size_check:
-                zeo_client_blob_cache_size_check = \
-                        'blob-cache-size-check %s' % \
-                        zeo_client_blob_cache_size_check
+                zeo_client_blob_cache_size_check = (
+                    'blob-cache-size-check %s'
+                    % zeo_client_blob_cache_size_check)
             if zeo_client_min_disconnect_poll:
-                zeo_client_min_disconnect_poll = "min-disconnect-poll %s" % zeo_client_min_disconnect_poll
+                zeo_client_min_disconnect_poll = (
+                    "min-disconnect-poll %s" % zeo_client_min_disconnect_poll)
             if zeo_client_max_disconnect_poll:
-                zeo_client_max_disconnect_poll = "max-disconnect-poll %s" % zeo_client_max_disconnect_poll
+                zeo_client_max_disconnect_poll = (
+                    "max-disconnect-poll %s" % zeo_client_max_disconnect_poll)
             if zeo_client_read_only_fallback:
-                zeo_client_read_only_fallback = "read-only-fallback %s" % zeo_client_read_only_fallback
+                zeo_client_read_only_fallback = (
+                    "read-only-fallback %s" % zeo_client_read_only_fallback)
             if options.get('zeo-username', ''):
                 if not options.get('zeo-password', ''):
                     raise zc.buildout.UserError('No ZEO password specified')
 
                 zeo_authentication = zeo_authentication_template % dict(
-                        realm = options.get('zeo-realm', 'ZEO'),
-                        username = options.get('zeo-username'),
-                        password = options.get('zeo-password'))
+                    realm=options.get('zeo-realm', 'ZEO'),
+                    username=options.get('zeo-username'),
+                    password=options.get('zeo-password'))
             else:
                 zeo_authentication = ''
 
@@ -524,18 +540,17 @@ class Recipe(Scripts):
                 storage_snippet_template = zeo_storage_template
 
             storage_snippet = storage_snippet_template % dict(
-                blob_storage = blob_storage,
-                shared_blob_dir = shared_blob_dir,
-                zeo_address_list = zeo_address_list,
-                zeo_client_cache_size = zeo_client_cache_size,
+                blob_storage=blob_storage,
+                shared_blob_dir=shared_blob_dir,
+                zeo_address_list=zeo_address_list,
+                zeo_client_cache_size=zeo_client_cache_size,
                 zeo_client_blob_cache_size=zeo_client_blob_cache_size,
-                zeo_client_blob_cache_size_check=\
-                    zeo_client_blob_cache_size_check,
-                zeo_authentication = zeo_authentication,
-                zeo_client_client = zeo_client_client,
-                zeo_storage = zeo_storage,
+                zeo_client_blob_cache_size_check=zeo_client_blob_cache_size_check,  # noqa: E501
+                zeo_authentication=zeo_authentication,
+                zeo_client_client=zeo_client_client,
+                zeo_storage=zeo_storage,
                 zeo_var_dir=zeo_var_dir,
-                zeo_client_drop_cache_rather_verify = zeo_client_drop_cache_rather_verify,
+                zeo_client_drop_cache_rather_verify=zeo_client_drop_cache_rather_verify,  # noqa: E501
                 zeo_client_min_disconnect_poll=zeo_client_min_disconnect_poll,
                 zeo_client_max_disconnect_poll=zeo_client_max_disconnect_poll,
                 read_only=options.get('read-only', 'false'),
@@ -547,8 +562,9 @@ class Recipe(Scripts):
             storage_snippet = file_storage_snippet
 
         if before_storage:
-            storage_snippet = (before_storage_template % before_storage) % \
-                              indent(storage_snippet, 2)
+            storage_snippet = (
+                before_storage_template % before_storage) % indent(
+                    storage_snippet, 2)
 
         if demo_storage:
             demo_file_storage = options.get('demo-file-storage')
@@ -557,8 +573,8 @@ class Recipe(Scripts):
             if demo_file_storage or demo_blob_storage:
                 base = storage_snippet.replace('>', ' base>', 1)
                 changes = self.render_file_storage(
-                    demo_file_storage, demo_blob_storage, base_dir, var_dir, zlib).\
-                    replace('>', ' changes>', 1)
+                    demo_file_storage, demo_blob_storage, base_dir, var_dir,
+                    zlib).replace('>', ' changes>', 1)
 
                 storage_snippet = demo_storage2_template % (base, changes)
 
@@ -566,12 +582,13 @@ class Recipe(Scripts):
                 raise ValueError(
                     "Both blob and demo storage cannot be used"
                     " at the same time (use a before storage instead)."
-                    )
+                )
             else:
                 storage_snippet = demo_storage_template % storage_snippet
 
         if options.get('storage-wrapper'):
-            storage_snippet = indent(options['storage-wrapper'] % storage_snippet, 4)
+            storage_snippet = indent(
+                options['storage-wrapper'] % storage_snippet, 4)
 
         zodb_tmp_storage = options.get('zodb-temporary-storage',
                                        zodb_temporary_storage_template)
@@ -591,42 +608,45 @@ class Recipe(Scripts):
         if not os.path.exists(lock_file_dir):
             os.makedirs(lock_file_dir)
 
-        zope_conf = template % dict(instance_home = instance_home,
-                                    client_home = client_home,
-                                    imports_lines = imports_lines,
-                                    paths_lines = paths_lines,
-                                    products_lines = products_lines,
-                                    debug_mode = debug_mode,
-                                    security_implementation = security_implementation,
-                                    verbose_security = verbose_security,
-                                    effective_user = effective_user,
-                                    http_header_max_length = http_header_max_length,
-                                    ip_address = ip_address,
-                                    mailinglogger_import = mailinglogger_import,
-                                    event_log = event_log,
-                                    access_event_log = access_event_log,
-                                    default_zpublisher_encoding = default_zpublisher_encoding,
-                                    storage_snippet = storage_snippet,
-                                    port_base = port_base,
-                                    http_address = http_address,
-                                    http_force_connection_close = http_force_connection_close,
-                                    http_fast_listen = http_fast_listen,
-                                    ftp_address = ftp_address,
-                                    webdav_address = webdav_address,
-                                    icp_address = icp_address,
-                                    zserver_threads = zserver_threads,
-                                    zodb_cache_size = zodb_cache_size,
-                                    zodb_cache_size_bytes = zodb_cache_size_bytes,
-                                    zodb_tmp_storage = zodb_tmp_storage,
-                                    pid_file = pid_file,
-                                    lock_file = lock_file,
-                                    environment_vars = environment_vars,
-                                    deprecation_warnings = deprecation_warnings,
-                                    python_check_interval = python_check_interval,
-                                    enable_products = enable_products,
-                                    zope_conf_additional = zope_conf_additional,)
+        zope_conf = template % dict(
+            instance_home=instance_home,
+            client_home=client_home,
+            imports_lines=imports_lines,
+            paths_lines=paths_lines,
+            products_lines=products_lines,
+            debug_mode=debug_mode,
+            security_implementation=security_implementation,
+            verbose_security=verbose_security,
+            effective_user=effective_user,
+            http_header_max_length=http_header_max_length,
+            ip_address=ip_address,
+            mailinglogger_import=mailinglogger_import,
+            event_log=event_log,
+            access_event_log=access_event_log,
+            default_zpublisher_encoding=default_zpublisher_encoding,
+            storage_snippet=storage_snippet,
+            port_base=port_base,
+            http_address=http_address,
+            http_force_connection_close=http_force_connection_close,
+            http_fast_listen=http_fast_listen,
+            ftp_address=ftp_address,
+            webdav_address=webdav_address,
+            icp_address=icp_address,
+            zserver_threads=zserver_threads,
+            zodb_cache_size=zodb_cache_size,
+            zodb_cache_size_bytes=zodb_cache_size_bytes,
+            zodb_tmp_storage=zodb_tmp_storage,
+            pid_file=pid_file,
+            lock_file=lock_file,
+            environment_vars=environment_vars,
+            deprecation_warnings=deprecation_warnings,
+            python_check_interval=python_check_interval,
+            enable_products=enable_products,
+            zope_conf_additional=zope_conf_additional,)
 
-        zope_conf = '\n'.join([l for l in zope_conf.splitlines() if l.rstrip()])
+        zope_conf = '\n'.join([l
+                               for l in zope_conf.splitlines()
+                               if l.rstrip()])
         zope_conf_path = os.path.join(location, 'etc', 'zope.conf')
         with open(zope_conf_path, 'w') as f:
             f.write(zope_conf)
@@ -674,15 +694,15 @@ class Recipe(Scripts):
                     zope_conf,
                     options['buildout-directory'] + os.sep,
                     self._relative_paths
-                    )
                 )
+            )
             program_path = relative_path_str(
                 zc.buildout.easy_install._relativitize(
                     program_path,
                     options['buildout-directory'] + os.sep,
                     self._relative_paths
-                    )
                 )
+            )
 
         options['zope-conf'] = zope_conf_path
         arguments = ["-C", zope_conf_path, '-p', program_path]
@@ -719,7 +739,7 @@ class Recipe(Scripts):
                 exec_sitecustomize=False,
                 relative_paths=self._relative_paths,
                 script_arguments=script_arguments,
-                )
+            )
         else:
             initialization = options['initialization'] % options
             return zc.buildout.easy_install.scripts(
@@ -734,8 +754,7 @@ class Recipe(Scripts):
                 relative_paths=self._relative_paths,)
 
     def build_package_includes(self):
-        """Create ZCML slugs in etc/package-includes
-        """
+        """Create ZCML slugs in etc/package-includes."""
         location = self.options['location']
         sitezcml_path = os.path.join(location, 'etc', 'site.zcml')
         zcml = self.options.get('zcml')
@@ -767,32 +786,32 @@ class Recipe(Scripts):
 
         if additional_zcml:
             additional_zcml = additional_zcml_template % additional_zcml
-            path=os.path.join(includes_path, "999-additional-overrides.zcml")
+            path = os.path.join(includes_path, "999-additional-overrides.zcml")
             open(path, "w").write(additional_zcml.strip())
 
         if resources:
             resources_path = resources.strip()
-            path=os.path.join(includes_path, "998-resources-configure.zcml")
+            path = os.path.join(includes_path, "998-resources-configure.zcml")
             open(path, "w").write(
                 resources_zcml % dict(directory=resources_path)
-                )
+            )
 
             if not os.path.exists(resources_path):
                 os.mkdir(resources_path)
 
         if locales:
             locales_path = locales.strip()
-            path=os.path.join(includes_path, "001-locales-configure.zcml")
+            path = os.path.join(includes_path, "001-locales-configure.zcml")
             open(path, "w").write(
                 locales_zcml % dict(directory=locales_path)
-                )
+            )
 
             if not os.path.exists(locales_path):
                 os.mkdir(locales_path)
 
         if zcml:
-            n = 1 # 001 is reserved for an optional locales-configure
-            package_match = re.compile('\w+([.]\w+)*$').match
+            n = 1  # 001 is reserved for an optional locales-configure
+            package_match = re.compile(r'\w+([.]\w+)*$').match
             for package in zcml:
                 n += 1
                 orig = package
@@ -818,11 +837,11 @@ class Recipe(Scripts):
                 path = os.path.join(
                     includes_path,
                     "%3.3d-%s-%s.zcml" % (n, package, file_suff),
-                    )
+                )
                 open(path, 'w').write(
                     '<include package="%s" file="%s" />\n'
                     % (package, filename)
-                    )
+                )
 
     def render_file_storage(self, file_storage, blob_storage,
                             base_dir, var_dir, zlib):
@@ -839,13 +858,12 @@ class Recipe(Scripts):
                     compress = 'false'
                 else:
                     raise ValueError(
-                        "Valid options for ``zlib-storage`` are "\
-                        "('compress', 'uncompress'). Got: %s." % zlib
-                        )
+                        "Valid options for ``zlib-storage`` are "
+                        "('compress', 'uncompress'). Got: %s." % zlib)
 
                 storage = zlib_storage_template % (
                     compress, indent(storage, 2)
-                    )
+                )
         else:
             storage = "    <demostorage />"
 
@@ -864,14 +882,14 @@ class Recipe(Scripts):
 
 
 # Storage snippets for zope.conf template
-file_storage_template="""
+file_storage_template = """
     # FileStorage database
     <filestorage>
       path %s
     </filestorage>
 """
 
-zlib_storage_template="""
+zlib_storage_template = """
     %%import zc.zlibstorage
     # ZlibStorage wrapper
     <zlibstorage>
@@ -880,14 +898,14 @@ zlib_storage_template="""
     </zlibstorage>
 """
 
-demo_storage_template="""
+demo_storage_template = """
     # DemoStorage
     <demostorage>
 %s
     </demostorage>
 """
 
-before_storage_template="""
+before_storage_template = """
     %%%%import zc.beforestorage
     # BeforeStorage
     <before>
@@ -896,7 +914,7 @@ before_storage_template="""
     </before>
 """
 
-demo_storage2_template="""
+demo_storage2_template = """
     # DemoStorage
     <demostorage>
 %s
@@ -904,7 +922,7 @@ demo_storage2_template="""
     </demostorage>
 """
 
-rel_storage_template="""
+rel_storage_template = """
     %%import relstorage
     <relstorage>
 %(rs_opts)s
@@ -914,7 +932,7 @@ rel_storage_template="""
     </relstorage>
 """
 
-blob_storage_template="""
+blob_storage_template = """
     # Blob-enabled FileStorage database
     <blobstorage>
       blob-dir %s
@@ -922,17 +940,17 @@ blob_storage_template="""
     </blobstorage>
 """
 
-zeo_authentication_template="""
+zeo_authentication_template = """
     realm %(realm)s
       username %(username)s
       password %(password)s
 """.strip()
 
-zeo_address_list_template="""
+zeo_address_list_template = """
       server %(zeo_address)s
 """
 
-zeo_storage_template="""
+zeo_storage_template = """
     # ZEOStorage database
     <zeoclient>
       read-only %(read_only)s
@@ -950,7 +968,7 @@ zeo_storage_template="""
     </zeoclient>
 """.strip()
 
-zeo_blob_storage_template="""
+zeo_blob_storage_template = """
     # Blob-enabled ZEOStorage database
     <zeoclient>
       read-only %(read_only)s
@@ -972,7 +990,7 @@ zeo_blob_storage_template="""
     </zeoclient>
 """.strip()
 
-zodb_temporary_storage_template="""
+zodb_temporary_storage_template = """
 <zodb_db temporary>
     # Temporary storage database (for sessions)
     <temporarystorage>
@@ -983,11 +1001,11 @@ zodb_temporary_storage_template="""
 </zodb_db>
 """.strip()
 
-http_force_connection_close_template="""\
+http_force_connection_close_template = """\
   force-connection-close %s
 """.rstrip()
 
-http_fast_listen_template="""\
+http_fast_listen_template = """\
   # Set to off to defer opening of the HTTP socket until the end of the
   # startup phase:
   fast-listen %s
@@ -1045,7 +1063,7 @@ environment_template = """
 """
 
 # The template used to build zope.conf
-zope_conf_template="""\
+zope_conf_template = """\
 %(imports_lines)s
 %%define INSTANCEHOME %(instance_home)s
 instancehome $INSTANCEHOME
@@ -1206,4 +1224,4 @@ formatter = generic
 
 [formatter_generic]
 format = %%(asctime)s %%(levelname)-5.5s [%%(name)s:%%(lineno)s][%%(threadName)s] %%(message)s
-"""
+"""  # noqa: E501

@@ -18,6 +18,9 @@ Changelog
   verbose
   [ajung]
 
+- Fix Flake8 issues in the code.
+  [icemac]
+
 
 6.1.0 (2018-12-28)
 ------------------
