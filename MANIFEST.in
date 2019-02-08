@@ -1,4 +1,7 @@
 include *.rst
+include pyproject.toml
 recursive-include src *.txt
 recursive-include src *.xml
 recursive-include src *.zcml
+recursive-exclude news *
+exclude news

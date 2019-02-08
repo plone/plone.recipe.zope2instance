@@ -1,0 +1,3 @@
+log level for Plone WSGI logger changed to INFO making the logging less
+verbose
+[ajung]
