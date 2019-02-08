@@ -8,6 +8,24 @@ Changelog
 
 .. towncrier release notes start
 
+6.1.1 (2019-02-08)
+------------------
+
+Bug fixes:
+
+
+- log level for Plone WSGI logger changed to INFO making the logging less
+  verbose [ajung] (#66)
+- Improve debugging of run scripts by providing the source code for the
+  debugger. [icemac] (#68)
+- Use correct debug switch for WSGI. (`Products.CMFPlone #2719
+  <https://github.com/plone/Products.CMFPlone/issues/2719>`_) Display warnings
+  in debug mode with WSGI (override with PYTHONWARNINGS). (`Products.CMFPlone
+  #2724 <https://github.com/plone/Products.CMFPlone/issues/2724>`_) [tschorr]
+  (#69)
+- Fix Flake8 issues in the code. [icemac] (#72)
+
+
 6.1.0 (2018-12-28)
 ------------------
 
