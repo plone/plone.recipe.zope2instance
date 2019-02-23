@@ -24,7 +24,6 @@ plone.recipe.zope2instance::
     ... recipe = plone.recipe.zope2instance
     ... eggs =
     ... user = me:me
-    ... wsgi = on
     ... ''' % options)
 
 Let's run it::
@@ -134,7 +133,6 @@ Let's create another buildout configuring a custom port and a custom number of w
     ... user = me:me
     ... http-address = localhost:6543
     ... threads = 3
-    ... wsgi = on
     ... ''' % options)
 
 Let's run it::

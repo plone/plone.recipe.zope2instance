@@ -3,8 +3,10 @@ plone.recipe.zope2instance
 ==========================
 
 
-This is the doctest for plone.recipe.zope2instance. It ensures the template
-works fine. It is based on zc.buildout testing module::
+This is the doctest for plone.recipe.zope2instance that only runs in Python 2.
+It ensures the template works fine with ZServer when wsgi is disabled.
+
+It is based on zc.buildout testing module::
 
     >>> from __future__ import print_function
     >>> from zc.buildout.testing import *
@@ -24,6 +26,7 @@ plone.recipe.zope2instance::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... ''' % options)
@@ -45,14 +48,53 @@ We should have a zope instance, with a basic zope.conf::
     instancehome $INSTANCEHOME
     %define CLIENTHOME .../sample-buildout/var/instance
     clienthome $CLIENTHOME
+    <BLANKLINE>
+    <BLANKLINE>
     debug-mode off
     security-policy-implementation C
     verbose-security off
     default-zpublisher-encoding utf-8
+    http-header-max-length 8192
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+    zserver-threads 2
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+    <eventlog>
+    <BLANKLINE>
+      level INFO
+      <logfile>
+        path .../sample-buildout/var/log/instance.log
+        level INFO
+      </logfile>
+    </eventlog>
+    <BLANKLINE>
+    <logger access>
+      level WARN
+      <logfile>
+        path .../sample-buildout/var/log/instance-Z2.log
+        format %(message)s
+      </logfile>
+    </logger>
+    <BLANKLINE>
+    <http-server>
+      address 8080
+    <BLANKLINE>
+    </http-server>
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
     <zodb_db main>
         # Main database
         cache-size 30000
-        # Blob-enabled FileStorage database
+    <BLANKLINE>
+    # Blob-enabled FileStorage database
         <blobstorage>
           blob-dir .../sample-buildout/var/blobstorage
           # FileStorage database
@@ -62,6 +104,7 @@ We should have a zope instance, with a basic zope.conf::
         </blobstorage>
         mount-point /
     </zodb_db>
+    <BLANKLINE>
     <zodb_db temporary>
         # Temporary storage database (for sessions)
         <temporarystorage>
@@ -70,7 +113,14 @@ We should have a zope instance, with a basic zope.conf::
         mount-point /temp_folder
         container-class Products.TemporaryFolder.TemporaryContainer
     </zodb_db>
+    <BLANKLINE>
+    pid-filename .../sample-buildout/var/instance.pid
+    lock-filename .../sample-buildout/var/instance.lock
     python-check-interval 1000
+    enable-product-installation off
+    <BLANKLINE>
+    <BLANKLINE>
+    <BLANKLINE>
 
 We should have a blobstorage directory.
 
@@ -91,8 +141,120 @@ otherwise you get a warning when the zope instance starts up.  The
 FTP and WebDAV
 ==============
 
-With wsgi there is no FTP and WebDAV. Use Python 2 and ``wsgi = off`` for that.
+Let's start off by adding an FTP address::
 
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
+    ... eggs =
+    ... user = me:me
+    ... ftp-address = 8021
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print(system(join('bin', 'buildout'))),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '...instance'.
+    Generated interpreter '.../parts/instance/bin/interpreter'...
+
+Our FTP server should be set up now::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print(zope_conf)
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    <ftp-server>
+      # valid key is "address"
+      address 8021
+    </ftp-server>
+    ...
+
+Next we will add a WebDAV server::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
+    ... eggs =
+    ... user = me:me
+    ... webdav-address = 1980
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print(system(join('bin', 'buildout'))),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '...instance'.
+    Generated interpreter '.../parts/instance/bin/interpreter'...
+
+Our WebDAV server should be set up now::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print(zope_conf)
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    <webdav-source-server>
+      address 1980
+      force-connection-close off
+    </webdav-source-server>
+    ...
+
+Next we will add a WebDAV server with force-connection-close on::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
+    ... eggs =
+    ... user = me:me
+    ... webdav-address = 1980
+    ... webdav-force-connection-close = on
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print(system(join('bin', 'buildout'))),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '...instance'.
+    Generated interpreter '.../parts/instance/bin/interpreter'...
+
+Our WebDAV server should be set up now::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print(zope_conf)
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    <webdav-source-server>
+      address 1980
+      force-connection-close on
+    </webdav-source-server>
+    ...
 
 DemoStorage
 ===========
@@ -107,6 +269,7 @@ To have a DemoStorage configuration, you can use demo-storage::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... file-storage = newfs/Data.fs
@@ -158,6 +321,7 @@ Verify that demostorage can be disable::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... file-storage = newfs/Data.fs
@@ -209,6 +373,7 @@ changes::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... file-storage = newfs/Data.fs
@@ -267,6 +432,7 @@ You can add a blob storage to the demo-storage as well::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... file-storage = newfs/Data.fs
@@ -322,6 +488,7 @@ not supported by the in-memory demostorage)::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... file-storage = newfs/Data.fs
@@ -384,6 +551,7 @@ To have a ZlibStorage configuration, you can use zlib-storage::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... file-storage = newfs/Data.fs
@@ -444,6 +612,7 @@ can set the ``zlib-storage`` option to 'passive'::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... file-storage = newfs/Data.fs
@@ -507,6 +676,7 @@ To have a BeforeStorage configuration, you can use before-storage::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... file-storage = newfs/Data.fs
@@ -564,6 +734,7 @@ The before-storage option can be combined with a demo-storage::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... file-storage = newfs/Data.fs
@@ -631,6 +802,7 @@ To have a BlobStorage configuration, you can use blob-storage::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... blob-storage = ${buildout:directory}/var/blob
@@ -683,6 +855,7 @@ To have a RelStorage configuration, you can use rel-storage::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... rel-storage =
@@ -740,6 +913,7 @@ for the plone.recipe.zope2instance recipe.
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... zeo-client = yes
@@ -795,6 +969,7 @@ specified, they should get included in that section as well.
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... zeo-client = yes
@@ -856,6 +1031,7 @@ Verify that demo-storage is correctly applied
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... zeo-client = yes
@@ -912,6 +1088,7 @@ Verify that blob-storage is correctly applied
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... zeo-client = yes
@@ -968,6 +1145,7 @@ before-storage::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... zeo-client = yes
@@ -1038,6 +1216,7 @@ You can get specific zeo server address using `zeo-address`.
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... zeo-client = yes
@@ -1092,6 +1271,7 @@ You can also set multiple zeo server addresses using `zeo-address`.
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... zeo-client = yes
@@ -1151,6 +1331,7 @@ use the `storage-wrapper` option::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... storage-wrapper =
@@ -1190,19 +1371,260 @@ Now zope.conf should include the custom storage wrapper::
 Custom Event log
 ================
 
-`event-log-custom` is only supported for ZServer (Python 2 only).
+`event-log-custom` is a new option that allows you to create
+a custom event log section. For example, let's say you want
+to use `rotatezlogs`::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
+    ... eggs =
+    ... user = me:me
+    ...
+    ... event-log-custom =
+    ...     %%import iw.rotatezlogs
+    ...     <rotatelogfile>
+    ...         path %(sample_buildout)s/var/log/event.log
+    ...         max-bytes 1MB
+    ...         backup-count 5
+    ...     </rotatelogfile>
+    ...
+    ... event-log-level = info
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print(system(join('bin', 'buildout'))),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '...instance'.
+    Generated interpreter '.../parts/instance/bin/interpreter'...
+
+We should have a zope instance, with the custom event log::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print(zope_conf)
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    <eventlog>
+      level info
+      %import iw.rotatezlogs
+      <rotatelogfile>
+        path .../sample-buildout/var/log/event.log
+        max-bytes 1MB
+        backup-count 5
+      </rotatelogfile>
+    </eventlog>
+    ...
+    <BLANKLINE>
 
 
 Mailing logger
 ==============
 
-`mailinglogger` is only supported for ZServer (Python 2 only).
+`mailinglogger` allows you to configure mail actions for the event log::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
+    ... eggs =
+    ... user = me:me
+    ...
+    ... mailinglogger =
+    ...     <mailing-logger>
+    ...       level error
+    ...       flood-level 10
+    ...       smtp-server smtp.mydomain.com
+    ...       from logger@mydomain.com
+    ...       to errors@mydomain.com
+    ...       subject [My domain error]
+    ...     </mailing-logger>
+    ...
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print(system(join('bin', 'buildout'))),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '...instance'.
+    Generated interpreter '.../parts/instance/bin/interpreter'...
+
+We should have a zope instance, with the mailing logger::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print(zope_conf)
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    %import mailinglogger
+    <eventlog>
+      <mailing-logger>
+        level error
+        flood-level 10
+        smtp-server smtp.mydomain.com
+        from logger@mydomain.com
+        to errors@mydomain.com
+        subject [My domain error]
+      </mailing-logger>
+      level INFO
+    ...
+    </eventlog>
+    ...
+    <BLANKLINE>
 
 
 Custom access log
 =================
 
-`access-log-custom`  is only supported for ZServer (Python 2 only).
+`access-log-custom` is a new option that allows you to create
+a custom event log section. For example, let's say you want
+to use `rotatezlogs`::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
+    ... eggs =
+    ... user = me:me
+    ...
+    ... access-log-custom =
+    ...     %%import iw.rotatezlogs
+    ...     <rotatelogfile>
+    ...         path %(sample_buildout)s/var/log/event.log
+    ...         max-bytes 1MB
+    ...         backup-count 5
+    ...     </rotatelogfile>
+    ...
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print(system(join('bin', 'buildout'))),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '...instance'.
+    Generated interpreter '.../parts/instance/bin/interpreter'...
+
+We should have a zope instance, with the custom event log::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print(zope_conf)
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    <logger access>
+      level WARN
+      %import iw.rotatezlogs
+      <rotatelogfile>
+        path .../sample-buildout/var/log/event.log
+        max-bytes 1MB
+        backup-count 5
+      </rotatelogfile>
+    </logger>
+    ...
+    <BLANKLINE>
+
+
+Disable access log
+==================
+
+If we assign `disable` to `z2-log`, the whole <logger access> section
+will be omitted::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
+    ... eggs =
+    ... user = me:me
+    ...
+    ... z2-log = disable
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print(system(join('bin', 'buildout'))),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '...instance'.
+    Generated interpreter '.../parts/instance/bin/interpreter'...
+
+We should have a zope instance, with no access log::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> "logger access" in zope_conf
+    False
+    >>> "eventlog" in zope_conf
+    True
+
+
+Disable events log
+==================
+
+If we assign `disable` to `event-log`, the whole <eventlog> section
+will be omitted::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
+    ... eggs =
+    ... user = me:me
+    ...
+    ... event-log = disable
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print(system(join('bin', 'buildout'))),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '...instance'.
+    Generated interpreter '.../parts/instance/bin/interpreter'...
+
+We should have a zope instance, with no access log::
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> "logger access" in zope_conf
+    True
+    >>> "eventlog" in zope_conf
+    False
 
 
 Custom site.zcml file
@@ -1219,6 +1641,7 @@ When this option is used the `zcml` option is ignored. Let's try it::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... # the zcml option will be ignored when a site-zcml option is given
@@ -1271,6 +1694,7 @@ between several servers::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... environment-vars = TZ US/Eastern
@@ -1307,6 +1731,7 @@ Now let's add several environment variables::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... environment-vars =
@@ -1343,6 +1768,7 @@ Several all on one line::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... environment-vars = TZ US/Eastern TMP /var/tmp DISABLE_PTS True
@@ -1368,8 +1794,119 @@ Our environment variables should be set now::
 HTTP server
 ===========
 
-Http-server options are only supported for ZServer (Python 2 only).
+Check additional options to the HTTP server::
 
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
+    ... eggs =
+    ... user = me:me
+    ... http-force-connection-close = on
+    ... http-fast-listen = off
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print(system(join('bin', 'buildout'))),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '...instance'.
+    Generated interpreter '.../parts/instance/bin/interpreter'...
+
+And check it::
+
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print(zope_conf)
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    <http-server>
+      address 8080
+      force-connection-close on
+      # Set to off to defer opening of the HTTP socket until the end of the
+      # startup phase:
+      fast-listen off
+    <BLANKLINE>
+    </http-server>
+    ...
+
+Configuring ZServer workers is also possible using the 'threads' option:
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
+    ... eggs =
+    ... user = me:me
+    ... threads = 3
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print(system(join('bin', 'buildout'))),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '...instance'.
+    Generated interpreter '.../parts/instance/bin/interpreter'...
+
+And check it::
+
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print(zope_conf)
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    zserver-threads 3
+    ...
+    <http-server>
+    ...
+
+The 'zserver-threads' option is deprecated but still working:
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
+    ... eggs =
+    ... user = me:me
+    ... zserver-threads = 3
+    ... ''' % options)
+
+Run it::
+
+    >>> print(system(join('bin', 'buildout')))
+    Uninstalling instance.
+    Installing instance.
+    Generated script '...instance'.
+    Generated interpreter '.../parts/instance/bin/interpreter'...
+
+And check it::
+
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print(zope_conf)
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    zserver-threads 3
+    ...
+    <http-server>
+    ...
 
 Edge Cases
 ==========
@@ -1386,6 +1923,7 @@ we don't error::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... ''' % options)
@@ -1412,6 +1950,7 @@ The recipe supports the generation of scripts with relative paths.
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... ''' % options)
@@ -1445,6 +1984,7 @@ Custom Zope Conf
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... zope-conf = /some/path/my.conf
@@ -1464,7 +2004,7 @@ We should have a zope instance script with the custom config file::
     >>> if WINDOWS:
     ...     instance_path += '-script.py'
     >>> open(instance_path).read()
-    "...plone.recipe.zope2instance.ctl.main(...['-C', '/some/path/my.conf', '-p', '.../bin/interpreter', '--wsgi']..."
+    "...plone.recipe.zope2instance.ctl.main(...['-C', '/some/path/my.conf', '-p', '.../bin/interpreter']..."
 
 Custom Zope Conf Imports
 ========================
@@ -1479,6 +2019,7 @@ define custom zope.conf sections using ZConfig API.
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... zope-conf-imports =
@@ -1520,6 +2061,7 @@ plone.app.theming resources directory.
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... resources = ${buildout:directory}/myresources
@@ -1562,6 +2104,7 @@ plone.app.theming locales directory.
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... locales = ${buildout:directory}/mylocales
@@ -1603,6 +2146,7 @@ code to the initialization process.
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
     ... eggs =
     ... user = me:me
     ... initialization =

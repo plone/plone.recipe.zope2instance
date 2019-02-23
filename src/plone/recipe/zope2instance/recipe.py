@@ -22,6 +22,7 @@ import os
 import os.path
 import re
 import shutil
+import six
 import sys
 import zc.buildout
 import zc.buildout.easy_install
@@ -108,7 +109,10 @@ class Recipe(Scripts):
             buildout['buildout'].get('include-site-packages', 'false')
         ) not in ('off', 'disable', 'false')
 
-        self.wsgi = options.get('wsgi') in ('on', 'waitress')
+        self.wsgi = True
+        if six.PY2 and options.get('wsgi') in ('off', 'false'):
+            self.wsgi = False
+
         # Get Scripts' attributes
         return Scripts.__init__(self, buildout, name, options)
 

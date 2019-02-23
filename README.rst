@@ -77,8 +77,10 @@ initialization
    whitespace is stripped from the code given. *added in version 4.2.14*
 
 wsgi
-   Use ``wsgi = on`` in a part to create a Python script that can be used as an
-   interface for a WSGI server.
+   By default this recipe creates a Python script that uses ``waitress`` as a
+   WSGI server.
+   When running Python 2 you can set ``wsgi = off`` to disable WSGI and enable
+   ZServer.
 
 Theme resources
 ---------------

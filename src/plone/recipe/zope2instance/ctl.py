@@ -36,6 +36,7 @@ import csv
 import os
 import os.path
 import pkg_resources
+import six
 import sys
 import xml.sax
 import zdaemon
@@ -892,19 +893,21 @@ def main(args=None):
     options.interpreter = os.path.join(options.directory, 'bin', 'interpreter')
     if sys.platform == 'win32':
         options.interpreter += '-script.py'
-    if options.wsgi:
-        from Zope2.Startup import serve
-        script = os.path.join(os.path.dirname(serve.__file__), 'serve.py')
-        wsgi_ini = os.path.join(options.directory, 'etc', 'wsgi.ini')
-        options.program = [
-            options.python, options.interpreter, script, wsgi_ini
-        ]
-    else:
+    if six.PY2 and not options.wsgi:
+        # only use zserver in Python 2 and if wsgi is disabled
         from ZServer.Zope2.Startup import run
         script = os.path.join(os.path.dirname(run.__file__), 'run.py')
         options.program = [
             options.python, options.interpreter, script, '-C',
             options.configfile
+        ]
+    else:
+        # wsgi is the default
+        from Zope2.Startup import serve
+        script = os.path.join(os.path.dirname(serve.__file__), 'serve.py')
+        wsgi_ini = os.path.join(options.directory, 'etc', 'wsgi.ini')
+        options.program = [
+            options.python, options.interpreter, script, wsgi_ini
         ]
 
     c = ZopeCmd(options)
