@@ -27,7 +27,9 @@ typed interactively is started. Use the action "help" to find out about
 available actions.
 """
 
+from asyncore import dispatcher
 from pkg_resources import iter_entry_points
+from time import sleep
 from waitress import serve
 from ZConfig.loader import SchemaLoader
 from zdaemon.zdctl import ZDCmd, ZDCtlOptions
@@ -898,8 +900,6 @@ def serve_paste(app, global_conf, **kw):
 
 def server_factory(global_conf, **kws):
     if 'fast-listen' in kws:
-        from asyncore import dispatcher
-        from time import sleep
         host, port = kws['fast-listen'].split(':')
         prebound = dispatcher()
         prebound.create_socket(socket.AF_INET, socket.SOCK_STREAM)
