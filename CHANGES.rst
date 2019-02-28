@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+6.1.2 (unreleased)
+------------------
+
+Bug fixes:
+
+- restore http-fast-listen for waitress (`#71 <https://github.com/plone/plone.recipe.zope2instance/issues/71>`_)
+  [tschorr]
+
+
 6.1.1 (2019-02-08)
 ------------------
 
