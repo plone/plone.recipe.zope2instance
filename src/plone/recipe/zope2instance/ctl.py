@@ -880,8 +880,13 @@ console -- Run the program in the console.
 def serve_paste(app, global_conf, **kw):
     sock = None
     if 'prebound' in global_conf:
-        sock = socket.fromfd(
+        _sock = socket.fromfd(
             int(global_conf['prebound']), socket.AF_INET, socket.SOCK_STREAM)
+        if six.PY2:
+            sock = socket.socket()
+            sock._sock = _sock
+        else:
+            sock = _sock
         kw.update(sockets=[sock])
     try:
         serve(app, **kw)
