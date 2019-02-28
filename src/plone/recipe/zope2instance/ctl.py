@@ -909,8 +909,8 @@ def server_factory(global_conf, **kws):
             sleep(1)
         global_conf.update(prebound=str(prebound.socket.fileno()))
         del kws['fast-listen']
-
     del kws['paste.server_factory']
+
     def serve(app):
         return serve_paste(app, global_conf, **kws)
     return serve
