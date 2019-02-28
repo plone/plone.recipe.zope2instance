@@ -659,12 +659,14 @@ class Recipe(Scripts):
         options = self.options
         wsgi_ini_path = os.path.join(options['location'], 'etc', 'wsgi.ini')
         listen = options.get('http-address', '0.0.0.0:8080')
+        fast = 'fast-' if options.get('http-fast-listen') is not None else ''
         if ':' not in listen:
             listen = '0.0.0.0:{}'.format(listen)
         options = {
             'location': options['location'],
             'http_address': listen,
             'threads': options.get('threads', 4),
+            'fast-listen': fast,
         }
         wsgi_ini = wsgi_ini_template % options
         with open(wsgi_ini_path, 'w') as f:
@@ -1189,8 +1191,9 @@ additional_zcml_template = """\
 
 wsgi_ini_template = """\
 [server:main]
-use = egg:waitress#main
-listen = %(http_address)s
+paste.server_factory = plone.recipe.zope2instance:main
+use = egg:plone.recipe.zope2instance#main
+%(fast-listen)slisten = %(http_address)s
 threads = %(threads)s
 
 [app:zope]

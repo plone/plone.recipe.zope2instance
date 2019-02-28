@@ -28,6 +28,7 @@ available actions.
 """
 
 from pkg_resources import iter_entry_points
+from waitress import serve
 from ZConfig.loader import SchemaLoader
 from zdaemon.zdctl import ZDCmd, ZDCtlOptions
 from zdaemon.zdoptions import ZDOptions
@@ -37,9 +38,11 @@ import os
 import os.path
 import pkg_resources
 import six
+import socket
 import sys
 import xml.sax
 import zdaemon
+
 
 if sys.version_info > (3, ):
     basestring = str
@@ -872,6 +875,40 @@ console -- Run the program in the console.
 
     def help_adduser(self):
         print("adduser <name> <password> -- add a Zope management user")
+
+
+def serve_paste(app, global_conf, **kw):
+    sock = None
+    if 'prebound' in global_conf:
+        sock = socket.fromfd(
+            int(global_conf['prebound']), socket.AF_INET, socket.SOCK_STREAM)
+        kw.update(sockets=[sock])
+    try:
+        serve(app, **kw)
+    finally:
+        if isinstance(sock, socket.socket):
+            sock.close()
+    return 0
+
+
+def server_factory(global_conf, **kws):
+    if 'fast-listen' in kws:
+        from asyncore import dispatcher
+        from time import sleep
+        host, port = kws['fast-listen'].split(':')
+        prebound = dispatcher()
+        prebound.create_socket(socket.AF_INET, socket.SOCK_STREAM)
+        prebound.bind((host, int(port)))
+        prebound.listen(5)
+        while not prebound.readable():
+            sleep(1)
+        global_conf.update(prebound=str(prebound.socket.fileno()))
+        del kws['fast-listen']
+
+    del kws['paste.server_factory']
+    def serve(app):
+        return serve_paste(app, global_conf, **kws)
+    return serve
 
 
 def main(args=None):

@@ -75,7 +75,8 @@ The buildout has also created an INI file containing the waitress configuration:
     >>> wsgi_ini = open(os.path.join(instance, 'etc', 'wsgi.ini')).read()
     >>> print(wsgi_ini)
     [server:main]
-    use = egg:waitress#main
+    paste.server_factory = plone.recipe.zope2instance:main
+    use = egg:plone.recipe.zope2instance#main
     listen = 0.0.0.0:8080
     threads = 4
     <BLANKLINE>
@@ -132,6 +133,7 @@ Let's create another buildout configuring a custom port and a custom number of w
     ... eggs =
     ... user = me:me
     ... http-address = localhost:6543
+    ... http-fast-listen = on
     ... threads = 3
     ... ''' % options)
 
@@ -149,8 +151,9 @@ The buildout has updated our INI file:
     >>> wsgi_ini = open(os.path.join(instance, 'etc', 'wsgi.ini')).read()
     >>> print(wsgi_ini)
     [server:main]
-    use = egg:waitress#main
-    listen = localhost:6543
+    paste.server_factory = plone.recipe.zope2instance:main
+    use = egg:plone.recipe.zope2instance#main
+    fast-listen = localhost:6543
     threads = 3
     <BLANKLINE>
     [app:zope]

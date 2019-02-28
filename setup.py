@@ -43,6 +43,7 @@ setup(
         'Zope >= 4.0b1',
         'ZODB >= 5.1.1',
         'ZEO',
+        'waitress >= 1.1.1',
     ],
     extras_require={
         'test': [
@@ -50,5 +51,13 @@ setup(
         ],
     },
     zip_safe=False,
-    entry_points={'zc.buildout': ['default = %s.recipe:Recipe' % name]},
+    entry_points={
+        'zc.buildout': ['default = %s.recipe:Recipe' % name],
+        'paste.server_runner': [
+            'main=plone.recipe.zope2instance.ctl:serve_paste',
+        ],
+        'paste.server_factory': [
+            'main=plone.recipe.zope2instance.ctl:server_factory',
+        ],
+        },
 )
