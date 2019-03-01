@@ -83,28 +83,44 @@ The buildout has also created an INI file containing the waitress configuration:
     use = egg:Zope#main
     zope_conf = .../sample-buildout/parts/instance/etc/zope.conf
     <BLANKLINE>
+    [filter:translogger]
+    use = egg:Paste#translogger
+    setup_console_handler = False
+    <BLANKLINE>
     [pipeline:main]
     pipeline =
+        translogger
         egg:Zope#httpexceptions
         zope
     <BLANKLINE>
     [loggers]
-    keys = root, plone
+    keys = root, plone, waitress, wsgi
     <BLANKLINE>
     [handlers]
-    keys = console
+    keys = console, accesslog, eventlog
     <BLANKLINE>
     [formatters]
     keys = generic
     <BLANKLINE>
     [logger_root]
     level = INFO
-    handlers = console
+    handlers = console, eventlog
     <BLANKLINE>
     [logger_plone]
     level = INFO
-    handlers =
+    handlers = eventlog
     qualname = plone
+    <BLANKLINE>
+    [logger_waitress]
+    level = INFO
+    handlers = eventlog
+    qualname = waitress
+    <BLANKLINE>
+    [logger_wsgi]
+    level = INFO
+    handlers = accesslog
+    qualname = wsgi
+    propagate = 0
     <BLANKLINE>
     [handler_console]
     class = StreamHandler
@@ -112,12 +128,23 @@ The buildout has also created an INI file containing the waitress configuration:
     level = NOTSET
     formatter = generic
     <BLANKLINE>
+    [handler_accesslog]
+    class = FileHandler
+    args = ('.../sample-buildout/var/log/access.log','a')
+    level = INFO
+    formatter = generic
+    <BLANKLINE>
+    [handler_eventlog]
+    class = FileHandler
+    args = ('.../sample-buildout/var/log/event.log', 'a')
+    level = NOTSET
+    formatter = generic
+    <BLANKLINE>
     [formatter_generic]
     format = %(asctime)s %(levelname)-5.5s [%(name)s:%(lineno)s][%(threadName)s] %(message)s
-    <BLANKLINE>
 
 Custom WSGI options
-=================
+==================
 
 Let's create another buildout configuring a custom port and a custom number of workers::
 
@@ -154,4 +181,111 @@ The buildout has updated our INI file:
     threads = 3
     <BLANKLINE>
     [app:zope]
+    ...
+
+Custom logging
+==============
+
+We want file based logging, i.e. event.log and access.log (ZServers Z2.log).
+Let's create a buildout:
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... access-log = var/log/foo.log
+    ... event-log = var/log/bar.log
+    ... ''' % options)
+
+The buildout has updated our INI file:
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> wsgi_ini = open(os.path.join(instance, 'etc', 'wsgi.ini')).read()
+    >>> print(wsgi_ini)
+    ...
+    [handler_accesslog]
+    class = FileHandler
+    args = ('.../sample-buildout/var/log/foo.log','a')
+    level = INFO
+    formatter = generic
+    <BLANKLINE>
+    [handler_eventlog]
+    class = FileHandler
+    args = ('.../sample-buildout/var/log/bar.log', 'a')
+    level = NOTSET
+    formatter = generic
+    ...
+
+Next we want to disable access logging (but keep an event log file):
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... access-log = disable
+    ... ''' % options)
+
+The buildout has updated our INI file:
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> wsgi_ini = open(os.path.join(instance, 'etc', 'wsgi.ini')).read()
+    >>> print(wsgi_ini)
+    ...
+    [pipeline:main]
+    pipeline =
+        egg:Zope#httpexceptions
+        zope
+    <BLANKLINE>
+    ...
+
+Now we also want to disable event logging:
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... access-log = disable
+    ... event-log = disable
+    ... ''' % options)
+
+The buildout has updated our INI file:
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> wsgi_ini = open(os.path.join(instance, 'etc', 'wsgi.ini')).read()
+    >>> print(wsgi_ini)
+    ...
+    [pipeline:main]
+    pipeline =
+        egg:Zope#httpexceptions
+        zope
+    <BLANKLINE>
+    ...
+    [logger_root]
+    level = INFO
+    handlers = console
+    <BLANKLINE>
+    [logger_plone]
+    level = INFO
+    handlers =
+    qualname = plone
+    <BLANKLINE>
+    [logger_waitress]
+    level = INFO
+    handlers =
+    qualname = waitress
     ...

@@ -43,6 +43,7 @@ setup(
         'Zope >= 4.0b1',
         'ZODB >= 5.1.1',
         'ZEO',
+        'Paste',
     ],
     extras_require={
         'test': [

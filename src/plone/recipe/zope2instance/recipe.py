@@ -661,10 +661,40 @@ class Recipe(Scripts):
         listen = options.get('http-address', '0.0.0.0:8080')
         if ':' not in listen:
             listen = '0.0.0.0:{}'.format(listen)
+
+        default_eventlog = os.path.sep.join(
+            ('var', 'log', '{}.log'.format(self.name),))
+        eventlog_name = options.get('event-log', default_eventlog)
+
+        if eventlog_name.lower() == 'disable':
+            root_handlers = 'console'
+            event_handlers = ''
+        else:
+            root_handlers = 'console, eventlog'
+            event_handlers = 'eventlog'
+
+        default_accesslog = os.path.sep.join(
+            ('var', 'log', '{}-access.log'.format(self.name),))
+
+        accesslog_name = options.get(
+            'z2-log',
+            options.get('access-log', default_accesslog))
+
+        if accesslog_name.lower() == 'disable':
+            pipeline = '\n    '.join(['egg:Zope#httpexceptions', 'zope'])
+            event_handlers = ''
+        else:
+            pipeline = '\n    '.join(
+                ['translogger', 'egg:Zope#httpexceptions', 'zope'])
         options = {
             'location': options['location'],
             'http_address': listen,
             'threads': options.get('threads', 4),
+            'eventlog_name': eventlog_name,
+            'root_handlers': root_handlers,
+            'event_handlers': event_handlers,
+            'accesslog_name': accesslog_name,
+            'pipeline': pipeline,
         }
         wsgi_ini = wsgi_ini_template % options
         with open(wsgi_ini_path, 'w') as f:
@@ -1197,32 +1227,58 @@ threads = %(threads)s
 use = egg:Zope#main
 zope_conf = %(location)s/etc/zope.conf
 
+[filter:translogger]
+use = egg:Paste#translogger
+setup_console_handler = False
+
 [pipeline:main]
 pipeline =
-    egg:Zope#httpexceptions
-    zope
+    %(pipeline)s
 
 [loggers]
-keys = root, plone
+keys = root, plone, waitress, wsgi
 
 [handlers]
-keys = console
+keys = console, accesslog, eventlog
 
 [formatters]
 keys = generic
 
 [logger_root]
 level = INFO
-handlers = console
+handlers = %(root_handlers)s
 
 [logger_plone]
 level = INFO
-handlers =
+handlers = %(event_handlers)s
 qualname = plone
+
+[logger_waitress]
+level = INFO
+handlers = %(event_handlers)s
+qualname = waitress
+
+[logger_wsgi]
+level = INFO
+handlers = accesslog
+qualname = wsgi
+propagate = 0
 
 [handler_console]
 class = StreamHandler
 args = (sys.stderr,)
+level = NOTSET
+formatter = generic
+
+[handler_accesslog]
+class = FileHandler
+args = ('%(accesslog_name)s','a')
+level = INFO
+formatter = generic
+
+[handler_eventlog]
+class = FileHandler
+args = ('%(eventlog_name)s', 'a')
 level = NOTSET
 formatter = generic
 
