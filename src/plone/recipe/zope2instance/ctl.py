@@ -27,7 +27,7 @@ typed interactively is started. Use the action "help" to find out about
 available actions.
 """
 
-from asyncore import dispatcher
+from waitress.wasyncore import dispatcher
 from pkg_resources import iter_entry_points
 from time import sleep
 from waitress import serve
