@@ -24,7 +24,6 @@ Breaking changes:
 
 Bug fixes:
 
-
 - log level for Plone WSGI logger changed to INFO making the logging less
   verbose [ajung] (#66)
 - Improve debugging of run scripts by providing the source code for the
