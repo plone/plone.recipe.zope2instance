@@ -130,13 +130,13 @@ The buildout has also created an INI file containing the waitress configuration:
     <BLANKLINE>
     [handler_accesslog]
     class = FileHandler
-    args = ('.../sample-buildout/var/log/access.log','a')
+    args = ('.../sample-buildout/var/log/instance-access.log','a')
     level = INFO
     formatter = generic
     <BLANKLINE>
     [handler_eventlog]
     class = FileHandler
-    args = ('.../sample-buildout/var/log/event.log', 'a')
+    args = ('.../sample-buildout/var/log/instance.log', 'a')
     level = NOTSET
     formatter = generic
     <BLANKLINE>
@@ -198,25 +198,58 @@ Let's create a buildout:
     ... [instance]
     ... recipe = plone.recipe.zope2instance
     ... eggs =
+    ... user = me:me
     ... access-log = var/log/foo.log
     ... event-log = var/log/bar.log
+    ... z2-log-level = DEBUG
+    ... event-log-level = ERROR
     ... ''' % options)
+
+Let's run it::
+
+    >>> print(system(join('bin', 'buildout'))),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '.../sample-buildout/bin/instance'.
+    ...
 
 The buildout has updated our INI file:
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> wsgi_ini = open(os.path.join(instance, 'etc', 'wsgi.ini')).read()
     >>> print(wsgi_ini)
+    [server:main]
+    use = egg:waitress#main
+    ...
+    [logger_root]
+    level = ERROR
+    handlers = console, eventlog
+    <BLANKLINE>
+    [logger_plone]
+    level = ERROR
+    handlers = eventlog
+    qualname = plone
+    <BLANKLINE>
+    [logger_waitress]
+    level = ERROR
+    handlers = eventlog
+    qualname = waitress
+    <BLANKLINE>
+    [logger_wsgi]
+    level = DEBUG
+    handlers = accesslog
+    qualname = wsgi
+    propagate = 0
     ...
     [handler_accesslog]
     class = FileHandler
-    args = ('.../sample-buildout/var/log/foo.log','a')
-    level = INFO
+    args = ('var/log/foo.log','a')
+    level = DEBUG
     formatter = generic
     <BLANKLINE>
     [handler_eventlog]
     class = FileHandler
-    args = ('.../sample-buildout/var/log/bar.log', 'a')
+    args = ('var/log/bar.log', 'a')
     level = NOTSET
     formatter = generic
     ...
@@ -232,20 +265,30 @@ Next we want to disable access logging (but keep an event log file):
     ... [instance]
     ... recipe = plone.recipe.zope2instance
     ... eggs =
+    ... user = me:me
     ... access-log = disable
     ... ''' % options)
+
+Let's run it::
+
+    >>> print(system(join('bin', 'buildout'))),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '.../sample-buildout/bin/instance'.
+    ...
 
 The buildout has updated our INI file:
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> wsgi_ini = open(os.path.join(instance, 'etc', 'wsgi.ini')).read()
     >>> print(wsgi_ini)
+    [server:main]
+    use = egg:waitress#main
     ...
     [pipeline:main]
     pipeline =
         egg:Zope#httpexceptions
         zope
-    <BLANKLINE>
     ...
 
 Now we also want to disable event logging:
@@ -259,21 +302,31 @@ Now we also want to disable event logging:
     ... [instance]
     ... recipe = plone.recipe.zope2instance
     ... eggs =
+    ... user = me:me
     ... access-log = disable
     ... event-log = disable
     ... ''' % options)
+
+Let's run it::
+
+    >>> print(system(join('bin', 'buildout'))),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '.../sample-buildout/bin/instance'.
+    ...
 
 The buildout has updated our INI file:
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> wsgi_ini = open(os.path.join(instance, 'etc', 'wsgi.ini')).read()
     >>> print(wsgi_ini)
+    [server:main]
+    use = egg:waitress#main
     ...
     [pipeline:main]
     pipeline =
         egg:Zope#httpexceptions
         zope
-    <BLANKLINE>
     ...
     [logger_root]
     level = INFO

@@ -333,7 +333,9 @@ class Recipe(Scripts):
             }
 
         z_log_name = os.path.sep.join(('log', self.name + '-Z2.log'))
-        z_log_name = options.get('z2-log', z_log_name)
+        z_log_name = options.get(
+            'z2-log',
+            options.get('access-log', z_log_name))
         if z_log_name.lower() == 'disable':
             access_event_log = ''
         else:
@@ -662,9 +664,12 @@ class Recipe(Scripts):
         if ':' not in listen:
             listen = '0.0.0.0:{}'.format(listen)
 
+        base_dir = self.buildout['buildout']['directory']
+        var_dir = options.get('var', os.path.join(base_dir, 'var'))
         default_eventlog = os.path.sep.join(
-            ('var', 'log', '{}.log'.format(self.name),))
+            (var_dir, 'log', '{}.log'.format(self.name),))
         eventlog_name = options.get('event-log', default_eventlog)
+        eventlog_level = options.get('event-log-level', 'INFO')
 
         if eventlog_name.lower() == 'disable':
             root_handlers = 'console'
@@ -674,11 +679,14 @@ class Recipe(Scripts):
             event_handlers = 'eventlog'
 
         default_accesslog = os.path.sep.join(
-            ('var', 'log', '{}-access.log'.format(self.name),))
+            (var_dir, 'log', '{}-access.log'.format(self.name),))
 
         accesslog_name = options.get(
             'z2-log',
             options.get('access-log', default_accesslog))
+        accesslog_level = options.get(
+            'access-log-level',
+            options.get('z2-log-level', 'INFO'))
 
         if accesslog_name.lower() == 'disable':
             pipeline = '\n    '.join(['egg:Zope#httpexceptions', 'zope'])
@@ -695,6 +703,8 @@ class Recipe(Scripts):
             'event_handlers': event_handlers,
             'accesslog_name': accesslog_name,
             'pipeline': pipeline,
+            'eventlog_level': eventlog_level,
+            'accesslog_level': accesslog_level,
         }
         wsgi_ini = wsgi_ini_template % options
         with open(wsgi_ini_path, 'w') as f:
@@ -1245,21 +1255,21 @@ keys = console, accesslog, eventlog
 keys = generic
 
 [logger_root]
-level = INFO
+level = %(eventlog_level)s
 handlers = %(root_handlers)s
 
 [logger_plone]
-level = INFO
+level = %(eventlog_level)s
 handlers = %(event_handlers)s
 qualname = plone
 
 [logger_waitress]
-level = INFO
+level = %(eventlog_level)s
 handlers = %(event_handlers)s
 qualname = waitress
 
 [logger_wsgi]
-level = INFO
+level = %(accesslog_level)s
 handlers = accesslog
 qualname = wsgi
 propagate = 0
@@ -1273,7 +1283,7 @@ formatter = generic
 [handler_accesslog]
 class = FileHandler
 args = ('%(accesslog_name)s','a')
-level = INFO
+level = %(accesslog_level)s
 formatter = generic
 
 [handler_eventlog]
