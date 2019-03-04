@@ -141,7 +141,7 @@ The buildout has also created an INI file containing the waitress configuration:
     formatter = generic
     <BLANKLINE>
     [formatter_generic]
-    format = %(asctime)s %(levelname)-5.5s [%(name)s:%(lineno)s][%(threadName)s] %(message)s
+    format = %(asctime)s %(levelname)-7.7s [%(name)s:%(lineno)s][%(threadName)s] %(message)s
 
 Custom WSGI options
 ==================

@@ -1293,5 +1293,5 @@ level = NOTSET
 formatter = generic
 
 [formatter_generic]
-format = %%(asctime)s %%(levelname)-5.5s [%%(name)s:%%(lineno)s][%%(threadName)s] %%(message)s
+format = %%(asctime)s %%(levelname)-7.7s [%%(name)s:%%(lineno)s][%%(threadName)s] %%(message)s
 """  # noqa: E501
