@@ -8,6 +8,17 @@ Changelog
 
 .. towncrier release notes start
 
+6.1.2 (2019-03-03)
+------------------
+
+Breaking changes:
+
+
+- Change the default to enable wsgi unless running Python 2 and setting
+  wsgi=off. See https://github.com/plone/Products.CMFPlone/issues/2763 [pbauer]
+  (#73)
+
+
 6.1.1 (2019-02-08)
 ------------------
 
