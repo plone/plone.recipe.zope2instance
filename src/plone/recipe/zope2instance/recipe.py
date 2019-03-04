@@ -333,7 +333,9 @@ class Recipe(Scripts):
             }
 
         z_log_name = os.path.sep.join(('log', self.name + '-Z2.log'))
-        z_log_name = options.get('z2-log', z_log_name)
+        z_log_name = options.get(
+            'z2-log',
+            options.get('access-log', z_log_name))
         if z_log_name.lower() == 'disable':
             access_event_log = ''
         else:
@@ -661,10 +663,48 @@ class Recipe(Scripts):
         listen = options.get('http-address', '0.0.0.0:8080')
         if ':' not in listen:
             listen = '0.0.0.0:{}'.format(listen)
+
+        base_dir = self.buildout['buildout']['directory']
+        var_dir = options.get('var', os.path.join(base_dir, 'var'))
+        default_eventlog = os.path.sep.join(
+            (var_dir, 'log', '{}.log'.format(self.name),))
+        eventlog_name = options.get('event-log', default_eventlog)
+        eventlog_level = options.get('event-log-level', 'INFO')
+
+        if eventlog_name.lower() == 'disable':
+            root_handlers = 'console'
+            event_handlers = ''
+        else:
+            root_handlers = 'console, eventlog'
+            event_handlers = 'eventlog'
+
+        default_accesslog = os.path.sep.join(
+            (var_dir, 'log', '{}-access.log'.format(self.name),))
+
+        accesslog_name = options.get(
+            'z2-log',
+            options.get('access-log', default_accesslog))
+        accesslog_level = options.get(
+            'access-log-level',
+            options.get('z2-log-level', 'INFO'))
+
+        if accesslog_name.lower() == 'disable':
+            pipeline = '\n    '.join(['egg:Zope#httpexceptions', 'zope'])
+            event_handlers = ''
+        else:
+            pipeline = '\n    '.join(
+                ['translogger', 'egg:Zope#httpexceptions', 'zope'])
         options = {
             'location': options['location'],
             'http_address': listen,
             'threads': options.get('threads', 4),
+            'eventlog_name': eventlog_name,
+            'root_handlers': root_handlers,
+            'event_handlers': event_handlers,
+            'accesslog_name': accesslog_name,
+            'pipeline': pipeline,
+            'eventlog_level': eventlog_level,
+            'accesslog_level': accesslog_level,
         }
         wsgi_ini = wsgi_ini_template % options
         with open(wsgi_ini_path, 'w') as f:
@@ -1197,28 +1237,42 @@ threads = %(threads)s
 use = egg:Zope#main
 zope_conf = %(location)s/etc/zope.conf
 
+[filter:translogger]
+use = egg:Paste#translogger
+setup_console_handler = False
+
 [pipeline:main]
 pipeline =
-    egg:Zope#httpexceptions
-    zope
+    %(pipeline)s
 
 [loggers]
-keys = root, plone
+keys = root, plone, waitress, wsgi
 
 [handlers]
-keys = console
+keys = console, accesslog, eventlog
 
 [formatters]
 keys = generic
 
 [logger_root]
-level = INFO
-handlers = console
+level = %(eventlog_level)s
+handlers = %(root_handlers)s
 
 [logger_plone]
-level = INFO
-handlers =
+level = %(eventlog_level)s
+handlers = %(event_handlers)s
 qualname = plone
+
+[logger_waitress]
+level = %(eventlog_level)s
+handlers = %(event_handlers)s
+qualname = waitress
+
+[logger_wsgi]
+level = %(accesslog_level)s
+handlers = accesslog
+qualname = wsgi
+propagate = 0
 
 [handler_console]
 class = StreamHandler
@@ -1226,6 +1280,18 @@ args = (sys.stderr,)
 level = NOTSET
 formatter = generic
 
+[handler_accesslog]
+class = FileHandler
+args = ('%(accesslog_name)s','a')
+level = %(accesslog_level)s
+formatter = generic
+
+[handler_eventlog]
+class = FileHandler
+args = ('%(eventlog_name)s', 'a')
+level = NOTSET
+formatter = generic
+
 [formatter_generic]
-format = %%(asctime)s %%(levelname)-5.5s [%%(name)s:%%(lineno)s][%%(threadName)s] %%(message)s
+format = %%(asctime)s %%(levelname)-7.7s [%%(name)s:%%(lineno)s][%%(threadName)s] %%(message)s
 """  # noqa: E501

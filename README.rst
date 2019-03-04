@@ -224,12 +224,11 @@ log levels or configure `mailinglogger`.
 event-log
   The filename of the event log. Defaults to ${buildout:directory}/var/log/${partname}.log
   Setting this value to 'disable' will make the <eventlog> section to be omitted,
-  disabling logging events by default to a .log file. Used for ZServer only, not WSGI.
+  disabling logging events by default to a .log file.
 
 event-log-level
   Set the level of the console output for the event log. Level may be any of
   CRITICAL, ERROR, WARN, INFO, DEBUG, or ALL. Defaults to INFO.
-  Used for ZServer only, not WSGI.
 
 event-log-max-size
   Maximum size of event log file. Enables log rotation.
@@ -258,14 +257,15 @@ mailinglogger
 
   You will need to add `mailinglogger` to your buildout's egg section to make this work.
 
-z2-log
-  The filename for the Z2 access log. Defaults to var/log/${partname}-Z2.log.
+access-log, z2-log
+  The filename for the Z2 access log. Defaults to var/log/${partname}-Z2.log
+  (var/log/${partname}-access.log) for WSGI).
   Setting this value to 'disable' will make the <logger access> section to be omitted,
-  disabling logging access events to a .log file. Used for ZServer only, not WSGI.
+  disabling logging access events to a .log file.
 
-z2-log-level
+access-log-level, z2-log-level
   Set the log level for the access log. Level may be any of CRITICAL, ERROR,
-  WARN, INFO, DEBUG, or ALL. Defaults to WARN. Used for ZServer only, not WSGI.
+  WARN, INFO, DEBUG, or ALL. Defaults to WARN (INFO for WSGI).
 
 access-log-max-size
   Maximum size of access log file. Enables log rotation.
