@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+6.1.3 (2019-03-04)
+------------------
+
+Bug fixes:
+
+
+- Restore log files for waitress. [tschorr] (#76)
+
+
 6.1.2 (2019-03-03)
 ------------------
 
