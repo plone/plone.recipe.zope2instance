@@ -43,7 +43,7 @@ setup(
         'Zope >= 4.0b1',
         'ZODB >= 5.1.1',
         'ZEO',
-        'waitress >= 1.1.1',
+        'waitress >= 1.2.0',
         'Paste',
     ],
     extras_require={
