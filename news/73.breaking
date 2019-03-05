@@ -1,2 +1,0 @@
-Change the default to enable wsgi unless running Python 2 and setting wsgi=off. See https://github.com/plone/Products.CMFPlone/issues/2763
-[pbauer]
