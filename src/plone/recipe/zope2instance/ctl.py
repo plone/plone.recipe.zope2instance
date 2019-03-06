@@ -27,10 +27,9 @@ typed interactively is started. Use the action "help" to find out about
 available actions.
 """
 
-from waitress.wasyncore import dispatcher
 from pkg_resources import iter_entry_points
 from time import sleep
-from waitress import serve
+from waitress.wasyncore import dispatcher
 from ZConfig.loader import SchemaLoader
 from zdaemon.zdctl import ZDCmd, ZDCtlOptions
 from zdaemon.zdoptions import ZDOptions
@@ -43,6 +42,7 @@ import six
 import socket
 import sys
 import xml.sax
+import waitress
 import zdaemon
 
 
@@ -891,7 +891,7 @@ def serve_paste(app, global_conf, **kw):
             sock = _sock
         kw.update(sockets=[sock])
     try:
-        serve(app, **kw)
+        waitress.serve(app, **kw)
     finally:
         if isinstance(sock, socket.socket):
             sock.close()
