@@ -100,6 +100,8 @@ class ZopeCtlOptions(ZDCtlOptions):
 
     def realize(self, *args, **kw):
         self.ZopeOptions.realize(self, *args, **kw)
+        if '-s' not in args:
+            self.sockname = None
         # Additional checking of user option; set uid and gid
         if self.user is not None:
             import pwd
