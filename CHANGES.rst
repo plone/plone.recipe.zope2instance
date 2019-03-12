@@ -15,6 +15,8 @@ Bug fixes:
 
 - restore http-fast-listen for waitress (`#71 <https://github.com/plone/plone.recipe.zope2instance/issues/71>`_)
   [tschorr]
+- remove unknown key `effective-user` for wsgi configuration (#80)
+  [petschki]
 
 
 6.1.3 (2019-03-04)

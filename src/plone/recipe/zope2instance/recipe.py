@@ -1170,7 +1170,6 @@ security-policy-implementation %(security_implementation)s
 verbose-security %(verbose_security)s
 %(default_zpublisher_encoding)s
 %(port_base)s
-%(effective_user)s
 %(environment_vars)s
 
 %(mailinglogger_import)s
