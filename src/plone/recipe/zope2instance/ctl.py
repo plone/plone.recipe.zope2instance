@@ -603,7 +603,7 @@ class ZopeCmd(ZDCmd):
             # so that we can split on spaces while respecting quotes.
             tup = self.options.args
             if len(tup) == 1:
-                tup = csv.reader(tup, delimiter=' ').next()
+                tup = next(csv.reader(tup, delimiter=' '))
 
             # Remove -c and add command name as sys.argv[0]
             cmd = ['import sys',
