@@ -135,8 +135,10 @@ class ZopeCtlOptions(ZDCtlOptions):
             self.program = config.runner.program
         else:
             self.program = [os.path.join(self.directory, "bin", "runzope")]
-        if self.sockname:
+        if '-s' in args:
             # set by command line option
+            # or by zdaemon.zdoptions - we need
+            # to override the latter case
             pass
         elif config.runner and config.runner.socket_name:
             self.sockname = config.runner.socket_name
