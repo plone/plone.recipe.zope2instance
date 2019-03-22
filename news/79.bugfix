@@ -1,1 +1,0 @@
-- Fix zdaemon socket location when it's not passed on the command line (`#79 <https://github.com/plone/plone.recipe.zope2instance/pull/79>`_). [tschorr]
