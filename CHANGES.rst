@@ -14,7 +14,7 @@ Changelog
 Bug fixes:
 
 
-- - Fix zdaemon socket location when it's not passed on the command line (`#79 <https://github.com/plone/plone.recipe.zope2instance/pull/79>`_). [tschorr] (#79)
+- Fix zdaemon socket location when it's not passed on the command line (`#79 <https://github.com/plone/plone.recipe.zope2instance/pull/79>`_). [tschorr] (#79)
 - remove unknown key `effective-user` for wsgi configuration (#80)
   [petschki] (#80)
 - Use built-in function next [erral] (#82)
