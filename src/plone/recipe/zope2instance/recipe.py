@@ -1254,7 +1254,7 @@ keys = root, plone, waitress, wsgi
 keys = console, accesslog, eventlog
 
 [formatters]
-keys = generic
+keys = generic, message
 
 [logger_root]
 level = %(eventlog_level)s
@@ -1286,7 +1286,7 @@ formatter = generic
 class = FileHandler
 args = ('%(accesslog_name)s','a')
 level = %(accesslog_level)s
-formatter = generic
+formatter = message
 
 [handler_eventlog]
 class = FileHandler
@@ -1296,4 +1296,7 @@ formatter = generic
 
 [formatter_generic]
 format = %%(asctime)s %%(levelname)-7.7s [%%(name)s:%%(lineno)s][%%(threadName)s] %%(message)s
+
+[formatter_message]
+format = %%(message)s
 """  # noqa: E501

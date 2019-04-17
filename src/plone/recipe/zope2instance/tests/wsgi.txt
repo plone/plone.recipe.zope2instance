@@ -101,7 +101,7 @@ The buildout has also created an INI file containing the waitress configuration:
     keys = console, accesslog, eventlog
     <BLANKLINE>
     [formatters]
-    keys = generic
+    keys = generic, message
     <BLANKLINE>
     [logger_root]
     level = INFO
@@ -133,7 +133,7 @@ The buildout has also created an INI file containing the waitress configuration:
     class = FileHandler
     args = ('.../sample-buildout/var/log/instance-access.log','a')
     level = INFO
-    formatter = generic
+    formatter = message
     <BLANKLINE>
     [handler_eventlog]
     class = FileHandler
@@ -143,6 +143,9 @@ The buildout has also created an INI file containing the waitress configuration:
     <BLANKLINE>
     [formatter_generic]
     format = %(asctime)s %(levelname)-7.7s [%(name)s:%(lineno)s][%(threadName)s] %(message)s
+    <BLANKLINE>
+    [formatter_message]
+    format = %(message)s
 
 Custom WSGI options
 ==================
@@ -249,7 +252,7 @@ The buildout has updated our INI file:
     class = FileHandler
     args = ('var/log/foo.log','a')
     level = DEBUG
-    formatter = generic
+    formatter = message
     <BLANKLINE>
     [handler_eventlog]
     class = FileHandler
