@@ -89,7 +89,7 @@ wsgi
 
    You can use other PasteDeploy-compatible WSGI servers by passing a path
    to a WSGI configuration file here and including the WSGI server's egg in the
-   eggs specification. Example::
+   ``eggs`` specification. Example::
 
      wsgi = ${buildout:directory}/etc/gunicorn.ini
      eggs =
