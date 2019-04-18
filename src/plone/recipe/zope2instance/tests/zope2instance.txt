@@ -1538,7 +1538,7 @@ We should have a zope instance script with the custom config file::
     >>> if WINDOWS:
     ...     instance_path += '-script.py'
     >>> open(instance_path).read()
-    "...plone.recipe.zope2instance.ctl.main(...['-C', '/some/path/my.conf', '-p', '.../bin/interpreter', '-w', '/some/path/service.ini']..."
+    "...plone.recipe.zope2instance.ctl.main(...[...'-w', '/some/path/service.ini']..."
 
 
 Resources directory
