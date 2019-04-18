@@ -110,8 +110,12 @@ class Recipe(Scripts):
         ) not in ('off', 'disable', 'false')
 
         self.wsgi = True
-        if six.PY2 and options.get('wsgi') in ('off', 'false'):
+        self.wsgi_config = os.path.join(options['location'], 'etc', 'wsgi.ini')
+        wsgi_opt = options.get('wsgi', 'on')
+        if six.PY2 and wsgi_opt.lower() in ('off', 'false', '0'):
             self.wsgi = False
+        elif wsgi_opt.lower() not in ('on', 'true', '1'):
+            self.wsgi_config = wsgi_opt
 
         # Get Scripts' attributes
         return Scripts.__init__(self, buildout, name, options)
@@ -754,8 +758,8 @@ class Recipe(Scripts):
         arguments = ["-C", zope_conf_path, '-p', program_path]
         if zopectl_umask:
             arguments.extend(["--umask", int(zopectl_umask, 8)])
-        if self.wsgi:
-            arguments.append("--wsgi")
+        if self.wsgi and self.wsgi_config:
+            arguments.extend(['-w', self.wsgi_config])
         script_arguments = ('\n        ' + repr(arguments) +
                             '\n        + sys.argv[1:]')
 

@@ -922,14 +922,14 @@ def main(args=None):
     """Customized entry point for launching Zope without forking other processes
     """
 
-    if '--wsgi' in args:
+    if '--wsgi' in args or '-w' in args:
         options = WSGICtlOptions()
     else:
         options = ZServerCtlOptions()
     options.add(name="no_request", short="R", long="no-request", flag=1)
     options.add(name="no_login", short="L", long="no-login", flag=1)
     options.add(name="object_path", short="O:", long="object-path=")
-    options.add(name="wsgi", short='w', long='wsgi', flag=1)
+    options.add(name="wsgi", short='w:', long='wsgi=')
     # Realize arguments and set documentation which is used in the -h option
     options.realize(args, doc=__doc__)
 
@@ -937,7 +937,7 @@ def main(args=None):
     options.interpreter = os.path.join(options.directory, 'bin', 'interpreter')
     if sys.platform == 'win32':
         options.interpreter += '-script.py'
-    if six.PY2 and not options.wsgi:
+    if six.PY2 and (options.wsgi or '').lower() in ('off', 'false', '0'):
         # only use zserver in Python 2 and if wsgi is disabled
         from ZServer.Zope2.Startup import run
         script = os.path.join(os.path.dirname(run.__file__), 'run.py')
@@ -949,9 +949,8 @@ def main(args=None):
         # wsgi is the default
         from Zope2.Startup import serve
         script = os.path.join(os.path.dirname(serve.__file__), 'serve.py')
-        wsgi_ini = os.path.join(options.directory, 'etc', 'wsgi.ini')
         options.program = [
-            options.python, options.interpreter, script, wsgi_ini
+            options.python, options.interpreter, script, options.wsgi
         ]
 
     c = ZopeCmd(options)

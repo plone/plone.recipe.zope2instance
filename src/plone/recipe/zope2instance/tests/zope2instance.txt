@@ -1464,7 +1464,7 @@ We should have a zope instance script with the custom config file::
     >>> if WINDOWS:
     ...     instance_path += '-script.py'
     >>> open(instance_path).read()
-    "...plone.recipe.zope2instance.ctl.main(...['-C', '/some/path/my.conf', '-p', '.../bin/interpreter', '--wsgi']..."
+    "...plone.recipe.zope2instance.ctl.main(...['-C', '/some/path/my.conf', '-p', '.../bin/interpreter', '-w', '...etc/wsgi.ini']..."
 
 Custom Zope Conf Imports
 ========================
@@ -1505,6 +1505,41 @@ We should have a zope instance, with custom imports::
     %define INSTANCEHOME .../sample-buildout/parts/instance
     ...
     <BLANKLINE>
+
+Custom WSGI configuration
+=========================
+
+`wsgi` is an option that allows you to use a specific WSGI config file.
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... wsgi = /some/path/service.ini
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print(system(join('bin', 'buildout'))),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '...instance'.
+    Generated interpreter '.../parts/instance/bin/interpreter'...
+
+We should have a zope instance script with the custom config file::
+
+    >>> instance_path = join('bin', 'instance')
+    >>> if WINDOWS:
+    ...     instance_path += '-script.py'
+    >>> open(instance_path).read()
+    "...plone.recipe.zope2instance.ctl.main(...['-C', '/some/path/my.conf', '-p', '.../bin/interpreter', '-w', '/some/path/service.ini']..."
+
 
 Resources directory
 ===================
