@@ -78,9 +78,27 @@ initialization
 
 wsgi
    By default this recipe creates a Python script that uses ``waitress`` as a
-   WSGI server.
-   When running Python 2 you can set ``wsgi = off`` to disable WSGI and enable
-   ZServer.
+   WSGI server. When running Python 2 you can disable WSGI and use ZServer by
+   setting ``wsgi = off`` and including ZServer in the ``eggs`` specification
+   list. Example::
+
+     wsgi = off
+     eggs =
+       ...
+       ZServer
+
+   You can use other PasteDeploy-compatible WSGI servers by passing a path
+   to a WSGI configuration file here and including the WSGI server's egg in the
+   ``eggs`` specification. Example::
+
+     wsgi = ${buildout:directory}/etc/gunicorn.ini
+     eggs =
+       ...
+       gunicorn
+
+   The WSGI configuration file will not be created for you in this case,
+   unlike the built-in ``waitress`` support. You have to provide it yourself.
+
 
 Theme resources
 ---------------
