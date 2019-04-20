@@ -600,8 +600,11 @@ class Recipe(Scripts):
             storage_snippet = indent(
                 options['storage-wrapper'] % storage_snippet, 4)
 
-        zodb_tmp_storage = options.get('zodb-temporary-storage',
-                                       zodb_temporary_storage_template)
+        zodb_tmp_storage = options.get('zodb-temporary-storage', 'on')
+        if zodb_tmp_storage.lower() in ('off', 'false', '0'):
+            zodb_tmp_storage = ''
+        else:
+            zodb_tmp_storage = zodb_temporary_storage_template
         template = wsgi_conf_template if self.wsgi else zope_conf_template
 
         pid_file = options.get(
