@@ -487,7 +487,9 @@ zodb-cache-size-bytes
 
 zodb-temporary-storage
   If given Zope's default temporary storage definition will be replaced by
-  the lines of this parameter.
+  the lines of this parameter. If set to "off" or "false", no temporary storage
+  definition will be created. This prevents startup issues for basic Zope 4
+  sites as it does not ship with the required packages by default anymore.
 
 zope-conf
   A relative or absolute path to a `zope.conf` file. If this is given, many of

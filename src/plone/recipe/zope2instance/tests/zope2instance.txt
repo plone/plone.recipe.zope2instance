@@ -94,6 +94,62 @@ FTP and WebDAV
 With wsgi there is no FTP and WebDAV. Use Python 2 and ``wsgi = off`` for that.
 
 
+Turning off ZODB temporary storage
+==================================
+Zope 4 does not ship with the required packages anymore, so to avoid breakage
+the creation of the ZODB temporary storage definition can be turned off:
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... zodb-temporary-storage = off
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print(system(join('bin', 'buildout'))),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '...instance'.
+    Generated interpreter '.../parts/instance/bin/interpreter'...
+
+The generated configuration has no temporary storage section anymore:
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print(zope_conf)
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    instancehome $INSTANCEHOME
+    %define CLIENTHOME .../sample-buildout/var/instance
+    clienthome $CLIENTHOME
+    debug-mode off
+    security-policy-implementation C
+    verbose-security off
+    default-zpublisher-encoding utf-8
+    <zodb_db main>
+        # Main database
+        cache-size 30000
+        # Blob-enabled FileStorage database
+        <blobstorage>
+          blob-dir .../sample-buildout/var/blobstorage
+          # FileStorage database
+          <filestorage>
+            path .../sample-buildout/var/filestorage/Data.fs
+          </filestorage>
+        </blobstorage>
+        mount-point /
+    </zodb_db>
+    python-check-interval 1000
+
+
 DemoStorage
 ===========
 
