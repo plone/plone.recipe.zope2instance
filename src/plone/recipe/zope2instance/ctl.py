@@ -905,6 +905,7 @@ def server_factory(global_conf, **kws):
         host, port = kws['fast-listen'].split(':')
         prebound = dispatcher()
         prebound.create_socket(socket.AF_INET, socket.SOCK_STREAM)
+        prebound.set_reuse_addr()
         prebound.bind((host, int(port)))
         prebound.listen(5)
         while not prebound.readable():
