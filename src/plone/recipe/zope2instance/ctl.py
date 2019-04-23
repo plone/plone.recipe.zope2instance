@@ -938,7 +938,12 @@ def main(args=None):
     options.interpreter = os.path.join(options.directory, 'bin', 'interpreter')
     if sys.platform == 'win32':
         options.interpreter += '-script.py'
-    if six.PY2 and (options.wsgi or '').lower() in ('off', 'false', '0'):
+
+    if options.wsgi is not None and \
+       options.wsgi.lower() in ('off', 'false', '0'):
+        options.wsgi = None
+
+    if six.PY2 and not options.wsgi:
         # only use zserver in Python 2 and if wsgi is disabled
         from ZServer.Zope2.Startup import run
         script = os.path.join(os.path.dirname(run.__file__), 'run.py')
