@@ -112,7 +112,7 @@ class Recipe(Scripts):
         self.wsgi = True
         self.wsgi_config = os.path.join(options['location'], 'etc', 'wsgi.ini')
         wsgi_opt = options.get('wsgi', 'on')
-        if six.PY2 and wsgi_opt.lower() in ('off', 'false', '0'):
+        if wsgi_opt.lower() in ('off', 'false', '0'):
             self.wsgi = False
         elif wsgi_opt.lower() not in ('on', 'true', '1'):
             self.wsgi_config = wsgi_opt
