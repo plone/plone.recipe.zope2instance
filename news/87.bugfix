@@ -1,1 +1,0 @@
-Add ability to turn off ``zodb-temporary-storage`` to prevent Zope 4 breakage

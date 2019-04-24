@@ -8,6 +8,24 @@ Changelog
 
 .. towncrier release notes start
 
+6.1.5 (2019-04-24)
+------------------
+
+New features:
+
+
+- Add the ability to specify a custom WSGI configuration file (#90)
+
+
+Bug fixes:
+
+
+- Enable socket reuse to prevent startup errors when running in the foreground (#86)
+- Add ability to turn off ``zodb-temporary-storage`` to prevent Zope 4 breakage (#87)
+- Fix WSGI access log formatting configuration (#88)
+- Fix ZServer instance creation with better WSGI flag checking (#95)
+
+
 6.1.4 (2019-03-21)
 ------------------
 

@@ -1,1 +1,0 @@
-Fix ZServer instance creation with better WSGI flag checking
