@@ -10,7 +10,7 @@ Introduction
 This recipe creates and configures a Zope instance in parts.
 (Despite its name it nowadays only works for Zope 4+.) It also
 installs a control script, which is like zopectl, in the bin/ directory.
-The name of the control script is the the name of the part in buildout.
+The name of the control script is the name of the part in buildout.
 By default various runtime and log information will be stored inside the var/
 directory.
 
