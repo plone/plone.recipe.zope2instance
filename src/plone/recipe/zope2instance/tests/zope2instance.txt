@@ -1715,3 +1715,41 @@ script::
     >>> "print('Initialization complete!')" in instance
     True
 
+
+Exceptions debug mode
+=====================
+`debug-exceptions` disables exception views including
+``standard_error_message`` and acts as a debugging aid during development.
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... debug-exceptions = on
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print(system(join('bin', 'buildout'))),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '...instance'.
+    Generated interpreter '.../parts/instance/bin/interpreter'...
+
+Now zope.conf should include the debug-exceptions configuration:
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print(zope_conf)
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    debug-exceptions on
+    ...
+    <BLANKLINE>

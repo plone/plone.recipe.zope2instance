@@ -111,6 +111,19 @@ class StartupTestCase(unittest.TestCase):
             """)
         self.assertEqual(conf.max_conflict_retries, 15)
 
+    def test_debug_exceptions_default(self):
+        conf, handler = self.load_config_text("""\
+        instancehome <<INSTANCE_HOME>>
+        """)
+        self.assertFalse(conf.debug_exceptions)
+
+    def test_debug_exceptions_explicit(self):
+        conf, handler = self.load_config_text("""\
+        instancehome <<INSTANCE_HOME>>
+        debug-exceptions on
+        """)
+        self.assertTrue(conf.debug_exceptions)
+
     def test_default_zpublisher_encoding(self):
         conf, dummy = self.load_config_text("""\
             instancehome <<INSTANCE_HOME>>
