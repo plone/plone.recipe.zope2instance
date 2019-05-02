@@ -212,6 +212,9 @@ class Recipe(Scripts):
             module_paths = [os.path.abspath(p) for p in module_paths]
         paths_lines = '\n'.join(['path %s' % p for p in module_paths])
         debug_mode = options.get('debug-mode', 'off')
+        debug_exceptions = options.get('debug-exceptions', '')
+        if debug_exceptions:
+            debug_exceptions = debug_exceptions_template % debug_exceptions
         security_implementation = 'C'
         verbose_security = options.get('verbose-security', 'off')
         if verbose_security == 'on':
@@ -628,6 +631,7 @@ class Recipe(Scripts):
             paths_lines=paths_lines,
             products_lines=products_lines,
             debug_mode=debug_mode,
+            debug_exceptions=debug_exceptions,
             security_implementation=security_implementation,
             verbose_security=verbose_security,
             effective_user=effective_user,
@@ -1054,6 +1058,10 @@ zodb_temporary_storage_template = """
 </zodb_db>
 """.strip()
 
+debug_exceptions_template = """\
+debug-exceptions %s
+"""
+
 http_force_connection_close_template = """\
   force-connection-close %s
 """.rstrip()
@@ -1173,6 +1181,7 @@ instancehome $INSTANCEHOME
 clienthome $CLIENTHOME
 %(products_lines)s
 debug-mode %(debug_mode)s
+%(debug_exceptions)s
 security-policy-implementation %(security_implementation)s
 verbose-security %(verbose_security)s
 %(default_zpublisher_encoding)s

@@ -139,6 +139,16 @@ verbose-security
   Set to `on` to turn on verbose security (and switch to the Python security
   implementation). Defaults to `off` (and the C security implementation).
 
+debug-exceptions
+  WSGI only: set to `on` to disable exception views including
+  ``standard_error_message``. Exceptions other than ``Unauthorized`` or
+  ``ConflictError`` can then travel up into the WSGI stack. Use this option
+  if you want more convenient error debugging offered by WSGI middleware
+  such as the `werkzeug debugger
+  <https://werkzeug.palletsprojects.com/en/0.15.x/debug/>`_. See the `Zope
+  WSGI documentation <https://zope.readthedocs.io/en/latest/wsgi.html>`_ for
+  examples.
+
 Direct storage
 --------------
 
