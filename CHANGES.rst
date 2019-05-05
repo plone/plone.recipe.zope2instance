@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+6.2.0 (2019-05-04)
+------------------
+
+New features:
+
+
+- Add support for the new ``debug-exceptions`` flag in Zope (#100)
+
+
 6.1.5 (2019-04-24)
 ------------------
 
