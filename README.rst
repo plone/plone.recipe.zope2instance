@@ -466,10 +466,13 @@ scripts
     eggs =
       Plone
       mr.migrator
-      zopeskel
-    scripts = zopeskel
+      my.package
+    scripts = my_package_script
 
-  In the above example, only zopeskel's scripts will be generated.
+  In the above example, only `my_package_script` will be generated. Keep in
+  mind that the egg containing the script (``my.package`` in the example) must
+  be listed explicitly in the eggs option, even if it is a dependency of an
+  already listed egg.
 
 var
   Used to configure the base directory for all things going into var.
