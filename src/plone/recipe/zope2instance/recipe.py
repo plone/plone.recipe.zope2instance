@@ -291,7 +291,7 @@ class Recipe(Scripts):
             deprecation_warnings = '\n'.join((
                 "<warnfilter>",
                 "  action %s" % deprecation_warnings,
-                "  category exceptions.DeprecationWarning",
+                "  category DeprecationWarning",
                 "</warnfilter>"))
 
         zope_conf_additional = options.get('zope-conf-additional', '')
