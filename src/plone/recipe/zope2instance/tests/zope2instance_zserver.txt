@@ -945,8 +945,8 @@ We should have a zope instance, with a basic zope.conf::
             server 8100
             storage 1
             name zeostorage
-            var .../sample-buildout/parts/instance/var
             cache-size 128MB
+    <BLANKLINE>
     <BLANKLINE>
     <BLANKLINE>
     <BLANKLINE>
@@ -979,6 +979,7 @@ specified, they should get included in that section as well.
     ... zeo-client-blob-cache-size = 5GB
     ... zeo-client-blob-cache-size-check = 50
     ... zeo-client-read-only-fallback = true
+    ... zeo-var = %(sample_buildout)s/var
     ... ''' % options)
 
 Let's run it::
@@ -1007,11 +1008,11 @@ We should have a zope instance, with a basic zope.conf::
             server 8100
             storage 1
             name zeostorage
-            var .../sample-buildout/parts/instance/var
             cache-size 128MB
             blob-cache-size 5GB
             blob-cache-size-check 50
     <BLANKLINE>
+            var .../sample-buildout/var
             client persistentcache88
             min-disconnect-poll 10
             max-disconnect-poll 20
@@ -1065,8 +1066,8 @@ We should have a zope instance, with a basic zope.conf::
             server 8100
             storage 1
             name zeostorage
-            var .../sample-buildout/parts/instance/var
             cache-size 128MB
+    <BLANKLINE>
     <BLANKLINE>
     <BLANKLINE>
     <BLANKLINE>
@@ -1122,8 +1123,8 @@ We should have a zope instance, with a basic zope.conf::
           server 8100
           storage 1
           name zeostorage
-          var .../sample-buildout/parts/instance/var
           cache-size 128MB
+    <BLANKLINE>
     <BLANKLINE>
     <BLANKLINE>
     <BLANKLINE>
@@ -1189,8 +1190,8 @@ We should have a zope instance, with a basic zope.conf::
             server 8100
             storage 1
             name zeostorage
-            var .../sample-buildout/parts/instance/var
             cache-size 128MB
+    <BLANKLINE>
     <BLANKLINE>
     <BLANKLINE>
     <BLANKLINE>
@@ -1249,8 +1250,8 @@ We should have a zope instance, with a basic zope.conf::
             server 127.0.0.1:8101
             storage 1
             name zeostorage
-            var .../sample-buildout/parts/instance/var
             cache-size 128MB
+    <BLANKLINE>
     <BLANKLINE>
     <BLANKLINE>
     <BLANKLINE>
@@ -1305,8 +1306,8 @@ We should have a zope instance, with a basic zope.conf::
             server 127.0.0.1:8102
             storage 1
             name zeostorage
-            var .../sample-buildout/parts/instance/var
             cache-size 128MB
+    <BLANKLINE>
     <BLANKLINE>
     <BLANKLINE>
     <BLANKLINE>

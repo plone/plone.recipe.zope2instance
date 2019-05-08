@@ -1,0 +1,1 @@
+Fix handling of ZEO client persistent cache and storage settings

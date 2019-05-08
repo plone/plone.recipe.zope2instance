@@ -505,9 +505,6 @@ class Recipe(Scripts):
                 zeo_client_drop_cache_rather_verify = (
                     'drop-cache-rather-verify %s'
                     % zeo_client_drop_cache_rather_verify)
-            zeo_var_dir = options.get('zeo-var',
-                                      os.path.join(instance_home, 'var'))
-            zeo_client_client = options.get('zeo-client-client', '')
             zeo_client_blob_cache_size = options.get(
                 'zeo-client-blob-cache-size', '')
             zeo_client_blob_cache_size_check = options.get(
@@ -518,8 +515,15 @@ class Recipe(Scripts):
                 'max-disconnect-poll', "")
             zeo_client_read_only_fallback = options.get(
                 'zeo-client-read-only-fallback', 'false')
+            zeo_client_client = options.get('zeo-client-client', '')
             if zeo_client_client:
                 zeo_client_client = 'client %s' % zeo_client_client
+                zeo_var_dir = options.get('zeo-var', '')
+                if not zeo_var_dir:
+                    zeo_var_dir = '$(ZEO_TMP)'
+                zeo_var_dir = 'var %s' % zeo_var_dir
+            else:
+                zeo_var_dir = ''
             if zeo_client_blob_cache_size:
                 zeo_client_blob_cache_size = (
                     'blob-cache-size %s' % zeo_client_blob_cache_size)
@@ -1015,9 +1019,9 @@ zeo_storage_template = """
       %(zeo_address_list)s
       storage %(zeo_storage)s
       name zeostorage
-      var %(zeo_var_dir)s
       cache-size %(zeo_client_cache_size)s
       %(zeo_authentication)s
+      %(zeo_var_dir)s
       %(zeo_client_client)s
       %(zeo_client_min_disconnect_poll)s
       %(zeo_client_max_disconnect_poll)s
@@ -1035,11 +1039,11 @@ zeo_blob_storage_template = """
       %(zeo_address_list)s
       storage %(zeo_storage)s
       name zeostorage
-      var %(zeo_var_dir)s
       cache-size %(zeo_client_cache_size)s
       %(zeo_client_blob_cache_size)s
       %(zeo_client_blob_cache_size_check)s
       %(zeo_authentication)s
+      %(zeo_var_dir)s
       %(zeo_client_client)s
       %(zeo_client_min_disconnect_poll)s
       %(zeo_client_max_disconnect_poll)s
