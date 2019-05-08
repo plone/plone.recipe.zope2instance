@@ -27,6 +27,10 @@ You can use it with a part like this::
    This release is targeted at Plone 5.2, ZODB 5, Zope 4, and Python 2.7, 3.6 or 3.7.
    If you are using this recipe with earlier versions, you should use one of the releases from the 4.x series.
 
+
+.. contents::
+
+
 Options
 =======
 
@@ -549,8 +553,12 @@ http-header-max-length
 
     http-header-max-length = 16384
 
-Additional Control Script `debug`, `console` and `run` Commands
----------------------------------------------------------------
+
+The generated control script
+============================
+
+The `debug`, `console` and `run` commands
+-----------------------------------------
 
 The extended Zope control script installed by this recipe, usually
 `bin/instance` by convention, offers a `debug` command and another
@@ -582,8 +590,8 @@ Second, IDEs like WingIDE and PyCharm support debugging running
 processes from within. For this to work, the process should also
 not fork away.
 
-Additional control script commands
-----------------------------------
+Developing your own control script commands
+-------------------------------------------
 
 Third-party distributions may add additional commands to the control script by
 installing a 'plone.recipe.zope2instance.ctl' entry point. For example,
@@ -612,8 +620,16 @@ parameters:
   args
     Any additional arguments that were passed on the command line.
 
-Reporting bugs or asking questions
-----------------------------------
+Known issues
+------------
 
-We have a shared bugtracker and help desk on Launchpad:
-https://bugs.launchpad.net/collective.buildout/
+* the ``restart`` command will not function reliably if you run the buildout
+  while the Zope instance is still running. In those cases, always use
+  ``stop`` followed by ``start`` to restart the Zope instance.
+
+Reporting bugs or asking questions
+==================================
+
+Please use the bug tracker in this repository at
+https://github.com/plone/plone.recipe.zope2instance/issues for questions and
+bug reports.
