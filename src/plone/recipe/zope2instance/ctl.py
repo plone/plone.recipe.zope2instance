@@ -41,6 +41,7 @@ import pkg_resources
 import six
 import socket
 import sys
+import tempfile
 import xml.sax
 import waitress
 import zdaemon
@@ -104,6 +105,13 @@ class ZopeCtlOptions(ZDCtlOptions):
                  default=1)
 
     def realize(self, *args, **kw):
+        # Before ZConfig interprets the Zope configuration, we need to make
+        # sure to put a suitable value for ZEO_TMP into the environment.
+        # This value is used for storing ZEO persistent caches in case
+        # the var option was not also specified. Otherwise it is not used
+        # and setting it does not affect anything.
+        os.environ.update({'ZEO_TMP': tempfile.gettempdir()})
+
         self.ZopeOptions.realize(self, *args, **kw)
         # Additional checking of user option; set uid and gid
         if self.user is not None:

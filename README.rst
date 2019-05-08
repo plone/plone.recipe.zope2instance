@@ -336,13 +336,15 @@ Advanced ZEO options
 
 zeo-client-cache-size
   Set the size of the ZEO client cache. Defaults to '128MB'. The ZEO cache is
-  a disk based cache shared between application threads. It's stored inside
-  the directory designated by the `TMP` environment variable.
+  a disk based cache shared between application threads. It is stored either in
+  temporary files or, in case you activate persistent cache files with the
+  option `client` (see below), in the folder designated by the `zeo-var`
+  option.
 
 zeo-client-client
   Set the persistent cache name that is used to construct the cache
-  filenames. This enabled the ZEO cache to be persisted. Persistent cache
-  files are disabled by default.
+  filenames. This enables the ZEO cache to persist across application restarts.
+  Persistent cache files are disabled by default.
 
 zeo-client-blob-cache-size
   Set the maximum size of the ZEO blob cache, in bytes.  If not set, then
@@ -363,8 +365,9 @@ zeo-storage
   Set the storage number of the ZEO storage. Defaults to '1'.
 
 zeo-var
-  Used in the ZEO storage snippets to configure the ZEO var folder.
-  Defaults to $INSTANCE_HOME/var.
+  Used in the ZEO storage snippets to configure the ZEO var folder, which
+  is used to store persistent ZEO client cache files. Defaults to the system
+  temporary folder.
 
 Advanced options
 ----------------
@@ -466,10 +469,13 @@ scripts
     eggs =
       Plone
       mr.migrator
-      zopeskel
-    scripts = zopeskel
+      my.package
+    scripts = my_package_script
 
-  In the above example, only zopeskel's scripts will be generated.
+  In the above example, only `my_package_script` will be generated. Keep in
+  mind that the egg containing the script (``my.package`` in the example) must
+  be listed explicitly in the eggs option, even if it is a dependency of an
+  already listed egg.
 
 var
   Used to configure the base directory for all things going into var.
