@@ -2,7 +2,7 @@ Introduction
 ============
 
 .. image:: http://img.shields.io/pypi/v/plone.recipe.zope2instance.svg
-   :target: https://pypi.python.org/pypi/plone.recipe.zope2instance
+   :target: https://pypi.org/project/plone.recipe.zope2instance
 
 .. image:: http://img.shields.io/travis/plone/plone.recipe.zope2instance.svg
    :target: https://travis-ci.org/plone/plone.recipe.zope2instance
@@ -107,7 +107,7 @@ wsgi
 Theme resources
 ---------------
 
-Please refer to `<http://pypi.python.org/pypi/plone.resource>`_ for more
+Please refer to `<https://pypi.org/project/plone.resource>`_ for more
 details and setup instructions.
 
 resources
@@ -227,7 +227,7 @@ zeo-realm
 RelStorage
 ----------
 
-Please refer to `<http://pypi.python.org/pypi/RelStorage>`_ for more details
+Please refer to `<https://pypi.org/project/RelStorage>`_ for more details
 and setup instructions.
 
 rel-storage
