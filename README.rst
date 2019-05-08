@@ -27,6 +27,11 @@ You can use it with a part like this::
    This release is targeted at Plone 5.2, ZODB 5, Zope 4, and Python 2.7, 3.6 or 3.7.
    If you are using this recipe with earlier versions, you should use one of the releases from the 4.x series.
 
+
+.. contents::
+   :local:
+
+
 Options
 =======
 
