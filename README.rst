@@ -630,5 +630,6 @@ Known issues
 Reporting bugs or asking questions
 ==================================
 
-We have a shared bugtracker and help desk on Launchpad:
-https://bugs.launchpad.net/collective.buildout/
+PLease use the bug tracker in this repository at
+https://github.com/plone/plone.recipe.zope2instance/issues for questions and
+bug reports.
