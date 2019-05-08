@@ -28,7 +28,7 @@ You can use it with a part like this::
    If you are using this recipe with earlier versions, you should use one of the releases from the 4.x series.
 
 
-.. contents::
+.. contents:: **Contents**
 
 
 Options
