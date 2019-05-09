@@ -1268,7 +1268,7 @@ pipeline =
     %(pipeline)s
 
 [loggers]
-keys = root, plone, waitress, wsgi
+keys = root, plone, waitress.queue, waitress, wsgi
 
 [handlers]
 keys = console, accesslog, eventlog
@@ -1284,6 +1284,12 @@ handlers = %(root_handlers)s
 level = %(eventlog_level)s
 handlers = %(event_handlers)s
 qualname = plone
+
+[logger_waitress.queue]
+level = INFO
+handlers = eventlog
+qualname = waitress.queue
+propagate = 0
 
 [logger_waitress]
 level = %(eventlog_level)s
