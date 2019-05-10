@@ -8,6 +8,21 @@ Changelog
 
 .. towncrier release notes start
 
+6.2.1 (2019-05-10)
+------------------
+
+Bug fixes:
+
+
+- Clarify documentation for the `scripts` option (#29)
+- Fix handling of ZEO client persistent cache and storage settings (#30)
+- Try to look up a suitable log file for the ``logtail`` verb (#85)
+- Fixed invalid import path for DeprecationWarning for ``warnfilter`` (#105)
+- Document where ``restart`` can break in the project README (#107)
+- Prevent constant `waitress.queue` log messages on the console and just send
+  them to the event log. (#110)
+
+
 6.2.0 (2019-05-04)
 ------------------
 

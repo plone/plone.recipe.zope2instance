@@ -1,2 +1,0 @@
-Prevent constant `waitress.queue` log messages on the console and just send
-them to the event log.
