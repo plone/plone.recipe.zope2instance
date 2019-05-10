@@ -35,6 +35,7 @@ from zdaemon.zdctl import ZDCmd, ZDCtlOptions
 from zdaemon.zdoptions import ZDOptions
 from Zope2.Startup.options import ConditionalSchemaParser
 import csv
+import logging
 import os
 import os.path
 import pkg_resources
@@ -966,6 +967,23 @@ def main(args=None):
         options.program = [
             options.python, options.interpreter, script, options.wsgi
         ]
+
+        # Try to find the log file from the WSGI configuration
+        # Requires loading the logging configuration from the WSGI config
+        try:
+            logging.config.fileConfig(options.wsgi)
+
+            # The root logger is the only one we can identify and get
+            # reliably as we cannot know what the other loggers' names are
+            root_logger = logging.getLogger()
+
+            for handler in root_logger.handlers:
+                # Try to find a FileHandler and (ab)use its file target
+                if isinstance(handler, logging.FileHandler):
+                    options.logfile = handler.baseFilename
+                    break
+        except Exception:
+            pass  # Give up
 
     c = ZopeCmd(options)
 
