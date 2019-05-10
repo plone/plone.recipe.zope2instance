@@ -95,7 +95,7 @@ The buildout has also created an INI file containing the waitress configuration:
         zope
     <BLANKLINE>
     [loggers]
-    keys = root, plone, waitress, wsgi
+    keys = root, plone, waitress.queue, waitress, wsgi
     <BLANKLINE>
     [handlers]
     keys = console, accesslog, eventlog
@@ -111,6 +111,12 @@ The buildout has also created an INI file containing the waitress configuration:
     level = INFO
     handlers = eventlog
     qualname = plone
+    <BLANKLINE>
+    [logger_waitress.queue]
+    level = INFO
+    handlers = eventlog
+    qualname = waitress.queue
+    propagate = 0
     <BLANKLINE>
     [logger_waitress]
     level = INFO
@@ -237,6 +243,12 @@ The buildout has updated our INI file:
     handlers = eventlog
     qualname = plone
     <BLANKLINE>
+    [logger_waitress.queue]
+    level = INFO
+    handlers = eventlog
+    qualname = waitress.queue
+    propagate = 0
+    <BLANKLINE>
     [logger_waitress]
     level = ERROR
     handlers = eventlog
@@ -345,6 +357,12 @@ The buildout has updated our INI file:
     level = INFO
     handlers =
     qualname = plone
+    <BLANKLINE>
+    [logger_waitress.queue]
+    level = INFO
+    handlers = eventlog
+    qualname = waitress.queue
+    propagate = 0
     <BLANKLINE>
     [logger_waitress]
     level = INFO
