@@ -707,9 +707,14 @@ class Recipe(Scripts):
         if accesslog_name.lower() == 'disable':
             pipeline = '\n    '.join(['egg:Zope#httpexceptions', 'zope'])
             event_handlers = ''
+            wsgi_handler_accesslog = ''
         else:
             pipeline = '\n    '.join(
                 ['translogger', 'egg:Zope#httpexceptions', 'zope'])
+            wsgi_handler_accesslog = wsgi_handler_accesslog_template % {
+                'accesslog_name': accesslog_name,
+                'accesslog_level': accesslog_level,
+            }
         options = {
             'location': options['location'],
             'http_address': listen,
@@ -718,10 +723,10 @@ class Recipe(Scripts):
             'eventlog_name': eventlog_name,
             'root_handlers': root_handlers,
             'event_handlers': event_handlers,
-            'accesslog_name': accesslog_name,
             'pipeline': pipeline,
             'eventlog_level': eventlog_level,
             'accesslog_level': accesslog_level,
+            'wsgi_handler_accesslog': wsgi_handler_accesslog,
         }
         wsgi_ini = wsgi_ini_template % options
         with open(wsgi_ini_path, 'w') as f:
@@ -1308,11 +1313,7 @@ args = (sys.stderr,)
 level = NOTSET
 formatter = generic
 
-[handler_accesslog]
-class = FileHandler
-args = ('%(accesslog_name)s','a')
-level = %(accesslog_level)s
-formatter = message
+%(wsgi_handler_accesslog)s
 
 [handler_eventlog]
 class = FileHandler
@@ -1326,3 +1327,11 @@ format = %%(asctime)s %%(levelname)-7.7s [%%(name)s:%%(lineno)s][%%(threadName)s
 [formatter_message]
 format = %%(message)s
 """  # noqa: E501
+
+wsgi_handler_accesslog_template = """
+[handler_accesslog]
+class = FileHandler
+args = ('%(accesslog_name)s','a')
+level = %(accesslog_level)s
+formatter = message
+"""
