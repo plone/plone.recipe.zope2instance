@@ -1,0 +1,2 @@
+Fix disabling the access-log when using wsgi.
+[pbauer]
