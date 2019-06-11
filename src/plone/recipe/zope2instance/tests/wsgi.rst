@@ -78,7 +78,7 @@ We should have an instance part, with a basic zope.conf::
     </zodb_db>
     python-check-interval 1000
 
-The buildout has also created an INI file containing the waitress configuration::
+The buildout has also created an INI file containing the waitress configuration:
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> with open(os.path.join(instance, 'etc', 'wsgi.ini')) as fd:
@@ -172,7 +172,7 @@ The buildout has also created an INI file containing the waitress configuration:
     format = %(message)s
 
 Custom WSGI options
-===================
+==================
 
 Let's create another buildout configuring a custom port and a custom number of workers::
 
@@ -203,7 +203,7 @@ Let's run it::
     >>> WINDOWS or "Generated script" in output
     True
 
-The buildout has updated our INI file::
+The buildout has updated our INI file:
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> with open(os.path.join(instance, 'etc', 'wsgi.ini')) as fd:
@@ -245,7 +245,7 @@ Custom logging
 ==============
 
 We want file based logging, i.e. event.log and access.log (ZServers Z2.log).
-Let's create a buildout::
+Let's create a buildout:
 
     >>> write('buildout.cfg',
     ... '''
@@ -275,7 +275,7 @@ Let's run it::
     >>> WINDOWS or "Generated script" in output
     True
 
-The buildout has updated our INI file::
+The buildout has updated our INI file:
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> with open(os.path.join(instance, 'etc', 'wsgi.ini')) as fd:
@@ -324,7 +324,7 @@ The buildout has updated our INI file::
     formatter = generic
     ...
 
-Next we want to disable access logging (but keep an event log file)::
+Next we want to disable access logging (but keep an event log file):
 
     >>> write('buildout.cfg',
     ... '''
@@ -351,7 +351,7 @@ Let's run it::
     >>> WINDOWS or "Generated script" in output
     True
 
-The buildout has updated our INI file::
+The buildout has updated our INI file:
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> with open(os.path.join(instance, 'etc', 'wsgi.ini')) as fd:
@@ -365,7 +365,7 @@ The buildout has updated our INI file::
         zope
     ...
 
-Now we also want to disable event logging::
+Now we also want to disable event logging:
 
     >>> write('buildout.cfg',
     ... '''
@@ -393,7 +393,7 @@ Let's run it::
     >>> WINDOWS or "Generated script" in output
     True
 
-The buildout has updated our INI file::
+The buildout has updated our INI file:
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> with open(os.path.join(instance, 'etc', 'wsgi.ini')) as fd:
@@ -532,3 +532,48 @@ The buildout has updated our INI file:
     <BLANKLINE>
     [loggers]
     ...
+
+Custom pipeline
+===============
+
+The recipe can configure custom pipelines in the ``wsgi.ini``::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... pipeline =
+    ...     foo
+    ...     bar
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print(system(join('bin', 'buildout'))),
+    Uninstalling instance.
+    Installing instance.
+    ...
+
+The buildout has updated our INI file and we can see that we have a custom pipeline::
+
+    >>> wsgi_ini = open(os.path.join(instance, 'etc', 'wsgi.ini')).read()
+    >>> print(wsgi_ini)
+    [server:main]
+    ...
+    [pipeline:main]
+    pipeline =
+        foo
+        bar
+        zope
+    <BLANKLINE>
+    [loggers]
+    ...
+
+
+# END OF TEST

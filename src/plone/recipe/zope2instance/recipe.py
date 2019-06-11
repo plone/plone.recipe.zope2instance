@@ -118,6 +118,12 @@ class Recipe(Scripts):
         elif wsgi_opt.lower() not in ('on', 'true', '1'):
             self.wsgi_config = wsgi_opt
 
+        if 'pipeline' not in options:
+            options['pipeline'] = '''
+                translogger
+                egg:Zope#httpexceptions
+                zope
+            '''.strip()
         # Get Scripts' attributes
         return Scripts.__init__(self, buildout, name, options)
 
@@ -776,36 +782,33 @@ class Recipe(Scripts):
         else:
             accesslog_args = accesslog_args.format(accesslog_name)
 
-        pipeline = []
+        pipeline = options['pipeline'].split()
         if accesslog_name.lower() == 'disable':
-            pipeline = ['egg:Zope#httpexceptions']
             event_handlers = ''
             accesslog_handler = 'NullHandler'
             accesslog_args = "()"
-        else:
-            pipeline = [
-                'translogger', 'egg:Zope#httpexceptions']
+            pipeline = [line for line in pipeline if line != "translogger"]
 
         sentry_dsn = options.get('sentry_dsn', '')
         if sentry_dsn:
-            pipeline.append('sentry')
+            if "zope" in pipeline:
+                pipeline.insert(pipeline.index("zope"), 'sentry')
+            else:
+                pipeline.append('sentry')
         sentry_level = options.get('sentry_level', 'INFO')
         sentry_event_level = options.get('sentry_event_level', 'ERROR')
         sentry_ignore = options.get('sentry_ignore', '')
 
-        clear_untrusted_proxy_headers = options.get(
-            'clear-untrusted-proxy-headers', 'false'
-        )
+        if "zope" not in pipeline:
+            pipeline.append('zope')
 
-        pipeline.append('zope')
-        pipeline = '\n    '.join(pipeline)
         wsgi_options = {
             'accesslog_args': accesslog_args,
             'accesslog_handler': accesslog_handler,
             'accesslog_kwargs': accesslog_kwargs,
             'accesslog_level': accesslog_level,
             'accesslog_name': accesslog_name,
-            'clear_untrusted_proxy_headers': clear_untrusted_proxy_headers,
+            'clear_untrusted_proxy_headers': options.get('clear-untrusted-proxy-headers', 'false'),
             'event_handlers': event_handlers,
             'eventlog_args': eventlog_args,
             'eventlog_handler': eventlog_handler,
@@ -817,7 +820,7 @@ class Recipe(Scripts):
             'location': options['location'],
             'max_request_body_size': options.get(
                 'max-request-body-size', 1073741824),
-            'pipeline': pipeline,
+            'pipeline': '\n    '.join(pipeline),
             'root_handlers': root_handlers,
             'sentry_dsn': sentry_dsn,
             'sentry_event_level': sentry_event_level,
