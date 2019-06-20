@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+6.2.2 (2019-06-19)
+------------------
+
+Bug fixes:
+
+
+- Fix startup issues by adding support for new Zope configuration keys
+  ``zmi-bookmarkable-urls`` and ``pid-filename`` (#112)
+
+
 6.2.1 (2019-05-10)
 ------------------
 

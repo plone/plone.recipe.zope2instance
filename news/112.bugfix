@@ -1,2 +1,0 @@
-Fix startup issues by adding support for new Zope configuration keys
-``zmi-bookmarkable-urls`` and ``pid-filename``
