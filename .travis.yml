@@ -13,6 +13,6 @@ matrix:
 install:
   - pip install tox-travis
 script:
-  - tox
+  - tox -vvvv
 cache:
   pip: true
