@@ -90,6 +90,9 @@ We should have a zope instance, with a basic zope.conf::
     <BLANKLINE>
     <BLANKLINE>
     <BLANKLINE>
+    <environment>
+        CHAMELEON_CACHE .../var/cache
+    </environment>
     <zodb_db main>
         # Main database
         cache-size 30000

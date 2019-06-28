@@ -49,6 +49,9 @@ We should have a zope instance, with a basic zope.conf::
     security-policy-implementation C
     verbose-security off
     default-zpublisher-encoding utf-8
+    <environment>
+        CHAMELEON_CACHE .../var/cache
+    </environment>
     <zodb_db main>
         # Main database
         cache-size 30000
@@ -76,6 +79,7 @@ We should have a blobstorage directory.
 
     >>> ls('var')
     d  blobstorage
+    d  cache
     d  filestorage
     d  instance
     d  log
@@ -134,6 +138,9 @@ The generated configuration has no temporary storage section anymore:
     security-policy-implementation C
     verbose-security off
     default-zpublisher-encoding utf-8
+    <environment>
+        CHAMELEON_CACHE .../var/cache
+    </environment>
     <zodb_db main>
         # Main database
         cache-size 30000
@@ -1351,6 +1358,7 @@ Our environment variables should be set now::
     ...
     <environment>
       TZ US/Eastern
+    CHAMELEON_CACHE .../var/cache
     </environment>
     ...
 
@@ -1402,6 +1410,7 @@ Several all on one line::
     ... recipe = plone.recipe.zope2instance
     ... eggs =
     ... user = me:me
+    ... template-cache = off
     ... environment-vars = TZ US/Eastern TMP /var/tmp DISABLE_PTS True
     ... ''' % options)
 
