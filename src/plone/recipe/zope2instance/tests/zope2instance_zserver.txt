@@ -48,31 +48,22 @@ We should have a zope instance, with a basic zope.conf::
     instancehome $INSTANCEHOME
     %define CLIENTHOME .../sample-buildout/var/instance
     clienthome $CLIENTHOME
-    <BLANKLINE>
-    <BLANKLINE>
     debug-mode off
     security-policy-implementation C
     verbose-security off
     default-zpublisher-encoding utf-8
     http-header-max-length 8192
-    <BLANKLINE>
-    <BLANKLINE>
-    <BLANKLINE>
     zserver-threads 2
-    <BLANKLINE>
-    <BLANKLINE>
-    <BLANKLINE>
-    <BLANKLINE>
-    <BLANKLINE>
+    <environment>
+        CHAMELEON_CACHE .../var/cache
+    </environment>
     <eventlog>
-    <BLANKLINE>
       level INFO
       <logfile>
         path .../sample-buildout/var/log/instance.log
         level INFO
       </logfile>
     </eventlog>
-    <BLANKLINE>
     <logger access>
       level WARN
       <logfile>
@@ -80,20 +71,12 @@ We should have a zope instance, with a basic zope.conf::
         format %(message)s
       </logfile>
     </logger>
-    <BLANKLINE>
     <http-server>
       address 8080
-    <BLANKLINE>
     </http-server>
-    <BLANKLINE>
-    <BLANKLINE>
-    <BLANKLINE>
-    <BLANKLINE>
-    <BLANKLINE>
     <zodb_db main>
         # Main database
         cache-size 30000
-    <BLANKLINE>
     # Blob-enabled FileStorage database
         <blobstorage>
           blob-dir .../sample-buildout/var/blobstorage
@@ -104,7 +87,6 @@ We should have a zope instance, with a basic zope.conf::
         </blobstorage>
         mount-point /
     </zodb_db>
-    <BLANKLINE>
     <zodb_db temporary>
         # Temporary storage database (for sessions)
         <temporarystorage>
@@ -113,19 +95,16 @@ We should have a zope instance, with a basic zope.conf::
         mount-point /temp_folder
         container-class Products.TemporaryFolder.TemporaryContainer
     </zodb_db>
-    <BLANKLINE>
     pid-filename .../sample-buildout/var/instance.pid
     lock-filename .../sample-buildout/var/instance.lock
     python-check-interval 1000
     enable-product-installation off
-    <BLANKLINE>
-    <BLANKLINE>
-    <BLANKLINE>
 
 We should have a blobstorage directory.
 
     >>> ls('var')
     d  blobstorage
+    d  cache
     d  filestorage
     d  instance
     d  log
@@ -1698,6 +1677,7 @@ between several servers::
     ... wsgi = off
     ... eggs =
     ... user = me:me
+    ... template-cache = off
     ... environment-vars = TZ US/Eastern
     ... ''' % options)
 
@@ -1735,6 +1715,7 @@ Now let's add several environment variables::
     ... wsgi = off
     ... eggs =
     ... user = me:me
+    ... template-cache = off
     ... environment-vars =
     ...     TZ US/Eastern
     ...     TMP /var/tmp
@@ -1772,6 +1753,7 @@ Several all on one line::
     ... wsgi = off
     ... eggs =
     ... user = me:me
+    ... template-cache = off
     ... environment-vars = TZ US/Eastern TMP /var/tmp DISABLE_PTS True
     ... ''' % options)
 

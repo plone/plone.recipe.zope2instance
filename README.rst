@@ -481,6 +481,13 @@ scripts
   be listed explicitly in the eggs option, even if it is a dependency of an
   already listed egg.
 
+template-cache
+  Used to configure the cache for page-template files. Chameleon will write
+  compile page-templates into this directory and use it as a cache.
+  See https://chameleon.readthedocs.io/en/latest/configuration.html for more info.
+  Valid options are off or on or a directory-location.
+  Defaults to ${buildout:directory}/var/cache (it also confirms to what var is set to).
+
 var
   Used to configure the base directory for all things going into var.
   Defaults to ${buildout:directory}/var.

@@ -46,6 +46,9 @@ We should have an instance part, with a basic zope.conf::
     security-policy-implementation C
     verbose-security off
     default-zpublisher-encoding utf-8
+    <environment>
+        CHAMELEON_CACHE .../var/cache
+    </environment>
     <zodb_db main>
         # Main database
         cache-size 30000

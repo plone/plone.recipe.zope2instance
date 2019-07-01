@@ -263,7 +263,46 @@ class Recipe(Scripts):
         ip_address = options.get('ip-address', '')
         if ip_address:
             ip_address = 'ip-address %s' % ip_address
+
         environment_vars = options.get('environment-vars', '')
+
+        if 'CHAMELEON_CACHE' in environment_vars:
+            # We do not override a explicitly defined CHAMELEON_CACHE setting!
+            # Do not create the directory here because this is probably a old
+            # setting and we don't want to mess with peoples working setup.
+            chameleon_cache = None
+        else:
+            # Use template-cache setting, default to on
+            chameleon_cache = options.get('template-cache', 'on')
+
+        if chameleon_cache:
+            if chameleon_cache.lower() in ('on', '1', 'true', 'enabled'):
+                # use default setting var_dir/cache
+                chameleon_cache = os.path.join(var_dir, 'cache')
+            elif chameleon_cache.lower() in ('off', '0', 'false', 'disabled'):
+                # disable cache
+                chameleon_cache = None
+            else:
+                # use the passed directory, cache is enabled
+                pass
+
+        # create the cache dir if cache is enabled
+        if chameleon_cache and not os.path.exists(chameleon_cache):
+            os.makedirs(chameleon_cache)
+
+        # Inject cache into environment_vars unless it is set there
+        if chameleon_cache and 'CHAMELEON_CACHE' not in environment_vars:
+            chameleon_cache = 'CHAMELEON_CACHE {}'.format(chameleon_cache)
+            if environment_vars and '\n' in environment_vars:
+                # default case
+                environment_vars += '\n'.format(chameleon_cache)
+            elif environment_vars:
+                # handle case of all vars in one line
+                environment_vars += ' {}'.format(chameleon_cache)
+            else:
+                # handle case when there are no environment_vars yet
+                environment_vars = chameleon_cache
+
         if environment_vars:
             # if the vars are all given on one line we need to do some work
             if '\n' not in environment_vars:
