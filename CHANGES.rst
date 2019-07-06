@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+6.3.0 (2019-07-06)
+------------------
+
+New features:
+
+
+- Enable CHAMELEON_CACHE by default. See https://github.com/plone/Products.CMFPlone/issues/2898
+  [pbauer] (#118)
+
+
 6.2.2 (2019-06-19)
 ------------------
 
