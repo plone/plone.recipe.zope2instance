@@ -58,13 +58,13 @@ level = NOTSET
 formatter = generic
 
 [handler_accesslog]
-class = FileHandler
+class = %(accesslog_handler)s
 args = ('%(accesslog_name)s','a')
 level = %(accesslog_level)s
 formatter = message
 
 [handler_eventlog]
-class = FileHandler
+class = %(eventlog_handler)s
 args = ('%(eventlog_name)s', 'a')
 level = NOTSET
 formatter = generic
