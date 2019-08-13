@@ -726,6 +726,7 @@ class Recipe(Scripts):
         eventlog_name = options.get('event-log', default_eventlog)
         eventlog_level = options.get('event-log-level', 'INFO')
         eventlog_handler = options.get('event-log-handler', 'FileHandler')
+        eventlog_kwargs = options.get('event-log-kwargs', '{}')
         eventlog_args = options.get('event-log-args')
         if not eventlog_args:
             eventlog_args = '("{}", "a")'.format(default_eventlog)
@@ -749,6 +750,7 @@ class Recipe(Scripts):
             'access-log-level',
             options.get('z2-log-level', 'INFO'))
         accesslog_handler = options.get('access-log-handler', 'FileHandler')
+        accesslog_kwargs = options.get('access-log-kwargs', '{}')
         accesslog_args = options.get('access-log-args')
         if not accesslog_args:
             accesslog_args = '("{}", "a")'.format(default_accesslog)
@@ -766,11 +768,13 @@ class Recipe(Scripts):
             'accesslog_handler': accesslog_handler,
             'accesslog_name': accesslog_name,
             'accesslog_args': accesslog_args,
+            'accesslog_kwargs': accesslog_kwargs,
             'event_handlers': event_handlers,
             'eventlog_handler': eventlog_handler,
             'eventlog_level': eventlog_level,
             'eventlog_name': eventlog_name,
             'eventlog_args': eventlog_args,
+            'eventlog_kwargs': eventlog_kwargs,
             'fast-listen': fast,
             'http_address': listen,
             'location': options['location'],
@@ -1012,6 +1016,5 @@ templates_dir = os.path.join(cwd, 'templates')
 for name in os.listdir(templates_dir):
     fn = os.path.join(templates_dir, name)
     with open(fn) as fp:
-        print(fn)
         text = fp.read()
         globals()[name] = text

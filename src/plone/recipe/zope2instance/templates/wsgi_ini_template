@@ -60,12 +60,14 @@ formatter = generic
 [handler_accesslog]
 class = %(accesslog_handler)s
 args = %(accesslog_args)s
+kwargs = %(accesslog_kwargs)s
 level = %(accesslog_level)s
 formatter = message
 
 [handler_eventlog]
 class = %(eventlog_handler)s
 args = %(eventlog_args)s
+kwargs = %(eventlog_kwargs)s
 level = NOTSET
 formatter = generic
 
