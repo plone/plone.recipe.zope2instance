@@ -1,5 +1,0 @@
-<eventlog>
-  %(mailinglogger_config)s
-  level %(event_log_level)s
-  %(event_log)s
-</eventlog>

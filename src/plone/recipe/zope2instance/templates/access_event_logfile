@@ -1,5 +1,0 @@
-<logfile>
-    path %(z_log)s
-    format %%(message)s
-    %(access_log_rotate)s
-  </logfile>

@@ -1,5 +1,0 @@
-<logfile>
-    path %(event_logfile)s
-    level %(event_log_level)s
-    %(event_log_rotate)s
-  </logfile>

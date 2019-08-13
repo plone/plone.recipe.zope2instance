@@ -1,5 +1,0 @@
-
-<ftp-server>
-  # valid key is "address"
-  address %s
-</ftp-server>

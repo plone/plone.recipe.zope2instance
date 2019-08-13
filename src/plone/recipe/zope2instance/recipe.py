@@ -1011,10 +1011,389 @@ class Recipe(Scripts):
         return blob_storage_template % (blob_storage, storage)
 
 
-cwd = os.path.dirname(__file__)
-templates_dir = os.path.join(cwd, 'templates')
-for name in os.listdir(templates_dir):
-    fn = os.path.join(templates_dir, name)
-    with open(fn) as fp:
-        text = fp.read()
-        globals()[name] = text
+# Storage snippets for zope.conf template
+file_storage_template = """
+    # FileStorage database
+    <filestorage>
+      path %s
+    </filestorage>
+"""
+
+zlib_storage_template = """
+    %%import zc.zlibstorage
+    # ZlibStorage wrapper
+    <zlibstorage>
+      compress %s
+%s
+    </zlibstorage>
+"""
+
+demo_storage_template = """
+    # DemoStorage
+    <demostorage>
+%s
+    </demostorage>
+"""
+
+before_storage_template = """
+    %%%%import zc.beforestorage
+    # BeforeStorage
+    <before>
+      before %s
+  %%s
+    </before>
+"""
+
+demo_storage2_template = """
+    # DemoStorage
+    <demostorage>
+%s
+%s
+    </demostorage>
+"""
+
+rel_storage_template = """
+    %%import relstorage
+    <relstorage>
+%(rs_opts)s
+        <%(type)s>
+%(db_opts)s
+        </%(type)s>
+    </relstorage>
+"""
+
+blob_storage_template = """
+    # Blob-enabled FileStorage database
+    <blobstorage>
+      blob-dir %s
+%s
+    </blobstorage>
+"""
+
+zeo_authentication_template = """
+    realm %(realm)s
+      username %(username)s
+      password %(password)s
+""".strip()
+
+zeo_address_list_template = """
+      server %(zeo_address)s
+"""
+
+zeo_storage_template = """
+    # ZEOStorage database
+    <zeoclient>
+      read-only %(read_only)s
+      %(zeo_client_read_only_fallback)s
+      %(zeo_address_list)s
+      storage %(zeo_storage)s
+      name zeostorage
+      cache-size %(zeo_client_cache_size)s
+      %(zeo_authentication)s
+      %(zeo_var_dir)s
+      %(zeo_client_client)s
+      %(zeo_client_min_disconnect_poll)s
+      %(zeo_client_max_disconnect_poll)s
+      %(zeo_client_drop_cache_rather_verify)s
+    </zeoclient>
+""".strip()
+
+zeo_blob_storage_template = """
+    # Blob-enabled ZEOStorage database
+    <zeoclient>
+      read-only %(read_only)s
+      %(zeo_client_read_only_fallback)s
+      blob-dir %(blob_storage)s
+      shared-blob-dir %(shared_blob_dir)s
+      %(zeo_address_list)s
+      storage %(zeo_storage)s
+      name zeostorage
+      cache-size %(zeo_client_cache_size)s
+      %(zeo_client_blob_cache_size)s
+      %(zeo_client_blob_cache_size_check)s
+      %(zeo_authentication)s
+      %(zeo_var_dir)s
+      %(zeo_client_client)s
+      %(zeo_client_min_disconnect_poll)s
+      %(zeo_client_max_disconnect_poll)s
+      %(zeo_client_drop_cache_rather_verify)s
+    </zeoclient>
+""".strip()
+
+zodb_temporary_storage_template = """
+<zodb_db temporary>
+    # Temporary storage database (for sessions)
+    <temporarystorage>
+      name temporary storage for sessioning
+    </temporarystorage>
+    mount-point /temp_folder
+    container-class Products.TemporaryFolder.TemporaryContainer
+</zodb_db>
+""".strip()
+
+debug_exceptions_template = """\
+debug-exceptions %s
+"""
+
+http_force_connection_close_template = """\
+  force-connection-close %s
+""".rstrip()
+
+http_fast_listen_template = """\
+  # Set to off to defer opening of the HTTP socket until the end of the
+  # startup phase:
+  fast-listen %s
+""".rstrip()
+
+event_logfile = """
+  <logfile>
+    path %(event_logfile)s
+    level %(event_log_level)s
+    %(event_log_rotate)s
+  </logfile>
+""".strip()
+
+access_event_logfile = """
+  <logfile>
+    path %(z_log)s
+    format %%(message)s
+    %(access_log_rotate)s
+  </logfile>
+""".strip()
+
+http_server_template = """
+<http-server>
+  address %(http_address)s
+%(http_force_connection_close)s
+%(http_fast_listen)s
+</http-server>
+"""
+
+ftp_server_template = """
+<ftp-server>
+  # valid key is "address"
+  address %s
+</ftp-server>
+"""
+
+icp_server_template = """
+<icp-server>
+  # valid key is "address"
+  address %s
+</icp-server>
+"""
+
+webdav_server_template = """
+<webdav-source-server>
+  address %s
+  force-connection-close %s
+</webdav-source-server>
+"""
+
+environment_template = """
+<environment>
+    %s
+</environment>
+"""
+
+# The template used to build zope.conf
+zope_conf_template = """\
+%(imports_lines)s
+%%define INSTANCEHOME %(instance_home)s
+instancehome $INSTANCEHOME
+%%define CLIENTHOME %(client_home)s
+clienthome $CLIENTHOME
+%(paths_lines)s
+%(products_lines)s
+debug-mode %(debug_mode)s
+security-policy-implementation %(security_implementation)s
+verbose-security %(verbose_security)s
+%(default_zpublisher_encoding)s
+%(port_base)s
+%(effective_user)s
+%(http_header_max_length)s
+%(ip_address)s
+%(zserver_threads)s
+%(environment_vars)s
+%(deprecation_warnings)s
+
+%(mailinglogger_import)s
+
+%(event_log)s
+
+%(access_event_log)s
+
+%(http_address)s
+%(ftp_address)s
+%(webdav_address)s
+%(icp_address)s
+
+<zodb_db main>
+    # Main database
+    %(zodb_cache_size)s
+    %(zodb_cache_size_bytes)s
+%(storage_snippet)s
+    mount-point /
+</zodb_db>
+
+%(zodb_tmp_storage)s
+
+pid-filename %(pid_file)s
+lock-filename %(lock_file)s
+%(python_check_interval)s
+%(enable_products)s
+
+%(zope_conf_additional)s
+"""
+
+wsgi_conf_template = """\
+%(imports_lines)s
+%%define INSTANCEHOME %(instance_home)s
+instancehome $INSTANCEHOME
+%%define CLIENTHOME %(client_home)s
+clienthome $CLIENTHOME
+%(products_lines)s
+debug-mode %(debug_mode)s
+%(debug_exceptions)s
+security-policy-implementation %(security_implementation)s
+verbose-security %(verbose_security)s
+%(default_zpublisher_encoding)s
+%(port_base)s
+%(environment_vars)s
+
+%(mailinglogger_import)s
+
+<zodb_db main>
+    # Main database
+    %(zodb_cache_size)s
+    %(zodb_cache_size_bytes)s
+%(storage_snippet)s
+    mount-point /
+</zodb_db>
+
+%(zodb_tmp_storage)s
+
+%(python_check_interval)s
+
+%(zope_conf_additional)s
+"""
+
+event_log_template = """\
+<eventlog>
+  %(mailinglogger_config)s
+  level %(event_log_level)s
+  %(event_log)s
+</eventlog>
+"""
+
+access_log_template = """\
+<logger access>
+  level %(z_log_level)s
+  %(access_event_log)s
+</logger>
+"""
+
+# Template used for plone.resource directory
+resources_zcml = """\
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:plone="http://namespaces.plone.org/plone">
+    <include package="plone.resource" file="meta.zcml"/>
+    <plone:static directory="%(directory)s"/>
+</configure>
+"""
+
+# Template used for locales directory
+locales_zcml = """\
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:i18n="http://namespaces.zope.org/i18n">
+    <i18n:registerTranslations directory="%(directory)s" />
+</configure>
+"""
+
+# Template used for additional ZCML
+additional_zcml_template = """\
+<configure xmlns="http://namespaces.zope.org/zope">
+    %s
+</configure>
+"""
+
+wsgi_ini_template = """\
+[server:main]
+paste.server_factory = plone.recipe.zope2instance:main
+use = egg:plone.recipe.zope2instance#main
+%(fast-listen)slisten = %(http_address)s
+threads = %(threads)s
+
+[app:zope]
+use = egg:Zope#main
+zope_conf = %(location)s/etc/zope.conf
+
+[filter:translogger]
+use = egg:Paste#translogger
+setup_console_handler = False
+
+[pipeline:main]
+pipeline =
+    %(pipeline)s
+
+[loggers]
+keys = root, plone, waitress.queue, waitress, wsgi
+
+[handlers]
+keys = console, accesslog, eventlog
+
+[formatters]
+keys = generic, message
+
+[logger_root]
+level = %(eventlog_level)s
+handlers = %(root_handlers)s
+
+[logger_plone]
+level = %(eventlog_level)s
+handlers = %(event_handlers)s
+qualname = plone
+
+[logger_waitress.queue]
+level = INFO
+handlers = eventlog
+qualname = waitress.queue
+propagate = 0
+
+[logger_waitress]
+level = %(eventlog_level)s
+handlers = %(event_handlers)s
+qualname = waitress
+
+[logger_wsgi]
+level = %(accesslog_level)s
+handlers = accesslog
+qualname = wsgi
+propagate = 0
+
+[handler_console]
+class = StreamHandler
+args = (sys.stderr,)
+level = NOTSET
+formatter = generic
+
+[handler_accesslog]
+class = %(accesslog_handler)s
+args = %(accesslog_args)s
+kwargs = %(accesslog_kwargs)s
+level = %(accesslog_level)s
+formatter = message
+
+[handler_eventlog]
+class = %(eventlog_handler)s
+args = %(eventlog_args)s
+kwargs = %(eventlog_kwargs)s
+level = NOTSET
+formatter = generic
+
+[formatter_generic]
+format = %%(asctime)s %%(levelname)-7.7s [%%(name)s:%%(lineno)s][%%(threadName)s] %%(message)s
+
+[formatter_message]
+format = %%(message)s
+"""  # noqa: E501

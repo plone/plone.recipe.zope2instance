@@ -1,8 +1,0 @@
-
-    %%import relstorage
-    <relstorage>
-%(rs_opts)s
-        <%(type)s>
-%(db_opts)s
-        </%(type)s>
-    </relstorage>

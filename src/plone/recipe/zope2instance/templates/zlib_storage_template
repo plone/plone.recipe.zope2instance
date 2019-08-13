@@ -1,7 +1,0 @@
-
-    %%import zc.zlibstorage
-    # ZlibStorage wrapper
-    <zlibstorage>
-      compress %s
-%s
-    </zlibstorage>

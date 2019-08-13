@@ -1,6 +1,0 @@
-
-<http-server>
-  address %(http_address)s
-%(http_force_connection_close)s
-%(http_fast_listen)s
-</http-server>
