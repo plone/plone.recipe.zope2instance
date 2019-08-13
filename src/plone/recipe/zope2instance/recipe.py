@@ -750,18 +750,28 @@ class Recipe(Scripts):
             pipeline = '\n    '.join(
                 ['translogger', 'egg:Zope#httpexceptions', 'zope'])
         options = {
-            'location': options['location'],
-            'http_address': listen,
-            'threads': options.get('threads', 4),
-            'fast-listen': fast,
-            'eventlog_name': eventlog_name,
-            'root_handlers': root_handlers,
-            'event_handlers': event_handlers,
-            'accesslog_name': accesslog_name,
-            'pipeline': pipeline,
-            'eventlog_level': eventlog_level,
             'accesslog_level': accesslog_level,
+            'accesslog_name': accesslog_name,
+            'event_handlers': event_handlers,
+            'eventlog_level': eventlog_level,
+            'eventlog_name': eventlog_name,
+            'fast-listen': fast,
+            'http_address': listen,
+            'location': options['location'],
+            'pipeline': pipeline,
+            'root_handlers': root_handlers,
+            'threads': options.get('threads', 4),
         }
+
+        global wsgi_ini_template
+        wsgi_ini_template_path = self.options.get('wsgi-ini-template')
+        if wsgi_ini_template_path:
+            try:
+                with open(wsgi_ini_template_path) as fp:
+                    wsgi_ini_template = fp.read()
+            except IOError:
+                raise
+
         wsgi_ini = wsgi_ini_template % options
         with open(wsgi_ini_path, 'w') as f:
             f.write(wsgi_ini)
