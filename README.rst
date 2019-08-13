@@ -640,3 +640,4 @@ Reporting bugs or asking questions
 Please use the bug tracker in this repository at
 https://github.com/plone/plone.recipe.zope2instance/issues for questions and
 bug reports.
+
