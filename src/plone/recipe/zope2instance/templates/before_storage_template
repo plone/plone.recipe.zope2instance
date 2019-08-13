@@ -1,0 +1,7 @@
+
+    %%%%import zc.beforestorage
+    # BeforeStorage
+    <before>
+      before %s
+  %%s
+    </before>

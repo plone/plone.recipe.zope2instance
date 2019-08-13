@@ -1,0 +1,5 @@
+
+    # FileStorage database
+    <filestorage>
+      path %s
+    </filestorage>

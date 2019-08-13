@@ -1,0 +1,15 @@
+# ZEOStorage database
+    <zeoclient>
+      read-only %(read_only)s
+      %(zeo_client_read_only_fallback)s
+      %(zeo_address_list)s
+      storage %(zeo_storage)s
+      name zeostorage
+      cache-size %(zeo_client_cache_size)s
+      %(zeo_authentication)s
+      %(zeo_var_dir)s
+      %(zeo_client_client)s
+      %(zeo_client_min_disconnect_poll)s
+      %(zeo_client_max_disconnect_poll)s
+      %(zeo_client_drop_cache_rather_verify)s
+    </zeoclient>

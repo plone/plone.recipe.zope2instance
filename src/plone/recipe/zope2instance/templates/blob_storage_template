@@ -1,0 +1,6 @@
+
+    # Blob-enabled FileStorage database
+    <blobstorage>
+      blob-dir %s
+%s
+    </blobstorage>

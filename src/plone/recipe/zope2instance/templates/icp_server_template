@@ -1,0 +1,5 @@
+
+<icp-server>
+  # valid key is "address"
+  address %s
+</icp-server>

@@ -1,0 +1,4 @@
+<logger access>
+  level %(z_log_level)s
+  %(access_event_log)s
+</logger>

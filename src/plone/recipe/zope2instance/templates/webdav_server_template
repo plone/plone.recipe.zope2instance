@@ -1,0 +1,5 @@
+
+<webdav-source-server>
+  address %s
+  force-connection-close %s
+</webdav-source-server>
