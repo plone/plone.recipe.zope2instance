@@ -59,13 +59,13 @@ formatter = generic
 
 [handler_accesslog]
 class = %(accesslog_handler)s
-args = ('%(accesslog_name)s','a')
+args = %(accesslog_args)s
 level = %(accesslog_level)s
 formatter = message
 
 [handler_eventlog]
 class = %(eventlog_handler)s
-args = ('%(eventlog_name)s', 'a')
+args = %(eventlog_args)s
 level = NOTSET
 formatter = generic
 
