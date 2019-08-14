@@ -793,10 +793,6 @@ class Recipe(Scripts):
             except IOError:
                 raise
 
-#        import pprint
-#        pprint.pprint(self.options)
-#        pprint.pprint(wsgi_options)
-
         wsgi_ini = wsgi_ini_template % wsgi_options
         with open(wsgi_ini_path, 'w') as f:
             f.write(wsgi_ini)
