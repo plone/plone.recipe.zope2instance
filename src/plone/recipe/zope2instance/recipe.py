@@ -729,9 +729,9 @@ class Recipe(Scripts):
         eventlog_kwargs = options.get('event-log-kwargs', '{}')
         eventlog_args = options.get('event-log-args')
         if not eventlog_args:
-            eventlog_args = '("{}", "a")'.format(default_eventlog)
+            eventlog_args = "('{}', 'a')".format(eventlog_name)
         else:
-            eventlog_args = eventlog_args.format(default_eventlog)
+            eventlog_args = eventlog_args.format(eventlog_name)
 
         if eventlog_name.lower() == 'disable':
             root_handlers = 'console'
@@ -753,9 +753,9 @@ class Recipe(Scripts):
         accesslog_kwargs = options.get('access-log-kwargs', '{}')
         accesslog_args = options.get('access-log-args')
         if not accesslog_args:
-            accesslog_args = '("{}", "a")'.format(default_accesslog)
+            accesslog_args = "('{}', 'a')".format(accesslog_name)
         else:
-            accesslog_args = accesslog_args.format(default_accesslog)
+            accesslog_args = accesslog_args.format(accesslog_name)
 
         if accesslog_name.lower() == 'disable':
             pipeline = '\n    '.join(['egg:Zope#httpexceptions', 'zope'])
@@ -763,7 +763,8 @@ class Recipe(Scripts):
         else:
             pipeline = '\n    '.join(
                 ['translogger', 'egg:Zope#httpexceptions', 'zope'])
-        options = {
+
+        wsgi_options = {
             'accesslog_level': accesslog_level,
             'accesslog_handler': accesslog_handler,
             'accesslog_name': accesslog_name,
@@ -792,7 +793,11 @@ class Recipe(Scripts):
             except IOError:
                 raise
 
-        wsgi_ini = wsgi_ini_template % options
+#        import pprint
+#        pprint.pprint(self.options)
+#        pprint.pprint(wsgi_options)
+
+        wsgi_ini = wsgi_ini_template % wsgi_options
         with open(wsgi_ini_path, 'w') as f:
             f.write(wsgi_ini)
 
