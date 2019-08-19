@@ -389,9 +389,11 @@ mail-log-smtp-hostname
 mail-log-smtp-port
   Port of SMTP server (default: 25)
 
-mail-log-smtp-username (optional)
+mail-log-smtp-username 
+  Optional username for SMTP server authentication
+
 mail-log-smtp-password (optional)
-  Optional authentication credential for the SMTP server
+  Optional password for SMTP server authentication
 
 mail-log-subject
   Subject string for email notification
