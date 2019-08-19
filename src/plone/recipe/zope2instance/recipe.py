@@ -766,23 +766,26 @@ class Recipe(Scripts):
             port = int(options.get('mail-log-smtp-port', '25'))
             username = options.get('mail-log-smtp-username', '')
             password = options.get('mail-log-smtp-password', '')
-            credentials='("{}", "{}")'.format(username, password),
+            credentials = (username, password)
             fromaddr = options.get('mail-log-from-address', '')
-            toaddrs = options.get('mail-log-to-address', '')
-            toaddrs = [a.strip() for a in toaddrs.split(',')]
+            toaddrs = options.get('mail-log-to-addresses', '')
+            toaddrs = ["'" + a.strip() + "'" for a in toaddrs.split(',')]
             subject = options.get('mail-log-suject')
             use_tls = options.get('mail-log-use-tls', 'false')
             secure='()' if use_tls else None
 
             event_handlers.append('maillog')
             root_handlers.append('maillog')
+            mail_args = []
+            mail_args = '("{mailhost}", "{fromaddr}", [{toaddrs}], {subject})'.format(
+                    mailhost=mailhost,
+                    fromaddr=fromaddr,
+                    toaddrs=','.join(toaddrs),
+                    subject=subject)
+
             mail_kwargs = []
-            mail_kwargs.append('"mailhost": "{}"'.format(mailhost))
-            mail_kwargs.append('"fromaddr": "{}"'.format(fromaddr))
-            mail_kwargs.append('"toaddrs": "{}"'.format(toaddrs))
-            mail_kwargs.append('"subject": "{}"'.format(subject))
-            mail_kwargs.append('"credentials": "{}"'.format(credentials))
-            mail_kwargs.append('"secure": "{}"'.format(secure))
+            mail_kwargs.append('"credentials": {}'.format(credentials))
+            mail_kwargs.append('"secure": {}'.format(secure))
             mail_kwargs = '{' + ', '.join(mail_kwargs) + '}'
 
             maillog_section = """
@@ -793,11 +796,10 @@ class Recipe(Scripts):
             level = {log_level}
             formatter = generic
             """.format(
-                    mail_args=(),
+                    mail_args=mail_args,
                     mail_kwargs=mail_kwargs,
-                    log_level=level
+                    log_level=level)
             maillog_section = '\n'.join([l.strip() for l in maillog_section.split("\n")])
-
 
         if accesslog_name.lower() == 'disable':
             pipeline = '\n    '.join(['egg:Zope#httpexceptions', 'zope'])
