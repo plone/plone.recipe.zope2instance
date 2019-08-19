@@ -374,6 +374,37 @@ for rotating the event log every 24 hours or one day::
     event-log-args = ("event.log", )
     event-log-kwargs = {"when": "D", "interval": 1}
 
+Mailing logger
+++++++++++++++
+
+A mailing logger can be configured e.g. for sending all warnings or errors from the eventlog 
+to a dedicated email address.
+
+mail-log-level 
+  Defines the severity level (DEBUG|INFO|WARN|ERROR). Default: INFO
+
+mail-log-smtp-hostname
+  Hostname of the SMTP server (default: localhost)
+
+mail-log-smtp-port
+  Port of SMTP server (default: 25)
+
+mail-log-smtp-username (optional)
+mail-log-smtp-password (optional)
+  Optional authentication credential for the SMTP server
+
+mail-log-subject
+  Subject string for email notification
+
+mail-log-from-address
+  Sender email address
+
+mail-log-to-addresses
+  Recipient email address(es). Separate multiple email addresses with a comma
+
+mail-log-use-tls = on|off
+  Use TLS encrypted connection between client and SMTP server
+
 
 Load non-setuptools compatible Python libraries
 -----------------------------------------------
