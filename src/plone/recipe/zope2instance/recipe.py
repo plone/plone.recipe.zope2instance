@@ -734,11 +734,11 @@ class Recipe(Scripts):
             eventlog_args = eventlog_args.format(eventlog_name)
 
         if eventlog_name.lower() == 'disable':
-            root_handlers = 'console'
-            event_handlers = ''
+            root_handlers = ['console']
+            event_handlers = []
         else:
-            root_handlers = 'console, eventlog'
-            event_handlers = 'eventlog'
+            root_handlers = ['console', 'eventlog']
+            event_handlers = ['eventlog']
 
         default_accesslog = os.path.sep.join(
             (var_dir, 'log', '{}-access.log'.format(self.name),))
@@ -757,9 +757,42 @@ class Recipe(Scripts):
         else:
             accesslog_args = accesslog_args.format(accesslog_name)
 
+
+        # mail logger will be enabled if from-address and to-addresses are set
+        maillog_section = ''
+        if options.get('mail-log-from-address') and options.get('mail-log-to-addresses'):
+            maillog_options = {}
+            maillog_options['level'] = options.get('mail-log-level', 'ERROR')
+            maillog_options['host'] = options.get('mail-log-smtp-host', 'localhost')
+            maillog_options['port'] = int(options.get('mail-log-smtp-port', '25'))
+            maillog_options['username'] = options.get('mail-log-smtp-username', '')
+            maillog_options['password'] = options.get('mail-log-smtp-username', '')
+            maillog_options['form_address'] = options.get('mail-log-from-address', '')
+            to_addresses = options.get('mail-log-to-address', '')
+            to_addresess = [a.strip() for a in to_addresses.split(',')]
+            maillog_options['to_addresses'] = to_addresses
+            maillog_options['subject'] = options.get('mail-log-suject')
+            use_tls = options.get('mail-log-use-tls', 'false')
+            maillog_options['tls'] = use_tls in ("true", "True", "1", "on")
+            event_handlers.append('maillog')
+            root_handlers.append('maillog')
+            mail_kwargs = '{"mailhost": "", "fromaddr": "", "toaddrs": "", "subject: "", "credentials": {}, "secure": {}'
+            maillog_section = """
+            [handler_maillog]
+            class = logging.handlers.SMTPHandler
+            args = {mail_args}
+            kwargs = {mail_kwargs}
+            level = {log_level}
+            formatter = generic
+            """.format(
+                    mail_args=(),
+                    mail_kwargs=mail_kwargs,
+                    log_level=maillog_options['level'])
+
+
         if accesslog_name.lower() == 'disable':
             pipeline = '\n    '.join(['egg:Zope#httpexceptions', 'zope'])
-            event_handlers = ''
+            event_handlers = []
         else:
             pipeline = '\n    '.join(
                 ['translogger', 'egg:Zope#httpexceptions', 'zope'])
@@ -770,7 +803,7 @@ class Recipe(Scripts):
             'accesslog_name': accesslog_name,
             'accesslog_args': accesslog_args,
             'accesslog_kwargs': accesslog_kwargs,
-            'event_handlers': event_handlers,
+            'event_handlers': ', '.join(event_handlers),
             'eventlog_handler': eventlog_handler,
             'eventlog_level': eventlog_level,
             'eventlog_name': eventlog_name,
@@ -780,8 +813,9 @@ class Recipe(Scripts):
             'http_address': listen,
             'location': options['location'],
             'pipeline': pipeline,
-            'root_handlers': root_handlers,
+            'root_handlers': ', '.join(root_handlers),
             'threads': options.get('threads', 4),
+            'maillog_section': maillog_section
         }
 
         global wsgi_ini_template
@@ -1341,7 +1375,7 @@ pipeline =
 keys = root, plone, waitress.queue, waitress, wsgi
 
 [handlers]
-keys = console, accesslog, eventlog
+keys = console, accesslog, eventlog, maillog
 
 [formatters]
 keys = generic, message
@@ -1392,9 +1426,12 @@ kwargs = %(eventlog_kwargs)s
 level = NOTSET
 formatter = generic
 
+%(maillog_section)s
+
 [formatter_generic]
 format = %%(asctime)s %%(levelname)-7.7s [%%(name)s:%%(lineno)s][%%(threadName)s] %%(message)s
 
 [formatter_message]
 format = %%(message)s
+
 """  # noqa: E501
