@@ -761,22 +761,30 @@ class Recipe(Scripts):
         # mail logger will be enabled if from-address and to-addresses are set
         maillog_section = ''
         if options.get('mail-log-from-address') and options.get('mail-log-to-addresses'):
-            maillog_options = {}
-            maillog_options['level'] = options.get('mail-log-level', 'ERROR')
-            maillog_options['host'] = options.get('mail-log-smtp-host', 'localhost')
-            maillog_options['port'] = int(options.get('mail-log-smtp-port', '25'))
-            maillog_options['username'] = options.get('mail-log-smtp-username', '')
-            maillog_options['password'] = options.get('mail-log-smtp-username', '')
-            maillog_options['form_address'] = options.get('mail-log-from-address', '')
-            to_addresses = options.get('mail-log-to-address', '')
-            to_addresess = [a.strip() for a in to_addresses.split(',')]
-            maillog_options['to_addresses'] = to_addresses
-            maillog_options['subject'] = options.get('mail-log-suject')
+            level = options.get('mail-log-level', 'ERROR')
+            mailhost = options.get('mail-log-smtp-host', 'localhost')
+            port = int(options.get('mail-log-smtp-port', '25'))
+            username = options.get('mail-log-smtp-username', '')
+            password = options.get('mail-log-smtp-password', '')
+            credentials='("{}", "{}")'.format(username, password),
+            fromaddr = options.get('mail-log-from-address', '')
+            toaddrs = options.get('mail-log-to-address', '')
+            toaddrs = [a.strip() for a in toaddrs.split(',')]
+            subject = options.get('mail-log-suject')
             use_tls = options.get('mail-log-use-tls', 'false')
-            maillog_options['tls'] = use_tls in ("true", "True", "1", "on")
+            secure='()' if use_tls else None
+
             event_handlers.append('maillog')
             root_handlers.append('maillog')
-            mail_kwargs = '{"mailhost": "", "fromaddr": "", "toaddrs": "", "subject: "", "credentials": {}, "secure": {}'
+            mail_kwargs = []
+            mail_kwargs.append('"mailhost": "{}"'.format(mailhost))
+            mail_kwargs.append('"fromaddr": "{}"'.format(fromaddr))
+            mail_kwargs.append('"toaddrs": "{}"'.format(toaddrs))
+            mail_kwargs.append('"subject": "{}"'.format(subject))
+            mail_kwargs.append('"credentials": "{}"'.format(credentials))
+            mail_kwargs.append('"secure": "{}"'.format(secure))
+            mail_kwargs = '{' + ', '.join(mail_kwargs) + '}'
+
             maillog_section = """
             [handler_maillog]
             class = logging.handlers.SMTPHandler
@@ -787,7 +795,8 @@ class Recipe(Scripts):
             """.format(
                     mail_args=(),
                     mail_kwargs=mail_kwargs,
-                    log_level=maillog_options['level'])
+                    log_level=level
+            maillog_section = '\n'.join([l.strip() for l in maillog_section.split("\n")])
 
 
         if accesslog_name.lower() == 'disable':
