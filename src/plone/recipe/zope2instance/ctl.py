@@ -678,8 +678,8 @@ class ZopeCmd(ZDCmd):
 
         if not self.options.no_request:
             cmdline += (
-                'from Testing.ZopeTestCase.utils import makerequest; '
-                'app = makerequest(app); '
+                'import Testing.makerequest; '
+                'app = Testing.makerequest(app); '
                 # REQUEST.traverse needs this but no reason not to set
                 # this even if we're not traversing to an object
                 'app.REQUEST[\'PARENTS\'] = [app]; '
