@@ -50,6 +50,9 @@ setup(
         'test': [
             'zope.testrunner',
         ],
+        'sentry': [
+            'sentry-sdk',
+        ]
     },
     zip_safe=False,
     entry_points={
@@ -59,6 +62,9 @@ setup(
         ],
         'paste.server_factory': [
             'main=plone.recipe.zope2instance.ctl:server_factory',
+        ],
+        'paste.filter_factory': [
+            'sentry=plone.recipe.zope2instance.sentry:sdk_init',
         ],
         },
 )

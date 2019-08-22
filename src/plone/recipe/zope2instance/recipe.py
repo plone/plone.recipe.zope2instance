@@ -743,12 +743,21 @@ class Recipe(Scripts):
             'access-log-level',
             options.get('z2-log-level', 'INFO'))
 
+        pipeline = []
         if accesslog_name.lower() == 'disable':
-            pipeline = '\n    '.join(['egg:Zope#httpexceptions', 'zope'])
+            pipeline = [
+                'egg:Zope#httpexceptions']
             event_handlers = ''
         else:
-            pipeline = '\n    '.join(
-                ['translogger', 'egg:Zope#httpexceptions', 'zope'])
+            pipeline = [
+                'translogger', 'egg:Zope#httpexceptions']
+
+        sentry_dsn = options.get('sentry_dsn', '')
+        if sentry_dsn:
+            pipeline.append('sentry')
+
+        pipeline.append('zope')
+        pipeline = '\n    '.join(pipeline)
         options = {
             'location': options['location'],
             'http_address': listen,
@@ -761,6 +770,7 @@ class Recipe(Scripts):
             'pipeline': pipeline,
             'eventlog_level': eventlog_level,
             'accesslog_level': accesslog_level,
+            'sentry_dsn': sentry_dsn,
         }
         wsgi_ini = wsgi_ini_template % options
         with open(wsgi_ini_path, 'w') as f:
@@ -1301,6 +1311,10 @@ zope_conf = %(location)s/etc/zope.conf
 [filter:translogger]
 use = egg:Paste#translogger
 setup_console_handler = False
+
+[filter:sentry]
+use = egg:plone.recipe.zope2instance#sentry
+dsn = %(sentry_dsn)s
 
 [pipeline:main]
 pipeline =

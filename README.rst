@@ -311,6 +311,11 @@ access-log-custom
   Like `event-log-custom`, a custom section for the access logger, to be able
   to use another event logger than `logfile`. Used for ZServer only, not WSGI.
 
+sentry_dsn
+  Provide a Sentry DSN here to enable basic Sentry logging documented
+  in `<https://docs.sentry.io/platforms/python/logging/>`_.
+  Available for WSGI only.
+
 Load non-setuptools compatible Python libraries
 -----------------------------------------------
 
