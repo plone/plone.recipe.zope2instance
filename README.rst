@@ -313,7 +313,9 @@ access-log-custom
 
 sentry_dsn
   Provide a Sentry DSN here to enable basic Sentry logging documented
-  in `<https://docs.sentry.io/platforms/python/logging/>`_.
+  in `<https://docs.sentry.io/platforms/python/logging/>`_. You will need to add the
+  Python Sentry SDK, either by adding it to your eggs section directly or by adding
+  `plone.recipe.zope2instance[sentry]`.
   Available for WSGI only.
 
 Load non-setuptools compatible Python libraries
