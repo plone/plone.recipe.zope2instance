@@ -311,6 +311,25 @@ access-log-custom
   Like `event-log-custom`, a custom section for the access logger, to be able
   to use another event logger than `logfile`. Used for ZServer only, not WSGI.
 
+sentry_dsn
+  Provide a Sentry DSN here to enable basic Sentry logging documented
+  in `<https://docs.sentry.io/platforms/python/logging/>`_. You will need to add the
+  Python Sentry SDK, either by adding it to your eggs section directly or by adding
+  `plone.recipe.zope2instance[sentry]`.
+  Available for WSGI only.
+
+sentry_level
+  Set the logging level for Sentry breadcrumbs.
+  Available for WSGI only.
+
+sentry_event_level
+  Set the logging level for Sentry events.
+  Available for WSGI only.
+
+sentry_ignore
+  Set the (space separated list of) logger names that are ignored by Sentry.
+  Available for WSGI only.
+
 Load non-setuptools compatible Python libraries
 -----------------------------------------------
 
