@@ -318,6 +318,18 @@ sentry_dsn
   `plone.recipe.zope2instance[sentry]`.
   Available for WSGI only.
 
+sentry_level
+  Set the logging level for Sentry breadcrumbs.
+  Available for WSGI only.
+
+sentry_event_level
+  Set the logging level for Sentry events.
+  Available for WSGI only.
+
+sentry_ignore
+  Set the (space separated list of) logger names that are ignored by Sentry.
+  Available for WSGI only.
+
 Load non-setuptools compatible Python libraries
 -----------------------------------------------
 

@@ -755,6 +755,9 @@ class Recipe(Scripts):
         sentry_dsn = options.get('sentry_dsn', '')
         if sentry_dsn:
             pipeline.append('sentry')
+        sentry_level = options.get('sentry_level', 'INFO')
+        sentry_event_level = options.get('sentry_event_level', 'ERROR')
+        sentry_ignore = options.get('sentry_ignore', '')
 
         pipeline.append('zope')
         pipeline = '\n    '.join(pipeline)
@@ -771,6 +774,9 @@ class Recipe(Scripts):
             'eventlog_level': eventlog_level,
             'accesslog_level': accesslog_level,
             'sentry_dsn': sentry_dsn,
+            'sentry_level': sentry_level,
+            'sentry_event_level': sentry_event_level,
+            'sentry_ignore': sentry_ignore,
         }
         wsgi_ini = wsgi_ini_template % options
         with open(wsgi_ini_path, 'w') as f:
@@ -1315,6 +1321,9 @@ setup_console_handler = False
 [filter:sentry]
 use = egg:plone.recipe.zope2instance#sentry
 dsn = %(sentry_dsn)s
+level = %(sentry_level)s
+event_level = %(sentry_event_level)s
+ignorelist = %(sentry_ignore)s
 
 [pipeline:main]
 pipeline =
