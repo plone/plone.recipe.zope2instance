@@ -1,1 +1,2 @@
-Fixed a deprecation warning when importing `makerequest` from Testing.ZopeTestCase.utils. This also fixes a side effect which can bite you if you rely on ZOPETESTCASE environment variable, only being set to `1` during test runs.
+Fixed a deprecation warning when importing ``makerequest`` from ``Testing.ZopeTestCase.utils``.
+This also fixes a side effect which can bite you if you rely on the ``ZOPETESTCASE`` environment variable, only being set to ``1`` during test runs.
