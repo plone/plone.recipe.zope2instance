@@ -18,11 +18,12 @@ setup(
     keywords="zope buildout",
     url='https://github.com/plone/plone.recipe.zope2instance',
     classifiers=[
-        "License :: OSI Approved :: Zope Public License",
+        "Development Status :: 6 - Mature",
         "Framework :: Buildout",
         "Framework :: Plone",
         "Framework :: Plone :: 5.2",
         "Framework :: Zope :: 4",
+        "License :: OSI Approved :: Zope Public License",
         "Programming Language :: Python",
         "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 2.7",
