@@ -725,6 +725,13 @@ class Recipe(Scripts):
             (var_dir, 'log', '{}.log'.format(self.name),))
         eventlog_name = options.get('event-log', default_eventlog)
         eventlog_level = options.get('event-log-level', 'INFO')
+        eventlog_handler = options.get('event-log-handler', 'FileHandler')
+        eventlog_kwargs = options.get('event-log-kwargs', '{}')
+        eventlog_args = options.get('event-log-args')
+        if not eventlog_args:
+            eventlog_args = "('{}', 'a')".format(eventlog_name)
+        else:
+            eventlog_args = eventlog_args.format(eventlog_name)
 
         if eventlog_name.lower() == 'disable':
             root_handlers = 'console'
@@ -742,11 +749,17 @@ class Recipe(Scripts):
         accesslog_level = options.get(
             'access-log-level',
             options.get('z2-log-level', 'INFO'))
+        accesslog_handler = options.get('access-log-handler', 'FileHandler')
+        accesslog_kwargs = options.get('access-log-kwargs', '{}')
+        accesslog_args = options.get('access-log-args')
+        if not accesslog_args:
+            accesslog_args = "('{}', 'a')".format(accesslog_name)
+        else:
+            accesslog_args = accesslog_args.format(accesslog_name)
 
         pipeline = []
         if accesslog_name.lower() == 'disable':
-            pipeline = [
-                'egg:Zope#httpexceptions']
+            pipeline = ['egg:Zope#httpexceptions']
             event_handlers = ''
         else:
             pipeline = [
@@ -761,24 +774,42 @@ class Recipe(Scripts):
 
         pipeline.append('zope')
         pipeline = '\n    '.join(pipeline)
-        options = {
+        wsgi_options = {
             'location': options['location'],
             'http_address': listen,
             'threads': options.get('threads', 4),
             'fast-listen': fast,
-            'eventlog_name': eventlog_name,
             'root_handlers': root_handlers,
-            'event_handlers': event_handlers,
             'accesslog_name': accesslog_name,
-            'pipeline': pipeline,
-            'eventlog_level': eventlog_level,
+            'accesslog_handler': accesslog_handler,
             'accesslog_level': accesslog_level,
+            'accesslog_args': accesslog_args,
+            'accesslog_kwargs': accesslog_kwargs,
+            'event_handlers': event_handlers,
+            'eventlog_name': eventlog_name,
+            'eventlog_handler': eventlog_handler,
+            'eventlog_level': eventlog_level,
+            'eventlog_args': eventlog_args,
+            'eventlog_kwargs': eventlog_kwargs,
+            'fast-listen': fast,
+            'http_address': listen,
+            'pipeline': pipeline,
             'sentry_dsn': sentry_dsn,
             'sentry_level': sentry_level,
             'sentry_event_level': sentry_event_level,
             'sentry_ignore': sentry_ignore,
         }
-        wsgi_ini = wsgi_ini_template % options
+
+        global wsgi_ini_template
+        wsgi_ini_template_path = self.options.get('wsgi-ini-template')
+        if wsgi_ini_template_path:
+            try:
+                with open(wsgi_ini_template_path) as fp:
+                    wsgi_ini_template = fp.read()
+            except IOError:
+                raise
+
+        wsgi_ini = wsgi_ini_template % wsgi_options
         with open(wsgi_ini_path, 'w') as f:
             f.write(wsgi_ini)
 
@@ -1371,14 +1402,16 @@ level = NOTSET
 formatter = generic
 
 [handler_accesslog]
-class = FileHandler
-args = ('%(accesslog_name)s','a')
+class = %(accesslog_handler)s
+args = %(accesslog_args)s
+kwargs = %(accesslog_kwargs)s
 level = %(accesslog_level)s
 formatter = message
 
 [handler_eventlog]
-class = FileHandler
-args = ('%(eventlog_name)s', 'a')
+class = %(eventlog_handler)s
+args = %(eventlog_args)s
+kwargs = %(eventlog_kwargs)s
 level = NOTSET
 formatter = generic
 

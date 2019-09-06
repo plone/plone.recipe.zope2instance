@@ -330,6 +330,69 @@ sentry_ignore
   Set the (space separated list of) logger names that are ignored by Sentry.
   Available for WSGI only.
 
+Advanced logging options for WSGI
+---------------------------------
+
+For more complex logging configuration, the zope2instance recipe exposes the
+underlaying `logging.handlers` functionality through the `access-log-handler`
+and `event-log-handler` configuration options. This allows you to configure an
+arbitrary logging handler for Python as defined in
+`here <https://docs.python.org/3/library/logging.handlers.html>`_.
+
+The supplementary options `event-log-args`, `event-log-kwargs` and
+`access-log-args`, `access-log-kwargs` can be used for passing positional and
+keyword arguments to the constructor of the underlaying handler.
+
+access-log-handler
+  The (dotted) name of an importable Python logging handler like
+  `logging.handlers.RotatingFileHandler`.
+
+  Default: `FileHandler`
+
+access-log-args
+  A python tuple which usually refers to the logging filename and opening mode
+  of the file like `("access.log", "a")`.  Note that you a Python tuple with
+  only one element (e.g. only the filename) must have a trailing comma like
+  `("access.log", )` The `access-log-args` is used to specify the positional
+  parameters for the logging handler configured through `access-log-handler`.
+
+  Default: `("access.log", "a")`
+
+access-log-kwargs
+  A python dictionary used for passing keyword argument for the logging handler
+  configured through `access-log-handler` e.g.  `{"when": "h", "interval": 1}`.
+
+  Default: `{}`
+
+event-log-handler
+    Same as `access-log-handler` but for the configuration of the event log of Plone.
+
+event-log-args
+    Same as `access-log-args` but for the configuration of the event log of Plone.
+
+event-log-kwargs
+    Same as `access-log-kwargs` but for the configuration of the event log of Plone.
+
+Example (access log rotation based on file size)
+++++++++++++++++++++++++++++++++++++++++++++++++
+
+This example uses a `RotatingFileHandler` https://docs.python.org/3/library/logging.handlers.html#rotatingfilehandler
+which rotates the access log when it becomes larger than 10 MB while keeping seven copies::
+
+    access-log-handler = logging.handlers.RotatingFileHandler
+    access-log-args  = ("access.log", "a")
+    access-log-kwargs = {"maxBytes": 10000000, "maxCount": 7}
+
+Example (rotating of event log after each day)
+++++++++++++++++++++++++++++++++++++++++++++++
+
+This example uses a `TimedRotatingFileHandler` https://docs.python.org/3/library/logging.handlers.html#timedrotatingfilehandler
+for rotating the event log every 24 hours or one day::
+
+    event-log-handler = logging.handlers.TimedRotatingFileHandler
+    event-log-args = ("event.log", )
+    event-log-kwargs = {"when": "D", "interval": 1}
+
 Load non-setuptools compatible Python libraries
 -----------------------------------------------
 
@@ -394,6 +457,23 @@ zeo-var
 
 Advanced options
 ----------------
+
+wsgi-ini-template
+
+  By default `plone.recipe.zope2instances` uses a hard-coded template for the
+  generated WSGI configuration in `parts/<partname>/etc/wsgi.ini`. The template
+  is defined as `wsgi_ini_template` variable within the `recipe.py
+  <https://github.com/plone/plone.recipe.zope2instance/blob/master/src/plone/recipe/zope2instance/recipe.py>`_
+  file.
+
+  You can override the template with a custom template file using this option.
+
+  Example::
+
+      wsgi-ini-template = /path/to/wsgi_template.ini
+
+  The available variables for variable substition can be found within the existing template (see above).
+
 
 before-storage
   Wraps the base storage in a "before storage" which sets it in
@@ -659,3 +739,4 @@ Reporting bugs or asking questions
 Please use the bug tracker in this repository at
 https://github.com/plone/plone.recipe.zope2instance/issues for questions and
 bug reports.
+
