@@ -757,31 +757,47 @@ class Recipe(Scripts):
         else:
             accesslog_args = accesslog_args.format(accesslog_name)
 
+        pipeline = []
         if accesslog_name.lower() == 'disable':
-            pipeline = '\n    '.join(['egg:Zope#httpexceptions', 'zope'])
+            pipeline = ['egg:Zope#httpexceptions']
             event_handlers = ''
         else:
-            pipeline = '\n    '.join(
-                ['translogger', 'egg:Zope#httpexceptions', 'zope'])
+            pipeline = [
+                'translogger', 'egg:Zope#httpexceptions']
 
+        sentry_dsn = options.get('sentry_dsn', '')
+        if sentry_dsn:
+            pipeline.append('sentry')
+        sentry_level = options.get('sentry_level', 'INFO')
+        sentry_event_level = options.get('sentry_event_level', 'ERROR')
+        sentry_ignore = options.get('sentry_ignore', '')
+
+        pipeline.append('zope')
+        pipeline = '\n    '.join(pipeline)
         wsgi_options = {
-            'accesslog_level': accesslog_level,
-            'accesslog_handler': accesslog_handler,
+            'location': options['location'],
+            'http_address': listen,
+            'threads': options.get('threads', 4),
+            'fast-listen': fast,
+            'root_handlers': root_handlers,
             'accesslog_name': accesslog_name,
+            'accesslog_handler': accesslog_handler,
+            'accesslog_level': accesslog_level,
             'accesslog_args': accesslog_args,
             'accesslog_kwargs': accesslog_kwargs,
             'event_handlers': event_handlers,
+            'eventlog_name': eventlog_name,
             'eventlog_handler': eventlog_handler,
             'eventlog_level': eventlog_level,
-            'eventlog_name': eventlog_name,
             'eventlog_args': eventlog_args,
             'eventlog_kwargs': eventlog_kwargs,
             'fast-listen': fast,
             'http_address': listen,
-            'location': options['location'],
             'pipeline': pipeline,
-            'root_handlers': root_handlers,
-            'threads': options.get('threads', 4),
+            'sentry_dsn': sentry_dsn,
+            'sentry_level': sentry_level,
+            'sentry_event_level': sentry_event_level,
+            'sentry_ignore': sentry_ignore,
         }
 
         global wsgi_ini_template
@@ -1332,6 +1348,13 @@ zope_conf = %(location)s/etc/zope.conf
 [filter:translogger]
 use = egg:Paste#translogger
 setup_console_handler = False
+
+[filter:sentry]
+use = egg:plone.recipe.zope2instance#sentry
+dsn = %(sentry_dsn)s
+level = %(sentry_level)s
+event_level = %(sentry_event_level)s
+ignorelist = %(sentry_ignore)s
 
 [pipeline:main]
 pipeline =

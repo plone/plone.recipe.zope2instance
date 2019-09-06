@@ -311,6 +311,25 @@ access-log-custom
   Like `event-log-custom`, a custom section for the access logger, to be able
   to use another event logger than `logfile`. Used for ZServer only, not WSGI.
 
+sentry_dsn
+  Provide a Sentry DSN here to enable basic Sentry logging documented
+  in `<https://docs.sentry.io/platforms/python/logging/>`_. You will need to add the
+  Python Sentry SDK, either by adding it to your eggs section directly or by adding
+  `plone.recipe.zope2instance[sentry]`.
+  Available for WSGI only.
+
+sentry_level
+  Set the logging level for Sentry breadcrumbs.
+  Available for WSGI only.
+
+sentry_event_level
+  Set the logging level for Sentry events.
+  Available for WSGI only.
+
+sentry_ignore
+  Set the (space separated list of) logger names that are ignored by Sentry.
+  Available for WSGI only.
+
 Advanced logging options for WSGI
 ---------------------------------
 
@@ -335,7 +354,7 @@ access-log-args
   of the file like `("access.log", "a")`.  Note that you a Python tuple with
   only one element (e.g. only the filename) must have a trailing comma like
   `("access.log", )` The `access-log-args` is used to specify the positional
-  parameters for the logging handler configured through `access-log-handler`. 
+  parameters for the logging handler configured through `access-log-handler`.
 
   Default: `("access.log", "a")`
 
@@ -373,7 +392,6 @@ for rotating the event log every 24 hours or one day::
     event-log-handler = logging.handlers.TimedRotatingFileHandler
     event-log-args = ("event.log", )
     event-log-kwargs = {"when": "D", "interval": 1}
-
 
 Load non-setuptools compatible Python libraries
 -----------------------------------------------
@@ -440,7 +458,7 @@ zeo-var
 Advanced options
 ----------------
 
-wsgi-ini-template 
+wsgi-ini-template
 
   By default `plone.recipe.zope2instances` uses a hard-coded template for the
   generated WSGI configuration in `parts/<partname>/etc/wsgi.ini`. The template

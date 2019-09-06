@@ -8,6 +8,22 @@ Changelog
 
 .. towncrier release notes start
 
+6.4.0 (2019-08-29)
+------------------
+
+New features:
+
+
+- Add Sentry support by adding a new filter to the WSGI pipeline. (#124)
+
+
+Bug fixes:
+
+
+- Fixed a deprecation warning when importing ``makerequest`` from ``Testing.ZopeTestCase.utils``.
+  This also fixes a side effect which can bite you if you rely on the ``ZOPETESTCASE`` environment variable, only being set to ``1`` during test runs. (#122)
+
+
 6.3.0 (2019-07-06)
 ------------------
 

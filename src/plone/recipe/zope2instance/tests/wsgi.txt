@@ -90,7 +90,7 @@ The buildout has also created an INI file containing the waitress configuration:
     [filter:translogger]
     use = egg:Paste#translogger
     setup_console_handler = False
-    <BLANKLINE>
+    ...
     [pipeline:main]
     pipeline =
         translogger
@@ -375,4 +375,113 @@ The buildout has updated our INI file:
     level = INFO
     handlers =
     qualname = waitress
+    ...
+
+Sentry support
+==============
+
+We want to sent logging events to Sentry.
+Let's create a buildout:
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ...     plone.recipe.zope2instance[sentry]
+    ... user = me:me
+    ... sentry_dsn = https://f00ba4ba2@my.sentry.server/9999
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print(system(join('bin', 'buildout'))),
+    Uninstalling instance.
+    Installing instance.
+    Getting distribution for 'sentry-sdk'.
+    ...
+    Generated script '.../sample-buildout/bin/instance'.
+    ...
+
+The buildout has updated our INI file:
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> wsgi_ini = open(os.path.join(instance, 'etc', 'wsgi.ini')).read()
+    >>> print(wsgi_ini)
+    [server:main]
+    paste.server_factory = plone.recipe.zope2instance:main
+    use = egg:plone.recipe.zope2instance#main
+    ...
+    [filter:sentry]
+    use = egg:plone.recipe.zope2instance#sentry
+    dsn = https://f00ba4ba2@my.sentry.server/9999
+    level = INFO
+    event_level = ERROR
+    ignorelist =
+    <BLANKLINE>
+    [pipeline:main]
+    pipeline =
+        translogger
+        egg:Zope#httpexceptions
+        sentry
+        zope
+    <BLANKLINE>
+    [loggers]
+    ...
+
+Let's update our buildout with some Sentry options:
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ...     plone.recipe.zope2instance[sentry]
+    ... user = me:me
+    ... sentry_dsn = https://f00ba4ba2@my.sentry.server/9999
+    ... sentry_level = DEBUG
+    ... sentry_event_level = WARNING
+    ... sentry_ignore = waitress.queue foo
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print(system(join('bin', 'buildout'))),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '.../sample-buildout/bin/instance'.
+    ...
+
+The buildout has updated our INI file:
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> wsgi_ini = open(os.path.join(instance, 'etc', 'wsgi.ini')).read()
+    >>> print(wsgi_ini)
+    [server:main]
+    paste.server_factory = plone.recipe.zope2instance:main
+    use = egg:plone.recipe.zope2instance#main
+    ...
+    [filter:sentry]
+    use = egg:plone.recipe.zope2instance#sentry
+    dsn = https://f00ba4ba2@my.sentry.server/9999
+    level = DEBUG
+    event_level = WARNING
+    ignorelist = waitress.queue foo
+    <BLANKLINE>
+    [pipeline:main]
+    pipeline =
+        translogger
+        egg:Zope#httpexceptions
+        sentry
+        zope
+    <BLANKLINE>
+    [loggers]
     ...

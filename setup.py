@@ -4,7 +4,7 @@ from setuptools import setup
 
 
 name = "plone.recipe.zope2instance"
-version = '6.3.1.dev0'
+version = '6.4.1.dev0'
 
 setup(
     name=name,
@@ -18,11 +18,12 @@ setup(
     keywords="zope buildout",
     url='https://github.com/plone/plone.recipe.zope2instance',
     classifiers=[
-        "License :: OSI Approved :: Zope Public License",
+        "Development Status :: 6 - Mature",
         "Framework :: Buildout",
         "Framework :: Plone",
         "Framework :: Plone :: 5.2",
         "Framework :: Zope :: 4",
+        "License :: OSI Approved :: Zope Public License",
         "Programming Language :: Python",
         "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 2.7",
@@ -50,6 +51,9 @@ setup(
         'test': [
             'zope.testrunner',
         ],
+        'sentry': [
+            'sentry-sdk',
+        ]
     },
     zip_safe=False,
     entry_points={
@@ -59,6 +63,9 @@ setup(
         ],
         'paste.server_factory': [
             'main=plone.recipe.zope2instance.ctl:server_factory',
+        ],
+        'paste.filter_factory': [
+            'sentry=plone.recipe.zope2instance.sentry:sdk_init',
         ],
         },
 )
