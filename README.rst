@@ -57,11 +57,16 @@ ip-address
   overridden on a per-server basis in the servers section. Defaults to not
   setting an ip-address. Used for ZServer only, not WSGI.
 
+threads
+  Specify the number of worker threads used to service requests.
+  The default is 4 for WSGI (since this is the waitress default) and 2 for ZServer.
+
 zodb-cache-size
   Set the ZODB cache size, i.e. the number of objects which the ZODB cache
   will try to hold. Defaults to 30000.
 
 zserver-threads
+  Deprecated, use `threads` instead.
   Specify the number of threads that Zope's ZServer web server will use to
   service requests. The recipes default is 2. Used for ZServer only, not WSGI.
 
