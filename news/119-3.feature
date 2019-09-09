@@ -1,1 +1,1 @@
-- added documentation and examples for advanced WSGI logger configuration [ajung]
+added documentation and examples for advanced WSGI logger configuration [ajung]
