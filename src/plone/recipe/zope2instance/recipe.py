@@ -798,6 +798,41 @@ class Recipe(Scripts):
         sentry_level = options.get('sentry_level', 'INFO')
         sentry_event_level = options.get('sentry_event_level', 'ERROR')
         sentry_ignore = options.get('sentry_ignore', '')
+        profile = options.get('profile', '').strip() == 'on'
+        if profile:
+            pipeline.append('profile')
+        default_profile_log_filename = os.path.sep.join(
+            [
+                var_dir,
+                'log',
+                'profile-{0}.raw'.format(self.name),
+            ]
+        )
+        profile_log_filename = options.get(
+            'profile_log_filename',
+            default_profile_log_filename
+        )
+        default_profile_log_filename = os.path.sep.join(
+            [
+                var_dir,
+                'log',
+                'cachegrind.out.{0}'.format(self.name),
+            ]
+        )
+        profile_cachegrind_filename = options.get(
+            'profile_cachegrind_filename',
+            default_profile_log_filename
+        )
+        profile_discard_first_request = options.get(
+            'profile_discard_first_request',
+            'true'
+        )
+        profile_path = options.get('profile_path', '/__profile__')
+        profile_flush_at_shutdown = options.get(
+            'profile_flush_at_shutdown',
+            'true'
+        )
+        profile_unwind = options.get('profile_unwind', 'false')
 
         if "zope" not in pipeline:
             pipeline.append('zope')
@@ -827,8 +862,13 @@ class Recipe(Scripts):
             'sentry_ignore': sentry_ignore,
             'sentry_level': sentry_level,
             'threads': options.get('threads', 4),
+            'profile_log_filename': profile_log_filename,
+            'profile_cachegrind_filename': profile_cachegrind_filename,
+            'profile_discard_first_request': profile_discard_first_request,
+            'profile_path': profile_path,
+            'profile_flush_at_shutdown': profile_flush_at_shutdown,
+            'profile_unwind': profile_unwind,
         }
-
         global wsgi_ini_template
         wsgi_ini_template_path = self.options.get('wsgi-ini-template')
         if wsgi_ini_template_path:
@@ -1408,6 +1448,15 @@ dsn = %(sentry_dsn)s
 level = %(sentry_level)s
 event_level = %(sentry_event_level)s
 ignorelist = %(sentry_ignore)s
+
+[filter:profile]
+use = egg:repoze.profile
+log_filename = %(profile_log_filename)s
+cachegrind_filename = %(profile_cachegrind_filename)s
+discard_first_request = %(profile_discard_first_request)s
+path = %(profile_path)s
+flush_at_shutdown = %(profile_flush_at_shutdown)s
+unwind = %(profile_unwind)s
 
 [pipeline:main]
 pipeline =

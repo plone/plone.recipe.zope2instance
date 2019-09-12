@@ -157,7 +157,7 @@ verbose-security
   implementation). Defaults to `off` (and the C security implementation).
 
 debug-exceptions
-  WSGI only: set to `on` to disable exception views including
+  WSGI only: set to ``on`` to disable exception views including
   ``standard_error_message``. Exceptions other than ``Unauthorized`` or
   ``ConflictError`` can then travel up into the WSGI stack. Use this option
   if you want more convenient error debugging offered by WSGI middleware
@@ -165,6 +165,38 @@ debug-exceptions
   <https://werkzeug.palletsprojects.com/en/0.15.x/debug/>`_. See the `Zope
   WSGI documentation <https://zope.readthedocs.io/en/latest/wsgi.html>`_ for
   examples.
+
+profile
+  Set to ``on`` enables `repoze.profile <https://github.com/repoze/repoze.profile>`_.
+  Defaults to ``off``,
+  If switched on there are further options prefixed with ``profile_`` to configure it as below.
+
+profile_log_filename
+  Filename of the raw profile data.
+  Default to ``profile-SECTIONNAME.raw``.
+  This file contains the raw profile data for further analysis.
+
+profile_cachegrind_filename
+  If the package ``pyprof2calltree`` is installed, another file is written.
+  It is meant for consumation with any cachegrind compatible application.
+  Defaults to ``cachegrind.out.SECTIONNAME``.
+
+profile_discard_first_request
+  Defaults to ``true``.
+  See `repoze.profile docs <https://repozeprofile.readthedocs.io/en/latest/#configuration-via-python>`_ for details.
+
+profile_path
+  Defaults to ``/__profile__``.
+  The path for through the web access to the last profiled request.
+
+profile_flush_at_shutdown
+  Defaults to ``true``.
+  See `repoze.profile docs <https://repozeprofile.readthedocs.io/en/latest/#configuration-via-python>`_ for details.
+
+profile_unwind
+  Defaults to ``false``.
+  See `repoze.profile docs <https://repozeprofile.readthedocs.io/en/latest/#configuration-via-python>`_ for details.
+
 
 Direct storage
 --------------
