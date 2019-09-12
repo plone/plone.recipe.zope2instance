@@ -50,6 +50,7 @@ setup(
         'ZEO',
         'waitress >= 1.2.0',
         'Paste',
+        'repoze.profile',
     ],
     extras_require={
         'test': [
