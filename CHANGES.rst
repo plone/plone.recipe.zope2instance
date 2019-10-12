@@ -8,6 +8,24 @@ Changelog
 
 .. towncrier release notes start
 
+6.5.0 (2019-10-12)
+------------------
+
+New features:
+
+
+- added `wsgi-ini-template` option for specifying a custom template for the generation of the `wsgi.ini` configuration file [ajung] (119-1)
+- advanced WSGI logging configuration options for specifying arbitrary logging handlers for event and access log [ajung] (119-2)
+- added documentation and examples for advanced WSGI logger configuration [ajung] (119-3)
+
+
+Bug fixes:
+
+
+- Add documentation for `threads` option. (#126)
+- Fix documentation for http-address option. (#127)
+
+
 6.4.0 (2019-08-29)
 ------------------
 
