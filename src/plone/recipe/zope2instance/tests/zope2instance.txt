@@ -1704,10 +1704,10 @@ code to the initialization process.
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... eggs =
+    ... eggs = waitress
     ... user = me:me
     ... initialization =
-    ...     print('Initialization complete!')
+    ...     print('Initialization complete! Hello %%(user)s!')
     ... ''' % options)
 
 Let's run it::
@@ -1722,7 +1722,11 @@ We should see the given initialization commands included in the instance
 script::
 
     >>> instance = open(os.path.join(sample_buildout, 'bin', 'instance')).read()
-    >>> "print('Initialization complete!')" in instance
+    >>> "print('Initialization complete! Hello me:me!')" in instance
+    True
+
+    >>> waitress = open(os.path.join(sample_buildout, 'bin', 'waitress-serve')).read()
+    >>> "print('Initialization complete! Hello me:me!')" in waitress
     True
 
 

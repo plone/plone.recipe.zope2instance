@@ -85,9 +85,6 @@ class Recipe(Scripts):
         )
         options['bin-directory'] = buildout['buildout']['bin-directory']
 
-        if 'initialization' not in options:
-            options['initialization'] = ''
-
         if 'scripts' in options:
             if options['scripts'] == '':
                 options['scripts'] = ''  # suppress script generation.
@@ -103,6 +100,10 @@ class Recipe(Scripts):
             self._relative_paths = options['buildout-directory']
         else:
             self._relative_paths = ''
+
+        if 'initialization' not in options:
+            options['initialization'] = ''
+        options['initialization'] = options['initialization'] % options
 
         self._include_site_packages = options.get(
             'include-site-packages',
@@ -888,14 +889,13 @@ class Recipe(Scripts):
                 script_arguments=script_arguments,
             )
         else:
-            initialization = options['initialization'] % options
             return zc.buildout.easy_install.scripts(
                 dest=dest,
                 reqs=reqs,
                 working_set=working_set,
                 executable=options['executable'],
                 extra_paths=extra_paths,
-                initialization=initialization,
+                initialization=options['initialization'],
                 arguments=script_arguments,
                 interpreter=interpreter,
                 relative_paths=self._relative_paths,)
