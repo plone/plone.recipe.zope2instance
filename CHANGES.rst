@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+6.5.1 (2019-11-25)
+------------------
+
+Bug fixes:
+
+
+- for initialization option, string format works for instance console script not for the others
+  [mamico] (#130)
+
+
 6.5.0 (2019-10-12)
 ------------------
 
