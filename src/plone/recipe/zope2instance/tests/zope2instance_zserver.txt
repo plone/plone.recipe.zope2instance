@@ -2150,4 +2150,3 @@ script::
     >>> instance = open(os.path.join(sample_buildout, 'bin', 'instance')).read()
     >>> "print('Initialization complete!')" in instance
     True
-

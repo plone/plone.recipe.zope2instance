@@ -475,13 +475,24 @@ class Recipe(Scripts):
                 # All generic RelStorage options have a dash in their name,
                 # except the "name" option. Other options are
                 # database-specific.
+                if name == 'data-dir':  # sqlite3
+                    return False
                 return '-' in name or name == 'name'
 
+            db_opts = '\n'.join(' ' * 12 + ' '.join((k, v))
+                                for k, v in rel_storage.items()
+                                if not is_rs_option(k))
+            if type_ == 'sqlite3':
+                pragmas = [k for k in rel_storage if k.startswith('pragmas-')]
+                if pragmas:
+                    db_opts += '\n' + ' ' * 12 + '<pragmas>\n'
+                    for k in pragmas:
+                        db_opts += ' ' * 16 + ' '.join((k[8:], rel_storage[k])) + '\n'
+                        del rel_storage[k]
+                    db_opts += ' ' * 12 + '</pragmas>\n'
             opts = dict(
                 type=type_,
-                db_opts='\n'.join(' ' * 12 + ' '.join((k, v))
-                                  for k, v in rel_storage.items()
-                                  if not is_rs_option(k)),
+                db_opts=db_opts,
                 rs_opts='\n'.join(' ' * 8 + ' '.join((k, v))
                                   for k, v in rel_storage.items()
                                   if is_rs_option(k)),
