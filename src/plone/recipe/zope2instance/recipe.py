@@ -487,7 +487,8 @@ class Recipe(Scripts):
                 if pragmas:
                     db_opts += '\n' + ' ' * 12 + '<pragmas>\n'
                     for k in pragmas:
-                        db_opts += ' ' * 16 + ' '.join((k[8:], rel_storage[k])) + '\n'
+                        db_opts += ' ' * 16 + \
+                            ' '.join((k[8:], rel_storage[k])) + '\n'
                         del rel_storage[k]
                     db_opts += ' ' * 12 + '</pragmas>\n'
             opts = dict(
