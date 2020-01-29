@@ -829,8 +829,8 @@ Relstorage and sqlite3::
             <sqlite3>
                 data-dir .../sample-buildout/var/db
                 <pragmas>
-                    synchronous off
                     checkpoint_fullfsync off
+                    synchronous off
                 </pragmas>
             </sqlite3>
         </relstorage>
