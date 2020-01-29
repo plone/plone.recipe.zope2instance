@@ -486,7 +486,7 @@ class Recipe(Scripts):
                 pragmas = [k for k in rel_storage if k.startswith('pragmas-')]
                 if pragmas:
                     db_opts += '\n' + ' ' * 12 + '<pragmas>\n'
-                    for k in pragmas:
+                    for k in sorted(pragmas):
                         db_opts += ' ' * 16 + \
                             ' '.join((k[8:], rel_storage[k])) + '\n'
                         del rel_storage[k]
