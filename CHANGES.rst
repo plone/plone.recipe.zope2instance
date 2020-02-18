@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+6.6.0 (2020-02-18)
+------------------
+
+New features:
+
+
+- Support for Zope options ``webdav-source-port`` and ``enable-ms-public-header``.
+  [dataflake] (#134)
+
+
 6.5.1 (2019-11-25)
 ------------------
 
