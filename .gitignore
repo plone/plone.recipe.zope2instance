@@ -9,8 +9,10 @@ dist
 eggs
 include/
 lib/
+lib64
 parts
 pip-selfcheck.json
+pyvenv.cfg
 /.coverage
 /.installed.cfg
 /.tox
