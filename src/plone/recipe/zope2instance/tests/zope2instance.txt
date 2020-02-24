@@ -789,6 +789,56 @@ We should have a zope instance, with a basic zope.conf::
     ...
     <BLANKLINE>
 
+Relstorage and sqlite3::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... wsgi = off
+    ... eggs =
+    ... user = me:me
+    ... rel-storage =
+    ...   type sqlite3
+    ...   data-dir %(sample_buildout)s/var/db
+    ...   pragmas-synchronous off
+    ...   pragmas-checkpoint_fullfsync off
+    ... ''' % options)
+
+    >>> print(system(join('bin', 'buildout'))),
+    Uninstalling instance.
+    Installing instance.
+    Generated script '...instance'.
+    Generated interpreter '.../parts/instance/bin/interpreter'...
+
+    >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
+    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> zope_conf = zope_conf.replace('\\', '/')
+    >>> print(zope_conf)
+    %define INSTANCEHOME .../sample-buildout/parts/instance
+    ...
+    <zodb_db main>
+        # Main database
+        cache-size 30000
+        %import relstorage
+        <relstorage>
+            <sqlite3>
+                data-dir .../sample-buildout/var/db
+                <pragmas>
+                    checkpoint_fullfsync off
+                    synchronous off
+                </pragmas>
+            </sqlite3>
+        </relstorage>
+        mount-point /
+    </zodb_db>
+    ...
+    <BLANKLINE>
+
 ZEO storage
 ===========
 
