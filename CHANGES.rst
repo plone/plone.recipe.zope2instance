@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+6.7.0 (2020-03-09)
+------------------
+
+New features:
+
+
+- - added relstorage w/ sqlite support
+    [mamico] (#132)
+
+
 6.6.0 (2020-02-18)
 ------------------
 
