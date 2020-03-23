@@ -14,8 +14,8 @@ Changelog
 New features:
 
 
-- - added relstorage w/ sqlite support
-    [mamico] (#132)
+- added relstorage w/ sqlite support
+  [mamico] (#132)
 
 
 6.6.0 (2020-02-18)
