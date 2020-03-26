@@ -22,6 +22,7 @@ setup(
         "Framework :: Buildout",
         "Framework :: Plone",
         "Framework :: Plone :: 5.2",
+        "Framework :: Plone :: Core",
         "Framework :: Zope :: 4",
         "License :: OSI Approved :: Zope Public License",
         "Programming Language :: Python",
