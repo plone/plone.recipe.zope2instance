@@ -296,7 +296,7 @@ class Recipe(Scripts):
             chameleon_cache = 'CHAMELEON_CACHE {}'.format(chameleon_cache)
             if environment_vars and '\n' in environment_vars:
                 # default case
-                environment_vars += '\n'.format(chameleon_cache)
+                environment_vars += '\n'
             elif environment_vars:
                 # handle case of all vars in one line
                 environment_vars += ' {}'.format(chameleon_cache)
@@ -717,9 +717,9 @@ class Recipe(Scripts):
             enable_products=enable_products,
             zope_conf_additional=zope_conf_additional,)
 
-        zope_conf = '\n'.join([l
-                               for l in zope_conf.splitlines()
-                               if l.rstrip()])
+        zope_conf = "\n".join(
+            [line for line in zope_conf.splitlines() if line.rstrip()]
+        )
         zope_conf_path = os.path.join(location, 'etc', 'zope.conf')
         with open(zope_conf_path, 'w') as f:
             f.write(zope_conf)
