@@ -1,1 +1,1 @@
-Fix flake8 [ale-rt]
+Fix flake8 and fix inserting ``CHAMELEON_CACHE`` in some cases.  [ale-rt]
