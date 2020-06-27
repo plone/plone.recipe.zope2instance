@@ -1737,8 +1737,10 @@ Our environment variables should be set now::
     >>> zope_conf = zope_conf.replace('\\', '/')
     >>> import re
     >>> env_vars = re.compile(r"<environment>\n\s*(?P<vars>.*)\n</environment>", re.M | re.S)
-    >>> re.search(env_vars, zope_conf).group('vars')
-    'TZ US/Eastern\nTMP /var/tmp\nDISABLE_PTS True'
+    >>> print(re.search(env_vars, zope_conf).group('vars'))
+    TZ US/Eastern
+    TMP /var/tmp
+    DISABLE_PTS True
 
 Several all on one line::
 
@@ -1770,8 +1772,10 @@ Our environment variables should be set now::
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
     >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
     >>> zope_conf = zope_conf.replace('\\', '/')
-    >>> re.search(env_vars, zope_conf).group('vars')
-    'TZ US/Eastern\nTMP /var/tmp\nDISABLE_PTS True'
+    >>> print(re.search(env_vars, zope_conf).group('vars'))
+    TZ US/Eastern
+    TMP /var/tmp
+    DISABLE_PTS True
 
 
 HTTP server
