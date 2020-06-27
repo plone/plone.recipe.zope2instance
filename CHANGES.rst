@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+6.7.2 (2020-06-28)
+------------------
+
+Bug fixes:
+
+
+- Fix flake8 and fix inserting ``CHAMELEON_CACHE`` in some cases.  [ale-rt] (#139)
+
+
 6.7.1 (2020-04-21)
 ------------------
 
