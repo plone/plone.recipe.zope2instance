@@ -296,7 +296,7 @@ class Recipe(Scripts):
             chameleon_cache = 'CHAMELEON_CACHE {}'.format(chameleon_cache)
             if environment_vars and '\n' in environment_vars:
                 # default case
-                environment_vars += '\n'
+                environment_vars += '\n{}'.format(chameleon_cache)
             elif environment_vars:
                 # handle case of all vars in one line
                 environment_vars += ' {}'.format(chameleon_cache)
