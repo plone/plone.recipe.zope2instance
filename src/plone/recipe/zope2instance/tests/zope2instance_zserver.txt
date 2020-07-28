@@ -73,6 +73,9 @@ We should have a zope instance, with a basic zope.conf::
     </logger>
     <http-server>
       address 8080
+      # Set to off to defer opening of the HTTP socket until the end of the
+      # startup phase:
+      fast-listen on
     </http-server>
     <zodb_db main>
         # Main database

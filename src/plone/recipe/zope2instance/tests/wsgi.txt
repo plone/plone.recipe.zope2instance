@@ -80,7 +80,7 @@ The buildout has also created an INI file containing the waitress configuration:
     [server:main]
     paste.server_factory = plone.recipe.zope2instance:main
     use = egg:plone.recipe.zope2instance#main
-    listen = 0.0.0.0:8080
+    fast-listen = 0.0.0.0:8080
     threads = 4
     <BLANKLINE>
     [app:zope]
