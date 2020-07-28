@@ -231,11 +231,11 @@ class Recipe(Scripts):
             http_force_connection_close = (
                 http_force_connection_close_template
                 % http_force_connection_close)
-        http_fast_listen = options.get('http-fast-listen', None)
-        if http_fast_listen is None:
-            http_fast_listen = ''
+        http_fast_listen = options.get('http-fast-listen', 'on') or ''
+        if http_fast_listen.lower() in ("on", "true"):
+            http_fast_listen = http_fast_listen_template % 'on'
         else:
-            http_fast_listen = http_fast_listen_template % http_fast_listen
+            http_fast_listen = http_fast_listen_template % 'off'
         http_address = options.get('http-address', '8080')
         if http_address:
             http_address = http_server_template % dict(
@@ -728,7 +728,8 @@ class Recipe(Scripts):
         options = self.options
         wsgi_ini_path = os.path.join(options['location'], 'etc', 'wsgi.ini')
         listen = options.get('http-address', '0.0.0.0:8080')
-        fast = 'fast-' if options.get('http-fast-listen') is not None else ''
+        fast_listen = options.get('http-fast-listen', 'on') or ''
+        fast = 'fast-' if fast_listen.lower() in ('on', 'true') else ''
         if ':' not in listen:
             listen = '0.0.0.0:{}'.format(listen)
 
@@ -788,29 +789,27 @@ class Recipe(Scripts):
         pipeline.append('zope')
         pipeline = '\n    '.join(pipeline)
         wsgi_options = {
-            'location': options['location'],
-            'http_address': listen,
-            'threads': options.get('threads', 4),
-            'fast-listen': fast,
-            'root_handlers': root_handlers,
-            'accesslog_name': accesslog_name,
-            'accesslog_handler': accesslog_handler,
-            'accesslog_level': accesslog_level,
             'accesslog_args': accesslog_args,
+            'accesslog_handler': accesslog_handler,
             'accesslog_kwargs': accesslog_kwargs,
+            'accesslog_level': accesslog_level,
+            'accesslog_name': accesslog_name,
             'event_handlers': event_handlers,
-            'eventlog_name': eventlog_name,
-            'eventlog_handler': eventlog_handler,
-            'eventlog_level': eventlog_level,
             'eventlog_args': eventlog_args,
+            'eventlog_handler': eventlog_handler,
             'eventlog_kwargs': eventlog_kwargs,
+            'eventlog_level': eventlog_level,
+            'eventlog_name': eventlog_name,
             'fast-listen': fast,
             'http_address': listen,
+            'location': options['location'],
             'pipeline': pipeline,
+            'root_handlers': root_handlers,
             'sentry_dsn': sentry_dsn,
-            'sentry_level': sentry_level,
             'sentry_event_level': sentry_event_level,
             'sentry_ignore': sentry_ignore,
+            'sentry_level': sentry_level,
+            'threads': options.get('threads', 4),
         }
 
         global wsgi_ini_template
