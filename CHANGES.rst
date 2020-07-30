@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+6.7.3 (2020-07-30)
+------------------
+
+Bug fixes:
+
+
+- Set the default for the http-fast-listen to on to match the documentation [ale-rt] (#71)
+
+
 6.7.2 (2020-06-28)
 ------------------
 
