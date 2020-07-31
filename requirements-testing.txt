@@ -1,0 +1,1 @@
+-e .[test] -c https://zopefoundation.github.io/Zope/releases/4.5/requirements-full.txt
