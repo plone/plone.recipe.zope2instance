@@ -140,14 +140,14 @@ The buildout has also created an INI file containing the waitress configuration:
     <BLANKLINE>
     [handler_accesslog]
     class = FileHandler
-    args = ('.../sample-buildout/var/log/instance-access.log', 'a')
+    args = (r'.../sample-buildout/var/log/instance-access.log', 'a')
     kwargs = {}
     level = INFO
     formatter = message
     <BLANKLINE>
     [handler_eventlog]
     class = FileHandler
-    args = ('.../sample-buildout/var/log/instance.log', 'a')
+    args = (r'.../sample-buildout/var/log/instance.log', 'a')
     kwargs = {}
     level = NOTSET
     formatter = generic
@@ -267,14 +267,14 @@ The buildout has updated our INI file:
     ...
     [handler_accesslog]
     class = FileHandler
-    args = ('var/log/foo.log', 'a')
+    args = (r'var/log/foo.log', 'a')
     kwargs = {}
     level = DEBUG
     formatter = message
     <BLANKLINE>
     [handler_eventlog]
     class = FileHandler
-    args = ('var/log/bar.log', 'a')
+    args = (r'var/log/bar.log', 'a')
     kwargs = {}
     level = NOTSET
     formatter = generic
