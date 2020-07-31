@@ -361,7 +361,7 @@ access-log-args
   `("access.log", )` The `access-log-args` is used to specify the positional
   parameters for the logging handler configured through `access-log-handler`.
 
-  Default: `("access.log", "a")`
+  Default: `(r"access.log", "a")`
 
 access-log-kwargs
   A python dictionary used for passing keyword argument for the logging handler
@@ -385,7 +385,7 @@ This example uses a `RotatingFileHandler` https://docs.python.org/3/library/logg
 which rotates the access log when it becomes larger than 10 MB while keeping seven copies::
 
     access-log-handler = logging.handlers.RotatingFileHandler
-    access-log-args  = ("access.log", "a")
+    access-log-args  = (r"access.log", "a")
     access-log-kwargs = {"maxBytes": 10000000, "maxCount": 7}
 
 Example (rotating of event log after each day)
@@ -395,7 +395,7 @@ This example uses a `TimedRotatingFileHandler` https://docs.python.org/3/library
 for rotating the event log every 24 hours or one day::
 
     event-log-handler = logging.handlers.TimedRotatingFileHandler
-    event-log-args = ("event.log", )
+    event-log-args = (r"event.log", )
     event-log-kwargs = {"when": "D", "interval": 1}
 
 Load non-setuptools compatible Python libraries

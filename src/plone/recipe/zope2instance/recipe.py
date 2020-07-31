@@ -743,7 +743,7 @@ class Recipe(Scripts):
         eventlog_kwargs = options.get('event-log-kwargs', '{}')
         eventlog_args = options.get('event-log-args')
         if not eventlog_args:
-            eventlog_args = "('{}', 'a')".format(eventlog_name)
+            eventlog_args = "(r'{}', 'a')".format(eventlog_name)
         else:
             eventlog_args = eventlog_args.format(eventlog_name)
 
@@ -767,7 +767,7 @@ class Recipe(Scripts):
         accesslog_kwargs = options.get('access-log-kwargs', '{}')
         accesslog_args = options.get('access-log-args')
         if not accesslog_args:
-            accesslog_args = "('{}', 'a')".format(accesslog_name)
+            accesslog_args = "(r'{}', 'a')".format(accesslog_name)
         else:
             accesslog_args = accesslog_args.format(accesslog_name)
 
