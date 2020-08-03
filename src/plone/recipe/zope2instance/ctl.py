@@ -891,35 +891,41 @@ console -- Run the program in the console.
 
 
 def serve_paste(app, global_conf, **kw):
-    sock = None
+    sockets = []
     if 'prebound' in global_conf:
-        _sock = socket.fromfd(
-            int(global_conf['prebound']), socket.AF_INET, socket.SOCK_STREAM)
-        if six.PY2:
-            sock = socket.socket()
-            sock._sock = _sock
-        else:
-            sock = _sock
-        kw.update(sockets=[sock])
+        filenos = global_conf['prebound'].split()
+        for fileno in filenos:
+            _sock = socket.fromfd(
+                int(fileno), socket.AF_INET, socket.SOCK_STREAM)
+            if six.PY2:
+                sock = socket.socket()
+                sock._sock = _sock
+            else:
+                sock = _sock
+            sockets.append(sock)
+        kw.update(sockets=sockets)
     try:
         waitress.serve(app, **kw)
     finally:
-        if isinstance(sock, socket.socket):
+        for sock in sockets:
             sock.close()
     return 0
 
 
 def server_factory(global_conf, **kws):
     if 'fast-listen' in kws:
-        host, port = kws['fast-listen'].split(':')
-        prebound = dispatcher()
-        prebound.create_socket(socket.AF_INET, socket.SOCK_STREAM)
-        prebound.set_reuse_addr()
-        prebound.bind((host, int(port)))
-        prebound.listen(5)
-        while not prebound.readable():
-            sleep(1)
-        global_conf.update(prebound=str(prebound.socket.fileno()))
+        filenos = []
+        for host_port in kws['fast-listen'].split():
+            host, port = host_port.split(':')
+            prebound = dispatcher()
+            prebound.create_socket(socket.AF_INET, socket.SOCK_STREAM)
+            prebound.set_reuse_addr()
+            prebound.bind((host, int(port)))
+            prebound.listen(5)
+            while not prebound.readable():
+                sleep(1)
+            filenos.append(str(prebound.socket.fileno()))
+        global_conf.update(prebound=" ".join(filenos))
         del kws['fast-listen']
     del kws['paste.server_factory']
 
