@@ -730,9 +730,12 @@ class Recipe(Scripts):
         listen = options.get('http-address', '0.0.0.0:8080')
         fast_listen = options.get('http-fast-listen', 'on') or ''
         fast = 'fast-' if fast_listen.lower() in ('on', 'true') else ''
-        if ':' not in listen:
-            listen = '0.0.0.0:{}'.format(listen)
-
+        listen = ' '.join(
+            [
+                '0.0.0.0:{}'.format(part) if ':' not in part else part
+                for part in listen.split()
+            ]
+        )
         base_dir = self.buildout['buildout']['directory']
         var_dir = options.get('var', os.path.join(base_dir, 'var'))
         default_eventlog = os.path.sep.join(

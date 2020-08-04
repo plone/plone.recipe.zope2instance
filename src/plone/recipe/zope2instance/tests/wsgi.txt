@@ -200,6 +200,35 @@ The buildout has updated our INI file:
     [app:zope]
     ...
 
+You can also specify multiple http-address and/or specify only the port
+(the host part will be assumed to be 0.0.0.0):
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... http-address =
+    ...     localhost:6543
+    ...     127.0.0.1:6544
+    ...     8080
+    ... ''' % options)
+    >>> _ = system(join('bin', 'buildout'))
+
+The buildout has updated our INI file:
+
+    >>> wsgi_ini = open(os.path.join(instance, 'etc', 'wsgi.ini')).read()
+    >>> print(wsgi_ini)
+    [server:main]
+    ...
+    fast-listen = localhost:6543 127.0.0.1:6544 0.0.0.0:8080
+    ...
+
 Custom logging
 ==============
 
