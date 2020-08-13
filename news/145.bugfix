@@ -1,2 +1,0 @@
-Fix "SyntaxError" on windows: Generate raw strings in order to allow backslashes in log file paths.
-[jensens]

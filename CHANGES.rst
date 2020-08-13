@@ -8,6 +8,20 @@ Changelog
 
 .. towncrier release notes start
 
+6.7.4 (2020-08-14)
+------------------
+
+Bug fixes:
+
+
+- Fix "SyntaxError" on windows: Generate raw strings in order to allow backslashes in log file paths.
+  [jensens] (#145)
+- Fixed an issue that prevented the instance to start
+  when http-address has multiple entries and http-fast-listen is on
+  [ale-rt] (#146)
+- WSGI instances do not fail to start when http-address is equal to a list of ports [ale-rt] (#148)
+
+
 6.7.3 (2020-07-30)
 ------------------
 

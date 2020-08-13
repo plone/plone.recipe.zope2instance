@@ -1,3 +1,0 @@
-Fixed an issue that prevented the instance to start
-when http-address has multiple entries and http-fast-listen is on
-[ale-rt]
