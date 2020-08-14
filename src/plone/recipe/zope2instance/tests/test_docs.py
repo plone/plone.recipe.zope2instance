@@ -44,15 +44,22 @@ def test_suite():
         doctest.REPORT_NDIFF)
 
     suite.append(doctest.DocFileSuite(
-        'zope2instance.txt',
-        'wsgi.txt',
+        'zope2instance_base.rst',
+        'zope2instance_beforestorage.rst',
+        'zope2instance_blobstorage.rst',
+        'zope2instance_demostorage.rst',
+        'zope2instance_relstorage.rst',
+        'zope2instance_tempstorage_off.rst',
+        'zope2instance_zeostorage.rst',
+        'zope2instance_zlibstorage.rst',
+        'wsgi.rst',
         optionflags=flags,
         setUp=setUp,
         tearDown=tearDown))
 
     if six.PY2:
         suite.append(doctest.DocFileSuite(
-            'zope2instance_zserver.txt',
+            'zope2instance_zserver.rst',
             optionflags=flags,
             setUp=setUp,
             tearDown=tearDown))

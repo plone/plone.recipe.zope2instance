@@ -1,0 +1,5 @@
+-e .[test] -c https://zopefoundation.github.io/Zope/releases/5.0a2/requirements-full.txt
+
+# Windows specific down here (has to be installed here, fails in buildout)
+# Dependency of zope.sendmail:
+pywin32 ; platform_system == 'Windows'

@@ -10,6 +10,7 @@ Test default configuration
     >>> from os.path import join
     >>> import sys, os
     >>> options = globals()
+    >>> WINDOWS = sys.platform == 'win32'
 
 Let's create a minimum buildout that uses the current
 plone.recipe.zope2instance::
@@ -28,14 +29,19 @@ plone.recipe.zope2instance::
 
 Let's run it::
 
-    >>> print(system(join('bin', 'buildout'))),
-    Installing instance.
-    Generated script '...instance'...
+    >>> output = system(join('bin', 'buildout'))
+    >>> "Installing instance" in output
+    True
+
+    >>> WINDOWS or "Generated script '" in output and 'instance' in output
+    True
+
 
 We should have an instance part, with a basic zope.conf::
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> zope_conf = open(os.path.join(instance, 'etc', 'zope.conf')).read()
+    >>> with open(os.path.join(instance, 'etc', 'zope.conf')) as fd:
+    ...     zope_conf = fd.read()
     >>> zope_conf = zope_conf.replace('\\', '/')
     >>> print(zope_conf)
     %define INSTANCEHOME .../sample-buildout/parts/instance
@@ -75,13 +81,20 @@ We should have an instance part, with a basic zope.conf::
 The buildout has also created an INI file containing the waitress configuration:
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> wsgi_ini = open(os.path.join(instance, 'etc', 'wsgi.ini')).read()
-    >>> print(wsgi_ini)
+    >>> with open(os.path.join(instance, 'etc', 'wsgi.ini')) as fd:
+    ...     wsgi_ini = fd.read()
+    >>> WINDOWS or 'fast-listen = 0.0.0.0:8080' in wsgi_ini
+    True
+
+    >>> WINDOWS or 'use = egg:plone.recipe.zope2instance#main' in wsgi_ini
+    True
+
+    >>> not WINDOWS or 'use = egg:waitress#main' in wsgi_ini
+    True
+
+    >>> print(wsgi_ini.replace('\\', '/'))
     [server:main]
-    paste.server_factory = plone.recipe.zope2instance:main
-    use = egg:plone.recipe.zope2instance#main
-    fast-listen = 0.0.0.0:8080
-    threads = 4
+    ...
     <BLANKLINE>
     [app:zope]
     use = egg:Zope#main
@@ -180,25 +193,26 @@ Let's create another buildout configuring a custom port and a custom number of w
 
 Let's run it::
 
-    >>> print(system(join('bin', 'buildout'))),
-    Uninstalling instance.
-    Installing instance.
-    Generated script '.../sample-buildout/bin/instance'.
-    ...
+    >>> output = system(join('bin', 'buildout'))
+    >>> "Uninstalling instance" in output
+    True
+
+    >>> "Installing instance" in output
+    True
+
+    >>> WINDOWS or "Generated script" in output
+    True
 
 The buildout has updated our INI file:
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> wsgi_ini = open(os.path.join(instance, 'etc', 'wsgi.ini')).read()
-    >>> print(wsgi_ini)
-    [server:main]
-    paste.server_factory = plone.recipe.zope2instance:main
-    use = egg:plone.recipe.zope2instance#main
-    fast-listen = localhost:6543
-    threads = 3
-    <BLANKLINE>
-    [app:zope]
-    ...
+    >>> with open(os.path.join(instance, 'etc', 'wsgi.ini')) as fd:
+    ...     wsgi_ini = fd.read()
+    >>> WINDOWS or 'fast-listen = localhost:6543' in wsgi_ini
+    True
+
+    >>> WINDOWS or 'threads = 3' in wsgi_ini
+    True
 
 You can also specify multiple http-address and/or specify only the port
 (the host part will be assumed to be 0.0.0.0):
@@ -222,12 +236,10 @@ You can also specify multiple http-address and/or specify only the port
 
 The buildout has updated our INI file:
 
-    >>> wsgi_ini = open(os.path.join(instance, 'etc', 'wsgi.ini')).read()
-    >>> print(wsgi_ini)
-    [server:main]
-    ...
-    fast-listen = localhost:6543 127.0.0.1:6544 0.0.0.0:8080
-    ...
+    >>> with open(os.path.join(instance, 'etc', 'wsgi.ini')) as fd:
+    ...     wsgi_ini = fd.read()
+    >>> WINDOWS or 'fast-listen = localhost:6543 127.0.0.1:6544 0.0.0.0:8080' in wsgi_ini
+    True
 
 Custom logging
 ==============
@@ -253,20 +265,23 @@ Let's create a buildout:
 
 Let's run it::
 
-    >>> print(system(join('bin', 'buildout'))),
-    Uninstalling instance.
-    Installing instance.
-    Generated script '.../sample-buildout/bin/instance'.
-    ...
+    >>> output = system(join('bin', 'buildout'))
+    >>> "Uninstalling instance" in output
+    True
+
+    >>> "Installing instance" in output
+    True
+
+    >>> WINDOWS or "Generated script" in output
+    True
 
 The buildout has updated our INI file:
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> wsgi_ini = open(os.path.join(instance, 'etc', 'wsgi.ini')).read()
-    >>> print(wsgi_ini)
+    >>> with open(os.path.join(instance, 'etc', 'wsgi.ini')) as fd:
+    ...     wsgi_ini = fd.read()
+    >>> print(wsgi_ini.replace('\\', '/'))
     [server:main]
-    paste.server_factory = plone.recipe.zope2instance:main
-    use = egg:plone.recipe.zope2instance#main
     ...
     [logger_root]
     level = ERROR
@@ -326,20 +341,23 @@ Next we want to disable access logging (but keep an event log file):
 
 Let's run it::
 
-    >>> print(system(join('bin', 'buildout'))),
-    Uninstalling instance.
-    Installing instance.
-    Generated script '.../sample-buildout/bin/instance'.
-    ...
+    >>> output = system(join('bin', 'buildout'))
+    >>> "Uninstalling instance" in output
+    True
+
+    >>> "Installing instance" in output
+    True
+
+    >>> WINDOWS or "Generated script" in output
+    True
 
 The buildout has updated our INI file:
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> wsgi_ini = open(os.path.join(instance, 'etc', 'wsgi.ini')).read()
+    >>> with open(os.path.join(instance, 'etc', 'wsgi.ini')) as fd:
+    ...     wsgi_ini = fd.read()
     >>> print(wsgi_ini)
     [server:main]
-    paste.server_factory = plone.recipe.zope2instance:main
-    use = egg:plone.recipe.zope2instance#main
     ...
     [pipeline:main]
     pipeline =
@@ -365,20 +383,23 @@ Now we also want to disable event logging:
 
 Let's run it::
 
-    >>> print(system(join('bin', 'buildout'))),
-    Uninstalling instance.
-    Installing instance.
-    Generated script '.../sample-buildout/bin/instance'.
-    ...
+    >>> output = system(join('bin', 'buildout'))
+    >>> "Uninstalling instance" in output
+    True
+
+    >>> "Installing instance" in output
+    True
+
+    >>> WINDOWS or "Generated script" in output
+    True
 
 The buildout has updated our INI file:
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> wsgi_ini = open(os.path.join(instance, 'etc', 'wsgi.ini')).read()
+    >>> with open(os.path.join(instance, 'etc', 'wsgi.ini')) as fd:
+    ...     wsgi_ini = fd.read()
     >>> print(wsgi_ini)
     [server:main]
-    paste.server_factory = plone.recipe.zope2instance:main
-    use = egg:plone.recipe.zope2instance#main
     ...
     [pipeline:main]
     pipeline =
@@ -428,22 +449,23 @@ Let's create a buildout:
 
 Let's run it::
 
-    >>> print(system(join('bin', 'buildout'))),
-    Uninstalling instance.
-    Installing instance.
-    Getting distribution for 'sentry-sdk'.
-    ...
-    Generated script '.../sample-buildout/bin/instance'.
-    ...
+    >>> output = system(join('bin', 'buildout'))
+    >>> "Uninstalling instance" in output
+    True
+
+    >>> "Installing instance" in output
+    True
+
+    >>> WINDOWS or "Generated script" in output
+    True
 
 The buildout has updated our INI file:
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> wsgi_ini = open(os.path.join(instance, 'etc', 'wsgi.ini')).read()
+    >>> with open(os.path.join(instance, 'etc', 'wsgi.ini')) as fd:
+    ...     wsgi_ini = fd.read()
     >>> print(wsgi_ini)
     [server:main]
-    paste.server_factory = plone.recipe.zope2instance:main
-    use = egg:plone.recipe.zope2instance#main
     ...
     [filter:sentry]
     use = egg:plone.recipe.zope2instance#sentry
@@ -483,20 +505,20 @@ Let's update our buildout with some Sentry options:
 
 Let's run it::
 
-    >>> print(system(join('bin', 'buildout'))),
-    Uninstalling instance.
-    Installing instance.
-    Generated script '.../sample-buildout/bin/instance'.
-    ...
+    >>> output = system(join('bin', 'buildout'))
+    >>> "Installing instance" in output
+    True
+
+    >>> WINDOWS or "Generated script" in output
+    True
 
 The buildout has updated our INI file:
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
-    >>> wsgi_ini = open(os.path.join(instance, 'etc', 'wsgi.ini')).read()
+    >>> with open(os.path.join(instance, 'etc', 'wsgi.ini')) as fd:
+    ...     wsgi_ini = fd.read()
     >>> print(wsgi_ini)
     [server:main]
-    paste.server_factory = plone.recipe.zope2instance:main
-    use = egg:plone.recipe.zope2instance#main
     ...
     [filter:sentry]
     use = egg:plone.recipe.zope2instance#sentry
