@@ -4,7 +4,7 @@ from setuptools import setup
 
 
 name = "plone.recipe.zope2instance"
-version = '6.7.5'
+version = '6.7.6.dev0'
 
 setup(
     name=name,
