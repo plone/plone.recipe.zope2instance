@@ -1,4 +1,4 @@
 Generate working ``wsgi.ini`` on windows.
 Do not generate instance script.
-Need to use ``.\bin\runwsigi.exe -dv .\parts\etc\wsgi.ini`` on windows to start.
+Need to use ``.\bin\runwsgi.exe -dv .\parts\etc\wsgi.ini`` on windows to start.
 [jensens]

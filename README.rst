@@ -675,11 +675,11 @@ On the windows platform the ``bin/instance`` script as described below will not 
 
 To run Plone start it with::
 
-  .\bin\runwsigi.exe -v .\parts\etc\wsgi.ini
+  .\bin\runwsgi.exe -v .\parts\etc\wsgi.ini
 
 Or for development in debug mode use
 
-  .\bin\runwsigi.exe -v .\parts\etc\wsgi.ini
+  .\bin\runwsgi.exe -v .\parts\etc\wsgi.ini
 
 The documentation for the extended Zope control script below does not apply.
 
