@@ -805,6 +805,10 @@ class Recipe(Scripts):
             'eventlog_name': eventlog_name,
             'fast-listen': fast,
             'http_address': listen,
+            # todo: make this configurable
+            'listen_ip': '127.0.0.1',
+            'listen_port': '8080',
+            # /todo
             'location': options['location'],
             'pipeline': pipeline,
             'root_handlers': root_handlers,
@@ -824,11 +828,21 @@ class Recipe(Scripts):
             except IOError:
                 raise
 
+        # generate a different [server:main] - useful for Windows
+        wsgi_server_main_template = wsgi_server_main_templates.get(
+            sys.platform,
+            wsgi_server_main_templates['default']
+        )
+        wsgi_options['server_main'] = wsgi_server_main_template % wsgi_options
+
         wsgi_ini = wsgi_ini_template % wsgi_options
         with open(wsgi_ini_path, 'w') as f:
             f.write(wsgi_ini)
 
     def install_scripts(self):
+        if IS_WIN:
+            # instance scripts are usung zdaemon, which are Unix only
+            return {}
         options = self.options
         location = options['location']
 
@@ -1348,12 +1362,23 @@ additional_zcml_template = """\
 </configure>
 """
 
-wsgi_ini_template = """\
-[server:main]
+wsgi_server_main_templates = {}
+wsgi_server_main_templates['default'] = """\
 paste.server_factory = plone.recipe.zope2instance:main
 use = egg:plone.recipe.zope2instance#main
 %(fast-listen)slisten = %(http_address)s
 threads = %(threads)s
+"""
+
+wsgi_server_main_templates['win32'] = """\
+use = egg:waitress#main
+host = %(listen_ip)s
+port = %(listen_port)s
+"""
+
+wsgi_ini_template = """\
+[server:main]
+%(server_main)s
 
 [app:zope]
 use = egg:Zope#main

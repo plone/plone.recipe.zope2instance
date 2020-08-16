@@ -668,6 +668,22 @@ http-header-max-length
 The generated control script
 ============================
 
+Windows
+-------
+
+On the windows platform the ``bin/instance`` script as described below will not be generated, because it uses a Unix specific implementation.
+
+To run Plone start it with::
+
+  .\bin\runwsigi.exe -v .\parts\etc\wsgi.ini
+
+Or for development in debug mode use
+
+  .\bin\runwsigi.exe -v .\parts\etc\wsgi.ini
+
+The documentation for the extended Zope control script below does not apply.
+
+
 The `debug`, `console` and `run` commands
 -----------------------------------------
 
