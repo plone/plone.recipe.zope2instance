@@ -8,6 +8,18 @@ Changelog
 
 .. towncrier release notes start
 
+6.7.5 (2020-08-16)
+------------------
+
+Bug fixes:
+
+
+- Generate working ``wsgi.ini`` on windows.
+  Do not generate instance script.
+  Need to use ``.\bin\runwsgi.exe -dv .\parts\etc\wsgi.ini`` on windows to start.
+  [jensens] (#151)
+
+
 6.7.4 (2020-08-14)
 ------------------
 
