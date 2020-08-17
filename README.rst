@@ -464,7 +464,6 @@ Advanced options
 ----------------
 
 wsgi-ini-template
-
   By default `plone.recipe.zope2instances` uses a hard-coded template for the
   generated WSGI configuration in `parts/<partname>/etc/wsgi.ini`. The template
   is defined as `wsgi_ini_template` variable within the `recipe.py
@@ -677,7 +676,7 @@ To run Plone start it with::
 
   .\bin\runwsgi.exe -v .\parts\etc\wsgi.ini
 
-Or for development in debug mode use
+Or for development in debug mode use::
 
   .\bin\runwsgi.exe -v .\parts\etc\wsgi.ini
 
