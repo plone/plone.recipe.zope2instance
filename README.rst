@@ -6,7 +6,10 @@ Introduction
 
 .. image:: http://img.shields.io/travis/plone/plone.recipe.zope2instance.svg
    :target: https://travis-ci.org/plone/plone.recipe.zope2instance
-
+   
+.. image:: https://github.com/plone/plone.recipe.zope2instance/workflows/Test/badge.svg?branch=master
+   :target: https://github.com/plone/plone.recipe.zope2instance/actions?query=workflow%3ATest+branch%3Amaster
+   
 This recipe creates and configures a Zope instance in parts.
 (Despite its name it nowadays only works for Zope 4+.) It also
 installs a control script, which is like zopectl, in the bin/ directory.
