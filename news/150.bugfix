@@ -6,5 +6,5 @@ Split up tests in smaller easier to maintain files.
 Fix tests to run on Windows without tocuhing the recipe code (the Windows code is not perfect right now, but it test are reflecting current state).
 This primary includes respecting path-handling (backslash vs slash), conditional instance generation and differences in wsgi configurations.
 Also resolves "unclosed files" warnings.
-Reflect Zope 5 and so Plone 6.0 support in troove classifiers.
+Reflect Zope 5 and so Plone 6.0 support in trove classifiers.
 [jensens]
