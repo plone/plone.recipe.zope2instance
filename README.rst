@@ -6,10 +6,10 @@ Introduction
 
 .. image:: http://img.shields.io/travis/plone/plone.recipe.zope2instance.svg
    :target: https://travis-ci.org/plone/plone.recipe.zope2instance
-   
+
 .. image:: https://github.com/plone/plone.recipe.zope2instance/workflows/Test/badge.svg?branch=master
    :target: https://github.com/plone/plone.recipe.zope2instance/actions?query=workflow%3ATest+branch%3Amaster
-   
+
 This recipe creates and configures a Zope instance in parts.
 (Despite its name it nowadays only works for Zope 4+.) It also
 installs a control script, which is like zopectl, in the bin/ directory.
@@ -493,6 +493,17 @@ before-storage
 client-home
   Sets the clienthome for the generated instance.
   Defaults to ${buildout:directory}/var/<name of the section>.
+
+clear-untrusted-proxy-headers
+  This tells Waitress to remove any untrusted proxy headers
+  ("Forwarded", "X-Forwarded-For", "X-Forwarded-By",
+  "X-Forwarded-Host", "X-Forwarded-Port", "X-Forwarded-Proto").
+  The default in waitress 1 is false, but waitress 2 changes this to true.
+  We explicitly default to false.
+  When you set it to true, you may need to set other ``wsgi.ini`` options like
+  ``trusted_proxy_headers`` and ``trusted_proxy``.
+  Setting those is not supported by the recipe yet.
+  Used for WSGI only, not ZServer.
 
 default-zpublisher-encoding
   This controls what character set is used to encode unicode data that reaches

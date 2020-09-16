@@ -789,6 +789,8 @@ class Recipe(Scripts):
         sentry_event_level = options.get('sentry_event_level', 'ERROR')
         sentry_ignore = options.get('sentry_ignore', '')
 
+        clear_untrusted_proxy_headers = options.get('clear-untrusted-proxy-headers', 'false')
+
         pipeline.append('zope')
         pipeline = '\n    '.join(pipeline)
         wsgi_options = {
@@ -797,6 +799,7 @@ class Recipe(Scripts):
             'accesslog_kwargs': accesslog_kwargs,
             'accesslog_level': accesslog_level,
             'accesslog_name': accesslog_name,
+            'clear_untrusted_proxy_headers': clear_untrusted_proxy_headers,
             'event_handlers': event_handlers,
             'eventlog_args': eventlog_args,
             'eventlog_handler': eventlog_handler,
@@ -1368,12 +1371,14 @@ paste.server_factory = plone.recipe.zope2instance:main
 use = egg:plone.recipe.zope2instance#main
 %(fast-listen)slisten = %(http_address)s
 threads = %(threads)s
+clear_untrusted_proxy_headers = %(clear_untrusted_proxy_headers)s
 """
 
 wsgi_server_main_templates['win32'] = """\
 use = egg:waitress#main
 host = %(listen_ip)s
 port = %(listen_port)s
+clear_untrusted_proxy_headers = %(clear_untrusted_proxy_headers)s
 """
 
 wsgi_ini_template = """\
