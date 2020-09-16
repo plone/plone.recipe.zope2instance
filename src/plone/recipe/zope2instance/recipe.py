@@ -789,7 +789,9 @@ class Recipe(Scripts):
         sentry_event_level = options.get('sentry_event_level', 'ERROR')
         sentry_ignore = options.get('sentry_ignore', '')
 
-        clear_untrusted_proxy_headers = options.get('clear-untrusted-proxy-headers', 'false')
+        clear_untrusted_proxy_headers = options.get(
+            'clear-untrusted-proxy-headers', 'false'
+        )
 
         pipeline.append('zope')
         pipeline = '\n    '.join(pipeline)
