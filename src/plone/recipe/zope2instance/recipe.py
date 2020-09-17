@@ -815,6 +815,8 @@ class Recipe(Scripts):
             'listen_port': '8080',
             # /todo
             'location': options['location'],
+            'max_request_body_size': options.get(
+                'max-request-body-size', 1073741824),
             'pipeline': pipeline,
             'root_handlers': root_handlers,
             'sentry_dsn': sentry_dsn,
@@ -1374,6 +1376,7 @@ use = egg:plone.recipe.zope2instance#main
 %(fast-listen)slisten = %(http_address)s
 threads = %(threads)s
 clear_untrusted_proxy_headers = %(clear_untrusted_proxy_headers)s
+max_request_body_size = %(max_request_body_size)s
 """
 
 wsgi_server_main_templates['win32'] = """\
