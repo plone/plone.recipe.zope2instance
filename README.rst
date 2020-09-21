@@ -111,6 +111,10 @@ wsgi
    The WSGI configuration file will not be created for you in this case,
    unlike the built-in ``waitress`` support. You have to provide it yourself.
 
+max-request-body-size
+   Specify the maximum request body size in bytes
+   The default is 1073741824 (since this is the waitress default)
+
 
 Theme resources
 ---------------
