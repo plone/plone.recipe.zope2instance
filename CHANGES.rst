@@ -8,6 +8,36 @@ Changelog
 
 .. towncrier release notes start
 
+6.8.0 (2020-09-26)
+------------------
+
+New features:
+
+
+- Added option ``clear-untrusted-proxy-headers``, with default false.
+  See waitress documentation on `clear_untrusted_proxy_headers <https://waitress.readthedocs.io/en/latest/arguments.html?highlight=clear_untrusted_proxy_headers>`_.
+  Fixes a `deprecation warning <https://github.com/plone/plone.recipe.zope2instance/issues/142>`_.
+  [maurits] (#142)
+- Added option ``max-request-body-size``, with default 1073741824.
+  See waitress documentation on `max_request_body_size <https://waitress.readthedocs.io/en/latest/arguments.html?highlight=max_request_body_size>`_.
+  [mpeeters] (#155)
+
+
+Bug fixes:
+
+
+- Add GitHub Actions to project.
+  Run tests there in a matrix against Zope 4 and Zope 5, Windows and Linux, Python 27, 3.6, 3.7 and 3.8.
+  Testing Python 2.7 on Windows is skipped.
+  Refactor tox test setup slightly, do not use tox on GitHub.
+  Split up tests in smaller easier to maintain files.
+  Fix tests to run on Windows without tocuhing the recipe code (the Windows code is not perfect right now, but it test are reflecting current state).
+  This primary includes respecting path-handling (backslash vs slash), conditional instance generation and differences in wsgi configurations.
+  Also resolves "unclosed files" warnings.
+  Reflect Zope 5 and so Plone 6.0 support in trove classifiers.
+  [jensens] (#150)
+
+
 6.7.5 (2020-08-16)
 ------------------
 
