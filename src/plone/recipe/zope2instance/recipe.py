@@ -778,6 +778,8 @@ class Recipe(Scripts):
         if accesslog_name.lower() == 'disable':
             pipeline = ['egg:Zope#httpexceptions']
             event_handlers = ''
+            accesslog_handler = 'NullHandler'
+            accesslog_args = "()"
         else:
             pipeline = [
                 'translogger', 'egg:Zope#httpexceptions']
