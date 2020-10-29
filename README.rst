@@ -304,8 +304,9 @@ mailinglogger
 access-log, z2-log
   The filename for the Z2 access log. Defaults to var/log/${partname}-Z2.log
   (var/log/${partname}-access.log) for WSGI).
-  Setting this value to 'disable' will make the <logger access> section to be omitted,
-  disabling logging access events to a .log file.
+  You can disable access logging by setting this value to 'disable'.
+  For ZServer this will omit the `<logger access>` section in `zope.conf`.
+  For WSGI, the logging handler will be a `NullHandler <https://docs.python.org/3/library/logging.handlers.html#nullhandler>`_.
 
 access-log-level, z2-log-level
   Set the log level for the access log. Level may be any of CRITICAL, ERROR,
