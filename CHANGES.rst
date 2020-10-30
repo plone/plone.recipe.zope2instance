@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+6.8.1 (2020-10-30)
+------------------
+
+Bug fixes:
+
+
+- Properly disable access-log for WSGI.
+  [tschorr] (#159)
+
+
 6.8.0 (2020-09-26)
 ------------------
 
