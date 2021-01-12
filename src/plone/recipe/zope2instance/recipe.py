@@ -661,8 +661,10 @@ class Recipe(Scripts):
 
         zodb_tmp_storage = options.get('zodb-temporary-storage', 'on')
         if zodb_tmp_storage.lower() in ('off', 'false', '0'):
+            # no temporary-storage snippet
             zodb_tmp_storage = ''
-        else:
+        elif zodb_tmp_storage.lower() in ('on', 'true', '1'):
+            # use default temporary-storage snippet
             zodb_tmp_storage = zodb_temporary_storage_template
         template = wsgi_conf_template if self.wsgi else zope_conf_template
 
