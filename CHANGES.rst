@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+6.8.2 (2021-02-16)
+------------------
+
+Bug fixes:
+
+
+- Restored ability to use own explicit version of zodb-temporary-storage.
+  [maurits] (#93)
+
+
 6.8.1 (2020-10-30)
 ------------------
 
