@@ -814,10 +814,6 @@ class Recipe(Scripts):
             'eventlog_name': eventlog_name,
             'fast-listen': fast,
             'http_address': listen,
-            # todo: make this configurable
-            'listen_ip': '127.0.0.1',
-            'listen_port': '8080',
-            # /todo
             'location': options['location'],
             'max_request_body_size': options.get(
                 'max-request-body-size', 1073741824),
@@ -1385,9 +1381,10 @@ max_request_body_size = %(max_request_body_size)s
 
 wsgi_server_main_templates['win32'] = """\
 use = egg:waitress#main
-host = %(listen_ip)s
-port = %(listen_port)s
+listen = %(http_address)s
+threads = %(threads)s
 clear_untrusted_proxy_headers = %(clear_untrusted_proxy_headers)s
+max_request_body_size = %(max_request_body_size)s
 """
 
 wsgi_ini_template = """\
