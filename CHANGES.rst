@@ -8,6 +8,17 @@ Changelog
 
 .. towncrier release notes start
 
+6.8.3 (2021-02-17)
+------------------
+
+Bug fixes:
+
+
+- Fix windows `wsgi.ini` to have a configurable listen address. 
+  Added missing WSGI config options for windows.
+  [jensens] (#161)
+
+
 6.8.2 (2021-02-16)
 ------------------
 

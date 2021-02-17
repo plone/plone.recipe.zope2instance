@@ -1,3 +1,0 @@
-Fix windows `wsgi.ini` to have a configurable listen address. 
-Added missing WSGI config options for windows.
-[jensens]
