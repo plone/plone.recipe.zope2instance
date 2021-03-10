@@ -944,7 +944,6 @@ def main(args=None):
     else:
         options = ZServerCtlOptions()
 
-
     options.add(name="no_request", short="R", long="no-request", flag=1)
     options.add(name="no_login", short="L", long="no-login", flag=1)
     options.add(name="object_path", short="O:", long="object-path=")
