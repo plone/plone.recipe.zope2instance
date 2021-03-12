@@ -54,6 +54,7 @@ setup(
     extras_require={
         'test': [
             'zope.testrunner',
+            'sentry-sdk',
         ],
         'sentry': [
             'sentry-sdk',
