@@ -1,4 +1,4 @@
--e .[test] -c https://zopefoundation.github.io/Zope/releases/4.5.4/requirements-full.txt
+-e .[test] -c https://zopefoundation.github.io/Zope/releases/4.5.5/requirements-full.txt
 
 # Windows specific down here (has to be installed here, fails in buildout)
 # Dependency of zope.sendmail:
