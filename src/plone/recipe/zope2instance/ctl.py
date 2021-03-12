@@ -27,6 +27,7 @@ typed interactively is started. Use the action "help" to find out about
 available actions.
 """
 
+from dotenv import load_dotenv
 from pkg_resources import iter_entry_points
 from time import sleep
 from waitress.wasyncore import dispatcher
@@ -942,12 +943,19 @@ def main(args=None):
         options = WSGICtlOptions()
     else:
         options = ZServerCtlOptions()
+
     options.add(name="no_request", short="R", long="no-request", flag=1)
     options.add(name="no_login", short="L", long="no-login", flag=1)
     options.add(name="object_path", short="O:", long="object-path=")
     options.add(name="wsgi", short='w:', long='wsgi=')
     # Realize arguments and set documentation which is used in the -h option
     options.realize(args, doc=__doc__)
+
+    load_dotenv(os.path.join(options.directory, '..', '..', '.env'))
+
+    if (os.environ.get('PLONE_ENV')):
+        PLONE_ENV = os.environ.get('PLONE_ENV')
+        load_dotenv(os.path.join(options.directory, '..', '..', '.env.{}'.format(PLONE_ENV)))
 
     # Run the right command depending on whether we have ZServer
     options.interpreter = os.path.join(options.directory, 'bin', 'interpreter')
