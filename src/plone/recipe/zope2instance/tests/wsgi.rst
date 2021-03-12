@@ -450,15 +450,13 @@ Let's create a buildout:
 Let's run it::
 
     >>> output = system(join('bin', 'buildout'))
-    >>> "Uninstalling instance" in output
-    True
+    >>> print(output)
 
-    >>> "Installing instance" in output
-    True
-
-    >>> WINDOWS or "Generated script" in output
-    True
-
+    >>> if "Uninstalling instance" not in output or "Installing instance" not in output:
+    ...    print(output)
+    >>> if not WINDOWS and "Generated script" not in output:
+    ...     print(output)
+    
 The buildout has updated our INI file:
 
     >>> instance = os.path.join(sample_buildout, 'parts', 'instance')
