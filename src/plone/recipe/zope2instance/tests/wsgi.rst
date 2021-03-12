@@ -450,8 +450,6 @@ Let's create a buildout:
 Let's run it::
 
     >>> output = system(join('bin', 'buildout'))
-    >>> print(output)
-
     >>> if "Uninstalling instance" not in output or "Installing instance" not in output:
     ...    print(output)
     >>> if not WINDOWS and "Generated script" not in output:
