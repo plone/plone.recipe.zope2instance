@@ -14,7 +14,9 @@ parts
 pip-selfcheck.json
 pyvenv.cfg
 /.coverage
+/.coverage.*
 /.installed.cfg
 /.tox
 /coverage.xml
+/default.profraw
 /htmlcov
