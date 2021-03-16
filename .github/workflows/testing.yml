@@ -11,6 +11,7 @@ jobs:
         - "3.6"
         - "3.7"
         - "3.8"
+        - "3.9"
         zope-version:
         - "zope-4"
         - "zope-5"
@@ -22,6 +23,8 @@ jobs:
           python-version: "2.7"
         - zope-version: "zope-5"
           python-version: "2.7"
+        - zope-version: "zope-4"
+          python-version: "3.9"
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -39,7 +42,7 @@ jobs:
             ${{ runner.os }}-test
       - name: Install dependencies
         run: |
-          pip install -U pip
+          pip install -U pip wheel
           pip install -r requirements-testing-${{ matrix.zope-version }}.txt
       - name: Run Tests
         run: |

@@ -955,7 +955,8 @@ def main(args=None):
 
     if (os.environ.get('PLONE_ENV')):
         PLONE_ENV = os.environ.get('PLONE_ENV')
-        load_dotenv(os.path.join(options.directory, '..', '..', '.env.{}'.format(PLONE_ENV)))
+        load_dotenv(os.path.join(options.directory,
+                                 '..', '..', '.env.{}'.format(PLONE_ENV)))
 
     # Run the right command depending on whether we have ZServer
     options.interpreter = os.path.join(options.directory, 'bin', 'interpreter')
