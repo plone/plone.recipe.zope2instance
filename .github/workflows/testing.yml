@@ -8,7 +8,6 @@ jobs:
       matrix:
         python-version:
         - "2.7"
-        - "3.5"
         - "3.6"
         - "3.7"
         - "3.8"
@@ -24,8 +23,6 @@ jobs:
           python-version: "2.7"
         - zope-version: "zope-5"
           python-version: "2.7"
-        - zope-version: "zope-5"
-          python-version: "3.5"
         - zope-version: "zope-4"
           python-version: "3.9"
     runs-on: ${{ matrix.os }}
