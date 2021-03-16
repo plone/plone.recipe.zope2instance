@@ -42,7 +42,7 @@ jobs:
             ${{ runner.os }}-test
       - name: Install dependencies
         run: |
-          pip install -U pip
+          pip install -U pip wheel
           pip install -r requirements-testing-${{ matrix.zope-version }}.txt
       - name: Run Tests
         run: |
