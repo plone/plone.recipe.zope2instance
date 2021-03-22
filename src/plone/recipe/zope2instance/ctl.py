@@ -796,11 +796,15 @@ console -- Run the program in the console.
         interactive_startup = (
             "import os;"
             "os.path.exists(os.environ.get('PYTHONSTARTUP', '')) "
-            "and execfile(os.environ['PYTHONSTARTUP']); del os;"
+            "and %s; del os;"
         )
+        if six.PY2:
+            exec_call = "execfile(os.environ['PYTHONSTARTUP'])"
+        else:
+            exec_call = "exec(open(os.environ['PYTHONSTARTUP']).read())"
         cmdline = self.get_startup_cmd(
             self.options.python,
-            interactive_startup,
+            interactive_startup % exec_call,
             pyflags='-i',
         )
         print('Starting debugger (the name "app" is bound to the top-level '
