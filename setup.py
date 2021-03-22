@@ -53,11 +53,8 @@ setup(
         'ZEO',
         'waitress >= 1.2.0',
         'Paste',
-<<<<<<< HEAD
         'python-dotenv'
-=======
         'repoze.profile',
->>>>>>> 8f25081... Basic repoze.profile integration
     ],
     extras_require={
         'test': [
