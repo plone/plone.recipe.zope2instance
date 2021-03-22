@@ -53,7 +53,7 @@ setup(
         'ZEO',
         'waitress >= 1.2.0',
         'Paste',
-        'python-dotenv'
+        'python-dotenv',
         'repoze.profile',
     ],
     extras_require={
