@@ -1,2 +1,0 @@
-Fixed ``$PYTHONSTARTUP`` file support for the ``debug`` command under Python 3
-[dataflake]

@@ -8,6 +8,25 @@ Changelog
 
 .. towncrier release notes start
 
+6.9.0 (2021-03-22)
+------------------
+
+New features:
+
+
+- Make any ctl script python-env aware
+  [sneridagh] (#162)
+- Added support for Python 3.9 and restored support for Python 3.5 (needed for Zope 4)
+  [dataflake] (#164)
+
+
+Bug fixes:
+
+
+- Fixed ``$PYTHONSTARTUP`` file support for the ``debug`` command under Python 3
+  [dataflake] (#167)
+
+
 6.8.3 (2021-02-17)
 ------------------
 
