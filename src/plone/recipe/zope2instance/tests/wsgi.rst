@@ -532,3 +532,48 @@ The buildout has updated our INI file:
     <BLANKLINE>
     [loggers]
     ...
+
+Custom pipeline
+===============
+
+The recipe can configure custom pipelines in the ``wsgi.ini``::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... pipeline =
+    ...     foo
+    ...     bar
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print(system(join('bin', 'buildout'))),
+    Uninstalling instance.
+    Installing instance.
+    ...
+
+The buildout has updated our INI file and we can see that we have a custom pipeline::
+
+    >>> wsgi_ini = open(os.path.join(instance, 'etc', 'wsgi.ini')).read()
+    >>> print(wsgi_ini)
+    [server:main]
+    ...
+    [pipeline:main]
+    pipeline =
+        foo
+        bar
+        zope
+    <BLANKLINE>
+    [loggers]
+    ...
+
+
+# END OF TEST

@@ -623,6 +623,19 @@ webdav-force-connection-close
   Valid options are off and on. Defaults to off.
   Used for ZServer only, not WSGI.
 
+pipeline
+   The main application pipeline served by the wsgi server.
+   By default the pipeline is::
+
+     translogger
+     egg:Zope#httpexceptions
+     zope
+
+   The ``translogger`` line in the pipeline will be removed
+   if ``z2-log`` is set to ``disabled`` or if it is not set
+   and ``access-log`` is set to ``disabled`` (case insensitive).
+   Used for WSGI only, not ZServer.
+
 zlib-storage
   Adds support for file compression on a file storage database. The
   option accepts the values 'active' (compress new records) or
