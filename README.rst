@@ -170,6 +170,7 @@ profile
   Set to ``on`` enables `repoze.profile <https://github.com/repoze/repoze.profile>`_.
   Defaults to ``off``,
   If switched on there are further options prefixed with ``profile_`` to configure it as below.
+  You will need to add the `repoze.profile` package, either by adding it to your eggs section directly or by using the extra `plone.recipe.zope2instance[profile]`.
 
 profile_log_filename
   Filename of the raw profile data.
