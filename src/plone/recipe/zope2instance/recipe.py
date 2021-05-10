@@ -798,9 +798,13 @@ class Recipe(Scripts):
         sentry_level = options.get('sentry_level', 'INFO')
         sentry_event_level = options.get('sentry_event_level', 'ERROR')
         sentry_ignore = options.get('sentry_ignore', '')
+
         profile = options.get('profile', '').strip() == 'on'
         if profile:
-            pipeline.append('profile')
+            if "zope" in pipeline:
+                pipeline.insert(pipeline.index("zope"), 'profile')
+            else:
+                pipeline.append('profile')
         default_profile_log_filename = os.path.sep.join(
             [
                 var_dir,

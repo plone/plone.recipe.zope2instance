@@ -469,7 +469,7 @@ The buildout has updated our INI file:
     level = INFO
     event_level = ERROR
     ignorelist =
-    <BLANKLINE>
+    ...
     [pipeline:main]
     pipeline =
         translogger
@@ -522,7 +522,7 @@ The buildout has updated our INI file:
     level = DEBUG
     event_level = WARNING
     ignorelist = waitress.queue foo
-    <BLANKLINE>
+    ...
     [pipeline:main]
     pipeline =
         translogger
@@ -570,6 +570,56 @@ The buildout has updated our INI file and we can see that we have a custom pipel
     pipeline =
         foo
         bar
+        zope
+    <BLANKLINE>
+    [loggers]
+    ...
+
+
+With repoze.profile middleware
+==============================
+
+The recipe can configure custom pipelines in the ``wsgi.ini``::
+
+    >>> write('buildout.cfg',
+    ... '''
+    ... [buildout]
+    ... parts = instance
+    ... find-links = %(sample_buildout)s/eggs
+    ...
+    ... [instance]
+    ... recipe = plone.recipe.zope2instance
+    ... eggs =
+    ... user = me:me
+    ... profile = on
+    ... ''' % options)
+
+Let's run it::
+
+    >>> print(system(join('bin', 'buildout'))),
+    Uninstalling instance.
+    Installing instance.
+    ...
+
+The buildout has updated our INI file and we can see that we have a custom pipeline::
+
+    >>> wsgi_ini = open(os.path.join(instance, 'etc', 'wsgi.ini')).read()
+    >>> print(wsgi_ini)
+    [server:main]
+    ...
+    [filter:profile]
+    use = egg:repoze.profile
+    ...
+    discard_first_request = true
+    path = /__profile__
+    flush_at_shutdown = true
+    unwind = false
+    <BLANKLINE>
+    [pipeline:main]
+    pipeline =
+        translogger
+        egg:Zope#httpexceptions
+        profile
         zope
     <BLANKLINE>
     [loggers]
