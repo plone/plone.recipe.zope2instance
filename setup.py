@@ -53,7 +53,7 @@ setup(
         'ZEO',
         'waitress >= 1.2.0',
         'Paste',
-        'python-dotenv'
+        'python-dotenv',
     ],
     extras_require={
         'test': [
@@ -62,6 +62,9 @@ setup(
         ],
         'sentry': [
             'sentry-sdk',
+        ],
+        'profile': [
+            'repoze.profile',
         ]
     },
     zip_safe=False,
