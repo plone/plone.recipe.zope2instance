@@ -4,11 +4,13 @@ from setuptools import setup
 
 
 name = "plone.recipe.zope2instance"
-version = '6.9.1.dev0'
+version = '6.10.0.dev0'
 
 setup(
     name=name,
     version=version,
+    maintainer="Plone Release Team",
+    maintainer_email="releaseteam@plone.org",
     author="Hanno Schlichting",
     author_email="hanno@hannosch.eu",
     description="Buildout recipe for creating a Zope instance",
