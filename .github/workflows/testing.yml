@@ -49,11 +49,14 @@ jobs:
             ${{ runner.os }}-test
       - name: Install dependencies
         run: |
-          pip install -U pip wheel black
+          pip install -U pip wheel black isort
           pip install -r requirements-testing-${{ matrix.zope-version }}.txt
       - name: Run black code style check
         run: |
           black --check src setup.py
+      - name: Run isort code style check
+        run: |
+          isort --check-only --df src setup.py
       - name: Run Tests
         run: |
           zope-testrunner --test-path=src

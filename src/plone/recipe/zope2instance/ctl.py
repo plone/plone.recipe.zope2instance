@@ -32,9 +32,11 @@ from pkg_resources import iter_entry_points
 from time import sleep
 from waitress.wasyncore import dispatcher
 from ZConfig.loader import SchemaLoader
-from zdaemon.zdctl import ZDCmd, ZDCtlOptions
+from zdaemon.zdctl import ZDCmd
+from zdaemon.zdctl import ZDCtlOptions
 from zdaemon.zdoptions import ZDOptions
 from Zope2.Startup.options import ConditionalSchemaParser
+
 import csv
 import logging
 import os
@@ -44,8 +46,8 @@ import six
 import socket
 import sys
 import tempfile
-import xml.sax
 import waitress
+import xml.sax
 import zdaemon
 
 
@@ -57,11 +59,12 @@ if sys.platform[:3].lower() == "win":
     WINDOWS = True
 
 if WINDOWS:
-    import traceback
     from pkg_resources import resource_filename
-    import pywintypes
-    import win32api
     from win32com.shell import shell
+
+    import pywintypes
+    import traceback
+    import win32api
     import win32con
     import win32service
     import win32serviceutil

@@ -1,6 +1,8 @@
+from sentry_sdk.integrations.logging import ignore_logger
+from sentry_sdk.integrations.logging import LoggingIntegration
+
 import logging
 import sentry_sdk
-from sentry_sdk.integrations.logging import LoggingIntegration, ignore_logger
 
 
 def sdk_init(global_conf, dsn, level="INFO", event_level="ERROR", ignorelist=""):
