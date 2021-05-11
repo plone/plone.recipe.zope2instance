@@ -10,24 +10,23 @@ import shutil
 import sys
 
 
-VCS_DIRS = [os.path.normcase('CVS'),
-            os.path.normcase('.svn'),
-            os.path.normcase('.git')]
+VCS_DIRS = [os.path.normcase("CVS"), os.path.normcase(".svn"), os.path.normcase(".git")]
 
 
-def make_instance(user=None, instancehome=None, version='4'):
+def make_instance(user=None, instancehome=None, version="4"):
     instancehome = os.path.abspath(os.path.expanduser(instancehome))
     password = None
     if user:
-        user, password = user.split(':', 1)
+        user, password = user.split(":", 1)
 
     # Use our own skeleton
-    skelsrc = os.path.join(os.path.dirname(__file__), 'skel' + version)
+    skelsrc = os.path.join(os.path.dirname(__file__), "skel" + version)
     if not os.path.exists(skelsrc):
         raise ValueError(
-            'No configuration skeleton found for version {0}'.format(version))
+            "No configuration skeleton found for version {0}".format(version)
+        )
 
-    inituser = os.path.join(instancehome, 'inituser')
+    inituser = os.path.join(instancehome, "inituser")
     if not (user or os.path.exists(inituser)):
         user, password = get_inituser()
 
@@ -38,29 +37,32 @@ def make_instance(user=None, instancehome=None, version='4'):
 
 def get_inituser():
     import getpass
-    print("""\
+
+    print(
+        """\
 Please choose a username and password for the initial user.
 These will be the credentials you use to initially manage
 your new Zope instance.
-""")
-    user = input('Username: ').strip()
-    if user == '':
+"""
+    )
+    user = input("Username: ").strip()
+    if user == "":
         return None, None
     while 1:
-        passwd = getpass.getpass('Password: ')
-        verify = getpass.getpass('Verify password: ')
+        passwd = getpass.getpass("Password: ")
+        verify = getpass.getpass("Verify password: ")
         if verify == passwd:
             break
         else:
-            passwd = verify = ''
-            print('Password mismatch, please try again...')
+            passwd = verify = ""
+            print("Password mismatch, please try again...")
     return user, passwd
 
 
 def write_inituser(fn, user, password):
-    fp = open(fn, 'w')
-    pw = b2a_base64(sha1(password.encode('utf-8')).digest())[:-1]
-    fp.write('%s:{SHA}%s\n' % (user, pw.decode('ascii')))
+    fp = open(fn, "w")
+    pw = b2a_base64(sha1(password.encode("utf-8")).digest())[:-1]
+    fp.write("%s:{SHA}%s\n" % (user, pw.decode("ascii")))
     fp.close()
     os.chmod(fn, 0o644)
 
