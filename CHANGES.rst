@@ -8,6 +8,25 @@ Changelog
 
 .. towncrier release notes start
 
+6.10.0 (2021-05-11)
+-------------------
+
+New features:
+
+
+- Allow to customize the WSGI pipeline [ale-rt, jensens] (#116)
+- Add repoze.profile profiling middleware support [jensens] (#129)
+
+
+Bug fixes:
+
+
+- Enable both weekly and manual builds for GitHub Actions [jugmac00] (#169)
+- Fix unsupported syntax in the requirements files which prevented to evaluate
+  the specified constraints during test runs [jugmac00]. (#171)
+- Applied code style black and isort with Plone/black rules, includes tox/GH-Actions  [jensens] (#175)
+
+
 6.9.0 (2021-03-22)
 ------------------
 

@@ -1,1 +1,0 @@
-Add repoze.profile profiling middleware support [jensens]

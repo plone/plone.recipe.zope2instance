@@ -1,2 +1,0 @@
-Fix unsupported syntax in the requirements files which prevented to evaluate
-the specified constraints during test runs [jugmac00].
