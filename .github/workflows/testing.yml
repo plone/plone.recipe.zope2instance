@@ -47,16 +47,20 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements-testing-*.txt') }}
           restore-keys: |
             ${{ runner.os }}-test
-      - name: Install dependencies
-        run: |
-          pip install -U pip wheel black isort
-          pip install -r requirements-testing-${{ matrix.zope-version }}.txt
       - name: Run black code style check
+        if: ${{ matrix.python-version == '3.8' }}
         run: |
+          pip install black
           black --check src setup.py
       - name: Run isort code style check
+        if: ${{ matrix.python-version == '3.8' }}
         run: |
+          pip install isort
           isort --check-only --df src setup.py
+      - name: Install dependencies
+        run: |
+          pip install -U pip wheel 
+          pip install -r requirements-testing-${{ matrix.zope-version }}.txt
       - name: Run Tests
         run: |
           zope-testrunner --test-path=src
