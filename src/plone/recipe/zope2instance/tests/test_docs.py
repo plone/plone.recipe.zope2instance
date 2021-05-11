@@ -14,11 +14,11 @@ import unittest
 
 def setUp(test):
     buildoutSetUp(test)
-    install_develop('plone.recipe.zope2instance', test)
-    install('zc.recipe.egg', test)
-    install_dependencies(pkg_resources.working_set.require('ZEO'), test)
-    install_dependencies(pkg_resources.working_set.require('Zope'), test)
-    install_dependencies(pkg_resources.working_set.require('ZODB'), test)
+    install_develop("plone.recipe.zope2instance", test)
+    install("zc.recipe.egg", test)
+    install_dependencies(pkg_resources.working_set.require("ZEO"), test)
+    install_dependencies(pkg_resources.working_set.require("Zope"), test)
+    install_dependencies(pkg_resources.working_set.require("ZODB"), test)
 
 
 def install_dependencies(dependencies, test):
@@ -33,35 +33,39 @@ def install_dependencies(dependencies, test):
 
 def tearDown(test):
     buildoutTearDown(test)
-    sample_buildout = test.globs['sample_buildout']
+    sample_buildout = test.globs["sample_buildout"]
     shutil.rmtree(sample_buildout, ignore_errors=True)
 
 
 def test_suite():
     suite = []
-    flags = (
-        doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE |
-        doctest.REPORT_NDIFF)
+    flags = doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE | doctest.REPORT_NDIFF
 
-    suite.append(doctest.DocFileSuite(
-        'zope2instance_base.rst',
-        'zope2instance_beforestorage.rst',
-        'zope2instance_blobstorage.rst',
-        'zope2instance_demostorage.rst',
-        'zope2instance_relstorage.rst',
-        'zope2instance_tempstorage_off.rst',
-        'zope2instance_zeostorage.rst',
-        'zope2instance_zlibstorage.rst',
-        'wsgi.rst',
-        optionflags=flags,
-        setUp=setUp,
-        tearDown=tearDown))
-
-    if six.PY2:
-        suite.append(doctest.DocFileSuite(
-            'zope2instance_zserver.rst',
+    suite.append(
+        doctest.DocFileSuite(
+            "zope2instance_base.rst",
+            "zope2instance_beforestorage.rst",
+            "zope2instance_blobstorage.rst",
+            "zope2instance_demostorage.rst",
+            "zope2instance_relstorage.rst",
+            "zope2instance_tempstorage_off.rst",
+            "zope2instance_zeostorage.rst",
+            "zope2instance_zlibstorage.rst",
+            "wsgi.rst",
             optionflags=flags,
             setUp=setUp,
-            tearDown=tearDown))
+            tearDown=tearDown,
+        )
+    )
+
+    if six.PY2:
+        suite.append(
+            doctest.DocFileSuite(
+                "zope2instance_zserver.rst",
+                optionflags=flags,
+                setUp=setUp,
+                tearDown=tearDown,
+            )
+        )
 
     return unittest.TestSuite(suite)

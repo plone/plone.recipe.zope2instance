@@ -28,7 +28,7 @@ import zc.buildout
 import zc.buildout.easy_install
 
 
-IS_WIN = sys.platform[:3].lower() == 'win'
+IS_WIN = sys.platform[:3].lower() == "win"
 
 BUILDOUT15 = True
 try:
@@ -39,7 +39,7 @@ except ImportError:
 
 def indent(snippet, amount):
     ws = " " * amount
-    return "\n".join(ws + s if s else "" for s in snippet.split('\n'))
+    return "\n".join(ws + s if s else "" for s in snippet.split("\n"))
 
 
 def nocomments_split(s):
@@ -65,71 +65,74 @@ def nocomments_split(s):
     """
     res = []
     for line in s.splitlines():
-        if '#' in line:
-            line, comment = line.split('#', 1)
+        if "#" in line:
+            line, comment = line.split("#", 1)
         for word in line.split():
             res.append(word)
     return res
 
 
 class Recipe(Scripts):
-
     def __init__(self, buildout, name, options):
-        self.egg = Egg(buildout, options['recipe'], options)
+        self.egg = Egg(buildout, options["recipe"], options)
         self.buildout, self.options, self.name = buildout, options, name
         self.scripts = True
 
-        options['location'] = os.path.join(
-            buildout['buildout']['parts-directory'],
+        options["location"] = os.path.join(
+            buildout["buildout"]["parts-directory"],
             self.name,
         )
-        options['bin-directory'] = buildout['buildout']['bin-directory']
+        options["bin-directory"] = buildout["buildout"]["bin-directory"]
 
-        if 'scripts' in options:
-            if options['scripts'] == '':
-                options['scripts'] = ''  # suppress script generation.
+        if "scripts" in options:
+            if options["scripts"] == "":
+                options["scripts"] = ""  # suppress script generation.
                 self.scripts = False
 
         # Relative path support for the generated scripts
         relative_paths = options.get(
-            'relative-paths',
-            buildout['buildout'].get('relative-paths', 'false')
+            "relative-paths", buildout["buildout"].get("relative-paths", "false")
         )
-        if relative_paths == 'true':
-            options['buildout-directory'] = buildout['buildout']['directory']
-            self._relative_paths = options['buildout-directory']
+        if relative_paths == "true":
+            options["buildout-directory"] = buildout["buildout"]["directory"]
+            self._relative_paths = options["buildout-directory"]
         else:
-            self._relative_paths = ''
+            self._relative_paths = ""
 
-        if 'initialization' not in options:
-            options['initialization'] = ''
-        options['initialization'] = options['initialization'] % options
+        if "initialization" not in options:
+            options["initialization"] = ""
+        options["initialization"] = options["initialization"] % options
 
-        self._include_site_packages = options.get(
-            'include-site-packages',
-            buildout['buildout'].get('include-site-packages', 'false')
-        ) not in ('off', 'disable', 'false')
+        self._include_site_packages = (
+            options.get(
+                "include-site-packages",
+                buildout["buildout"].get("include-site-packages", "false"),
+            )
+            not in ("off", "disable", "false")
+        )
 
         self.wsgi = True
-        self.wsgi_config = os.path.join(options['location'], 'etc', 'wsgi.ini')
-        wsgi_opt = options.get('wsgi', 'on')
-        if six.PY2 and wsgi_opt.lower() in ('off', 'false', '0'):
+        self.wsgi_config = os.path.join(options["location"], "etc", "wsgi.ini")
+        wsgi_opt = options.get("wsgi", "on")
+        if six.PY2 and wsgi_opt.lower() in ("off", "false", "0"):
             self.wsgi = False
-        elif wsgi_opt.lower() not in ('on', 'true', '1'):
+        elif wsgi_opt.lower() not in ("on", "true", "1"):
             self.wsgi_config = wsgi_opt
 
-        if 'pipeline' not in options:
-            options['pipeline'] = '''
+        if "pipeline" not in options:
+            options[
+                "pipeline"
+            ] = """
                 translogger
                 egg:Zope#httpexceptions
                 zope
-            '''.strip()
+            """.strip()
         # Get Scripts' attributes
         return Scripts.__init__(self, buildout, name, options)
 
     def install(self, update=False):
         options = self.options
-        location = options['location']
+        location = options["location"]
         installed = [location]
 
         if not update:
@@ -138,8 +141,8 @@ class Recipe(Scripts):
 
             # We could check with pkg_resources which Zope version we have.
             # But we support creating instances for 4 only.
-            version = '4'
-            make.make_instance(options.get('user', None), location, version)
+            version = "4"
+            make.make_instance(options.get("user", None), location, version)
 
         try:
             # Make a new zope.conf and wsgi.ini
@@ -172,121 +175,123 @@ class Recipe(Scripts):
     def build_zope_conf(self):
         """Create a zope.conf file."""
         options = self.options
-        location = options['location']
+        location = options["location"]
         # Don't do this if we have a manual zope.conf
-        zope_conf_path = options.get('zope-conf', None)
+        zope_conf_path = options.get("zope-conf", None)
         if zope_conf_path is not None:
             return
 
-        imports = options.get('zope-conf-imports', '')
+        imports = options.get("zope-conf-imports", "")
         if imports:
-            imports = imports.split('\n')
+            imports = imports.split("\n")
             # Filter out empty lines
             imports = [i for i in imports if i]
-        imports_lines = '\n'.join(('%%import %s' % i for i in imports))
+        imports_lines = "\n".join(("%%import %s" % i for i in imports))
 
-        products = options.get('products', '')
+        products = options.get("products", "")
         if products:
-            products = products.split('\n')
+            products = products.split("\n")
             # Filter out empty directories
             products = [p for p in products if p]
             # Make sure we have consistent path seperators
             products = [os.path.abspath(p) for p in products]
 
-        base_dir = self.buildout['buildout']['directory']
-        var_dir = options.get('var', os.path.join(base_dir, 'var'))
+        base_dir = self.buildout["buildout"]["directory"]
+        var_dir = options.get("var", os.path.join(base_dir, "var"))
         if not os.path.exists(var_dir):
             os.makedirs(var_dir)
 
         instance_home = location
-        client_home = options.get('client-home', os.path.join(var_dir,
-                                                              self.name))
+        client_home = options.get("client-home", os.path.join(var_dir, self.name))
         if not os.path.exists(client_home):
             os.makedirs(client_home)
 
-        client_import = options.get('import-directory',
-                                    os.path.join(client_home, 'import'))
+        client_import = options.get(
+            "import-directory", os.path.join(client_home, "import")
+        )
         if not os.path.exists(client_import):
             os.makedirs(client_import)
 
-        products_lines = '\n'.join(['products %s' % p for p in products])
-        module_paths = options.get('extra-paths', '')
+        products_lines = "\n".join(["products %s" % p for p in products])
+        module_paths = options.get("extra-paths", "")
         if module_paths:
-            module_paths = module_paths.split('\n')
+            module_paths = module_paths.split("\n")
             # Filter out empty directories
             module_paths = [p for p in module_paths if p]
             # Make sure we have consistent path seperators
             module_paths = [os.path.abspath(p) for p in module_paths]
-        paths_lines = '\n'.join(['path %s' % p for p in module_paths])
-        debug_mode = options.get('debug-mode', 'off')
-        debug_exceptions = options.get('debug-exceptions', '')
+        paths_lines = "\n".join(["path %s" % p for p in module_paths])
+        debug_mode = options.get("debug-mode", "off")
+        debug_exceptions = options.get("debug-exceptions", "")
         if debug_exceptions:
             debug_exceptions = debug_exceptions_template % debug_exceptions
-        security_implementation = 'C'
-        verbose_security = options.get('verbose-security', 'off')
-        if verbose_security == 'on':
-            security_implementation = 'python'
-        port_base = options.get('port-base', '')
+        security_implementation = "C"
+        verbose_security = options.get("verbose-security", "off")
+        if verbose_security == "on":
+            security_implementation = "python"
+        port_base = options.get("port-base", "")
         if port_base:
-            port_base = 'port-base %s' % port_base
-        http_force_connection_close = options.get(
-            'http-force-connection-close', None)
+            port_base = "port-base %s" % port_base
+        http_force_connection_close = options.get("http-force-connection-close", None)
         if http_force_connection_close is None:
-            http_force_connection_close = ''
+            http_force_connection_close = ""
         else:
             http_force_connection_close = (
-                http_force_connection_close_template
-                % http_force_connection_close)
-        http_fast_listen = options.get('http-fast-listen', 'on') or ''
+                http_force_connection_close_template % http_force_connection_close
+            )
+        http_fast_listen = options.get("http-fast-listen", "on") or ""
         if http_fast_listen.lower() in ("on", "true"):
-            http_fast_listen = http_fast_listen_template % 'on'
+            http_fast_listen = http_fast_listen_template % "on"
         else:
-            http_fast_listen = http_fast_listen_template % 'off'
-        http_address = options.get('http-address', '8080')
+            http_fast_listen = http_fast_listen_template % "off"
+        http_address = options.get("http-address", "8080")
         if http_address:
             http_address = http_server_template % dict(
                 http_address=http_address,
                 http_force_connection_close=http_force_connection_close,
-                http_fast_listen=http_fast_listen)
-        ftp_address = options.get('ftp-address', '')
+                http_fast_listen=http_fast_listen,
+            )
+        ftp_address = options.get("ftp-address", "")
         if ftp_address:
             ftp_address = ftp_server_template % ftp_address
-        webdav_address = options.get('webdav-address', '')
+        webdav_address = options.get("webdav-address", "")
         if webdav_address:
-            webdav_conn_close = options.get(
-                'webdav-force-connection-close', 'off')
-            webdav_address = webdav_server_template % (webdav_address,
-                                                       webdav_conn_close)
-        icp_address = options.get('icp-address', '')
+            webdav_conn_close = options.get("webdav-force-connection-close", "off")
+            webdav_address = webdav_server_template % (
+                webdav_address,
+                webdav_conn_close,
+            )
+        icp_address = options.get("icp-address", "")
         if icp_address:
             icp_address = icp_server_template % icp_address
-        http_header_max_length = options.get('http-header-max-length', '8192')
+        http_header_max_length = options.get("http-header-max-length", "8192")
         if http_header_max_length:
             http_header_max_length = (
-                'http-header-max-length %s' % http_header_max_length)
-        effective_user = options.get('effective-user', '')
+                "http-header-max-length %s" % http_header_max_length
+            )
+        effective_user = options.get("effective-user", "")
         if effective_user:
-            effective_user = 'effective-user %s' % effective_user
-        ip_address = options.get('ip-address', '')
+            effective_user = "effective-user %s" % effective_user
+        ip_address = options.get("ip-address", "")
         if ip_address:
-            ip_address = 'ip-address %s' % ip_address
+            ip_address = "ip-address %s" % ip_address
 
-        environment_vars = options.get('environment-vars', '')
+        environment_vars = options.get("environment-vars", "")
 
-        if 'CHAMELEON_CACHE' in environment_vars:
+        if "CHAMELEON_CACHE" in environment_vars:
             # We do not override a explicitly defined CHAMELEON_CACHE setting!
             # Do not create the directory here because this is probably a old
             # setting and we don't want to mess with peoples working setup.
             chameleon_cache = None
         else:
             # Use template-cache setting, default to on
-            chameleon_cache = options.get('template-cache', 'on')
+            chameleon_cache = options.get("template-cache", "on")
 
         if chameleon_cache:
-            if chameleon_cache.lower() in ('on', '1', 'true', 'enabled'):
+            if chameleon_cache.lower() in ("on", "1", "true", "enabled"):
                 # use default setting var_dir/cache
-                chameleon_cache = os.path.join(var_dir, 'cache')
-            elif chameleon_cache.lower() in ('off', '0', 'false', 'disabled'):
+                chameleon_cache = os.path.join(var_dir, "cache")
+            elif chameleon_cache.lower() in ("off", "0", "false", "disabled"):
                 # disable cache
                 chameleon_cache = None
             else:
@@ -298,21 +303,21 @@ class Recipe(Scripts):
             os.makedirs(chameleon_cache)
 
         # Inject cache into environment_vars unless it is set there
-        if chameleon_cache and 'CHAMELEON_CACHE' not in environment_vars:
-            chameleon_cache = 'CHAMELEON_CACHE {}'.format(chameleon_cache)
-            if environment_vars and '\n' in environment_vars:
+        if chameleon_cache and "CHAMELEON_CACHE" not in environment_vars:
+            chameleon_cache = "CHAMELEON_CACHE {}".format(chameleon_cache)
+            if environment_vars and "\n" in environment_vars:
                 # default case
-                environment_vars += '\n{}'.format(chameleon_cache)
+                environment_vars += "\n{}".format(chameleon_cache)
             elif environment_vars:
                 # handle case of all vars in one line
-                environment_vars += ' {}'.format(chameleon_cache)
+                environment_vars += " {}".format(chameleon_cache)
             else:
                 # handle case when there are no environment_vars yet
                 environment_vars = chameleon_cache
 
         if environment_vars:
             # if the vars are all given on one line we need to do some work
-            if '\n' not in environment_vars:
+            if "\n" not in environment_vars:
                 keys = []
                 values = []
                 env_vars = environment_vars.split()
@@ -323,128 +328,151 @@ class Recipe(Scripts):
                     else:
                         values.append(var)
                 env_vars = zip(keys, values)
-                environment_vars = '\n'.join([
-                    "%s %s" % (env_var[0], env_var[1])
-                    for env_var in env_vars])
+                environment_vars = "\n".join(
+                    ["%s %s" % (env_var[0], env_var[1]) for env_var in env_vars]
+                )
             environment_vars = environment_template % environment_vars
 
-        deprecation_warnings = options.get('deprecation-warnings', '')
+        deprecation_warnings = options.get("deprecation-warnings", "")
         if deprecation_warnings:
-            if deprecation_warnings.lower() in ('off', 'disable', 'false'):
-                deprecation_warnings = 'ignore'
-            elif deprecation_warnings.lower() in ('enable', 'on', 'true'):
-                deprecation_warnings = 'default'
-            deprecation_warnings = '\n'.join((
-                "<warnfilter>",
-                "  action %s" % deprecation_warnings,
-                "  category DeprecationWarning",
-                "</warnfilter>"))
+            if deprecation_warnings.lower() in ("off", "disable", "false"):
+                deprecation_warnings = "ignore"
+            elif deprecation_warnings.lower() in ("enable", "on", "true"):
+                deprecation_warnings = "default"
+            deprecation_warnings = "\n".join(
+                (
+                    "<warnfilter>",
+                    "  action %s" % deprecation_warnings,
+                    "  category DeprecationWarning",
+                    "</warnfilter>",
+                )
+            )
 
-        zope_conf_additional = options.get('zope-conf-additional', '')
+        zope_conf_additional = options.get("zope-conf-additional", "")
 
         # logging
 
-        mailinglogger_config = options.get('mailinglogger', '')
-        mailinglogger_import = ''
+        mailinglogger_config = options.get("mailinglogger", "")
+        mailinglogger_import = ""
         if mailinglogger_config:
             mailinglogger_config = mailinglogger_config.strip()
-            mailinglogger_import = '%import mailinglogger'
+            mailinglogger_import = "%import mailinglogger"
 
-        default_log = os.path.sep.join(('log', self.name + '.log',))
-        event_log_name = options.get('event-log', default_log)
+        default_log = os.path.sep.join(
+            (
+                "log",
+                self.name + ".log",
+            )
+        )
+        event_log_name = options.get("event-log", default_log)
 
-        if event_log_name.lower() == 'disable':
-            event_log = ''
+        if event_log_name.lower() == "disable":
+            event_log = ""
         else:
-            event_log_level = options.get('event-log-level', 'INFO')
-            custom_event_log = options.get('event-log-custom', None)
+            event_log_level = options.get("event-log-level", "INFO")
+            custom_event_log = options.get("event-log-custom", None)
             # log file
             if not custom_event_log:
                 event_file = os.path.join(var_dir, event_log_name)
                 event_log_dir = os.path.dirname(event_file)
                 if not os.path.exists(event_log_dir):
                     os.makedirs(event_log_dir)
-                event_log_rotate = ''
-                event_log_max_size = options.get('event-log-max-size', None)
+                event_log_rotate = ""
+                event_log_max_size = options.get("event-log-max-size", None)
                 if event_log_max_size:
-                    event_log_old_files = options.get('event-log-old-files', 1)
-                    event_log_rotate = '\n'.join((
-                        "max-size %s" % event_log_max_size,
-                        "    old-files %s" % event_log_old_files))
+                    event_log_old_files = options.get("event-log-old-files", 1)
+                    event_log_rotate = "\n".join(
+                        (
+                            "max-size %s" % event_log_max_size,
+                            "    old-files %s" % event_log_old_files,
+                        )
+                    )
                 event_log = event_logfile % {
-                    'event_logfile': event_file,
-                    'event_log_level': event_log_level,
-                    'event_log_rotate': event_log_rotate}
+                    "event_logfile": event_file,
+                    "event_log_level": event_log_level,
+                    "event_log_rotate": event_log_rotate,
+                }
             # custom log
             else:
                 event_log = custom_event_log
 
             event_log = event_log_template % {
-                'mailinglogger_config': mailinglogger_config,
-                'event_log_level': event_log_level,
-                'event_log': event_log,
+                "mailinglogger_config": mailinglogger_config,
+                "event_log_level": event_log_level,
+                "event_log": event_log,
             }
 
-        z_log_name = os.path.sep.join(('log', self.name + '-Z2.log'))
-        z_log_name = options.get(
-            'z2-log',
-            options.get('access-log', z_log_name))
-        if z_log_name.lower() == 'disable':
-            access_event_log = ''
+        z_log_name = os.path.sep.join(("log", self.name + "-Z2.log"))
+        z_log_name = options.get("z2-log", options.get("access-log", z_log_name))
+        if z_log_name.lower() == "disable":
+            access_event_log = ""
         else:
             z_log = os.path.join(var_dir, z_log_name)
             z_log_dir = os.path.dirname(z_log)
             if not os.path.exists(z_log_dir):
                 os.makedirs(z_log_dir)
 
-            z_log_level = options.get('z2-log-level', 'WARN')
+            z_log_level = options.get("z2-log-level", "WARN")
 
             # access event log
-            custom_access_event_log = options.get('access-log-custom', None)
+            custom_access_event_log = options.get("access-log-custom", None)
             # filelog directive
             if not custom_access_event_log:
-                access_log_rotate = ''
-                access_log_max_size = options.get('access-log-max-size', None)
+                access_log_rotate = ""
+                access_log_max_size = options.get("access-log-max-size", None)
                 if access_log_max_size:
-                    access_log_old_files = options.get(
-                        'access-log-old-files', 1)
-                    access_log_rotate = '\n'.join((
-                        "max-size %s" % access_log_max_size,
-                        "    old-files %s" % access_log_old_files))
+                    access_log_old_files = options.get("access-log-old-files", 1)
+                    access_log_rotate = "\n".join(
+                        (
+                            "max-size %s" % access_log_max_size,
+                            "    old-files %s" % access_log_old_files,
+                        )
+                    )
                 access_event_log = access_event_logfile % {
-                    'z_log': z_log,
-                    'access_log_rotate': access_log_rotate}
+                    "z_log": z_log,
+                    "access_log_rotate": access_log_rotate,
+                }
             # custom directive
             else:
                 access_event_log = custom_access_event_log
 
             access_event_log = access_log_template % {
-                'z_log_level': z_log_level,
-                'access_event_log': access_event_log,
+                "z_log_level": z_log_level,
+                "access_event_log": access_event_log,
             }
 
         default_zpublisher_encoding = options.get(
-            'default-zpublisher-encoding', 'utf-8')
+            "default-zpublisher-encoding", "utf-8"
+        )
         if default_zpublisher_encoding:
-            default_zpublisher_encoding = 'default-zpublisher-encoding %s' %\
-                                          default_zpublisher_encoding
+            default_zpublisher_encoding = (
+                "default-zpublisher-encoding %s" % default_zpublisher_encoding
+            )
 
-        zeo_client = options.get('zeo-client', '')
-        zeo_client = zeo_client.lower() in ('yes', 'true', 'on', '1')
-        shared_blob_dir = options.get('shared-blob', 'no')
+        zeo_client = options.get("zeo-client", "")
+        zeo_client = zeo_client.lower() in ("yes", "true", "on", "1")
+        shared_blob_dir = options.get("shared-blob", "no")
 
-        before_storage = options.get('before-storage')
-        demo_storage = options.get(
-            'demo-storage', 'off') not in ('off', 'disable', 'false')
+        before_storage = options.get("before-storage")
+        demo_storage = options.get("demo-storage", "off") not in (
+            "off",
+            "disable",
+            "false",
+        )
 
-        zlib = options.get('zlib-storage')
+        zlib = options.get("zlib-storage")
 
-        default_blob = os.path.join(var_dir, 'blobstorage')
-        default_file = os.path.sep.join(('filestorage', 'Data.fs',))
+        default_blob = os.path.join(var_dir, "blobstorage")
+        default_file = os.path.sep.join(
+            (
+                "filestorage",
+                "Data.fs",
+            )
+        )
 
         # Don't try to use the actual blobstorage as a cache
-        if zeo_client and shared_blob_dir == 'no':
-            default_blob = os.path.join(var_dir, 'blobcache')
+        if zeo_client and shared_blob_dir == "no":
+            default_blob = os.path.join(var_dir, "blobcache")
 
         # Only set blob storage default if we're using a before
         # storage, or not a demo storage (otherwise, the default
@@ -452,162 +480,171 @@ class Recipe(Scripts):
         if demo_storage and not before_storage:
             default_blob = None
 
-        blob_storage = options.get('blob-storage', default_blob)
-        file_storage = options.get('file-storage', default_file)
+        blob_storage = options.get("blob-storage", default_blob)
+        file_storage = options.get("file-storage", default_file)
 
-        relstorage = options.get('rel-storage')
+        relstorage = options.get("rel-storage")
         if relstorage:
+
             def _split(el):
                 el = el.split(None, 1)
                 return len(el) == 2 and el or None
 
-            rel_storage = dict([
-                _split(el) for el in relstorage.splitlines()
-                if _split(el) is not None])
-            type_ = rel_storage.pop('type', 'postgresql')
+            rel_storage = dict(
+                [_split(el) for el in relstorage.splitlines() if _split(el) is not None]
+            )
+            type_ = rel_storage.pop("type", "postgresql")
 
-            if type_ == 'postgresql' and 'dsn' not in rel_storage:
+            if type_ == "postgresql" and "dsn" not in rel_storage:
                 # Support zope2instance 1.4 style interpolation for
                 # postgresql
-                template = ("dbname='%(dbname)s' user='%(user)s' "
-                            "host='%(host)s' password='%(password)s'")
+                template = (
+                    "dbname='%(dbname)s' user='%(user)s' "
+                    "host='%(host)s' password='%(password)s'"
+                )
                 dsn = template % rel_storage
-                del rel_storage['dbname']
-                del rel_storage['user']
-                del rel_storage['host']
-                del rel_storage['password']
-                rel_storage['dsn'] = dsn
+                del rel_storage["dbname"]
+                del rel_storage["user"]
+                del rel_storage["host"]
+                del rel_storage["password"]
+                rel_storage["dsn"] = dsn
 
             def is_rs_option(name):
                 # All generic RelStorage options have a dash in their name,
                 # except the "name" option. Other options are
                 # database-specific.
-                if name == 'data-dir':  # sqlite3
+                if name == "data-dir":  # sqlite3
                     return False
-                return '-' in name or name == 'name'
+                return "-" in name or name == "name"
 
-            db_opts = '\n'.join(' ' * 12 + ' '.join((k, v))
-                                for k, v in rel_storage.items()
-                                if not is_rs_option(k))
-            if type_ == 'sqlite3':
-                pragmas = [k for k in rel_storage if k.startswith('pragmas-')]
+            db_opts = "\n".join(
+                " " * 12 + " ".join((k, v))
+                for k, v in rel_storage.items()
+                if not is_rs_option(k)
+            )
+            if type_ == "sqlite3":
+                pragmas = [k for k in rel_storage if k.startswith("pragmas-")]
                 if pragmas:
-                    db_opts += '\n' + ' ' * 12 + '<pragmas>\n'
+                    db_opts += "\n" + " " * 12 + "<pragmas>\n"
                     for k in sorted(pragmas):
-                        db_opts += ' ' * 16 + \
-                            ' '.join((k[8:], rel_storage[k])) + '\n'
+                        db_opts += " " * 16 + " ".join((k[8:], rel_storage[k])) + "\n"
                         del rel_storage[k]
-                    db_opts += ' ' * 12 + '</pragmas>\n'
+                    db_opts += " " * 12 + "</pragmas>\n"
             opts = dict(
                 type=type_,
                 db_opts=db_opts,
-                rs_opts='\n'.join(' ' * 8 + ' '.join((k, v))
-                                  for k, v in rel_storage.items()
-                                  if is_rs_option(k)),
+                rs_opts="\n".join(
+                    " " * 8 + " ".join((k, v))
+                    for k, v in rel_storage.items()
+                    if is_rs_option(k)
+                ),
             )
             file_storage_snippet = rel_storage_template % opts
         else:
             file_storage_snippet = self.render_file_storage(
-                file_storage, blob_storage, base_dir, var_dir, zlib)
+                file_storage, blob_storage, base_dir, var_dir, zlib
+            )
 
-        if 'zserver-threads' in options:
+        if "zserver-threads" in options:
             warn(
                 'option "zserver-threads" is deprecated, please use "threads"',
-                DeprecationWarning)
-        zserver_threads = options.get(
-            'threads', options.get('zserver-threads', '2'))
+                DeprecationWarning,
+            )
+        zserver_threads = options.get("threads", options.get("zserver-threads", "2"))
         if zserver_threads:
-            zserver_threads = 'zserver-threads %s' % zserver_threads
+            zserver_threads = "zserver-threads %s" % zserver_threads
 
-        python_check_interval = options.get('python-check-interval', '1000')
+        python_check_interval = options.get("python-check-interval", "1000")
         if python_check_interval:
-            python_check_interval = (
-                "python-check-interval %s" % python_check_interval)
+            python_check_interval = "python-check-interval %s" % python_check_interval
 
-        enable_products = options.get('enable-product-installation', 'off')
+        enable_products = options.get("enable-product-installation", "off")
         if enable_products:
-            enable_products = (
-                "enable-product-installation %s" % enable_products)
+            enable_products = "enable-product-installation %s" % enable_products
 
-        zeo_address = options.get('zeo-address', '8100')
-        zeo_addresses = zeo_address.split(' ')
-        zeo_address_list = ''
+        zeo_address = options.get("zeo-address", "8100")
+        zeo_addresses = zeo_address.split(" ")
+        zeo_address_list = ""
         for address in zeo_addresses:
             if not address:
                 continue
-            zeo_address_list += zeo_address_list_template % dict(
-                zeo_address=address)
+            zeo_address_list += zeo_address_list_template % dict(zeo_address=address)
 
-        zodb_cache_size = options.get('zodb-cache-size', '30000')
+        zodb_cache_size = options.get("zodb-cache-size", "30000")
         if zodb_cache_size:
             zodb_cache_size = "cache-size %s" % zodb_cache_size
         else:
             zodb_cache_size = ""
-        zodb_cache_size_bytes = options.get('zodb-cache-size-bytes', None)
+        zodb_cache_size_bytes = options.get("zodb-cache-size-bytes", None)
         if zodb_cache_size_bytes:
-            zodb_cache_size_bytes = (
-                "cache-size-bytes %s" % zodb_cache_size_bytes)
+            zodb_cache_size_bytes = "cache-size-bytes %s" % zodb_cache_size_bytes
         else:
             zodb_cache_size_bytes = ""
-        zeo_client_cache_size = options.get('zeo-client-cache-size', '128MB')
-        zeo_storage = options.get('zeo-storage', '1')
+        zeo_client_cache_size = options.get("zeo-client-cache-size", "128MB")
+        zeo_storage = options.get("zeo-storage", "1")
 
         if zeo_client:
             if relstorage:
                 raise ValueError(
-                    'You cannot use both ZEO and RelStorage at the same time.')
+                    "You cannot use both ZEO and RelStorage at the same time."
+                )
 
             zeo_client_drop_cache_rather_verify = options.get(
-                'zeo-client-drop-cache-rather-verify', '')
+                "zeo-client-drop-cache-rather-verify", ""
+            )
             if zeo_client_drop_cache_rather_verify:
                 zeo_client_drop_cache_rather_verify = (
-                    'drop-cache-rather-verify %s'
-                    % zeo_client_drop_cache_rather_verify)
-            zeo_client_blob_cache_size = options.get(
-                'zeo-client-blob-cache-size', '')
+                    "drop-cache-rather-verify %s" % zeo_client_drop_cache_rather_verify
+                )
+            zeo_client_blob_cache_size = options.get("zeo-client-blob-cache-size", "")
             zeo_client_blob_cache_size_check = options.get(
-                'zeo-client-blob-cache-size-check', '')
-            zeo_client_min_disconnect_poll = options.get(
-                'min-disconnect-poll', "")
-            zeo_client_max_disconnect_poll = options.get(
-                'max-disconnect-poll', "")
+                "zeo-client-blob-cache-size-check", ""
+            )
+            zeo_client_min_disconnect_poll = options.get("min-disconnect-poll", "")
+            zeo_client_max_disconnect_poll = options.get("max-disconnect-poll", "")
             zeo_client_read_only_fallback = options.get(
-                'zeo-client-read-only-fallback', 'false')
-            zeo_client_client = options.get('zeo-client-client', '')
+                "zeo-client-read-only-fallback", "false"
+            )
+            zeo_client_client = options.get("zeo-client-client", "")
             if zeo_client_client:
-                zeo_client_client = 'client %s' % zeo_client_client
-                zeo_var_dir = options.get('zeo-var', '')
+                zeo_client_client = "client %s" % zeo_client_client
+                zeo_var_dir = options.get("zeo-var", "")
                 if not zeo_var_dir:
-                    zeo_var_dir = '$(ZEO_TMP)'
-                zeo_var_dir = 'var %s' % zeo_var_dir
+                    zeo_var_dir = "$(ZEO_TMP)"
+                zeo_var_dir = "var %s" % zeo_var_dir
             else:
-                zeo_var_dir = ''
+                zeo_var_dir = ""
             if zeo_client_blob_cache_size:
                 zeo_client_blob_cache_size = (
-                    'blob-cache-size %s' % zeo_client_blob_cache_size)
+                    "blob-cache-size %s" % zeo_client_blob_cache_size
+                )
             if zeo_client_blob_cache_size_check:
                 zeo_client_blob_cache_size_check = (
-                    'blob-cache-size-check %s'
-                    % zeo_client_blob_cache_size_check)
+                    "blob-cache-size-check %s" % zeo_client_blob_cache_size_check
+                )
             if zeo_client_min_disconnect_poll:
                 zeo_client_min_disconnect_poll = (
-                    "min-disconnect-poll %s" % zeo_client_min_disconnect_poll)
+                    "min-disconnect-poll %s" % zeo_client_min_disconnect_poll
+                )
             if zeo_client_max_disconnect_poll:
                 zeo_client_max_disconnect_poll = (
-                    "max-disconnect-poll %s" % zeo_client_max_disconnect_poll)
+                    "max-disconnect-poll %s" % zeo_client_max_disconnect_poll
+                )
             if zeo_client_read_only_fallback:
                 zeo_client_read_only_fallback = (
-                    "read-only-fallback %s" % zeo_client_read_only_fallback)
-            if options.get('zeo-username', ''):
-                if not options.get('zeo-password', ''):
-                    raise zc.buildout.UserError('No ZEO password specified')
+                    "read-only-fallback %s" % zeo_client_read_only_fallback
+                )
+            if options.get("zeo-username", ""):
+                if not options.get("zeo-password", ""):
+                    raise zc.buildout.UserError("No ZEO password specified")
 
                 zeo_authentication = zeo_authentication_template % dict(
-                    realm=options.get('zeo-realm', 'ZEO'),
-                    username=options.get('zeo-username'),
-                    password=options.get('zeo-password'))
+                    realm=options.get("zeo-realm", "ZEO"),
+                    username=options.get("zeo-username"),
+                    password=options.get("zeo-password"),
+                )
             else:
-                zeo_authentication = ''
+                zeo_authentication = ""
 
             if blob_storage:
                 storage_snippet_template = zeo_blob_storage_template
@@ -628,32 +665,32 @@ class Recipe(Scripts):
                 zeo_client_drop_cache_rather_verify=zeo_client_drop_cache_rather_verify,  # noqa: E501
                 zeo_client_min_disconnect_poll=zeo_client_min_disconnect_poll,
                 zeo_client_max_disconnect_poll=zeo_client_max_disconnect_poll,
-                read_only=options.get('read-only', 'false'),
-                zeo_client_read_only_fallback=zeo_client_read_only_fallback
-                )
+                read_only=options.get("read-only", "false"),
+                zeo_client_read_only_fallback=zeo_client_read_only_fallback,
+            )
         else:
             # no zeo-client
-            zeo_client_client = ''
+            zeo_client_client = ""
             storage_snippet = file_storage_snippet
 
         if before_storage:
-            storage_snippet = (
-                before_storage_template % before_storage) % indent(
-                    storage_snippet, 2)
+            storage_snippet = (before_storage_template % before_storage) % indent(
+                storage_snippet, 2
+            )
 
         if demo_storage:
-            demo_file_storage = options.get('demo-file-storage')
-            demo_blob_storage = options.get('demo-blob-storage')
+            demo_file_storage = options.get("demo-file-storage")
+            demo_blob_storage = options.get("demo-blob-storage")
 
             if demo_file_storage or demo_blob_storage:
-                base = storage_snippet.replace('>', ' base>', 1)
+                base = storage_snippet.replace(">", " base>", 1)
                 changes = self.render_file_storage(
-                    demo_file_storage, demo_blob_storage, base_dir, var_dir,
-                    zlib).replace('>', ' changes>', 1)
+                    demo_file_storage, demo_blob_storage, base_dir, var_dir, zlib
+                ).replace(">", " changes>", 1)
 
                 storage_snippet = demo_storage2_template % (base, changes)
 
-            elif 'blob-storage' in options:
+            elif "blob-storage" in options:
                 raise ValueError(
                     "Both blob and demo storage cannot be used"
                     " at the same time (use a before storage instead)."
@@ -661,29 +698,24 @@ class Recipe(Scripts):
             else:
                 storage_snippet = demo_storage_template % storage_snippet
 
-        if options.get('storage-wrapper'):
-            storage_snippet = indent(
-                options['storage-wrapper'] % storage_snippet, 4)
+        if options.get("storage-wrapper"):
+            storage_snippet = indent(options["storage-wrapper"] % storage_snippet, 4)
 
-        zodb_tmp_storage = options.get('zodb-temporary-storage', 'on')
-        if zodb_tmp_storage.lower() in ('off', 'false', '0'):
+        zodb_tmp_storage = options.get("zodb-temporary-storage", "on")
+        if zodb_tmp_storage.lower() in ("off", "false", "0"):
             # no temporary-storage snippet
-            zodb_tmp_storage = ''
-        elif zodb_tmp_storage.lower() in ('on', 'true', '1'):
+            zodb_tmp_storage = ""
+        elif zodb_tmp_storage.lower() in ("on", "true", "1"):
             # use default temporary-storage snippet
             zodb_tmp_storage = zodb_temporary_storage_template
         template = wsgi_conf_template if self.wsgi else zope_conf_template
 
-        pid_file = options.get(
-            'pid-file',
-            os.path.join(var_dir, self.name + '.pid'))
+        pid_file = options.get("pid-file", os.path.join(var_dir, self.name + ".pid"))
         pid_file_dir = os.path.dirname(pid_file)
         if not os.path.exists(pid_file_dir):
             os.makedirs(pid_file_dir)
 
-        lock_file = options.get(
-            'lock-file',
-            os.path.join(var_dir, self.name + '.lock'))
+        lock_file = options.get("lock-file", os.path.join(var_dir, self.name + ".lock"))
         lock_file_dir = os.path.dirname(lock_file)
         if not os.path.exists(lock_file_dir):
             os.makedirs(lock_file_dir)
@@ -723,158 +755,164 @@ class Recipe(Scripts):
             deprecation_warnings=deprecation_warnings,
             python_check_interval=python_check_interval,
             enable_products=enable_products,
-            zope_conf_additional=zope_conf_additional,)
+            zope_conf_additional=zope_conf_additional,
+        )
 
         zope_conf = "\n".join(
             [line for line in zope_conf.splitlines() if line.rstrip()]
         )
-        zope_conf_path = os.path.join(location, 'etc', 'zope.conf')
-        with open(zope_conf_path, 'w') as f:
+        zope_conf_path = os.path.join(location, "etc", "zope.conf")
+        with open(zope_conf_path, "w") as f:
             f.write(zope_conf)
 
     def build_wsgi_ini(self):
         options = self.options
-        wsgi_ini_path = os.path.join(options['location'], 'etc', 'wsgi.ini')
-        listen = options.get('http-address', '0.0.0.0:8080')
-        fast_listen = options.get('http-fast-listen', 'on') or ''
-        fast = 'fast-' if fast_listen.lower() in ('on', 'true') else ''
-        listen = ' '.join(
+        wsgi_ini_path = os.path.join(options["location"], "etc", "wsgi.ini")
+        listen = options.get("http-address", "0.0.0.0:8080")
+        fast_listen = options.get("http-fast-listen", "on") or ""
+        fast = "fast-" if fast_listen.lower() in ("on", "true") else ""
+        listen = " ".join(
             [
-                '0.0.0.0:{}'.format(part) if ':' not in part else part
+                "0.0.0.0:{}".format(part) if ":" not in part else part
                 for part in listen.split()
             ]
         )
-        base_dir = self.buildout['buildout']['directory']
-        var_dir = options.get('var', os.path.join(base_dir, 'var'))
+        base_dir = self.buildout["buildout"]["directory"]
+        var_dir = options.get("var", os.path.join(base_dir, "var"))
         default_eventlog = os.path.sep.join(
-            (var_dir, 'log', '{}.log'.format(self.name),))
-        eventlog_name = options.get('event-log', default_eventlog)
-        eventlog_level = options.get('event-log-level', 'INFO')
-        eventlog_handler = options.get('event-log-handler', 'FileHandler')
-        eventlog_kwargs = options.get('event-log-kwargs', '{}')
-        eventlog_args = options.get('event-log-args')
+            (
+                var_dir,
+                "log",
+                "{}.log".format(self.name),
+            )
+        )
+        eventlog_name = options.get("event-log", default_eventlog)
+        eventlog_level = options.get("event-log-level", "INFO")
+        eventlog_handler = options.get("event-log-handler", "FileHandler")
+        eventlog_kwargs = options.get("event-log-kwargs", "{}")
+        eventlog_args = options.get("event-log-args")
         if not eventlog_args:
             eventlog_args = "(r'{}', 'a')".format(eventlog_name)
         else:
             eventlog_args = eventlog_args.format(eventlog_name)
 
-        if eventlog_name.lower() == 'disable':
-            root_handlers = 'console'
-            event_handlers = ''
+        if eventlog_name.lower() == "disable":
+            root_handlers = "console"
+            event_handlers = ""
         else:
-            root_handlers = 'console, eventlog'
-            event_handlers = 'eventlog'
+            root_handlers = "console, eventlog"
+            event_handlers = "eventlog"
 
         default_accesslog = os.path.sep.join(
-            (var_dir, 'log', '{}-access.log'.format(self.name),))
+            (
+                var_dir,
+                "log",
+                "{}-access.log".format(self.name),
+            )
+        )
 
         accesslog_name = options.get(
-            'z2-log',
-            options.get('access-log', default_accesslog))
+            "z2-log", options.get("access-log", default_accesslog)
+        )
         accesslog_level = options.get(
-            'access-log-level',
-            options.get('z2-log-level', 'INFO'))
-        accesslog_handler = options.get('access-log-handler', 'FileHandler')
-        accesslog_kwargs = options.get('access-log-kwargs', '{}')
-        accesslog_args = options.get('access-log-args')
+            "access-log-level", options.get("z2-log-level", "INFO")
+        )
+        accesslog_handler = options.get("access-log-handler", "FileHandler")
+        accesslog_kwargs = options.get("access-log-kwargs", "{}")
+        accesslog_args = options.get("access-log-args")
         if not accesslog_args:
             accesslog_args = "(r'{}', 'a')".format(accesslog_name)
         else:
             accesslog_args = accesslog_args.format(accesslog_name)
 
-        pipeline = options['pipeline'].split()
-        if accesslog_name.lower() == 'disable':
-            event_handlers = ''
-            accesslog_handler = 'NullHandler'
+        pipeline = options["pipeline"].split()
+        if accesslog_name.lower() == "disable":
+            event_handlers = ""
+            accesslog_handler = "NullHandler"
             accesslog_args = "()"
             pipeline = [line for line in pipeline if line != "translogger"]
 
-        sentry_dsn = options.get('sentry_dsn', '')
+        sentry_dsn = options.get("sentry_dsn", "")
         if sentry_dsn:
             if "zope" in pipeline:
-                pipeline.insert(pipeline.index("zope"), 'sentry')
+                pipeline.insert(pipeline.index("zope"), "sentry")
             else:
-                pipeline.append('sentry')
-        sentry_level = options.get('sentry_level', 'INFO')
-        sentry_event_level = options.get('sentry_event_level', 'ERROR')
-        sentry_ignore = options.get('sentry_ignore', '')
+                pipeline.append("sentry")
+        sentry_level = options.get("sentry_level", "INFO")
+        sentry_event_level = options.get("sentry_event_level", "ERROR")
+        sentry_ignore = options.get("sentry_ignore", "")
 
-        profile = options.get('profile', '').strip() == 'on'
+        profile = options.get("profile", "").strip() == "on"
         if profile:
             if "zope" in pipeline:
-                pipeline.insert(pipeline.index("zope"), 'profile')
+                pipeline.insert(pipeline.index("zope"), "profile")
             else:
-                pipeline.append('profile')
+                pipeline.append("profile")
         default_profile_log_filename = os.path.sep.join(
             [
                 var_dir,
-                'log',
-                'profile-{0}.raw'.format(self.name),
+                "log",
+                "profile-{0}.raw".format(self.name),
             ]
         )
         profile_log_filename = options.get(
-            'profile_log_filename',
-            default_profile_log_filename
+            "profile_log_filename", default_profile_log_filename
         )
         default_profile_log_filename = os.path.sep.join(
             [
                 var_dir,
-                'log',
-                'cachegrind.out.{0}'.format(self.name),
+                "log",
+                "cachegrind.out.{0}".format(self.name),
             ]
         )
         profile_cachegrind_filename = options.get(
-            'profile_cachegrind_filename',
-            default_profile_log_filename
+            "profile_cachegrind_filename", default_profile_log_filename
         )
         profile_discard_first_request = options.get(
-            'profile_discard_first_request',
-            'true'
+            "profile_discard_first_request", "true"
         )
-        profile_path = options.get('profile_path', '/__profile__')
-        profile_flush_at_shutdown = options.get(
-            'profile_flush_at_shutdown',
-            'true'
-        )
-        profile_unwind = options.get('profile_unwind', 'false')
+        profile_path = options.get("profile_path", "/__profile__")
+        profile_flush_at_shutdown = options.get("profile_flush_at_shutdown", "true")
+        profile_unwind = options.get("profile_unwind", "false")
 
         if "zope" not in pipeline:
-            pipeline.append('zope')
+            pipeline.append("zope")
 
         wsgi_options = {
-            'accesslog_args': accesslog_args,
-            'accesslog_handler': accesslog_handler,
-            'accesslog_kwargs': accesslog_kwargs,
-            'accesslog_level': accesslog_level,
-            'accesslog_name': accesslog_name,
-            'clear_untrusted_proxy_headers': options.get('clear-untrusted-proxy-headers', 'false'),
-            'event_handlers': event_handlers,
-            'eventlog_args': eventlog_args,
-            'eventlog_handler': eventlog_handler,
-            'eventlog_kwargs': eventlog_kwargs,
-            'eventlog_level': eventlog_level,
-            'eventlog_name': eventlog_name,
-            'fast-listen': fast,
-            'http_address': listen,
-            'location': options['location'],
-            'max_request_body_size': options.get(
-                'max-request-body-size', 1073741824),
-            'pipeline': '\n    '.join(pipeline),
-            'root_handlers': root_handlers,
-            'sentry_dsn': sentry_dsn,
-            'sentry_event_level': sentry_event_level,
-            'sentry_ignore': sentry_ignore,
-            'sentry_level': sentry_level,
-            'threads': options.get('threads', 4),
-            'profile_log_filename': profile_log_filename,
-            'profile_cachegrind_filename': profile_cachegrind_filename,
-            'profile_discard_first_request': profile_discard_first_request,
-            'profile_path': profile_path,
-            'profile_flush_at_shutdown': profile_flush_at_shutdown,
-            'profile_unwind': profile_unwind,
+            "accesslog_args": accesslog_args,
+            "accesslog_handler": accesslog_handler,
+            "accesslog_kwargs": accesslog_kwargs,
+            "accesslog_level": accesslog_level,
+            "accesslog_name": accesslog_name,
+            "clear_untrusted_proxy_headers": options.get(
+                "clear-untrusted-proxy-headers", "false"
+            ),
+            "event_handlers": event_handlers,
+            "eventlog_args": eventlog_args,
+            "eventlog_handler": eventlog_handler,
+            "eventlog_kwargs": eventlog_kwargs,
+            "eventlog_level": eventlog_level,
+            "eventlog_name": eventlog_name,
+            "fast-listen": fast,
+            "http_address": listen,
+            "location": options["location"],
+            "max_request_body_size": options.get("max-request-body-size", 1073741824),
+            "pipeline": "\n    ".join(pipeline),
+            "root_handlers": root_handlers,
+            "sentry_dsn": sentry_dsn,
+            "sentry_event_level": sentry_event_level,
+            "sentry_ignore": sentry_ignore,
+            "sentry_level": sentry_level,
+            "threads": options.get("threads", 4),
+            "profile_log_filename": profile_log_filename,
+            "profile_cachegrind_filename": profile_cachegrind_filename,
+            "profile_discard_first_request": profile_discard_first_request,
+            "profile_path": profile_path,
+            "profile_flush_at_shutdown": profile_flush_at_shutdown,
+            "profile_unwind": profile_unwind,
         }
         global wsgi_ini_template
-        wsgi_ini_template_path = self.options.get('wsgi-ini-template')
+        wsgi_ini_template_path = self.options.get("wsgi-ini-template")
         if wsgi_ini_template_path:
             try:
                 with open(wsgi_ini_template_path) as fp:
@@ -884,13 +922,12 @@ class Recipe(Scripts):
 
         # generate a different [server:main] - useful for Windows
         wsgi_server_main_template = wsgi_server_main_templates.get(
-            sys.platform,
-            wsgi_server_main_templates['default']
+            sys.platform, wsgi_server_main_templates["default"]
         )
-        wsgi_options['server_main'] = wsgi_server_main_template % wsgi_options
+        wsgi_options["server_main"] = wsgi_server_main_template % wsgi_options
 
         wsgi_ini = wsgi_ini_template % wsgi_options
-        with open(wsgi_ini_path, 'w') as f:
+        with open(wsgi_ini_path, "w") as f:
             f.write(wsgi_ini)
 
     def install_scripts(self):
@@ -898,23 +935,24 @@ class Recipe(Scripts):
             # instance scripts are usung zdaemon, which are Unix only
             return {}
         options = self.options
-        location = options['location']
+        location = options["location"]
 
         # The instance control script
-        zope_conf = os.path.join(location, 'etc', 'zope.conf')
-        zope_conf_path = options.get('zope-conf', zope_conf)
-        program_name = 'interpreter'
-        program_path = os.path.join(location, 'bin', program_name)
+        zope_conf = os.path.join(location, "etc", "zope.conf")
+        zope_conf_path = options.get("zope-conf", zope_conf)
+        program_name = "interpreter"
+        program_path = os.path.join(location, "bin", program_name)
 
-        zopectl_umask = options.get('zopectl-umask', '')
+        zopectl_umask = options.get("zopectl-umask", "")
 
-        extra_paths = options.get('extra-paths', '').split()
-        requirements, ws = self.egg.working_set(['plone.recipe.zope2instance'])
-        reqs = [self.options.get('control-script', self.name)]
-        reqs.extend(['plone.recipe.zope2instance.ctl', 'main'])
+        extra_paths = options.get("extra-paths", "").split()
+        requirements, ws = self.egg.working_set(["plone.recipe.zope2instance"])
+        reqs = [self.options.get("control-script", self.name)]
+        reqs.extend(["plone.recipe.zope2instance.ctl", "main"])
         reqs = [tuple(reqs)]
 
-        if options.get('relative-paths'):
+        if options.get("relative-paths"):
+
             class relative_path_str(str):
                 def __repr__(self):
                     return str(self)
@@ -922,49 +960,64 @@ class Recipe(Scripts):
             zope_conf_path = relative_path_str(
                 zc.buildout.easy_install._relativitize(
                     zope_conf,
-                    options['buildout-directory'] + os.sep,
-                    self._relative_paths
+                    options["buildout-directory"] + os.sep,
+                    self._relative_paths,
                 )
             )
             program_path = relative_path_str(
                 zc.buildout.easy_install._relativitize(
                     program_path,
-                    options['buildout-directory'] + os.sep,
-                    self._relative_paths
+                    options["buildout-directory"] + os.sep,
+                    self._relative_paths,
                 )
             )
 
-        options['zope-conf'] = zope_conf_path
-        arguments = ["-C", zope_conf_path, '-p', program_path]
+        options["zope-conf"] = zope_conf_path
+        arguments = ["-C", zope_conf_path, "-p", program_path]
         if zopectl_umask:
             arguments.extend(["--umask", int(zopectl_umask, 8)])
         if self.wsgi and self.wsgi_config:
-            arguments.extend(['-w', self.wsgi_config])
-        script_arguments = ('\n        ' + repr(arguments) +
-                            '\n        + sys.argv[1:]')
+            arguments.extend(["-w", self.wsgi_config])
+        script_arguments = "\n        " + repr(arguments) + "\n        + sys.argv[1:]"
 
         generated = self._install_scripts(
-            options['bin-directory'], ws, reqs=reqs, extra_paths=extra_paths,
-            script_arguments=script_arguments)
-        generated.extend(self._install_scripts(
-            os.path.join(options['location'], 'bin'), ws,
-            interpreter=program_name, extra_paths=extra_paths))
+            options["bin-directory"],
+            ws,
+            reqs=reqs,
+            extra_paths=extra_paths,
+            script_arguments=script_arguments,
+        )
+        generated.extend(
+            self._install_scripts(
+                os.path.join(options["location"], "bin"),
+                ws,
+                interpreter=program_name,
+                extra_paths=extra_paths,
+            )
+        )
         return generated
 
-    def _install_scripts(self, dest, working_set, reqs=(), interpreter=None,
-                         extra_paths=(), script_arguments=''):
+    def _install_scripts(
+        self,
+        dest,
+        working_set,
+        reqs=(),
+        interpreter=None,
+        extra_paths=(),
+        script_arguments="",
+    ):
         options = self.options
         if BUILDOUT15:
             return sitepackage_safe_scripts(
                 dest=dest,
                 working_set=working_set,
-                executable=options['executable'],
-                site_py_dest=options['location'],
+                executable=options["executable"],
+                site_py_dest=options["location"],
                 reqs=reqs,
                 scripts=None,
                 interpreter=interpreter,
                 extra_paths=extra_paths,
-                initialization=options['initialization'],
+                initialization=options["initialization"],
                 include_site_packages=self._include_site_packages,
                 exec_sitecustomize=False,
                 relative_paths=self._relative_paths,
@@ -975,40 +1028,41 @@ class Recipe(Scripts):
                 dest=dest,
                 reqs=reqs,
                 working_set=working_set,
-                executable=options['executable'],
+                executable=options["executable"],
                 extra_paths=extra_paths,
-                initialization=options['initialization'],
+                initialization=options["initialization"],
                 arguments=script_arguments,
                 interpreter=interpreter,
-                relative_paths=self._relative_paths,)
+                relative_paths=self._relative_paths,
+            )
 
     def build_package_includes(self):
         """Create ZCML slugs in etc/package-includes."""
-        location = self.options['location']
-        sitezcml_path = os.path.join(location, 'etc', 'site.zcml')
-        zcml = self.options.get('zcml')
-        site_zcml = self.options.get('site-zcml')
+        location = self.options["location"]
+        sitezcml_path = os.path.join(location, "etc", "site.zcml")
+        zcml = self.options.get("zcml")
+        site_zcml = self.options.get("site-zcml")
         additional_zcml = self.options.get("zcml-additional")
         resources = self.options.get("resources")
         locales = self.options.get("locales")
 
         if site_zcml:
-            open(sitezcml_path, 'w').write(site_zcml)
+            open(sitezcml_path, "w").write(site_zcml)
             return
 
         if zcml:
             zcml = nocomments_split(zcml)
 
         if additional_zcml or resources or locales or zcml:
-            includes_path = os.path.join(location, 'etc', 'package-includes')
+            includes_path = os.path.join(location, "etc", "package-includes")
 
             if not os.path.exists(includes_path):
                 # Zope 2.9 does not have a package-includes so we
                 # create one.
                 os.mkdir(includes_path)
             else:
-                if zcml and '*' in zcml:
-                    zcml.remove('*')
+                if zcml and "*" in zcml:
+                    zcml.remove("*")
                 else:
                     shutil.rmtree(includes_path)
                     os.mkdir(includes_path)
@@ -1021,9 +1075,7 @@ class Recipe(Scripts):
         if resources:
             resources_path = resources.strip()
             path = os.path.join(includes_path, "998-resources-configure.zcml")
-            open(path, "w").write(
-                resources_zcml % dict(directory=resources_path)
-            )
+            open(path, "w").write(resources_zcml % dict(directory=resources_path))
 
             if not os.path.exists(resources_path):
                 os.mkdir(resources_path)
@@ -1031,49 +1083,45 @@ class Recipe(Scripts):
         if locales:
             locales_path = locales.strip()
             path = os.path.join(includes_path, "001-locales-configure.zcml")
-            open(path, "w").write(
-                locales_zcml % dict(directory=locales_path)
-            )
+            open(path, "w").write(locales_zcml % dict(directory=locales_path))
 
             if not os.path.exists(locales_path):
                 os.mkdir(locales_path)
 
         if zcml:
             n = 1  # 001 is reserved for an optional locales-configure
-            package_match = re.compile(r'\w+([.]\w+)*$').match
+            package_match = re.compile(r"\w+([.]\w+)*$").match
             for package in zcml:
                 n += 1
                 orig = package
-                if ':' in package:
-                    package, filename = package.split(':')
+                if ":" in package:
+                    package, filename = package.split(":")
                 else:
                     filename = None
 
-                if '-' in package:
-                    package, suff = package.split('-')
+                if "-" in package:
+                    package, suff = package.split("-")
                     file_suff = suff
-                    if suff not in ('configure', 'meta', 'overrides'):
-                        file_suff = '%s-configure' % suff
+                    if suff not in ("configure", "meta", "overrides"):
+                        file_suff = "%s-configure" % suff
                 else:
-                    suff = file_suff = 'configure'
+                    suff = file_suff = "configure"
 
                 if filename is None:
-                    filename = suff + '.zcml'
+                    filename = suff + ".zcml"
 
                 if not package_match(package):
-                    raise ValueError('Invalid zcml', orig)
+                    raise ValueError("Invalid zcml", orig)
 
                 path = os.path.join(
                     includes_path,
                     "%3.3d-%s-%s.zcml" % (n, package, file_suff),
                 )
-                open(path, 'w').write(
-                    '<include package="%s" file="%s" />\n'
-                    % (package, filename)
+                open(path, "w").write(
+                    '<include package="%s" file="%s" />\n' % (package, filename)
                 )
 
-    def render_file_storage(self, file_storage, blob_storage,
-                            base_dir, var_dir, zlib):
+    def render_file_storage(self, file_storage, blob_storage, base_dir, var_dir, zlib):
         if file_storage:
             file_storage = os.path.join(var_dir, file_storage)
             file_storage_dir = os.path.dirname(file_storage)
@@ -1081,18 +1129,17 @@ class Recipe(Scripts):
                 os.makedirs(file_storage_dir)
             storage = file_storage_template % file_storage
             if zlib is not None:
-                if zlib == 'active':
-                    compress = 'true'
-                elif zlib == 'passive':
-                    compress = 'false'
+                if zlib == "active":
+                    compress = "true"
+                elif zlib == "passive":
+                    compress = "false"
                 else:
                     raise ValueError(
                         "Valid options for ``zlib-storage`` are "
-                        "('compress', 'uncompress'). Got: %s." % zlib)
+                        "('compress', 'uncompress'). Got: %s." % zlib
+                    )
 
-                storage = zlib_storage_template % (
-                    compress, indent(storage, 2)
-                )
+                storage = zlib_storage_template % (compress, indent(storage, 2))
         else:
             storage = "    <demostorage />"
 
@@ -1417,7 +1464,9 @@ additional_zcml_template = """\
 """
 
 wsgi_server_main_templates = {}
-wsgi_server_main_templates['default'] = """\
+wsgi_server_main_templates[
+    "default"
+] = """\
 paste.server_factory = plone.recipe.zope2instance:main
 use = egg:plone.recipe.zope2instance#main
 %(fast-listen)slisten = %(http_address)s
@@ -1426,7 +1475,9 @@ clear_untrusted_proxy_headers = %(clear_untrusted_proxy_headers)s
 max_request_body_size = %(max_request_body_size)s
 """
 
-wsgi_server_main_templates['win32'] = """\
+wsgi_server_main_templates[
+    "win32"
+] = """\
 use = egg:waitress#main
 listen = %(http_address)s
 threads = %(threads)s
