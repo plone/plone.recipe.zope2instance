@@ -560,9 +560,10 @@ Let's run it::
     Installing instance.
     ...
 
-The buildout has updated our INI file and we can see that we have a custom pipeline::
+The buildout has updated our INI file and we can see that we have a custom pipeline:
 
-    >>> wsgi_ini = open(os.path.join(instance, 'etc', 'wsgi.ini')).read()
+    >>> with open(os.path.join(instance, 'etc', 'wsgi.ini')) as f:
+    ...     wsgi_ini = f.read()
     >>> print(wsgi_ini)
     [server:main]
     ...
@@ -601,9 +602,10 @@ Let's run it::
     Installing instance.
     ...
 
-The buildout has updated our INI file and we can see that we have a custom pipeline::
+The buildout has updated our INI file and we can see that we have a custom pipeline:
 
-    >>> wsgi_ini = open(os.path.join(instance, 'etc', 'wsgi.ini')).read()
+    >>> with open(os.path.join(instance, 'etc', 'wsgi.ini')) as f:
+    ...     wsgi_ini = f.read()
     >>> print(wsgi_ini)
     [server:main]
     ...
