@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+6.10.1 (2021-09-01)
+-------------------
+
+Bug fixes:
+
+
+- Fix resource warning in tests.  [icemac] (#176)
+
+
 6.10.0 (2021-05-11)
 -------------------
 
