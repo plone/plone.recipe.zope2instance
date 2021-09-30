@@ -54,7 +54,7 @@ setup(
         "ZEO",
         "waitress >= 1.2.0",
         "Paste",
-        "python-dotenv",
+        "python-dotenv < 0.19",
     ],
     extras_require={
         "test": [
