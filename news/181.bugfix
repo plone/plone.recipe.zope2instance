@@ -1,1 +1,1 @@
-- Fix `python-dotenv` dependency for Python 2 compatibility [dataflake] (#181)
+Fix ``python-dotenv`` dependency for Python 2 compatibility. [dataflake]
