@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+6.10.2 (2021-10-07)
+-------------------
+
+Bug fixes:
+
+
+- Fix ``python-dotenv`` dependency for Python 2 compatibility. [dataflake] (#181)
+
+
 6.10.1 (2021-09-01)
 -------------------
 
