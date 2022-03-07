@@ -103,13 +103,10 @@ class Recipe(Scripts):
             options["initialization"] = ""
         options["initialization"] = options["initialization"] % options
 
-        self._include_site_packages = (
-            options.get(
-                "include-site-packages",
-                buildout["buildout"].get("include-site-packages", "false"),
-            )
-            not in ("off", "disable", "false")
-        )
+        self._include_site_packages = options.get(
+            "include-site-packages",
+            buildout["buildout"].get("include-site-packages", "false"),
+        ) not in ("off", "disable", "false")
 
         self.wsgi = True
         self.wsgi_config = os.path.join(options["location"], "etc", "wsgi.ini")
