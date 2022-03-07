@@ -13,6 +13,7 @@
 #
 ##############################################################################
 
+from pkg_resources import parse_version
 from plone.recipe.zope2instance import make
 from warnings import warn
 from zc.recipe.egg.egg import Egg
@@ -698,7 +699,17 @@ class Recipe(Scripts):
         if options.get("storage-wrapper"):
             storage_snippet = indent(options["storage-wrapper"] % storage_snippet, 4)
 
-        zodb_tmp_storage = options.get("zodb-temporary-storage", "on")
+        zodb_tmp_storage = options.get("zodb-temporary-storage")
+        if zodb_tmp_storage is None:
+            # What should be the default?
+            # In Plone 6 we do not want to use the temporary storage anymore.
+            # See https://github.com/plone/plone.recipe.zope2instance/issues/180
+            requirements, ws = self.egg.working_set(["plone.recipe.zope2instance"])
+            cmfplone = ws.by_key.get("products.cmfplone")
+            if cmfplone and parse_version(cmfplone.version) >= parse_version("6.0.0a1"):
+                zodb_tmp_storage = "off"
+            else:
+                zodb_tmp_storage = "on"
         if zodb_tmp_storage.lower() in ("off", "false", "0"):
             # no temporary-storage snippet
             zodb_tmp_storage = ""
