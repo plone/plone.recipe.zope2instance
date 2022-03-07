@@ -884,19 +884,16 @@ console -- Run the program in the console.
         except Exception:
             print("usage: adduser <name> <password>")
             return
-        cmdline = (
-            self.get_startup_cmd(
-                self.options.python,
-                "import Zope2; "
-                "app = Zope2.app(); "
-                "result = app.acl_users._doAddUser("
-                "'%s', '%s', ['Manager'], []); "
-                "import transaction; "
-                "transaction.commit(); "
-                "print('Created user:', result)",
-            )
-            % (name, password)
-        )
+        cmdline = self.get_startup_cmd(
+            self.options.python,
+            "import Zope2; "
+            "app = Zope2.app(); "
+            "result = app.acl_users._doAddUser("
+            "'%s', '%s', ['Manager'], []); "
+            "import transaction; "
+            "transaction.commit(); "
+            "print('Created user:', result)",
+        ) % (name, password)
         os.system(cmdline)
 
     def help_adduser(self):
