@@ -8,6 +8,17 @@ Changelog
 
 .. towncrier release notes start
 
+6.11.0 (2022-03-23)
+-------------------
+
+New features:
+
+
+- By default, do not create a tempstorage on Plone 6.
+  See `issue 180 <https://github.com/plone/plone.recipe.zope2instance/issues/180>`_.
+  [maurits] (#180)
+
+
 6.10.2 (2021-10-07)
 -------------------
 
