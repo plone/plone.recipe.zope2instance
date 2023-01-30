@@ -892,6 +892,9 @@ class Recipe(Scripts):
             "accesslog_kwargs": accesslog_kwargs,
             "accesslog_level": accesslog_level,
             "accesslog_name": accesslog_name,
+            "asyncore_use_poll": options.get(
+                "asyncore-use-poll", "false"
+            ),
             "clear_untrusted_proxy_headers": options.get(
                 "clear-untrusted-proxy-headers", "false"
             ),
@@ -1481,6 +1484,7 @@ use = egg:plone.recipe.zope2instance#main
 threads = %(threads)s
 clear_untrusted_proxy_headers = %(clear_untrusted_proxy_headers)s
 max_request_body_size = %(max_request_body_size)s
+asyncore_use_poll = %(asyncore_use_poll)s
 """
 
 wsgi_server_main_templates[
