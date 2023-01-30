@@ -892,7 +892,11 @@ class Recipe(Scripts):
             "accesslog_kwargs": accesslog_kwargs,
             "accesslog_level": accesslog_level,
             "accesslog_name": accesslog_name,
-            "asyncore_use_poll": options.get("asyncore-use-poll", "false"),
+            "asyncore_use_poll": (
+                "true"
+                if options.get("asyncore-use-poll", "false").lower() in ("on", "true")
+                else "false"
+            ),
             "clear_untrusted_proxy_headers": options.get(
                 "clear-untrusted-proxy-headers", "false"
             ),
