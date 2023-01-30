@@ -520,6 +520,9 @@ wsgi-ini-template
 
   The available variables for variable substition can be found within the existing template (see above).
 
+asyncore-use-poll
+  By default `false`. If you want the `waitress.asyncore.loop` flag to use poll()
+  instead of the default select() set to `true`.
 
 before-storage
   Wraps the base storage in a "before storage" which sets it in
