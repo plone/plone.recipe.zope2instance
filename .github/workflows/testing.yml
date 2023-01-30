@@ -12,26 +12,32 @@ on:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         python-version:
         - "2.7"
-        - "3.6"
         - "3.7"
         - "3.8"
         - "3.9"
+        - "3.10"
+        - "3.11"
         zope-version:
         - "zope-4"
         - "zope-5"
         os:
-        - ubuntu-latest
-        - windows-latest
+        - ubuntu-20.04
+        - windows-2019
         exclude:
-        - os: windows-latest
+        - os: windows-2019
           python-version: "2.7"
         - zope-version: "zope-5"
           python-version: "2.7"
         - zope-version: "zope-4"
           python-version: "3.9"
+        - zope-version: "zope-4"
+          python-version: "3.10"
+        - zope-version: "zope-4"
+          python-version: "3.11"
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
