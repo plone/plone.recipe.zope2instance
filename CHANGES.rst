@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+6.12.0 (2023-01-31)
+-------------------
+
+New features:
+
+
+- Add new option `asyncore_use_poll` to waitress config file.
+  [petschki] (#189)
+
+
 6.11.0 (2022-03-23)
 -------------------
 
