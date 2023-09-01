@@ -428,7 +428,7 @@ which rotates the access log when it becomes larger than 10 MB while keeping sev
 
     access-log-handler = logging.handlers.RotatingFileHandler
     access-log-args  = (r"access.log", "a")
-    access-log-kwargs = {"maxBytes": 10000000, "maxCount": 7}
+    access-log-kwargs = {"maxBytes": 10000000, "backupCount": 7}
 
 Example (rotating of event log after each day)
 ++++++++++++++++++++++++++++++++++++++++++++++
