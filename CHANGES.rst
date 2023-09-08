@@ -8,6 +8,17 @@ Changelog
 
 .. towncrier release notes start
 
+6.12.1 (2023-09-08)
+-------------------
+
+Documentation:
+
+
+- Update README: for ``RotatingFileHandler`` ``maxCount`` is not a valid keyword argument.
+  Use ``backupCount``.
+  [gforcada] (#190)
+
+
 6.12.0 (2023-01-31)
 -------------------
 
