@@ -1,0 +1,3 @@
+Update README: for ``RotatingFileHandler`` ``maxCount`` is not a valid keyword argument.
+Use ``backupCount``.
+[gforcada]
