@@ -75,6 +75,7 @@ def nocomments_split(s):
 
 class Recipe(Scripts):
     def __init__(self, buildout, name, options):
+        options.setdefault("eggs", "")
         self.egg = Egg(buildout, options["recipe"], options)
         self.buildout, self.options, self.name = buildout, options, name
         self.scripts = True
