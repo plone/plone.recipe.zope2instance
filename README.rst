@@ -377,6 +377,11 @@ sentry_ignore
   Set the (space separated list of) logger names that are ignored by Sentry.
   Available for WSGI only.
 
+sentry_max_value_length
+  Set the maximum size of traceback messages sent to Sentry. If your tracebacks
+  get truncated, increase this above the sentry-sdk default of 1024.
+  Available for WSGI only.
+
 Advanced logging options for WSGI
 ---------------------------------
 
