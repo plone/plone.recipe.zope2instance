@@ -469,6 +469,7 @@ The buildout has updated our INI file:
     level = INFO
     event_level = ERROR
     ignorelist =
+    max_value_length =
     ...
     [pipeline:main]
     pipeline =
@@ -497,6 +498,7 @@ Let's update our buildout with some Sentry options:
     ... sentry_level = DEBUG
     ... sentry_event_level = WARNING
     ... sentry_ignore = waitress.queue foo
+    ... sentry_max_value_length = 2048
     ... ''' % options)
 
 Let's run it::
@@ -522,6 +524,7 @@ The buildout has updated our INI file:
     level = DEBUG
     event_level = WARNING
     ignorelist = waitress.queue foo
+    max_value_length = 2048
     ...
     [pipeline:main]
     pipeline =

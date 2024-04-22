@@ -849,6 +849,7 @@ class Recipe(Scripts):
         sentry_level = options.get("sentry_level", "INFO")
         sentry_event_level = options.get("sentry_event_level", "ERROR")
         sentry_ignore = options.get("sentry_ignore", "")
+        sentry_max_value_length = options.get("sentry_max_value_length", "")
 
         profile = options.get("profile", "").strip() == "on"
         if profile:
@@ -916,6 +917,7 @@ class Recipe(Scripts):
             "sentry_event_level": sentry_event_level,
             "sentry_ignore": sentry_ignore,
             "sentry_level": sentry_level,
+            "sentry_max_value_length": sentry_max_value_length,
             "threads": options.get("threads", 4),
             "profile_log_filename": profile_log_filename,
             "profile_cachegrind_filename": profile_cachegrind_filename,
@@ -1517,6 +1519,7 @@ dsn = %(sentry_dsn)s
 level = %(sentry_level)s
 event_level = %(sentry_event_level)s
 ignorelist = %(sentry_ignore)s
+max_value_length = %(sentry_max_value_length)s
 
 [filter:profile]
 use = egg:repoze.profile
