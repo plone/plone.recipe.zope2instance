@@ -8,6 +8,23 @@ Changelog
 
 .. towncrier release notes start
 
+6.13.0 (2024-04-23)
+-------------------
+
+New features:
+
+
+- Add support for setting max_value_length in Sentry init.
+  When you use this option, you should use `sentry-sdk` 1.29.0 or higher.
+  [gyst] (#193)
+
+
+Tests
+
+
+- Update tox to support python 3.10 and 3.11. (#193)
+
+
 6.12.2 (2023-09-26)
 -------------------
 
