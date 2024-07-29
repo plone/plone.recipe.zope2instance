@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2006-2007 Zope Corporation and Contributors.
@@ -51,8 +50,7 @@ import xml.sax
 import zdaemon
 
 
-if sys.version_info > (3,):
-    basestring = str
+basestring = str
 
 WINDOWS = False
 if sys.platform[:3].lower() == "win":
@@ -232,7 +230,7 @@ class ZopeCmd(ZDCmd):
                         return int(f.read().strip())
                     except ValueError:
                         # pid file for any reason empty or corrupt
-                        print("ERROR: Corrupt pid file: {}".format(fname))
+                        print(f"ERROR: Corrupt pid file: {fname}")
                         return 0
             else:
                 return 0
@@ -337,7 +335,7 @@ class ZopeCmd(ZDCmd):
                     "pid_filename", self.options.configroot.pid_filename
                 )
 
-                print('Installed Zope as Windows Service "{}".'.format(name))
+                print(f'Installed Zope as Windows Service "{name}".')
 
             except pywintypes.error:
                 traceback.print_exc()
@@ -373,7 +371,7 @@ class ZopeCmd(ZDCmd):
             name = self._get_service_name()
             try:
                 win32serviceutil.StartService(name)
-                print('Starting Windows Service "{}".'.format(name))
+                print(f'Starting Windows Service "{name}".')
             except pywintypes.error:
                 traceback.print_exc()
 
@@ -392,7 +390,7 @@ class ZopeCmd(ZDCmd):
             name = self._get_service_name()
             try:
                 win32serviceutil.RestartService(name)
-                print('Restarting Windows Service "{}".'.format(name))
+                print(f'Restarting Windows Service "{name}".')
             except pywintypes.error:
                 traceback.print_exc()
 
@@ -411,7 +409,7 @@ class ZopeCmd(ZDCmd):
             name = self._get_service_name()
             try:
                 win32serviceutil.StopService(name)
-                print('Stopping Windows Service "{}".'.format(name))
+                print(f'Stopping Windows Service "{name}".')
             except pywintypes.error:
                 traceback.print_exc()
 
@@ -432,7 +430,7 @@ class ZopeCmd(ZDCmd):
             name = self._get_service_name()
             try:
                 win32serviceutil.RemoveService(name)
-                print('Removed Windows Service "{}".'.format(name))
+                print(f'Removed Windows Service "{name}".')
             except pywintypes.error:
                 ret_code = 1
                 traceback.print_exc()
@@ -553,7 +551,7 @@ class ZopeCmd(ZDCmd):
             elif not self.zd_pid:
                 self.send_action("start")
             else:
-                print("daemon process already running; pid={}".format(self.zd_pid))
+                print(f"daemon process already running; pid={self.zd_pid}")
                 return
 
             def cond(n=0):
@@ -654,7 +652,7 @@ class ZopeCmd(ZDCmd):
                 "configure(r'%s'); "
                 "import Zope2; app=Zope2.app(); "
             )
-        cmdline = '"%s" %s "%s" %s -c "%s' % (
+        cmdline = '"{}" {} "{}" {} -c "{}'.format(
             python,
             pyflags,
             self.options.interpreter,
@@ -792,10 +790,7 @@ console -- Run the program in the console.
             "os.path.exists(os.environ.get('PYTHONSTARTUP', '')) "
             "and %s; del os;"
         )
-        if six.PY2:
-            exec_call = "execfile(os.environ['PYTHONSTARTUP'])"
-        else:
-            exec_call = "exec(open(os.environ['PYTHONSTARTUP']).read())"
+        exec_call = "exec(open(os.environ['PYTHONSTARTUP']).read())"
         cmdline = self.get_startup_cmd(
             self.options.python,
             interactive_startup % exec_call,
@@ -900,11 +895,7 @@ def serve_paste(app, global_conf, **kw):
         filenos = global_conf["prebound"].split()
         for fileno in filenos:
             _sock = socket.fromfd(int(fileno), socket.AF_INET, socket.SOCK_STREAM)
-            if six.PY2:
-                sock = socket.socket()
-                sock._sock = _sock
-            else:
-                sock = _sock
+            sock = _sock
             sockets.append(sock)
         kw.update(sockets=sockets)
     try:
@@ -958,7 +949,7 @@ def main(args=None):
     if os.environ.get("PLONE_ENV"):
         PLONE_ENV = os.environ.get("PLONE_ENV")
         load_dotenv(
-            os.path.join(options.directory, "..", "..", ".env.{}".format(PLONE_ENV))
+            os.path.join(options.directory, "..", "..", f".env.{PLONE_ENV}")
         )
 
     # Run the right command depending on whether we have ZServer

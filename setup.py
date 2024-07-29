@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from setuptools import find_packages
 from setuptools import setup
 
@@ -14,7 +13,7 @@ setup(
     author="Hanno Schlichting",
     author_email="hanno@hannosch.eu",
     description="Buildout recipe for creating a Zope instance",
-    long_description=((open("README.rst").read() + "\n" + open("CHANGES.rst").read())),
+    long_description=(open("README.rst").read() + "\n" + open("CHANGES.rst").read()),
     license="ZPL 2.1",
     keywords="zope buildout",
     url="https://github.com/plone/plone.recipe.zope2instance",

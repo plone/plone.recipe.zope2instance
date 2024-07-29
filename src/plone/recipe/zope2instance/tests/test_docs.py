@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from zc.buildout.testing import buildoutSetUp
 from zc.buildout.testing import buildoutTearDown
 from zc.buildout.testing import install

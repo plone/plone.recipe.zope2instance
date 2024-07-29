@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # ##############################################################################
 #
 # Copyright (c) 2006-2008 Zope Corporation and Contributors.
@@ -184,7 +183,7 @@ class Recipe(Scripts):
             imports = imports.split("\n")
             # Filter out empty lines
             imports = [i for i in imports if i]
-        imports_lines = "\n".join(("%%import %s" % i for i in imports))
+        imports_lines = "\n".join("%%import %s" % i for i in imports)
 
         products = options.get("products", "")
         if products:
@@ -302,13 +301,13 @@ class Recipe(Scripts):
 
         # Inject cache into environment_vars unless it is set there
         if chameleon_cache and "CHAMELEON_CACHE" not in environment_vars:
-            chameleon_cache = "CHAMELEON_CACHE {}".format(chameleon_cache)
+            chameleon_cache = f"CHAMELEON_CACHE {chameleon_cache}"
             if environment_vars and "\n" in environment_vars:
                 # default case
-                environment_vars += "\n{}".format(chameleon_cache)
+                environment_vars += f"\n{chameleon_cache}"
             elif environment_vars:
                 # handle case of all vars in one line
-                environment_vars += " {}".format(chameleon_cache)
+                environment_vars += f" {chameleon_cache}"
             else:
                 # handle case when there are no environment_vars yet
                 environment_vars = chameleon_cache
@@ -327,7 +326,7 @@ class Recipe(Scripts):
                         values.append(var)
                 env_vars = zip(keys, values)
                 environment_vars = "\n".join(
-                    ["%s %s" % (env_var[0], env_var[1]) for env_var in env_vars]
+                    [f"{env_var[0]} {env_var[1]}" for env_var in env_vars]
                 )
             environment_vars = environment_template % environment_vars
 
@@ -781,7 +780,7 @@ class Recipe(Scripts):
         fast = "fast-" if fast_listen.lower() in ("on", "true") else ""
         listen = " ".join(
             [
-                "0.0.0.0:{}".format(part) if ":" not in part else part
+                f"0.0.0.0:{part}" if ":" not in part else part
                 for part in listen.split()
             ]
         )
@@ -791,7 +790,7 @@ class Recipe(Scripts):
             (
                 var_dir,
                 "log",
-                "{}.log".format(self.name),
+                f"{self.name}.log",
             )
         )
         eventlog_name = options.get("event-log", default_eventlog)
@@ -800,7 +799,7 @@ class Recipe(Scripts):
         eventlog_kwargs = options.get("event-log-kwargs", "{}")
         eventlog_args = options.get("event-log-args")
         if not eventlog_args:
-            eventlog_args = "(r'{}', 'a')".format(eventlog_name)
+            eventlog_args = f"(r'{eventlog_name}', 'a')"
         else:
             eventlog_args = eventlog_args.format(eventlog_name)
 
@@ -815,7 +814,7 @@ class Recipe(Scripts):
             (
                 var_dir,
                 "log",
-                "{}-access.log".format(self.name),
+                f"{self.name}-access.log",
             )
         )
 
@@ -829,7 +828,7 @@ class Recipe(Scripts):
         accesslog_kwargs = options.get("access-log-kwargs", "{}")
         accesslog_args = options.get("access-log-args")
         if not accesslog_args:
-            accesslog_args = "(r'{}', 'a')".format(accesslog_name)
+            accesslog_args = f"(r'{accesslog_name}', 'a')"
         else:
             accesslog_args = accesslog_args.format(accesslog_name)
 
@@ -861,7 +860,7 @@ class Recipe(Scripts):
             [
                 var_dir,
                 "log",
-                "profile-{0}.raw".format(self.name),
+                f"profile-{self.name}.raw",
             ]
         )
         profile_log_filename = options.get(
@@ -871,7 +870,7 @@ class Recipe(Scripts):
             [
                 var_dir,
                 "log",
-                "cachegrind.out.{0}".format(self.name),
+                f"cachegrind.out.{self.name}",
             ]
         )
         profile_cachegrind_filename = options.get(
@@ -932,7 +931,7 @@ class Recipe(Scripts):
             try:
                 with open(wsgi_ini_template_path) as fp:
                     wsgi_ini_template = fp.read()
-            except IOError:
+            except OSError:
                 raise
 
         # generate a different [server:main] - useful for Windows
@@ -1133,7 +1132,7 @@ class Recipe(Scripts):
                     "%3.3d-%s-%s.zcml" % (n, package, file_suff),
                 )
                 open(path, "w").write(
-                    '<include package="%s" file="%s" />\n' % (package, filename)
+                    f'<include package="{package}" file="{filename}" />\n'
                 )
 
     def render_file_storage(self, file_storage, blob_storage, base_dir, var_dir, zlib):
