@@ -19,9 +19,7 @@ def make_instance(user=None, instancehome=None, version="4"):
     # Use our own skeleton
     skelsrc = os.path.join(os.path.dirname(__file__), "skel" + version)
     if not os.path.exists(skelsrc):
-        raise ValueError(
-            f"No configuration skeleton found for version {version}"
-        )
+        raise ValueError(f"No configuration skeleton found for version {version}")
 
     inituser = os.path.join(instancehome, "inituser")
     if not (user or os.path.exists(inituser)):

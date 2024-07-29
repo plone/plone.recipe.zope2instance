@@ -41,7 +41,6 @@ import logging
 import os
 import os.path
 import pkg_resources
-import six
 import socket
 import sys
 import tempfile
@@ -948,9 +947,7 @@ def main(args=None):
 
     if os.environ.get("PLONE_ENV"):
         PLONE_ENV = os.environ.get("PLONE_ENV")
-        load_dotenv(
-            os.path.join(options.directory, "..", "..", f".env.{PLONE_ENV}")
-        )
+        load_dotenv(os.path.join(options.directory, "..", "..", f".env.{PLONE_ENV}"))
 
     # Run the right command depending on whether we have ZServer
     options.interpreter = os.path.join(options.directory, "bin", "interpreter")
@@ -960,41 +957,28 @@ def main(args=None):
     if options.wsgi is not None and options.wsgi.lower() in ("off", "false", "0"):
         options.wsgi = None
 
-    if six.PY2 and not options.wsgi:
-        # only use zserver in Python 2 and if wsgi is disabled
-        from ZServer.Zope2.Startup import run
+    # wsgi is the default
+    from Zope2.Startup import serve
 
-        script = os.path.join(os.path.dirname(run.__file__), "run.py")
-        options.program = [
-            options.python,
-            options.interpreter,
-            script,
-            "-C",
-            options.configfile,
-        ]
-    else:
-        # wsgi is the default
-        from Zope2.Startup import serve
+    script = os.path.join(os.path.dirname(serve.__file__), "serve.py")
+    options.program = [options.python, options.interpreter, script, options.wsgi]
 
-        script = os.path.join(os.path.dirname(serve.__file__), "serve.py")
-        options.program = [options.python, options.interpreter, script, options.wsgi]
+    # Try to find the log file from the WSGI configuration
+    # Requires loading the logging configuration from the WSGI config
+    try:
+        logging.config.fileConfig(options.wsgi)
 
-        # Try to find the log file from the WSGI configuration
-        # Requires loading the logging configuration from the WSGI config
-        try:
-            logging.config.fileConfig(options.wsgi)
+        # The root logger is the only one we can identify and get
+        # reliably as we cannot know what the other loggers' names are
+        root_logger = logging.getLogger()
 
-            # The root logger is the only one we can identify and get
-            # reliably as we cannot know what the other loggers' names are
-            root_logger = logging.getLogger()
-
-            for handler in root_logger.handlers:
-                # Try to find a FileHandler and (ab)use its file target
-                if isinstance(handler, logging.FileHandler):
-                    options.logfile = handler.baseFilename
-                    break
-        except Exception:
-            pass  # Give up
+        for handler in root_logger.handlers:
+            # Try to find a FileHandler and (ab)use its file target
+            if isinstance(handler, logging.FileHandler):
+                options.logfile = handler.baseFilename
+                break
+    except Exception:
+        pass  # Give up
 
     c = ZopeCmd(options)
 

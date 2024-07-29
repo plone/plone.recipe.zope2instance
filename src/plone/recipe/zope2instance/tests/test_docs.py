@@ -6,7 +6,6 @@ from zc.buildout.testing import install_develop
 import doctest
 import pkg_resources
 import shutil
-import six
 import unittest
 
 
@@ -55,15 +54,5 @@ def test_suite():
             tearDown=tearDown,
         )
     )
-
-    if six.PY2:
-        suite.append(
-            doctest.DocFileSuite(
-                "zope2instance_zserver.rst",
-                optionflags=flags,
-                setUp=setUp,
-                tearDown=tearDown,
-            )
-        )
 
     return unittest.TestSuite(suite)

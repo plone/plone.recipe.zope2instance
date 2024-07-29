@@ -22,7 +22,6 @@ import os
 import os.path
 import re
 import shutil
-import six
 import sys
 import zc.buildout
 import zc.buildout.easy_install
@@ -111,9 +110,7 @@ class Recipe(Scripts):
         self.wsgi = True
         self.wsgi_config = os.path.join(options["location"], "etc", "wsgi.ini")
         wsgi_opt = options.get("wsgi", "on")
-        if six.PY2 and wsgi_opt.lower() in ("off", "false", "0"):
-            self.wsgi = False
-        elif wsgi_opt.lower() not in ("on", "true", "1"):
+        if wsgi_opt.lower() not in ("on", "true", "1"):
             self.wsgi_config = wsgi_opt
 
         if "pipeline" not in options:
@@ -779,10 +776,7 @@ class Recipe(Scripts):
         fast_listen = options.get("http-fast-listen", "on") or ""
         fast = "fast-" if fast_listen.lower() in ("on", "true") else ""
         listen = " ".join(
-            [
-                f"0.0.0.0:{part}" if ":" not in part else part
-                for part in listen.split()
-            ]
+            [f"0.0.0.0:{part}" if ":" not in part else part for part in listen.split()]
         )
         base_dir = self.buildout["buildout"]["directory"]
         var_dir = options.get("var", os.path.join(base_dir, "var"))
