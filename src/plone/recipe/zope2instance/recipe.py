@@ -29,12 +29,6 @@ import zc.buildout.easy_install
 
 IS_WIN = sys.platform[:3].lower() == "win"
 
-BUILDOUT15 = True
-try:
-    from zc.buildout.easy_install import sitepackage_safe_scripts
-except ImportError:
-    BUILDOUT15 = False
-
 
 def indent(snippet, amount):
     ws = " " * amount
@@ -1015,34 +1009,17 @@ class Recipe(Scripts):
         script_arguments="",
     ):
         options = self.options
-        if BUILDOUT15:
-            return sitepackage_safe_scripts(
-                dest=dest,
-                working_set=working_set,
-                executable=options["executable"],
-                site_py_dest=options["location"],
-                reqs=reqs,
-                scripts=None,
-                interpreter=interpreter,
-                extra_paths=extra_paths,
-                initialization=options["initialization"],
-                include_site_packages=self._include_site_packages,
-                exec_sitecustomize=False,
-                relative_paths=self._relative_paths,
-                script_arguments=script_arguments,
-            )
-        else:
-            return zc.buildout.easy_install.scripts(
-                dest=dest,
-                reqs=reqs,
-                working_set=working_set,
-                executable=options["executable"],
-                extra_paths=extra_paths,
-                initialization=options["initialization"],
-                arguments=script_arguments,
-                interpreter=interpreter,
-                relative_paths=self._relative_paths,
-            )
+        return zc.buildout.easy_install.scripts(
+            dest=dest,
+            reqs=reqs,
+            working_set=working_set,
+            executable=options["executable"],
+            extra_paths=extra_paths,
+            initialization=options["initialization"],
+            arguments=script_arguments,
+            interpreter=interpreter,
+            relative_paths=self._relative_paths,
+        )
 
     def build_package_includes(self):
         """Create ZCML slugs in etc/package-includes."""
