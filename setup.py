@@ -4,7 +4,7 @@ from setuptools import setup
 
 
 name = "plone.recipe.zope2instance"
-version = "6.13.1.dev0"
+version = "7.0.0.dev0"
 
 setup(
     name=name,
@@ -22,42 +22,35 @@ setup(
         "Development Status :: 6 - Mature",
         "Framework :: Buildout",
         "Framework :: Plone",
-        "Framework :: Plone :: 5.2",
         "Framework :: Plone :: 6.0",
+        "Framework :: Plone :: 6.1",
         "Framework :: Plone :: Core",
-        "Framework :: Zope :: 4",
         "Framework :: Zope :: 5",
         "License :: OSI Approved :: Zope Public License",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: Implementation :: CPython",
     ],
     packages=find_packages("src"),
     include_package_data=True,
     package_dir={"": "src"},
     namespace_packages=["plone", "plone.recipe"],
-    python_requires=">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*",
+    python_requires=">=3.8",
     install_requires=[
         "zc.buildout",
         "setuptools",
         "six",
         "zc.recipe.egg",
-        "Zope >= 4.0b1",
+        "Zope >= 5.0",
         "ZODB >= 5.1.1",
         "ZEO",
         "waitress >= 1.2.0",
         "Paste",
-        'python-dotenv < 0.19; python_version<"3"',
-        'python-dotenv; python_version>="3"',
+        "python-dotenv",
     ],
     extras_require={
         "test": [
