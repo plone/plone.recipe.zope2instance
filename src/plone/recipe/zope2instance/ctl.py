@@ -205,11 +205,9 @@ class WSGICtlOptions(ZopeCtlOptions, ZDOptions):
 
 
 class ZopeCmd(ZDCmd):
-
     _exitstatus = 0
 
     if WINDOWS:
-
         # printable representations of the Windows service states
         service_state_map = {
             win32service.SERVICE_START_PENDING: "starting",
@@ -358,7 +356,6 @@ class ZopeCmd(ZDCmd):
             )
 
         def do_start(self, arg):
-
             if not shell.IsUserAnAdmin():
                 print(ERR_MSG_NOT_ADMIN)
                 return
@@ -381,7 +378,6 @@ class ZopeCmd(ZDCmd):
                 traceback.print_exc()
 
         def do_restart(self, arg):
-
             if not shell.IsUserAnAdmin():
                 print(ERR_MSG_NOT_ADMIN)
                 return
@@ -401,7 +397,6 @@ class ZopeCmd(ZDCmd):
                 traceback.print_exc()
 
         def do_stop(self, arg):
-
             if not shell.IsUserAnAdmin():
                 print(ERR_MSG_NOT_ADMIN)
                 return
@@ -421,7 +416,6 @@ class ZopeCmd(ZDCmd):
                 traceback.print_exc()
 
         def do_remove(self, arg):
-
             if not shell.IsUserAnAdmin():
                 print(ERR_MSG_NOT_ADMIN)
                 return

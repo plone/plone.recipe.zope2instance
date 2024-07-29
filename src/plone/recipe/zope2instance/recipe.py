@@ -118,13 +118,13 @@ class Recipe(Scripts):
             self.wsgi_config = wsgi_opt
 
         if "pipeline" not in options:
-            options[
-                "pipeline"
-            ] = """
+            options["pipeline"] = (
+                """
                 translogger
                 egg:Zope#httpexceptions
                 zope
             """.strip()
+            )
         # Get Scripts' attributes
         return Scripts.__init__(self, buildout, name, options)
 
