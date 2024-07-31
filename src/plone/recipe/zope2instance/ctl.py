@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2006-2007 Zope Corporation and Contributors.
@@ -42,7 +41,6 @@ import logging
 import os
 import os.path
 import pkg_resources
-import six
 import socket
 import sys
 import tempfile
@@ -51,8 +49,7 @@ import xml.sax
 import zdaemon
 
 
-if sys.version_info > (3,):
-    basestring = str
+basestring = str
 
 WINDOWS = False
 if sys.platform[:3].lower() == "win":
@@ -205,11 +202,9 @@ class WSGICtlOptions(ZopeCtlOptions, ZDOptions):
 
 
 class ZopeCmd(ZDCmd):
-
     _exitstatus = 0
 
     if WINDOWS:
-
         # printable representations of the Windows service states
         service_state_map = {
             win32service.SERVICE_START_PENDING: "starting",
@@ -234,7 +229,7 @@ class ZopeCmd(ZDCmd):
                         return int(f.read().strip())
                     except ValueError:
                         # pid file for any reason empty or corrupt
-                        print("ERROR: Corrupt pid file: {}".format(fname))
+                        print(f"ERROR: Corrupt pid file: {fname}")
                         return 0
             else:
                 return 0
@@ -339,7 +334,7 @@ class ZopeCmd(ZDCmd):
                     "pid_filename", self.options.configroot.pid_filename
                 )
 
-                print('Installed Zope as Windows Service "{}".'.format(name))
+                print(f'Installed Zope as Windows Service "{name}".')
 
             except pywintypes.error:
                 traceback.print_exc()
@@ -358,7 +353,6 @@ class ZopeCmd(ZDCmd):
             )
 
         def do_start(self, arg):
-
             if not shell.IsUserAnAdmin():
                 print(ERR_MSG_NOT_ADMIN)
                 return
@@ -376,12 +370,11 @@ class ZopeCmd(ZDCmd):
             name = self._get_service_name()
             try:
                 win32serviceutil.StartService(name)
-                print('Starting Windows Service "{}".'.format(name))
+                print(f'Starting Windows Service "{name}".')
             except pywintypes.error:
                 traceback.print_exc()
 
         def do_restart(self, arg):
-
             if not shell.IsUserAnAdmin():
                 print(ERR_MSG_NOT_ADMIN)
                 return
@@ -396,12 +389,11 @@ class ZopeCmd(ZDCmd):
             name = self._get_service_name()
             try:
                 win32serviceutil.RestartService(name)
-                print('Restarting Windows Service "{}".'.format(name))
+                print(f'Restarting Windows Service "{name}".')
             except pywintypes.error:
                 traceback.print_exc()
 
         def do_stop(self, arg):
-
             if not shell.IsUserAnAdmin():
                 print(ERR_MSG_NOT_ADMIN)
                 return
@@ -416,12 +408,11 @@ class ZopeCmd(ZDCmd):
             name = self._get_service_name()
             try:
                 win32serviceutil.StopService(name)
-                print('Stopping Windows Service "{}".'.format(name))
+                print(f'Stopping Windows Service "{name}".')
             except pywintypes.error:
                 traceback.print_exc()
 
         def do_remove(self, arg):
-
             if not shell.IsUserAnAdmin():
                 print(ERR_MSG_NOT_ADMIN)
                 return
@@ -438,7 +429,7 @@ class ZopeCmd(ZDCmd):
             name = self._get_service_name()
             try:
                 win32serviceutil.RemoveService(name)
-                print('Removed Windows Service "{}".'.format(name))
+                print(f'Removed Windows Service "{name}".')
             except pywintypes.error:
                 ret_code = 1
                 traceback.print_exc()
@@ -559,7 +550,7 @@ class ZopeCmd(ZDCmd):
             elif not self.zd_pid:
                 self.send_action("start")
             else:
-                print("daemon process already running; pid={}".format(self.zd_pid))
+                print(f"daemon process already running; pid={self.zd_pid}")
                 return
 
             def cond(n=0):
@@ -660,7 +651,7 @@ class ZopeCmd(ZDCmd):
                 "configure(r'%s'); "
                 "import Zope2; app=Zope2.app(); "
             )
-        cmdline = '"%s" %s "%s" %s -c "%s' % (
+        cmdline = '"{}" {} "{}" {} -c "{}'.format(
             python,
             pyflags,
             self.options.interpreter,
@@ -798,10 +789,7 @@ console -- Run the program in the console.
             "os.path.exists(os.environ.get('PYTHONSTARTUP', '')) "
             "and %s; del os;"
         )
-        if six.PY2:
-            exec_call = "execfile(os.environ['PYTHONSTARTUP'])"
-        else:
-            exec_call = "exec(open(os.environ['PYTHONSTARTUP']).read())"
+        exec_call = "exec(open(os.environ['PYTHONSTARTUP']).read())"
         cmdline = self.get_startup_cmd(
             self.options.python,
             interactive_startup % exec_call,
@@ -906,11 +894,7 @@ def serve_paste(app, global_conf, **kw):
         filenos = global_conf["prebound"].split()
         for fileno in filenos:
             _sock = socket.fromfd(int(fileno), socket.AF_INET, socket.SOCK_STREAM)
-            if six.PY2:
-                sock = socket.socket()
-                sock._sock = _sock
-            else:
-                sock = _sock
+            sock = _sock
             sockets.append(sock)
         kw.update(sockets=sockets)
     try:
@@ -963,9 +947,7 @@ def main(args=None):
 
     if os.environ.get("PLONE_ENV"):
         PLONE_ENV = os.environ.get("PLONE_ENV")
-        load_dotenv(
-            os.path.join(options.directory, "..", "..", ".env.{}".format(PLONE_ENV))
-        )
+        load_dotenv(os.path.join(options.directory, "..", "..", f".env.{PLONE_ENV}"))
 
     # Run the right command depending on whether we have ZServer
     options.interpreter = os.path.join(options.directory, "bin", "interpreter")
@@ -975,41 +957,28 @@ def main(args=None):
     if options.wsgi is not None and options.wsgi.lower() in ("off", "false", "0"):
         options.wsgi = None
 
-    if six.PY2 and not options.wsgi:
-        # only use zserver in Python 2 and if wsgi is disabled
-        from ZServer.Zope2.Startup import run
+    # wsgi is the default
+    from Zope2.Startup import serve
 
-        script = os.path.join(os.path.dirname(run.__file__), "run.py")
-        options.program = [
-            options.python,
-            options.interpreter,
-            script,
-            "-C",
-            options.configfile,
-        ]
-    else:
-        # wsgi is the default
-        from Zope2.Startup import serve
+    script = os.path.join(os.path.dirname(serve.__file__), "serve.py")
+    options.program = [options.python, options.interpreter, script, options.wsgi]
 
-        script = os.path.join(os.path.dirname(serve.__file__), "serve.py")
-        options.program = [options.python, options.interpreter, script, options.wsgi]
+    # Try to find the log file from the WSGI configuration
+    # Requires loading the logging configuration from the WSGI config
+    try:
+        logging.config.fileConfig(options.wsgi)
 
-        # Try to find the log file from the WSGI configuration
-        # Requires loading the logging configuration from the WSGI config
-        try:
-            logging.config.fileConfig(options.wsgi)
+        # The root logger is the only one we can identify and get
+        # reliably as we cannot know what the other loggers' names are
+        root_logger = logging.getLogger()
 
-            # The root logger is the only one we can identify and get
-            # reliably as we cannot know what the other loggers' names are
-            root_logger = logging.getLogger()
-
-            for handler in root_logger.handlers:
-                # Try to find a FileHandler and (ab)use its file target
-                if isinstance(handler, logging.FileHandler):
-                    options.logfile = handler.baseFilename
-                    break
-        except Exception:
-            pass  # Give up
+        for handler in root_logger.handlers:
+            # Try to find a FileHandler and (ab)use its file target
+            if isinstance(handler, logging.FileHandler):
+                options.logfile = handler.baseFilename
+                break
+    except Exception:
+        pass  # Give up
 
     c = ZopeCmd(options)
 

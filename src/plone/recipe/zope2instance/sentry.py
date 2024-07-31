@@ -5,7 +5,14 @@ import logging
 import sentry_sdk
 
 
-def sdk_init(global_conf, dsn, level="INFO", event_level="ERROR", ignorelist="", max_value_length=""):
+def sdk_init(
+    global_conf,
+    dsn,
+    level="INFO",
+    event_level="ERROR",
+    ignorelist="",
+    max_value_length="",
+):
     sentry_logging = LoggingIntegration(
         level=logging.__dict__[level], event_level=logging.__dict__[event_level]
     )
@@ -19,7 +26,9 @@ def sdk_init(global_conf, dsn, level="INFO", event_level="ERROR", ignorelist="",
         max_value_length = int(max_value_length)
 
     def filter(app):
-        sentry_sdk.init(dsn=dsn, integrations=[sentry_logging], max_value_length=max_value_length)
+        sentry_sdk.init(
+            dsn=dsn, integrations=[sentry_logging], max_value_length=max_value_length
+        )
         return app
 
     return filter

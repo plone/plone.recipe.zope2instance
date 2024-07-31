@@ -1,9 +1,5 @@
-# -*- coding: utf-8 -*-
-from __future__ import print_function
-
 from binascii import b2a_base64
 from hashlib import sha1
-from six.moves import input
 
 import os
 import os.path
@@ -23,9 +19,7 @@ def make_instance(user=None, instancehome=None, version="4"):
     # Use our own skeleton
     skelsrc = os.path.join(os.path.dirname(__file__), "skel" + version)
     if not os.path.exists(skelsrc):
-        raise ValueError(
-            "No configuration skeleton found for version {0}".format(version)
-        )
+        raise ValueError(f"No configuration skeleton found for version {version}")
 
     inituser = os.path.join(instancehome, "inituser")
     if not (user or os.path.exists(inituser)):
@@ -63,7 +57,7 @@ your new Zope instance.
 def write_inituser(fn, user, password):
     fp = open(fn, "w")
     pw = b2a_base64(sha1(password.encode("utf-8")).digest())[:-1]
-    fp.write("%s:{SHA}%s\n" % (user, pw.decode("ascii")))
+    fp.write("{}:{{SHA}}{}\n".format(user, pw.decode("ascii")))
     fp.close()
     os.chmod(fn, 0o644)
 
@@ -82,7 +76,7 @@ def copyskel(sourcedir, targetdir):
             copydir(os.curdir, targetdir)
         finally:
             os.chdir(pwd)
-    except (IOError, OSError) as msg:
+    except OSError as msg:
         print(msg, file=sys.stderr)
         sys.exit(1)
 
