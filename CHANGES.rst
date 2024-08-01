@@ -8,6 +8,16 @@ Changelog
 
 .. towncrier release notes start
 
+7.0.0 (2024-08-01)
+------------------
+
+Breaking changes:
+
+
+- Drop support for Python 3.7 and lower, Zope 4, Plone 5.2.
+  [maurits] (#194)
+
+
 6.13.0 (2024-04-23)
 -------------------
 
