@@ -425,6 +425,22 @@ event-log-args
 event-log-kwargs
     Same as `access-log-kwargs` but for the configuration of the event log of Plone.
 
+wsgi-logging-ini-template
+  By default `plone.recipe.zope2instance` uses a hard-coded logging template for the
+  generated WSGI configuration in `parts/<partname>/etc/wsgi.ini`. The template
+  is defined as `wsgi_logging_ini_template` variable within the `recipe.py
+  <https://github.com/plone/plone.recipe.zope2instance/blob/master/src/plone/recipe/zope2instance/recipe.py>`_
+  file.
+
+  You can override the template with a custom `wsgi_logging.ini` file using this option.
+  All other default wsgi options will be untouched.
+
+  Example::
+
+      wsgi-logging-ini-template = /path/to/wsgi_logging.ini
+
+  This option cannot be used together with the `wsgi-ini-template` option (see Advanced options: wsgi-ini-template)
+
 Example (access log rotation based on file size)
 ++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -511,7 +527,7 @@ Advanced options
 ----------------
 
 wsgi-ini-template
-  By default `plone.recipe.zope2instances` uses a hard-coded template for the
+  By default `plone.recipe.zope2instance` uses a hard-coded template for the
   generated WSGI configuration in `parts/<partname>/etc/wsgi.ini`. The template
   is defined as `wsgi_ini_template` variable within the `recipe.py
   <https://github.com/plone/plone.recipe.zope2instance/blob/master/src/plone/recipe/zope2instance/recipe.py>`_

@@ -18,6 +18,7 @@ from warnings import warn
 from zc.recipe.egg.egg import Egg
 from zc.recipe.egg.egg import Scripts
 
+import configparser
 import os
 import os.path
 import re
@@ -913,14 +914,39 @@ class Recipe(Scripts):
             "profile_flush_at_shutdown": profile_flush_at_shutdown,
             "profile_unwind": profile_unwind,
         }
-        global wsgi_ini_template
+
+        # Check custom wsgi-ini-template and wsgi-logging-ini-template
         wsgi_ini_template_path = self.options.get("wsgi-ini-template")
+        wsgi_logging_ini_template_path = self.options.get("wsgi-logging-ini-template")
+        if wsgi_ini_template_path and wsgi_logging_ini_template_path:
+            raise ValueError(
+                "wsgi_ini_template_path and wsgi_logging_ini_template_path "
+                "cannot be used together."
+            )
+
+        global wsgi_ini_template
+
+        # Load custom wsgi and logging template from file
         if wsgi_ini_template_path:
             try:
                 with open(wsgi_ini_template_path) as fp:
                     wsgi_ini_template = fp.read()
             except OSError:
                 raise
+
+        # Load default global wsgi template and load custom wsgi logging template
+        elif wsgi_logging_ini_template_path:
+            try:
+                with open(wsgi_logging_ini_template_path) as fp:
+                    # Add custom wsgi logging template to wsgi template
+                    wsgi_ini_template += fp.read()
+            except OSError:
+                raise
+
+        # Load default global wsgi and logging template
+        else:
+            global wsgi_logging_ini_template
+            wsgi_ini_template += wsgi_logging_ini_template
 
         # generate a different [server:main] - useful for Windows
         wsgi_server_main_template = wsgi_server_main_templates.get(
@@ -929,6 +955,10 @@ class Recipe(Scripts):
         wsgi_options["server_main"] = wsgi_server_main_template % wsgi_options
 
         wsgi_ini = wsgi_ini_template % wsgi_options
+
+        # Catch errors in generated wsgi.ini by parsing it before writing the file
+        configparser.ConfigParser().read_string(wsgi_ini)
+
         with open(wsgi_ini_path, "w") as f:
             f.write(wsgi_ini)
 
@@ -1504,6 +1534,9 @@ unwind = %(profile_unwind)s
 pipeline =
     %(pipeline)s
 
+"""
+
+wsgi_logging_ini_template = """\
 [loggers]
 keys = root, plone, waitress.queue, waitress, wsgi
 
