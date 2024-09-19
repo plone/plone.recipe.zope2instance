@@ -8,6 +8,17 @@ Changelog
 
 .. towncrier release notes start
 
+7.1.0 (2024-09-19)
+------------------
+
+New features:
+
+
+- Specify a standalone logging.ini configuration using the wsgi-logging-ini-template option in buildout.
+  The log configuration will be injected into wsgi.ini keeping all other default wsgi config.
+  The wsgi-logging-ini-template option cannot be used together with the wsgi-ini-template. @Sakoes (#59)
+
+
 7.0.0 (2024-08-01)
 ------------------
 
