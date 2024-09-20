@@ -35,6 +35,12 @@ recipe = plone.recipe.zope2instance
 eggs =
 user = me:me
 wsgi-ini-template = %(sample_buildout)s/wsgi_tmpl.ini
+
+[instance2]
+# check multiple recipe call
+recipe = plone.recipe.zope2instance
+eggs =
+user = me:me
 """
         TEMPLATE_CONTENT = """
 [section]
