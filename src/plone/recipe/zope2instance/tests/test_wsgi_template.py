@@ -24,6 +24,26 @@ class WSGITemplateTestCase(unittest.TestCase):
         sample_buildout = self.globs["sample_buildout"]
         shutil.rmtree(sample_buildout, ignore_errors=True)
 
+    def test_two_instances(self):
+        BUILDOUT_CONTENT = """
+[buildout]
+parts = instance instance2
+find-links = %(sample_buildout)s/eggs
+
+[instance]
+recipe = plone.recipe.zope2instance
+eggs =
+user = me:me
+
+[instance2]
+recipe = plone.recipe.zope2instance
+eggs =
+user = me:me
+"""
+        buildout_testing.write("buildout.cfg", BUILDOUT_CONTENT % self.globs)
+        output = buildout_testing.system(join("bin", "buildout"), with_exit_code=True)
+        self.assertTrue("EXIT CODE: 0" in output, output)
+
     def test_wsgi_ini_template(self):
         BUILDOUT_CONTENT = """
 [buildout]
@@ -35,12 +55,6 @@ recipe = plone.recipe.zope2instance
 eggs =
 user = me:me
 wsgi-ini-template = %(sample_buildout)s/wsgi_tmpl.ini
-
-[instance2]
-# check multiple recipe call
-recipe = plone.recipe.zope2instance
-eggs =
-user = me:me
 """
         TEMPLATE_CONTENT = """
 [section]
