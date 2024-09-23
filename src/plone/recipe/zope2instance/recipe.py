@@ -116,6 +116,11 @@ class Recipe(Scripts):
                 zope
             """.strip()
             )
+
+        # instantinate base wsgi_ini_template
+        global wsgi_ini_template
+        self._wsgi_ini_template = wsgi_ini_template
+
         # Get Scripts' attributes
         return Scripts.__init__(self, buildout, name, options)
 
@@ -924,13 +929,11 @@ class Recipe(Scripts):
                 "cannot be used together."
             )
 
-        global wsgi_ini_template
-
         # Load custom wsgi and logging template from file
         if wsgi_ini_template_path:
             try:
                 with open(wsgi_ini_template_path) as fp:
-                    wsgi_ini_template = fp.read()
+                    self._wsgi_ini_template = fp.read()
             except OSError:
                 raise
 
@@ -939,14 +942,14 @@ class Recipe(Scripts):
             try:
                 with open(wsgi_logging_ini_template_path) as fp:
                     # Add custom wsgi logging template to wsgi template
-                    wsgi_ini_template += fp.read()
+                    self._wsgi_ini_template += fp.read()
             except OSError:
                 raise
 
         # Load default global wsgi and logging template
         else:
             global wsgi_logging_ini_template
-            wsgi_ini_template += wsgi_logging_ini_template
+            self._wsgi_ini_template += wsgi_logging_ini_template
 
         # generate a different [server:main] - useful for Windows
         wsgi_server_main_template = wsgi_server_main_templates.get(
@@ -954,7 +957,7 @@ class Recipe(Scripts):
         )
         wsgi_options["server_main"] = wsgi_server_main_template % wsgi_options
 
-        wsgi_ini = wsgi_ini_template % wsgi_options
+        wsgi_ini = self._wsgi_ini_template % wsgi_options
 
         # Catch errors in generated wsgi.ini by parsing it before writing the file
         configparser.ConfigParser().read_string(wsgi_ini)

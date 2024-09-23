@@ -1,0 +1,2 @@
+Fix wsgi_ini_template creation when recipe is called multiple times.
+[petschki]
