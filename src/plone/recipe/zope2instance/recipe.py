@@ -117,10 +117,6 @@ class Recipe(Scripts):
             """.strip()
             )
 
-        # instantinate base wsgi_ini_template
-        global wsgi_ini_template
-        self._wsgi_ini_template = wsgi_ini_template
-
         # Get Scripts' attributes
         return Scripts.__init__(self, buildout, name, options)
 
@@ -929,27 +925,31 @@ class Recipe(Scripts):
                 "cannot be used together."
             )
 
-        # Load custom wsgi and logging template from file
+        # Load custom wsgi template from file
         if wsgi_ini_template_path:
             try:
                 with open(wsgi_ini_template_path) as fp:
-                    self._wsgi_ini_template = fp.read()
+                    wsgi_ini_template = fp.read()
             except OSError:
                 raise
 
-        # Load default global wsgi template and load custom wsgi logging template
+        # Load default wsgi template and load custom wsgi logging template
         elif wsgi_logging_ini_template_path:
+            wsgi_ini_template = default_wsgi_ini_template
             try:
                 with open(wsgi_logging_ini_template_path) as fp:
                     # Add custom wsgi logging template to wsgi template
-                    self._wsgi_ini_template += fp.read()
+                    wsgi_ini_template += fp.read()
             except OSError:
                 raise
 
-        # Load default global wsgi and logging template
+        # Load default wsgi and logging templates
         else:
-            global wsgi_logging_ini_template
-            self._wsgi_ini_template += wsgi_logging_ini_template
+            wsgi_ini_template = (
+                default_wsgi_ini_template + default_wsgi_logging_ini_template
+            )
+
+        assert wsgi_ini_template
 
         # generate a different [server:main] - useful for Windows
         wsgi_server_main_template = wsgi_server_main_templates.get(
@@ -957,7 +957,7 @@ class Recipe(Scripts):
         )
         wsgi_options["server_main"] = wsgi_server_main_template % wsgi_options
 
-        wsgi_ini = self._wsgi_ini_template % wsgi_options
+        wsgi_ini = wsgi_ini_template % wsgi_options
 
         # Catch errors in generated wsgi.ini by parsing it before writing the file
         configparser.ConfigParser().read_string(wsgi_ini)
@@ -1504,7 +1504,7 @@ clear_untrusted_proxy_headers = %(clear_untrusted_proxy_headers)s
 max_request_body_size = %(max_request_body_size)s
 """
 
-wsgi_ini_template = """\
+default_wsgi_ini_template = """\
 [server:main]
 %(server_main)s
 
@@ -1539,7 +1539,7 @@ pipeline =
 
 """
 
-wsgi_logging_ini_template = """\
+default_wsgi_logging_ini_template = """\
 [loggers]
 keys = root, plone, waitress.queue, waitress, wsgi
 
