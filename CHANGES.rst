@@ -8,6 +8,18 @@ Changelog
 
 .. towncrier release notes start
 
+7.1.1 (2024-09-24)
+------------------
+
+Bug fixes:
+
+
+- Fix wsgi_ini_template creation when recipe is called multiple times.
+  [petschki] (#197)
+- Installing the recipe twice should not break; remove use of `global`
+  [gotcha] (#198)
+
+
 7.1.0 (2024-09-19)
 ------------------
 
