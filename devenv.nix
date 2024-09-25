@@ -1,11 +1,17 @@
 { pkgs, lib, config, inputs, ... }:
 
-{
+let
+  system = pkgs.stdenv.system;
+  python38 = inputs.all-python.packages.${system}."3.8";
+  python39 = inputs.all-python.packages.${system}."3.9";
+  python310 = inputs.all-python.packages.${system}."3.10";
+  python312 = inputs.all-python.packages.${system}."3.12";
+in {
   # https://devenv.sh/basics/
   env.GREET = "devenv";
 
   # https://devenv.sh/packages/
-  packages = [ pkgs.git pkgs.just pkgs.libffi];
+  packages = [ pkgs.git pkgs.just pkgs.libffi python38 python39 python310 python312 pkgs.uv];
 
   # https://devenv.sh/languages/
   languages.python.enable = true;
