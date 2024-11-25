@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+7.1.2 (2024-11-25)
+------------------
+
+Documentation:
+
+
+- Remove obsolete attention admonition. The `master` branch supports Plone 6.x. (#199)
+
+
 7.1.1 (2024-09-24)
 ------------------
 
