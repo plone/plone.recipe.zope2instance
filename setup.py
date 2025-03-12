@@ -3,7 +3,7 @@ from setuptools import setup
 
 
 name = "plone.recipe.zope2instance"
-version = "7.1.3.dev0"
+version = "7.2.0.dev0"
 
 setup(
     name=name,
@@ -32,6 +32,7 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
         "Programming Language :: Python :: Implementation :: CPython",
     ],
     packages=find_packages("src"),
