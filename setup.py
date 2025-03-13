@@ -3,7 +3,7 @@ from setuptools import setup
 
 
 name = "plone.recipe.zope2instance"
-version = "7.2.0.dev0"
+version = "8.0.0.dev0"
 
 setup(
     name=name,
@@ -23,11 +23,11 @@ setup(
         "Framework :: Plone",
         "Framework :: Plone :: 6.0",
         "Framework :: Plone :: 6.1",
+        "Framework :: Plone :: 6.2",
         "Framework :: Plone :: Core",
         "Framework :: Zope :: 5",
         "License :: OSI Approved :: Zope Public License",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
@@ -39,7 +39,7 @@ setup(
     include_package_data=True,
     package_dir={"": "src"},
     namespace_packages=["plone", "plone.recipe"],
-    python_requires=">=3.8",
+    python_requires=">=3.9",
     install_requires=[
         "zc.buildout",
         "setuptools",
