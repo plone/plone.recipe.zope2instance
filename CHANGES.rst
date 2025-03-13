@@ -8,6 +8,22 @@ Changelog
 
 .. towncrier release notes start
 
+8.0.0 (2025-03-13)
+------------------
+
+Breaking changes:
+
+
+- Drop support for Python 3.8. (#202)
+
+
+New features:
+
+
+- support for Zope option `enable-xmlrpc` (#200)
+- Add official support for Python 3.13. (#202)
+
+
 7.1.2 (2024-11-25)
 ------------------
 
