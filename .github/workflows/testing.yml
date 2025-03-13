@@ -15,11 +15,11 @@ jobs:
       fail-fast: false
       matrix:
         python-version:
-        - "3.8"
         - "3.9"
         - "3.10"
         - "3.11"
         - "3.12"
+        - "3.13"
         os:
         - ubuntu-22.04
         - windows-2022
@@ -39,12 +39,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-test
       - name: Run black code style check
-        if: ${{ matrix.python-version == '3.12' }}
+        if: ${{ matrix.python-version == '3.13' }}
         run: |
           pip install black
           black --check src setup.py
       - name: Run isort code style check
-        if: ${{ matrix.python-version == '3.12' }}
+        if: ${{ matrix.python-version == '3.13' }}
         run: |
           pip install isort
           isort --check-only --df src setup.py
