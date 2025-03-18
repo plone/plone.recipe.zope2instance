@@ -24,7 +24,6 @@ plone.recipe.zope2instance::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... eggs =
     ... user = me:me
     ... ''' % options)
 
@@ -128,7 +127,6 @@ use the `storage-wrapper` option::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... eggs =
     ... user = me:me
     ... storage-wrapper =
     ...   <foo>
@@ -204,7 +202,6 @@ When this option is used the `zcml` option is ignored. Let's try it::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... eggs =
     ... user = me:me
     ... # the zcml option will be ignored when a site-zcml option is given
     ... zcml =
@@ -264,7 +261,6 @@ between several servers::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... eggs =
     ... user = me:me
     ... environment-vars = TZ US/Eastern
     ... ''' % options)
@@ -309,7 +305,6 @@ Now let's add several environment variables::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... eggs =
     ... user = me:me
     ... environment-vars =
     ...     TZ US/Eastern
@@ -356,7 +351,6 @@ Several all on one line::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... eggs =
     ... user = me:me
     ... template-cache = off
     ... environment-vars = TZ US/Eastern TMP /var/tmp DISABLE_PTS True
@@ -408,7 +402,6 @@ we don't error::
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... eggs =
     ... user = me:me
     ... ''' % options)
 
@@ -441,7 +434,6 @@ The recipe supports the generation of scripts with relative paths.
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... eggs =
     ... user = me:me
     ... ''' % options)
     >>> output = system(join('bin', 'buildout'))
@@ -478,7 +470,6 @@ Custom Zope Conf
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... eggs =
     ... user = me:me
     ... zope-conf = /some/path/my.conf
     ... ''' % options)
@@ -521,7 +512,6 @@ define custom zope.conf sections using ZConfig API.
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... eggs =
     ... user = me:me
     ... zope-conf-imports =
     ...   mailinglogger
@@ -569,7 +559,6 @@ Custom WSGI configuration
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... eggs =
     ... user = me:me
     ... wsgi = /some/path/service.ini
     ... ''' % options)
@@ -614,7 +603,6 @@ plone.app.theming resources directory.
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... eggs =
     ... user = me:me
     ... resources = ${buildout:directory}/myresources
     ... ''' % options)
@@ -664,7 +652,6 @@ plone.app.theming locales directory.
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... eggs =
     ... user = me:me
     ... locales = ${buildout:directory}/mylocales
     ... ''' % options)
@@ -767,7 +754,6 @@ Exceptions debug mode
     ...
     ... [instance]
     ... recipe = plone.recipe.zope2instance
-    ... eggs =
     ... user = me:me
     ... debug-exceptions = on
     ... ''' % options)
