@@ -12,7 +12,6 @@
 #
 ##############################################################################
 
-from pkg_resources import parse_version
 from plone.recipe.zope2instance import make
 from warnings import warn
 from zc.recipe.egg.egg import Egg
@@ -129,8 +128,9 @@ class Recipe(Scripts):
             if os.path.exists(location):
                 shutil.rmtree(location)
 
-            # We could check with pkg_resources which Zope version we have.
-            # But we support creating instances for 4 only.
+            # We could check which Zope version we have.
+            # But we support creating instances for Zope 4 only.
+            # Actually: version 5 only, but there is no difference in the skeleton.
             version = "4"
             make.make_instance(options.get("user", None), location, version)
 
@@ -693,12 +693,19 @@ class Recipe(Scripts):
 
         zodb_tmp_storage = options.get("zodb-temporary-storage")
         if zodb_tmp_storage is None:
-            # What should be the default?
-            # In Plone 6 we do not want to use the temporary storage anymore.
+            # What should be the default?  In Plone 6 or higher (which are the only
+            # Plone versions the recipe supports) we do not want to use the temporary
+            # storage anymore.  So look for the main package Products.CMFPlone
             # See https://github.com/plone/plone.recipe.zope2instance/issues/180
             requirements, ws = self.egg.working_set(["plone.recipe.zope2instance"])
-            cmfplone = ws.by_key.get("products.cmfplone")
-            if cmfplone and parse_version(cmfplone.version) >= parse_version("6.0.0a1"):
+            # It is anyone's guess by which key Products.CMFPlone may be known.
+            # This depends on the setuptools and zc.buildout versions.
+            cmfplone = (
+                ws.by_key.get("products-cmfplone")
+                or ws.by_key.get("products.cmfplone")
+                or ws.by_key.get("Products.CMFPlone")
+            )
+            if cmfplone:
                 zodb_tmp_storage = "off"
             else:
                 zodb_tmp_storage = "on"
