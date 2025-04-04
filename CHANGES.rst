@@ -8,6 +8,17 @@ Changelog
 
 .. towncrier release notes start
 
+8.0.1 (2025-04-04)
+------------------
+
+Bug fixes:
+
+
+- Check for presence of Products.CMFPlone with multiple keys.
+  This is needed, depending on the used `zc.buildout` and `setuptools` versions.
+  [maurits] (#205)
+
+
 8.0.0 (2025-03-13)
 ------------------
 

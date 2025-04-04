@@ -1,3 +1,0 @@
-Check for presence of Products.CMFPlone with multiple keys.
-This is needed, depending on the used `zc.buildout` and `setuptools` versions.
-[maurits]
