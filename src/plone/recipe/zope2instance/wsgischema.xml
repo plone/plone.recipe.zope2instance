@@ -1,28 +1,38 @@
-<schema prefix="Zope2.Startup.datatypes"
+<?xml version="1.0" encoding="utf-8"?>
+<schema handler="root_wsgi_handler"
+        prefix="Zope2.Startup.datatypes"
         datatype=".root_wsgi_config"
-        handler="root_wsgi_handler">
+>
 
   <!-- type definitions -->
 
-  <import package="ZODB"/>
-  <import package="tempstorage" condition="tempstorage"/>
+  <import package="ZODB" />
+  <import condition="tempstorage"
+          package="tempstorage"
+  />
 
-  <sectiontype name="environment"
+  <sectiontype keytype="identifier"
+               name="environment"
                datatype=".environment"
-               keytype="identifier">
+  >
     <description>
      A section which allows you to define simple key-value pairs which
      will be used as environment variable settings during startup.
     </description>
-    <key name="+" attribute="environ">
+    <key attribute="environ"
+         name="+"
+    >
       <description>
         Use any key/value pair, e.g. 'MY_PRODUCT_ENVVAR foo_bar'
       </description>
     </key>
   </sectiontype>
 
-  <sectiontype name="zodb_db" datatype=".ZopeDatabase"
-               implements="ZODB.database" extends="zodb">
+  <sectiontype extends="zodb"
+               implements="ZODB.database"
+               name="zodb_db"
+               datatype=".ZopeDatabase"
+  >
 
     <description>
       We need to specialize the database configuration section for Zope
@@ -30,8 +40,11 @@
       is a string.  A Zope ZODB database can have multiple mount points,
       so this is a multikey.
     </description>
-    <multikey name="mount-point" required="yes" attribute="mount_points"
-              datatype=".mount_point">
+    <multikey attribute="mount_points"
+              name="mount-point"
+              required="yes"
+              datatype=".mount_point"
+    >
       <description>
        The mount point is a slash-separated path to a
        'Products.ZODBMountPoint.Mount.MountPoint' instance in Zope. If
@@ -53,7 +66,9 @@
       </description>
     </multikey>
 
-    <key name="connection-class" datatype=".importable_name">
+    <key name="connection-class"
+         datatype=".importable_name"
+    >
       <description>
        Change the connection class a database uses on a per-database basis to
        support different connection policies.  Use a Python dotted-path
@@ -61,8 +76,10 @@
       </description>
     </key>
 
-   <key name="class-factory" datatype=".importable_name"
-        default="Zope2.Startup.datatypes.simpleClassFactory">
+    <key default="Zope2.Startup.datatypes.simpleClassFactory"
+         name="class-factory"
+         datatype=".importable_name"
+    >
       <description>
        Change the class factory function a database uses on a
        per-database basis to support different class factory policy.
@@ -70,7 +87,9 @@
       </description>
     </key>
 
-    <key name="container-class" datatype="string">
+    <key name="container-class"
+         datatype="string"
+    >
       <description>
        Change the container class a (mounted) database uses on a
        per-database basis to support a different container than a plain
@@ -92,14 +111,19 @@
       here too.
     </description>
 
-    <multikey name="program" required="no">
+    <multikey name="program"
+              required="no"
+    >
       <description>
        The program(s) that will be run by the runner
       </description>
     </multikey>
 
-    <key name="daemon" datatype="boolean"
-         required="no" default="true">
+    <key default="true"
+         name="daemon"
+         required="no"
+         datatype="boolean"
+    >
       <description>
         Command-line option: -d or --daemon.
 
@@ -119,8 +143,11 @@
       </description>
     </key>
 
-    <key name="backoff-limit" datatype="integer"
-         required="no" default="10">
+    <key default="10"
+         name="backoff-limit"
+         required="no"
+         datatype="integer"
+    >
       <description>
         Command-line option: -b or --backoff-limit.
 
@@ -140,8 +167,11 @@
       </description>
     </key>
 
-    <key name="forever" datatype="boolean"
-         required="no" default="false">
+    <key default="false"
+         name="forever"
+         required="no"
+         datatype="boolean"
+    >
       <description>
         Command-line option: -f or --forever.
 
@@ -152,8 +182,10 @@
       </description>
     </key>
 
-    <key name="user" datatype="string"
-         required="no">
+    <key name="user"
+         required="no"
+         datatype="string"
+    >
       <description>
         Command-line option: -u or --user.
 
@@ -173,8 +205,11 @@
       </description>
     </key>
 
-    <key name="hang-around" datatype="boolean"
-         required="no" default="false">
+    <key default="false"
+         name="hang-around"
+         required="no"
+         datatype="boolean"
+    >
       <description>
         If this option is true, the zdrun.py process will remain even
         when the daemon subprocess is stopped.  In this case, zopectl
@@ -184,9 +219,11 @@
       </description>
     </key>
 
-    <key name="umask" datatype="zdaemon.zdoptions.octal_type"
+    <key default="022"
+         name="umask"
          required="no"
-         default="022">
+         datatype="zdaemon.zdoptions.octal_type"
+    >
       <description>
         Command-line option: -m or --umask.
 
@@ -195,8 +232,11 @@
       </description>
     </key>
 
-    <key name="default-to-interactive" datatype="boolean"
-         required="no" default="true">
+    <key default="true"
+         name="default-to-interactive"
+         required="no"
+         datatype="boolean"
+    >
       <description>
         If this option is true, zopectl enters interactive mode
         when it is invoked without a positional command argument.  If
@@ -205,14 +245,20 @@
       </description>
     </key>
 
-    <key name="prompt" datatype="string"
-         required="no" default="zopectl>">
-       <description>
+    <key default="zopectl&gt;"
+         name="prompt"
+         required="no"
+         datatype="string"
+    >
+      <description>
          The prompt shown by zopectl program.
        </description>
     </key>
 
-    <key name="socket-name" datatype="existing-dirpath" required="no">
+    <key name="socket-name"
+         required="no"
+         datatype="existing-dirpath"
+    >
       <description>
         Command-line option: -s or --socket-name.
 
@@ -229,7 +275,10 @@
 
     <description>Defines parameters for DOS attack protection</description>
 
-    <key name="form-memory-limit" datatype="byte-size" default="1MB">
+    <key default="1MB"
+         name="form-memory-limit"
+         datatype="byte-size"
+    >
       <description>
        The maximum size for each part in a multipart post request,
        for the complete body in an urlencoded post request
@@ -238,13 +287,19 @@
       </description>
     </key>
 
-    <key name="form-disk-limit" datatype="byte-size" default="1GB">
+    <key default="1GB"
+         name="form-disk-limit"
+         datatype="byte-size"
+    >
       <description>
        The maximum size of a POST request body
       </description>
     </key>
 
-    <key name="form-memfile-limit" datatype="byte-size" default="4KB">
+    <key default="4KB"
+         name="form-memfile-limit"
+         datatype="byte-size"
+    >
       <description>
        The value of form variables of type file with larger size
        are stored on disk rather than in memory.
@@ -256,7 +311,10 @@
 
   <!-- schema begins  -->
 
-  <section type="environment" attribute="environment" name="*">
+  <section attribute="environment"
+           name="*"
+           type="environment"
+  >
     <description>
      A section which allows a user to define arbitrary key-value pairs for
      use as environment variables during Zope's run cycle.  It
@@ -265,8 +323,10 @@
     </description>
   </section>
 
-  <key name="instancehome" datatype="existing-directory"
-       required="yes">
+  <key name="instancehome"
+       required="yes"
+       datatype="existing-directory"
+  >
     <description>
       The top-level directory which contains the "instance" data for the
       application server. It may also contain "etc", "bin", "log",
@@ -275,7 +335,9 @@
     </description>
   </key>
 
-  <key name="clienthome" datatype="existing-directory">
+  <key name="clienthome"
+       datatype="existing-directory"
+  >
     <description>
       The directory used to store the default filestorage file used to
       back the ZODB database, as well as other files used by the
@@ -284,7 +346,10 @@
     <metadefault>$instancehome/var</metadefault>
   </key>
 
-  <key name="debug-mode" datatype="boolean" default="off">
+  <key default="off"
+       name="debug-mode"
+       datatype="boolean"
+  >
     <description>
     A switch which controls several aspects of Zope operation useful for
     developing under Zope.  When debug mode is on:
@@ -303,7 +368,10 @@
     <metadefault>off</metadefault>
   </key>
 
-  <key name="debug-exceptions" datatype="boolean" default="off">
+  <key default="off"
+       name="debug-exceptions"
+       datatype="boolean"
+  >
     <description>
     This switch controls how exceptions are handled. If it is set to
     "off" (the default), Zope's own exception handling is active.
@@ -319,7 +387,10 @@
     <metadefault>off</metadefault>
   </key>
 
-  <key name="locale" datatype="locale" handler="locale">
+  <key handler="locale"
+       name="locale"
+       datatype="locale"
+  >
     <description>
      Locale name to be used. See your operating system documentation for locale
      information specific to your system. If the requested locale is not
@@ -328,8 +399,11 @@
     <metadefault>unset</metadefault>
   </key>
 
-  <key name="datetime-format" datatype=".datetime_format"
-       handler="datetime_format" default="us">
+  <key default="us"
+       handler="datetime_format"
+       name="datetime-format"
+       datatype=".datetime_format"
+  >
     <description>
      Set this variable either to "us" or "international" to force the
      DateTime module to parse date strings either with
@@ -341,7 +415,10 @@
     <metadefault>us</metadefault>
   </key>
 
-  <key name="python-check-interval" datatype="integer" default="1000">
+  <key default="1000"
+       name="python-check-interval"
+       datatype="integer"
+  >
     <description>
       Value passed to Python's sys.setcheckinterval() function.  The
       higher this is, the less frequently the Python interpreter
@@ -351,7 +428,9 @@
     </description>
   </key>
 
-  <key name="http-realm" default="Zope">
+  <key default="Zope"
+       name="http-realm"
+  >
     <description>
      The HTTP "Realm" header value sent by this Zope instance. This value
      often shows up in basic authentication dialogs.
@@ -359,9 +438,12 @@
     <metadefault>Zope</metadefault>
   </key>
 
-  <key name="automatically-quote-dtml-request-data" datatype="boolean"
-       default="on" handler="automatically_quote_dtml_request_data">
-     <description>
+  <key default="on"
+       handler="automatically_quote_dtml_request_data"
+       name="automatically-quote-dtml-request-data"
+       datatype="boolean"
+  >
+    <description>
      Set this directive to 'off' in order to disable the autoquoting of
      implicitly retrieved REQUEST data by DTML code which contains a '&lt;'
      when used in &lt;dtml-var&gt; construction. When this directive is 'on',
@@ -371,22 +453,26 @@
      construct. This mitigates the possibility that DTML programmers will
      leave their sites open to a "client-side trojan" attack.
      </description>
-     <metadefault>on</metadefault>
+    <metadefault>on</metadefault>
   </key>
 
-  <key name="zmi-bookmarkable-urls" datatype="boolean"
-       default="on">
-     <description>
+  <key default="on"
+       name="zmi-bookmarkable-urls"
+       datatype="boolean"
+  >
+    <description>
      Set this directive to 'on' to cause Zope to show the ZMI right hand
      frame's URL in the browser navigation bar as opposed to the static
      '/manage'. The default is 'on'. To restore the behavior of Zope 2
      where the URL was always static unless you opened the right-hand frame in
      its own browser window, set this to off.
      </description>
-     <metadefault>on</metadefault>
+    <metadefault>on</metadefault>
   </key>
 
-  <key name="pid-filename" datatype="existing-dirpath">
+  <key name="pid-filename"
+       datatype="existing-dirpath"
+  >
     <description>
       The full path to which the Zope process will write its
       OS process id at startup.
@@ -394,83 +480,100 @@
     <metadefault>$clienthome/Z4.pid</metadefault>
   </key>
 
-  <multikey name="trusted-proxy" datatype="ipaddr-or-hostname"
-       attribute="trusted_proxies">
-     <description>
+  <multikey attribute="trusted_proxies"
+            name="trusted-proxy"
+            datatype="ipaddr-or-hostname"
+  >
+    <description>
      Define one or more 'trusted-proxies' keys, each of which is a
      hostname or an IP address.  The set of definitions comprises a list
      of front-end proxies that are trusted to supply an accurate
      X_FORWARDED_FOR header to Zope (security-related).
      </description>
-     <metadefault>unset</metadefault>
+    <metadefault>unset</metadefault>
   </multikey>
 
-  <key name="clear-untrusted-proxy-headers" datatype="boolean"
-       default="on">
-     <description>
+  <key default="on"
+       name="clear-untrusted-proxy-headers"
+       datatype="boolean"
+  >
+    <description>
      This tells Waitress to remove any untrusted proxy headers
      ("Forwarded", "X-Forwarded-For", "X-Forwarded-By",
      "X-Forwarded-Host", "X-Forwarded-Port", "X-Forwarded-Proto")
      not explicitly allowed by trusted_proxy_headers.
      </description>
-     <metadefault>on</metadefault>
+    <metadefault>on</metadefault>
   </key>
 
-  <key name="max-conflict-retries" datatype="integer" default="3"
-       attribute="max_conflict_retries">
+  <key attribute="max_conflict_retries"
+       default="3"
+       name="max-conflict-retries"
+       datatype="integer"
+  >
     <description>
       The maximum number of retries on a conflict error
     </description>
   </key>
 
-  <key name="security-policy-implementation"
+  <key default="C"
+       name="security-policy-implementation"
        datatype=".security_policy_implementation"
-       default="C">
-     <description>
+  >
+    <description>
      The default Zope "security policy" implementation is written in C.
      Set this key to "PYTHON" to use the Python implementation
      (useful for debugging purposes); set it to "C" to use the C
      implementation.
      </description>
-     <metadefault>C</metadefault>
+    <metadefault>C</metadefault>
   </key>
 
-  <key name="skip-authentication-checking" datatype="boolean"
-       default="off">
-     <description>
+  <key default="off"
+       name="skip-authentication-checking"
+       datatype="boolean"
+  >
+    <description>
      Set this directive to 'on' to cause Zope to prevent Zope from
      attempting to authenticate users during normal operation.
      Potentially dangerous from a security perspective.  Only works if
      security-policy-implementation is set to 'C'.
      </description>
-     <metadefault>off</metadefault>
+    <metadefault>off</metadefault>
   </key>
 
-  <key name="skip-ownership-checking" datatype="boolean"
-       default="off">
-     <description>
+  <key default="off"
+       name="skip-ownership-checking"
+       datatype="boolean"
+  >
+    <description>
      Set this directive to 'on' to cause Zope to ignore ownership checking
      when attempting to execute "through the web" code. By default, this
      directive is off in order to prevent 'trojan horse' security problems
      whereby a user with less privilege can cause a user with more
      privilege to execute code which the less privileged user has written.
      </description>
-     <metadefault>off</metadefault>
+    <metadefault>off</metadefault>
   </key>
 
-  <key name="verbose-security" datatype="boolean"
-       default="off">
-     <description>
+  <key default="off"
+       name="verbose-security"
+       datatype="boolean"
+  >
+    <description>
      Set this directive to 'on' to enable verbose security exceptions.
      This can help you track down the reason for Unauthorized exceptions,
      but it is not suitable for public sites because it may reveal
      unnecessary information about the structure of your site.  Only
      works if security-policy-implementation is set to 'PYTHON'.
      </description>
-     <metadefault>off</metadefault>
+    <metadefault>off</metadefault>
   </key>
 
-  <multisection type="ZODB.Database" name="+" attribute="databases">
+  <multisection attribute="databases"
+                name="+"
+                type="ZODB.Database"
+  >
     <description>
        Zope ZODB databases must have a name, and they are required to be
        referenced via the "zodb_db" database type because it is
@@ -482,10 +585,11 @@
     </description>
   </multisection>
 
-  <key name="default-zpublisher-encoding"
+  <key default="utf-8"
+       name="default-zpublisher-encoding"
        datatype=".default_zpublisher_encoding"
-       default="utf-8">
-     <description>
+  >
+    <description>
        This key controls what character set is used to encode unicode
        data that reaches ZPublisher without any other specified encoding.
      </description>
@@ -502,20 +606,24 @@
     </description>
   </abstracttype>
 
-  <sectiontype name="product-config" implements="zope.product.base">
+  <sectiontype implements="zope.product.base"
+               name="product-config"
+  >
     <description>
     Product-specific configuration, expressed as arbitrary name-value pairs.
     </description>
 
-    <key name="+"
-         attribute="mapping"
+    <key attribute="mapping"
+         name="+"
          required="no"
-         />
+    />
   </sectiontype>
 
-  <multisection type="zope.product.base" name="+"
-                attribute="product_config">
-   <description>
+  <multisection attribute="product_config"
+                name="+"
+                type="zope.product.base"
+  >
+    <description>
     Product-specific configuration stanzas.
 
     Products may use the &lt;product-config&gt; section type, or may supply
@@ -526,10 +634,15 @@
    </description>
   </multisection>
 
-  <section type="zoperunner" name="*" attribute="runner"/>
+  <section attribute="runner"
+           name="*"
+           type="zoperunner"
+  />
 
-  <key name="python" datatype="existing-path"
-       required="no">
+  <key name="python"
+       required="no"
+       datatype="existing-path"
+  >
     <description>
       Path to the Python interpreter for use by zdaemon.
       Defaults to sys.executable.
@@ -538,7 +651,10 @@
     </description>
   </key>
 
-  <key name="webdav-source-port" datatype="integer" default="0">
+  <key default="0"
+       name="webdav-source-port"
+       datatype="integer"
+  >
     <description>
       This value designates a network port number as WebDAV source port.
 
@@ -559,11 +675,12 @@
     </description>
   </key>
 
-  <key name="enable-ms-public-header"
-       datatype="boolean"
+  <key default="off"
        handler="enable_ms_public_header"
-       default="off">
-   <description>
+       name="enable-ms-public-header"
+       datatype="boolean"
+  >
+    <description>
     Set this directive to 'on' to enable sending the "Public" header
     in response to an WebDAV OPTIONS request - but only those coming from
     Microsoft WebDAV clients.
@@ -577,10 +694,13 @@
     Microsoft Web Folders after 2005 apparently require its presence,
     but most documentation links have expired.
    </description>
-   <metadefault>off</metadefault>
+    <metadefault>off</metadefault>
   </key>
 
-  <key name="enable-xmlrpc" datatype="boolean" default="on">
+  <key default="on"
+       name="enable-xmlrpc"
+       datatype="boolean"
+  >
     <description>
      Turn Zope's built-in XML-RPC support on or off.
 
@@ -596,7 +716,10 @@
     <metadefault>on</metadefault>
   </key>
 
-  <section type="dos_protection" handler="dos_protection"
-           name="*" attribute="dos_protection" />
+  <section attribute="dos_protection"
+           handler="dos_protection"
+           name="*"
+           type="dos_protection"
+  />
 
 </schema>
