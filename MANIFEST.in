@@ -4,3 +4,4 @@ graft src
 recursive-exclude news *
 global-exclude *.pyc
 exclude news
+exclude *.txt
