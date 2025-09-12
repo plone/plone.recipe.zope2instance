@@ -183,7 +183,7 @@ class Recipe(Scripts):
             products = products.split("\n")
             # Filter out empty directories
             products = [p for p in products if p]
-            # Make sure we have consistent path seperators
+            # Make sure we have consistent path separators
             products = [os.path.abspath(p) for p in products]
 
         base_dir = self.buildout["buildout"]["directory"]
@@ -208,7 +208,7 @@ class Recipe(Scripts):
             module_paths = module_paths.split("\n")
             # Filter out empty directories
             module_paths = [p for p in module_paths if p]
-            # Make sure we have consistent path seperators
+            # Make sure we have consistent path separators
             module_paths = [os.path.abspath(p) for p in module_paths]
         paths_lines = "\n".join(["path %s" % p for p in module_paths])
         debug_mode = options.get("debug-mode", "off")

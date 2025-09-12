@@ -823,7 +823,7 @@ New:
 4.1.8 - 2011-07-17
 ------------------
 
-- Add preliminary support for Zope 4.0, by re-using the skeleton for 2.13.
+- Add preliminary support for Zope 4.0, by reusing the skeleton for 2.13.
   [hannosch]
 
 - Added `zeo-client-blob-cache-size` and `zeo-client-blob-cache-size-check`
@@ -1529,7 +1529,7 @@ New:
 - Added support for zodb 3.8's "<blobstorage>" directive.
   [witsch]
 
-- Added a script name arg before callint zope.testing.testrunner.run.
+- Added a script name arg before calling zope.testing.testrunner.run.
   zope.testing.testrunner:1772, get_options removes the first arg from
   the list of arguments expecting a script name there. Was causing
   "bin/instance test" to behave improperly.

@@ -77,13 +77,13 @@ class StartupTestCase(unittest.TestCase):
             instancehome <<INSTANCE_HOME>>
             <environment>
               FEARFACTORY rocks
-              NSYNC doesnt
+              NSYNC does-not
             </environment>
             """
         )
         items = list(conf.environment.items())
         items.sort()
-        self.assertEqual(items, [("FEARFACTORY", "rocks"), ("NSYNC", "doesnt")])
+        self.assertEqual(items, [("FEARFACTORY", "rocks"), ("NSYNC", "does-not")])
 
     def test_zodb_db(self):
         conf, handler = self.load_config_text(
