@@ -10,3 +10,11 @@ test_matrix = {"6.2" = ["*"]}
 
 [pyproject]
 codespell_ignores = "ore,"
+
+[github]
+jobs = [
+  "qa",
+  "coverage",
+  "release_ready",
+  "circular",
+]
