@@ -173,7 +173,7 @@ profile_log_filename
 
 profile_cachegrind_filename
   If the package ``pyprof2calltree`` is installed, another file is written.
-  It is meant for consumation with any cachegrind compatible application.
+  It is meant for consumption with any cachegrind compatible application.
   Defaults to ``cachegrind.out.SECTIONNAME``.
 
 profile_discard_first_request
@@ -380,14 +380,14 @@ Advanced logging options for WSGI
 ---------------------------------
 
 For more complex logging configuration, the zope2instance recipe exposes the
-underlaying `logging.handlers` functionality through the `access-log-handler`
+underlying `logging.handlers` functionality through the `access-log-handler`
 and `event-log-handler` configuration options. This allows you to configure an
 arbitrary logging handler for Python as defined in
 `here <https://docs.python.org/3/library/logging.handlers.html>`_.
 
 The supplementary options `event-log-args`, `event-log-kwargs` and
 `access-log-args`, `access-log-kwargs` can be used for passing positional and
-keyword arguments to the constructor of the underlaying handler.
+keyword arguments to the constructor of the underlying handler.
 
 access-log-handler
   The (dotted) name of an importable Python logging handler like
@@ -533,7 +533,7 @@ wsgi-ini-template
 
       wsgi-ini-template = /path/to/wsgi_template.ini
 
-  The available variables for variable substition can be found within the existing template (see above).
+  The available variables for variable substitution can be found within the existing template (see above).
 
 asyncore-use-poll
   By default `false`. If you want the `waitress.asyncore.loop` flag to use poll()
