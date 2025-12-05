@@ -7,3 +7,6 @@ commit-id = "2.2.2"
 
 [tox]
 test_matrix = {"6.2" = ["*"]}
+
+[pyproject]
+codespell_ignores = "ore,"
