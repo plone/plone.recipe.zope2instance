@@ -27,7 +27,7 @@ available actions.
 """
 
 from dotenv import load_dotenv
-from pkg_resources import iter_entry_points
+from importlib.metadata import entry_points
 from time import sleep
 from waitress.wasyncore import dispatcher
 from ZConfig.loader import SchemaLoader
@@ -40,7 +40,6 @@ import csv
 import logging
 import os
 import os.path
-import pkg_resources
 import socket
 import sys
 import tempfile
@@ -56,7 +55,7 @@ if sys.platform[:3].lower() == "win":
     WINDOWS = True
 
 if WINDOWS:
-    from pkg_resources import resource_filename
+    from importlib.resources import files
     from win32com.shell import shell
 
     import pywintypes
@@ -262,7 +261,7 @@ class ZopeCmd(ZDCmd):
             return status
 
         def _get_service_class_string(self):
-            return "%s.Service" % resource_filename("nt_svcutils", "service")
+            return f'{str(files("nt_svcutils") / "service")}.Service'
 
         def _set_winreg_key(self, name, value, keyname="PythonClass"):
             # see "collective.buildout.cluster.ClusterBase"
@@ -564,7 +563,7 @@ class ZopeCmd(ZDCmd):
         """
         if not name.startswith("do_"):
             raise AttributeError(name)
-        data = list(pkg_resources.iter_entry_points("zopectl.command", name=name[3:]))
+        data = list(entry_points(group="zopectl.command", name=name[3:]))
         if not data:
             raise AttributeError(name)
         if len(data) > 1:
@@ -609,10 +608,11 @@ class ZopeCmd(ZDCmd):
                     cmd.append("sys.argv.append(r'%s')" % a)
             cmd.extend(
                 [
-                    "import pkg_resources",
+                    "from importlib.metadata import entry_points",
                     "import Zope2",
-                    "func=pkg_resources.EntryPoint.parse('%s').load(False)"
-                    % entry_point,
+                    "entry_point = entry_points(group='zopectl.command', name='%s')[0]"
+                    % entry_point.name,
+                    "func = entry_point.load()",
                     "app=Zope2.app()",
                     "func(app, sys.argv[1:])",
                 ]
@@ -983,7 +983,7 @@ def main(args=None):
     c = ZopeCmd(options)
 
     # Mix in any additional commands supplied by other packages:
-    for ep in iter_entry_points("plone.recipe.zope2instance.ctl"):
+    for ep in entry_points(group="plone.recipe.zope2instance.ctl"):
         func_name = "do_" + ep.name
         func = ep.load()
         # avoid overwriting the standard commands
