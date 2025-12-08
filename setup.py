@@ -1,9 +1,8 @@
-from setuptools import find_packages
 from setuptools import setup
 
 
 name = "plone.recipe.zope2instance"
-version = "8.0.2.dev0"
+version = "9.0.0.dev0"
 
 setup(
     name=name,
@@ -21,28 +20,21 @@ setup(
         "Development Status :: 6 - Mature",
         "Framework :: Buildout",
         "Framework :: Plone",
-        "Framework :: Plone :: 6.0",
-        "Framework :: Plone :: 6.1",
         "Framework :: Plone :: 6.2",
         "Framework :: Plone :: Core",
         "Framework :: Zope :: 5",
         "License :: OSI Approved :: Zope Public License",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
         "Programming Language :: Python :: Implementation :: CPython",
     ],
-    packages=find_packages("src"),
     include_package_data=True,
-    package_dir={"": "src"},
-    namespace_packages=["plone", "plone.recipe"],
-    python_requires=">=3.9",
+    python_requires=">=3.10",
     install_requires=[
         "zc.buildout",
-        "setuptools",
         "zc.recipe.egg",
         "Zope >= 5.0",
         "ZODB >= 5.1.1",
@@ -53,7 +45,7 @@ setup(
     ],
     extras_require={
         "test": [
-            "zope.testrunner",
+            "zope.testrunner >= 6.4",
             "sentry-sdk",
         ],
         "sentry": [
