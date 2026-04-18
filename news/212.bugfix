@@ -1,0 +1,4 @@
+Remove class-factory from wsgischema.xml for Zope > 6.0 support.
+
+See `issue 212 <https://github.com/plone/plone.recipe.zope2instance/issues/212>`_.
+[perrinjerome]
