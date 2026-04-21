@@ -8,6 +8,18 @@ Changelog
 
 .. towncrier release notes start
 
+9.0.0a2 (2026-04-21)
+--------------------
+
+Bug fixes:
+
+
+- Remove class-factory from wsgischema.xml for Zope > 6.0 support.
+
+  See `issue 212 <https://github.com/plone/plone.recipe.zope2instance/issues/212>`_.
+  [perrinjerome] (#212)
+
+
 9.0.0a1 (2025-12-09)
 --------------------
 
