@@ -1,0 +1,1 @@
+Update WSGI schema to match the one from Zope 6.2.  [maurits]
