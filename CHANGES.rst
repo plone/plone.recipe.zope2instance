@@ -8,6 +8,15 @@ Changelog
 
 .. towncrier release notes start
 
+9.1.0 (2026-08-21)
+------------------
+
+New features:
+
+
+- Update WSGI schema to match the one from Zope 6.2.  [maurits]
+
+
 9.0.0 (2026-04-21)
 ------------------
 
