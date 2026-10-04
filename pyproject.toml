@@ -1,8 +1,81 @@
 # Generated from:
-# https://github.com/plone/meta/tree/main/src/plone/meta/default
+# https://github.com/plone/meta/tree/2.x/src/plone/meta/default
 # See the inline comments on how to expand/tweak this configuration file
 [build-system]
 requires = ["setuptools>=68.2,<80", "wheel"]
+
+# START-MARKER-MANUAL-CONFIG
+# Anything from here until END-MARKER-MANUAL-CONFIG
+# will be kept by plone.meta
+
+[project]
+name = "plone.recipe.zope2instance"
+version = "9.1.1.dev0"
+description = "Buildout recipe for creating a Zope instance"
+classifiers = [
+    "Development Status :: 6 - Mature",
+    "Framework :: Buildout",
+    "Framework :: Plone",
+    "Framework :: Plone :: 6.2",
+    "Framework :: Plone :: Core",
+    "Framework :: Zope :: 5",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: Implementation :: CPython",
+]
+license = "ZPL-2.1"
+dynamic = ["readme"]
+requires-python = ">=3.10"
+authors = [
+    {name = "Hanno Schlichting",email = "hanno@hannosch.eu"},
+]
+maintainers = [
+    {name = "Plone Foundation and contributors",email = "plone-developers@lists.sourceforge.net"},
+]
+dependencies = [
+    "Paste",
+    "ZEO",
+    "ZODB >= 5.1.1",
+    "Zope >= 5.0",
+    "python-dotenv",
+    "waitress >= 1.2.0",
+    "zc.buildout",
+    "zc.recipe.egg",
+]
+keywords = ["zope", "buildout"]
+
+[project.entry-points."zc.buildout"]
+default = "plone.recipe.zope2instance.recipe:Recipe"
+
+[project.entry-points."paste.server_runner"]
+main = "plone.recipe.zope2instance.ctl:serve_paste"
+
+[project.entry-points."paste.server_factory"]
+main = "plone.recipe.zope2instance.ctl:server_factory"
+
+[project.entry-points."paste.filter_factory"]
+sentry = "plone.recipe.zope2instance.sentry:sdk_init"
+
+[project.optional-dependencies]
+test = [
+    "sentry-sdk",
+    "zope.testrunner >= 6.4",
+]
+sentry = ["sentry-sdk"]
+profile = ["repoze.profile"]
+
+[project.urls]
+Source = "https://github.com/plone/plone.recipe.zope2instance"
+Issues = "https://github.com/plone/Products.CMFPlone/issues"
+Changelog = "https://github.com/plone/plone.recipe.zope2instance/blob/master/CHANGES.rst"
+
+[tool.setuptools.dynamic]
+readme = {file = ["README.rst", "CHANGES.rst"]}
+# END-MARKER-MANUAL-CONFIG
 
 [tool.towncrier]
 directory = "news/"
