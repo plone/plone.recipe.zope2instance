@@ -26,7 +26,6 @@ import sys
 import zc.buildout
 import zc.buildout.easy_install
 
-
 IS_WIN = sys.platform[:3].lower() == "win"
 
 
@@ -108,13 +107,11 @@ class Recipe(Scripts):
             self.wsgi_config = wsgi_opt
 
         if "pipeline" not in options:
-            options["pipeline"] = (
-                """
+            options["pipeline"] = """
                 translogger
                 egg:Zope#httpexceptions
                 zope
             """.strip()
-            )
 
         # Get Scripts' attributes
         return Scripts.__init__(self, buildout, name, options)
@@ -1489,9 +1486,7 @@ additional_zcml_template = """\
 """
 
 wsgi_server_main_templates = {}
-wsgi_server_main_templates[
-    "default"
-] = """\
+wsgi_server_main_templates["default"] = """\
 paste.server_factory = plone.recipe.zope2instance:main
 use = egg:plone.recipe.zope2instance#main
 %(fast-listen)slisten = %(http_address)s
@@ -1501,9 +1496,7 @@ max_request_body_size = %(max_request_body_size)s
 asyncore_use_poll = %(asyncore_use_poll)s
 """
 
-wsgi_server_main_templates[
-    "win32"
-] = """\
+wsgi_server_main_templates["win32"] = """\
 use = egg:waitress#main
 listen = %(http_address)s
 threads = %(threads)s

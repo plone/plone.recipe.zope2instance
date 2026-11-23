@@ -47,7 +47,6 @@ import waitress
 import xml.sax
 import zdaemon
 
-
 basestring = str
 
 WINDOWS = False
@@ -705,8 +704,7 @@ class ZopeCmd(ZDCmd):
             return cmdline
 
     def help_startup_command(self):
-        print(
-            """\
+        print("""\
     Also sets up a REQUEST, logs in the
     AccessControl.SpecialUsers.system user, and may traverse
     to an object, such as a CMF portal.  This environment set
@@ -715,8 +713,7 @@ class ZopeCmd(ZDCmd):
     -L/--no-login -- do not login the system user.
     -O/--object-path <path> -- Traverse to <path> from the app
                                and make available as `obj`.
-    Example usage: bin/instance -RLOPlone/front-page debug"""
-        )
+    Example usage: bin/instance -RLOPlone/front-page debug""")
 
     def do_run(self, arg):
         # If the command line was something like
@@ -776,11 +773,9 @@ class ZopeCmd(ZDCmd):
         self.do_foreground(arg, debug=False)
 
     def help_console(self):
-        print(
-            """\
+        print("""\
 console -- Run the program in the console.
-    In contrast to foreground this does not turn on debug mode."""
-        )
+    In contrast to foreground this does not turn on debug mode.""")
 
     def do_debug(self, arg):
         # `-c` disables the PYTHONSTARTUP feature; load it explicitly
