@@ -6,7 +6,6 @@ import os.path
 import shutil
 import sys
 
-
 VCS_DIRS = [os.path.normcase("CVS"), os.path.normcase(".svn"), os.path.normcase(".git")]
 
 
@@ -33,13 +32,11 @@ def make_instance(user=None, instancehome=None, version="4"):
 def get_inituser():
     import getpass
 
-    print(
-        """\
+    print("""\
 Please choose a username and password for the initial user.
 These will be the credentials you use to initially manage
 your new Zope instance.
-"""
-    )
+""")
     user = input("Username: ").strip()
     if user == "":
         return None, None

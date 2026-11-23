@@ -19,7 +19,6 @@ import tempfile
 import unittest
 import ZConfig
 
-
 try:
     from StringIO import StringIO
 except ImportError:
@@ -71,23 +70,20 @@ class StartupTestCase(unittest.TestCase):
         self.load_config_text(text)
 
     def test_environment(self):
-        conf, handler = self.load_config_text(
-            """\
+        conf, handler = self.load_config_text("""\
             # instancehome is here since it's required
             instancehome <<INSTANCE_HOME>>
             <environment>
               FEARFACTORY rocks
               NSYNC does-not
             </environment>
-            """
-        )
+            """)
         items = list(conf.environment.items())
         items.sort()
         self.assertEqual(items, [("FEARFACTORY", "rocks"), ("NSYNC", "does-not")])
 
     def test_zodb_db(self):
-        conf, handler = self.load_config_text(
-            """\
+        conf, handler = self.load_config_text("""\
             instancehome <<INSTANCE_HOME>>
             <zodb_db main>
               <filestorage>
@@ -97,56 +93,43 @@ class StartupTestCase(unittest.TestCase):
                 cache-size 5000
                 pool-size 7
             </zodb_db>
-            """
-        )
+            """)
         self.assertEqual(conf.databases[0].config.cache_size, 5000)
 
     def test_max_conflict_retries_default(self):
-        conf, handler = self.load_config_text(
-            """\
+        conf, handler = self.load_config_text("""\
             instancehome <<INSTANCE_HOME>>
-            """
-        )
+            """)
         self.assertEqual(conf.max_conflict_retries, 3)
 
     def test_max_conflict_retries_explicit(self):
-        conf, handler = self.load_config_text(
-            """\
+        conf, handler = self.load_config_text("""\
             instancehome <<INSTANCE_HOME>>
             max-conflict-retries 15
-            """
-        )
+            """)
         self.assertEqual(conf.max_conflict_retries, 15)
 
     def test_debug_exceptions_default(self):
-        conf, handler = self.load_config_text(
-            """\
+        conf, handler = self.load_config_text("""\
         instancehome <<INSTANCE_HOME>>
-        """
-        )
+        """)
         self.assertFalse(conf.debug_exceptions)
 
     def test_debug_exceptions_explicit(self):
-        conf, handler = self.load_config_text(
-            """\
+        conf, handler = self.load_config_text("""\
         instancehome <<INSTANCE_HOME>>
         debug-exceptions on
-        """
-        )
+        """)
         self.assertTrue(conf.debug_exceptions)
 
     def test_default_zpublisher_encoding(self):
-        conf, dummy = self.load_config_text(
-            """\
+        conf, dummy = self.load_config_text("""\
             instancehome <<INSTANCE_HOME>>
-            """
-        )
+            """)
         self.assertEqual(conf.default_zpublisher_encoding, "utf-8")
 
-        conf, dummy = self.load_config_text(
-            """\
+        conf, dummy = self.load_config_text("""\
             instancehome <<INSTANCE_HOME>>
             default-zpublisher-encoding iso-8859-15
-            """
-        )
+            """)
         self.assertEqual(conf.default_zpublisher_encoding, "iso-8859-15")
